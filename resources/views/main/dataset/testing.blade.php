@@ -41,6 +41,17 @@
 						</div>
 					</div>
 					@endforeach
+					<div class="form-floating mb-3">
+						<select name="status" class="form-select" id="testResult" required>
+							<option value="" selected>Pilih</option>
+							<option value="Layak">Layak</option>
+							<option value="Tidak Layak">Tidak Layak</option>
+						</select>
+						<label for="testResult">Hasil</label>
+						<div class="invalid-feedback" id="result-error">
+							Pilih hasil
+						</div>
+					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -52,6 +63,37 @@
 				</button>
 				<button type="submit" class="btn btn-primary data-submit" form="addNewTestingForm">
 					<i class="bi bi-save"></i> Simpan
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" tabindex="-1" id="modalImportTesting" aria-labelledby="modalImportTestingLabel"
+	role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 id="modalImportTestingLabel" class="modal-title">Upload Data Testing</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="importTestingData">
+					@csrf
+					<input type="file" class="form-control" id="testData" name="data"  aria-describedby="importFormats" accept=".csv, .tsv, .ods, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+					<div id="importFormats" class="form-text">
+					  Format yang diperbolehkan: .xls, .xlsx, .csv, .tsv
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<div class="spinner-grow text-success me-3 d-none" role="status">
+					<span class="visually-hidden">Mengupload..</span>
+				</div>
+				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
+					<i class="bi bi-x-lg"></i> Batal
+				</button>
+				<button type="submit" class="btn btn-primary data-submit" form="importTestingData">
+					<i class="bi bi-upload"></i> Upload
 				</button>
 			</div>
 		</div>
@@ -95,13 +137,30 @@
 </div>
 <div class="card">
 	<div class="card-body">
-		<div class="btn-group" role="group" id="spare-button">
-			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddTesting">
-				<i class="bi bi-plus-lg"></i> Tambah Data Testing
-			</button>
+		<div class="btn-group mb-3" role="group" id="spare-button">
+			<div class="btn-group" role="group">
+			  <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+			    <i class="bi bi-plus-lg"></i> Tambah Data
+			  </button>
+			  <ul class="dropdown-menu">
+			    <li>
+			    	<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalAddTesting">
+			    		<i class="bi bi-pencil"></i> Input Manual
+			    	</a>
+			    </li>
+			    <li>
+			    	<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalImportTesting">
+			    	<i class="bi bi-upload"></i> Upload File
+			    	</a>
+			    </li>
+			  </ul>
+			</div>
 			<button type="button" class="btn btn-danger delete-all">
-				<i class="bi bi-trash3-fill"></i> Hapus semua data
+				<i class="bi bi-trash3-fill"></i> Hapus Data
 			</button>
+			<a href="{{route('testing.export')}}" class="btn btn-success">
+				<i class="bi bi-download"></i> Ekspor Data
+			</a>
 		</div>
 		<table class="table table-bordered" id="table-testing" width="100%">
 			<thead>
@@ -146,6 +205,7 @@
 				],
 				columnDefs: [{
 					targets: 0,
+					searchable: false,
 					render: function (data, type, full, meta) {
 						return meta.settings._iDisplayStart + meta.row + 1;
 					}
@@ -161,6 +221,7 @@
 				@endforeach
 				{ //Aksi
 					orderable: false,
+					searchable: false,
 					targets: -1,
 					render: function (data, type, full) {
 						return ('<div class="btn-group btn-group-sm" role="group">' +
@@ -179,33 +240,30 @@
 				layout: {
 					topStart: {
 						buttons: [{
-							text: '<i class="bi bi-plus-lg"></i> Tambah Data Testing',
-							className: "add-new",
-							attr: {
-								"data-bs-toggle": "modal",
-								"data-bs-target": "#modalAddTesting"
-							}
+							text: '<i class="bi bi-plus-lg"></i> Tambah Data',
+							extend: "collection",
+							buttons: [{
+								text: '<i class="bi bi-pencil"></i> Input Manual',
+								className: "add-new",
+								attr: {
+									"data-bs-toggle": "modal",
+									"data-bs-target": "#modalAddTesting"
+								}
+							}, {
+								text: '<i class="bi bi-upload"></i> Upload File',
+								attr: {
+									"data-bs-toggle": "modal",
+									"data-bs-target": "#modalImportTesting"
+								}
+							}]
 						}, {
-							text: '<i class="bi bi-trash3-fill"></i> Hapus semua data',
+							text: '<i class="bi bi-trash3-fill"></i> Hapus Data',
 							className: "delete-all"
 						}, {
-							extend: "collection",
 							text: '<i class="bi bi-download"></i> Ekspor Data',
-							buttons: [{
-								extend: "excel",
-								title: "Data Testing",
-								text: '<i class="bi bi-file-earmark-spreadsheet"></i> Excel',
-								exportOptions: {
-							    columns: ':not(:last-child)',
-							  }
-							}, {
-								extend: "pdf",
-								title: "Data Testing",
-								text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
-								exportOptions: {
-							    columns: ':not(:last-child)',
-							  }
-							}]
+				      action: function () {
+				        location.href = "{{route('testing.export')}}";
+				    	}
 						}]
 					}
 				}
@@ -219,6 +277,10 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					swal.fire({
 						icon: 'error',
+					  customClass: {
+					    popup: 'bg-danger',
+					    title: 'text-light'
+					  },
 						title: 'Gagal memuat jumlah',
 						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`
 					});
@@ -256,6 +318,10 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
+				  customClass: {
+				    popup: 'bg-success',
+				    title: 'text-light'
+				  },
 					title: "Berhasil dihapus"
 				});
 			}
@@ -294,6 +360,10 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
+				  customClass: {
+				    popup: 'bg-success',
+				    title: 'text-light'
+				  },
 					title: "Berhasil dihapus"
 				});
 			}
@@ -305,6 +375,7 @@
 		$.get(`testing/${test_id}/edit`, function (data) {
 			$("#test_id").val(data.id);
 			$("#testName").val(data.nama);
+			$('#testResult').val(data.status);
 			@foreach($atribut as $attr)
 			$("#test-{{$attr->slug}}").val(data.{{$attr->slug}});
 			@endforeach
@@ -319,6 +390,10 @@
 			}
 			swal.fire({
 				icon: "error",
+				customClass: {
+				  popup: 'bg-danger',
+				  title: 'text-light'
+				},
 				title: "Gagal memuat data",
 				text: errmsg
 			});
@@ -326,7 +401,60 @@
 			formloading("#addNewTestingForm :input",false);
 		});
 	});
-	function submitform(ev) {
+	$('#importTestingData').submit(function(e){//form Upload Data
+		e.preventDefault();
+		$.ajax({
+        type: "POST",
+        url: "{{route('testing.import')}}",
+        dataType: 'JSON',
+        data: new FormData(this),
+        contentType: false,
+        cache: false,
+        processData: false,
+        beforeSend: function () {
+					formloading("#importTestingData :input",true);
+					$("#importTestingData :input").removeClass("is-invalid");
+				},
+				complete: function () {
+					formloading("#importTestingData :input",false);
+				},
+				success: function (status) {
+					if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
+					$('#modalImportTesting').modal("hide");
+					swal.fire({
+						icon: "success",
+					  customClass: {
+					    popup: 'bg-success',
+					    title: 'text-light'
+					  },
+						titleText: "Berhasil diupload"
+					});
+				},
+				error: function (xhr, st) {
+					if (xhr.status === 422) {
+						resetvalidation();
+						if (typeof xhr.responseJSON.errors.data !== "undefined") {
+							$("#testData").addClass("is-invalid");
+							$("#data-error").text(xhr.responseJSON.errors.data);
+						}
+						errmsg = xhr.responseJSON.message;
+					} else {
+						console.warn(xhr.responseJSON.message ?? st);
+						errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+					}
+					swal.fire({
+						title: "Gagal",
+						text: errmsg,
+						icon: "error",
+					  customClass: {
+					    popup: 'bg-danger',
+					    title: 'text-light'
+					  }
+					});
+				}
+    });
+	});
+	function submitform(ev) {//form Input Manual
 		ev.preventDefault();
 		$.ajax({
 			data: $("#addNewTestingForm").serialize(),
@@ -344,6 +472,10 @@
 				modalForm.modal("hide");
 				swal.fire({
 					icon: "success",
+				  customClass: {
+				    popup: 'bg-success',
+				    title: 'text-light'
+				  },
 					titleText: status.message
 				});
 			},
@@ -360,6 +492,10 @@
 						$("#{{$attr->slug}}-error").text(xhr.responseJSON.errors.{{$attr->slug}});
 					}
 					@endforeach
+					if (typeof xhr.responseJSON.errors.status !== "undefined") {
+						$("#testResult").addClass("is-invalid");
+						$("#status-error").text(xhr.responseJSON.errors.status);
+					}
 					errmsg = xhr.responseJSON.message;
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
@@ -368,7 +504,11 @@
 				swal.fire({
 					title: "Gagal",
 					text: errmsg,
-					icon: "error"
+					icon: "error",
+					customClass: {
+					  popup: 'bg-danger',
+					  title: 'text-light'
+					}
 				});
 			}
 		});

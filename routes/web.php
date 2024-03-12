@@ -52,12 +52,14 @@ Route::middleware(['auth'])->group(function () {
 	Route::controller(TrainingDataController::class)->prefix('training')
 		->name('training.')->group(function () {
 			Route::get('count', 'count')->name('count')->block();
+			Route::get('download','export')->name('export')->block();
 			Route::post('upload','import')->name('import')->block();
 			Route::delete('/', 'clear')->name('clear')->block();
 		});
 	Route::controller(TestingDataController::class)->prefix('testing')
 		->name('testing.')->group(function () {
 			Route::get('count', 'count')->name('count')->block();
+			Route::get('download','export')->name('export')->block();
 			Route::post('upload','import')->name('import')->block();
 			Route::delete('/', 'clear')->name('clear')->block();
 		});

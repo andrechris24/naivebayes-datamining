@@ -1,10 +1,10 @@
 # Deskripsi
 
-<p>Aplikasi ini adalah aplikasi Klasifikasi Kelayakan Calon Penerima Bantuan Sosial menggunakan algoritma Naive Bayes dan Particle Swarm Optimization. Komponen yang digunakan:</p>
+<p>Aplikasi ini adalah aplikasi Klasifikasi Kelayakan Calon Penerima Bantuan Sosial menggunakan algoritma Naive Bayes dan Particle Swarm Optimization (On Progress). Komponen yang digunakan:</p>
 
 -   [Laravel 10](https://laravel.com/)
 -   [PHP 8.2.9](https://www.php.net/)
--		[Bootstrap 5.3.2](https://getbootstrap.com/)
+-   [Bootstrap 5.3](https://getbootstrap.com/)
 -   [Bootstrap Icons](https://icons.getbootstrap.com/)
 -   [ApexCharts](https://apexcharts.com/)
 -   [DataTables](https://datatables.net/)

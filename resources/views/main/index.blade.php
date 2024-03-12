@@ -3,7 +3,7 @@
 @section('content')
 <p>Selamat datang di Aplikasi Klasifikasi Kelayakan Calon Penerima Bantuan Sosial,
 	{{ auth()->user()->name }}. Aplikasi ini menggunakan Naive Bayes sebagai
-	algoritma klasifikasi dengan optimasi Particle Swarm Optimization (PSO).</p>
+	algoritma klasifikasi dengan optimasi Particle Swarm Optimization (On Progress).</p>
 <div class="row">
 	<div class="col-sm-6">
 		<div class="card">

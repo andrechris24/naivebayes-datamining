@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Exports\TrainingExport;
 use App\Imports\TrainingImport;
 use App\Models\Atribut;
 use App\Models\Classification;
@@ -14,6 +14,10 @@ use Yajra\DataTables\Facades\DataTables;
 
 class TrainingDataController extends Controller
 {
+	public function export() 
+	{
+	    return Excel::download(new TrainingExport, 'training.xlsx');
+	}
 	public function import(Request $request) 
 	{
 		$request->validate(TrainingData::$filerule);
@@ -55,7 +59,7 @@ class TrainingDataController extends Controller
 	{
 		$dt = DataTables::of(TrainingData::query());
 		foreach (Atribut::get() as $attr) {
-			if ($attr->type !== 'numeric') {
+			if ($attr->type === 'categorical') {
 				$dt->editColumn($attr->slug, function (TrainingData $train) use ($attr) {
 					$atrib = NilaiAtribut::find($train[$attr->slug]);
 					return $atrib->name;

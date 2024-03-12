@@ -9,6 +9,7 @@ use App\Models\TestingData;
 use App\Models\TrainingData;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProbabilityController extends Controller
 {
@@ -92,16 +93,17 @@ class ProbabilityController extends Controller
 					'atribut_id' => $nilainum->id,
 					'nilai_atribut_id'=>null
 				],[
-					'mean_layak' => $avg[$nilainum->name]['l'] ?? 0.000,
-					'mean_tidak_layak' => $avg[$nilainum->name]['tl'] ?? 0.000,
-					'sd_layak' => $sd[$nilainum->name]['l'] ?? 0.000,
-					'sd_tidak_layak' => $sd[$nilainum->name]['tl'] ?? 0.000
+					'mean_layak' => $avg[$nilainum->name]['l'] ?? 0,
+					'mean_tidak_layak' => $avg[$nilainum->name]['tl'] ?? 0,
+					'sd_layak' => $sd[$nilainum->name]['l'] ?? 0,
+					'sd_tidak_layak' => $sd[$nilainum->name]['tl'] ?? 0
 				]);
 			}
 			//Likelihood End
 
 			return back()->withSuccess('Probabilitas berhasil dihitung');
 		} catch (QueryException $e) {
+			Log::error($e);
 			return back()->withError('Gagal hitung:')->withErrors($e->errorInfo);
 		}
 	}

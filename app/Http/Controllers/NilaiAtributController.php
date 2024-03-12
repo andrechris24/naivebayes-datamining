@@ -6,6 +6,7 @@ use App\Models\Atribut;
 use App\Models\NilaiAtribut;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 
 class NilaiAtributController extends Controller
@@ -73,6 +74,7 @@ class NilaiAtributController extends Controller
 				return response()->json(['message' => 'Berhasil diinput']);
 			}
 		} catch (QueryException $th) {
+			Log::error($th);
 			return response()->json(['message' => $th->errorInfo[2]], 500);
 		}
 	}

@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
 	<div class="card-body">
-		<div class="btn-group" role="button" id="spare-button">
+		<div class="btn-group mb-3" role="button" id="spare-button">
 			<button type="button" class="btn btn-primary calc-class">
 				<i class="bi bi-calculator"></i> Hitung
 			</button>
@@ -65,18 +65,6 @@
 						}, {
 							text: '<i class="bi bi-arrow-clockwise"></i> Reset',
 							className: 'reset-class'
-						}, {
-							extend: "collection",
-							text: '<i class="bi bi-download"></i> Ekspor Hasil',
-							buttons: [{
-								extend: "excel",
-								title: "Hasil Klasifikasi",
-								text: '<i class="bi bi-file-earmark-spreadsheet"></i> Excel'
-							}, {
-								extend: "pdf",
-								title: "Hasil Klasifikasi",
-								text: '<i class="bi bi-file-earmark-pdf"></i> PDF'
-							}]
 						}]
 					}
 				}
@@ -89,12 +77,26 @@
 	}).on("click", ".reset-class", function () {
 		confirm.fire({
 			title: "Reset Klasifikasi?",
-			text: 'Anda akan mereset hasil klasifikasi dari semua tipe data.',
-			preConfirm: async () => {
+			text: 'Anda akan mereset hasil klasifikasi. Pilih tipe data yang akan direset hasilnya.',
+		  input: "select",
+		  inputOptions: {
+		    train: "Data Training (Data Latih)",
+		    test: "Data Testing (Data Uji)",
+		    all: "Semua Data"
+		  },
+		  inputPlaceholder: "Pilih Tipe Data",
+		  inputValidator: (value) => {
+				if (!value) return "Anda harus memilih tipe data";
+			},
+			preConfirm: async (tipe) => {
 				try {
 					await $.ajax({
 						type: "DELETE",
 						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
+						data: {
+							type: tipe
+						},
+						dataType: 'JSON',
 						url: "{{route('class.reset')}}",
 						success: function () {
 							if ($.fn.DataTable.isDataTable("#table-classify"))
@@ -115,6 +117,10 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
+				  customClass: {
+				    popup: 'bg-success',
+				    title: 'text-light'
+				  },
 					title: "Berhasil direset"
 				});
 			}
@@ -126,6 +132,7 @@
 		  inputOptions: {
 		    train: "Data Training (Data Latih)",
 		    test: "Data Testing (Data Uji)"
+		    // all: "Semua Data"
 		  },
 		  inputPlaceholder: "Pilih Tipe Data",
 		  showCancelButton: true,
@@ -144,6 +151,7 @@
 						data: {
 							type: tipe
 						},
+						dataType: 'JSON',
 						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
 						success: function () {
 							return "Berhasil dihitung";
@@ -153,7 +161,7 @@
 								errmsg = xhr.responseJSON.message;
 							else {
 								console.warn(xhr.responseJSON.message ?? st);
-								errmsg = `Gagal hapus: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+								errmsg = `Gagal hitung: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 							}
 							return Swal.showValidationMessage(errmsg);
 						}
@@ -167,7 +175,11 @@
 				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
 				swal.fire({
 					title: "Berhasil dihitung",
-					icon: "success"
+					icon: "success",
+				  customClass: {
+				    popup: 'bg-success',
+				    title: 'text-light'
+				  }
 				});
 			}
 		});

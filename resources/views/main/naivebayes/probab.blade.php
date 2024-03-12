@@ -62,41 +62,41 @@
       </thead>
       <tbody>
         @if($attr->type==='categorical')
-        @forelse($data->where('atribut_id',$attr->id) as $prob)
-        @php
-        $layak+=$prob->layak/$total;
-        $tidak_layak+=$prob->tidak_layak/$total;
-        @endphp
-        <tr>
-          <td>{{$prob->nilai_atribut->name}}</td>
-          <td>{{$prob->layak/$total}}</td>
-          <td>{{$prob->tidak_layak/$total}}</td>
-        </tr>
-        @empty
-        @foreach($attribs['nilai']->where('atribut_id',$attr->id) as $nilai)
-        <tr>
-          <td>{{$nilai->name}}</td>
-          <td>0</td>
-          <td>0</td>
-        </tr>
-        @endforeach
-        @endforelse
-        <tr class="table-secondary">
-          <td>Total</td>
-          <td>{{$layak??0}}</td>
-          <td>{{$tidak_layak??0}}</td>
-        </tr>
+          @forelse($data->where('atribut_id',$attr->id) as $prob)
+            @php
+            $layak+=$prob->layak/$total;
+            $tidak_layak+=$prob->tidak_layak/$total;
+            @endphp
+            <tr>
+              <td>{{$prob->nilai_atribut->name}}</td>
+              <td>{{$prob->layak/$total}}</td>
+              <td>{{$prob->tidak_layak/$total}}</td>
+            </tr>
+          @empty
+            @foreach($attribs['nilai']->where('atribut_id',$attr->id) as $nilai)
+            <tr>
+              <td>{{$nilai->name}}</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            @endforeach
+          @endforelse
+          <tr class="table-secondary">
+            <td>Total</td>
+            <td>{{$layak??0}}</td>
+            <td>{{$tidak_layak??0}}</td>
+          </tr>
         @else
         <tr>
-          <th>{{$attr->name}}</th>
+          <th>Data</th>
           <td>
             @foreach($training['layak'] as $l)
-            {{$l[$attr->slug].(!$loop->last?', ':'')}}
+            {{number_format($l[$attr->slug]).(!$loop->last?'; ':'')}}
             @endforeach
           </td>
           <td>
             @foreach($training['tidak_layak'] as $tl)
-            {{$tl[$attr->slug].(!$loop->last?', ':'')}}
+            {{number_format($tl[$attr->slug]).(!$loop->last?'; ':'')}}
             @endforeach
           </td>
         </tr>

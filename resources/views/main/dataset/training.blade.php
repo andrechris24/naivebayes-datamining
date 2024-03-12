@@ -42,7 +42,7 @@
 					</div>
 					@endforeach
 					<div class="form-floating mb-3">
-						<select name="status" class="form-select" id="trainResult">
+						<select name="status" class="form-select" id="trainResult" required>
 							<option value="" selected>Pilih</option>
 							<option value="Layak">Layak</option>
 							<option value="Tidak Layak">Tidak Layak</option>
@@ -93,7 +93,7 @@
 					<i class="bi bi-x-lg"></i> Batal
 				</button>
 				<button type="submit" class="btn btn-primary data-submit" form="importTrainingData">
-					<i class="bi bi-save"></i> Unggah
+					<i class="bi bi-upload"></i> Upload
 				</button>
 			</div>
 		</div>
@@ -137,16 +137,30 @@
 </div>
 <div class="card">
 	<div class="card-body">
-		<div class="btn-group" role="group" id="spare-button">
-			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddTraining">
-				<i class="bi bi-plus-lg"></i> Tambah Data
-			</button>
-			<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalImportTraining">
-				<i class="bi bi-upload"></i> Upload Data
-			</button>
+		<div class="btn-group mb-3" role="group" id="spare-button">
+			<div class="btn-group" role="group">
+			  <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+			    <i class="bi bi-plus-lg"></i> Tambah Data
+			  </button>
+			  <ul class="dropdown-menu">
+			    <li>
+			    	<a class="dropdown-item" href="#modalAddTraining" data-bs-toggle="modal">
+			    		<i class="bi bi-pencil"></i> Input Manual
+			    	</a>
+			    </li>
+			    <li>
+			    	<a class="dropdown-item" href="#modalImportTraining" data-bs-toggle="modal">
+			    	<i class="bi bi-upload"></i> Upload File
+			    	</a>
+			    </li>
+			  </ul>
+			</div>
 			<button type="button" class="btn btn-danger delete-all">
-				<i class="bi bi-trash3-fill"></i> Hapus semua data
+				<i class="bi bi-trash3-fill"></i> Hapus Data
 			</button>
+			<a href="{{route('training.export')}}" class="btn btn-success">
+				<i class="bi bi-download"></i> Ekspor Data
+			</a>
 		</div>
 		<table class="table table-bordered" id="table-training" width="100%">
 			<thead>
@@ -191,6 +205,7 @@
 				],
 				columnDefs: [{
 					targets: 0,
+					searchable: false,
 					render: function (data, type, full, meta) {
 						return meta.settings._iDisplayStart + meta.row + 1;
 					}
@@ -199,7 +214,6 @@
 					{
 						targets: 2+{{$loop->index}},
 						render:function(data){
-							console.log(data);
 							if(data===null) return '?';
 							else return data;
 						}
@@ -207,6 +221,7 @@
 				@endforeach
 				{ //Aksi
 					orderable: false,
+					searchable: false,
 					targets: -1,
 					render: function (data, type, full) {
 						return ('<div class="btn-group btn-group-sm" role="group">' +
@@ -226,38 +241,29 @@
 					topStart: {
 						buttons: [{
 							text: '<i class="bi bi-plus-lg"></i> Tambah Data',
-							className: "add-new",
-							attr: {
-								"data-bs-toggle": "modal",
-								"data-bs-target": "#modalAddTraining"
-							}
-						}, {
-							text: '<i class="bi bi-upload"></i> Upload Data',
-							attr: {
-								"data-bs-toggle": "modal",
-								"data-bs-target": "#modalImportTraining"
-							}
-						},{
-							text: '<i class="bi bi-trash3-fill"></i> Hapus semua data',
-							className: "delete-all"
-						}, {
 							extend: "collection",
-							text: '<i class="bi bi-download"></i> Ekspor Data',
 							buttons: [{
-								extend: "excel",
-								title: "Data Training",
-								text: '<i class="bi bi-file-earmark-spreadsheet"></i> Excel',
-								exportOptions: {
-									columns: ':not(:last-child)',
+								text: '<i class="bi bi-pencil"></i> Input Manual',
+								className: "add-new",
+								attr: {
+									"data-bs-toggle": "modal",
+									"data-bs-target": "#modalAddTraining"
 								}
 							}, {
-								extend: "pdf",
-								title: "Data Training",
-								text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
-								exportOptions: {
-									columns: ':not(:last-child)',
+								text: '<i class="bi bi-upload"></i> Upload File',
+								attr: {
+									"data-bs-toggle": "modal",
+									"data-bs-target": "#modalImportTraining"
 								}
 							}]
+						},{
+							text: '<i class="bi bi-trash3-fill"></i> Hapus Data',
+							className: "delete-all"
+						}, {
+							text: '<i class="bi bi-download"></i> Ekspor Data',
+				      action: function () {
+				        location.href = "{{route('training.export')}}";
+				      }
 						}]
 					}
 				}
@@ -309,6 +315,10 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
+				  customClass: {
+				    popup: 'bg-success',
+				    title: 'text-light'
+				  },
 					title: "Berhasil dihapus"
 				});
 			}
@@ -347,6 +357,10 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
+				  customClass: {
+				    popup: 'bg-success',
+				    title: 'text-light'
+				  },
 					title: "Berhasil dihapus"
 				});
 			}
@@ -373,6 +387,10 @@
 			}
 			swal.fire({
 				icon: "error",
+				customClass: {
+				  popup: 'bg-danger',
+				  title: 'text-light'
+				},
 				title: "Gagal memuat data",
 				text: errmsg
 			});
@@ -380,7 +398,7 @@
 			formloading("#addNewTrainingForm :input",false);
 		});
 	});
-	$('#importTrainingData').submit(function(e){
+	$('#importTrainingData').submit(function(e){//form Upload Data
 		e.preventDefault();
 		$.ajax({
         type: "POST",
@@ -402,6 +420,10 @@
 					$('#modalImportTraining').modal("hide");
 					swal.fire({
 						icon: "success",
+					  customClass: {
+					    popup: 'bg-success',
+					    title: 'text-light'
+					  },
 						titleText: "Berhasil diupload"
 					});
 				},
@@ -420,12 +442,16 @@
 					swal.fire({
 						title: "Gagal",
 						text: errmsg,
-						icon: "error"
+						icon: "error",
+					  customClass: {
+					    popup: 'bg-danger',
+					    title: 'text-light'
+					  }
 					});
 				}
     });
 	});
-	function submitform(ev) {
+	function submitform(ev) {//form Input Manual
 		ev.preventDefault();
 		$.ajax({
 			data: $("#addNewTrainingForm").serialize(),
@@ -443,6 +469,10 @@
 				modalForm.modal("hide");
 				swal.fire({
 					icon: "success",
+				  customClass: {
+				    popup: 'bg-success',
+				    title: 'text-light'
+				  },
 					titleText: status.message
 				});
 			},
@@ -460,7 +490,7 @@
 					}
 					@endforeach
 					if (typeof xhr.responseJSON.errors.status !== "undefined") {
-						$("#trainName").addClass("is-invalid");
+						$("#trainResult").addClass("is-invalid");
 						$("#status-error").text(xhr.responseJSON.errors.status);
 					}
 					errmsg = xhr.responseJSON.message;
@@ -471,7 +501,11 @@
 				swal.fire({
 					title: "Gagal",
 					text: errmsg,
-					icon: "error"
+					icon: "error",
+					  customClass: {
+					    popup: 'bg-danger',
+					    title: 'text-light'
+					  }
 				});
 			}
 		});

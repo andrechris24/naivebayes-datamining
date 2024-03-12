@@ -7,6 +7,7 @@ use App\Models\NilaiAtribut;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
@@ -17,7 +18,7 @@ class AtributController extends Controller
 	{
 		$attr = Atribut::get();
 		$unused = 0;
-		foreach ($attr as $at) {
+		foreach (Atribut::where('type','categorical') as $at) {
 			if (NilaiAtribut::where('atribut_id', $at->id)->count() === 0)
 				$unused++;
 		}
@@ -104,6 +105,7 @@ class AtributController extends Controller
 					'errors' => ['name' => 'Nama Atribut sudah digunakan']
 				], 422);
 			}
+			Log::error($e);
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
 	}

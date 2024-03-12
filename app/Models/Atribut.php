@@ -15,7 +15,7 @@ class Atribut extends Model
 	];
 	public static array $tipe = [
 		'numeric' => 'Numerik',
-		'categorical' => 'Kategorikal'
+		'categorical' => 'Kategoris'
 	];
 	public function nilai_atribut()
 	{

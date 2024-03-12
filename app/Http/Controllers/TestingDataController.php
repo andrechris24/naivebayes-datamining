@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Exports\TestingExport;
 use App\Imports\TestingImport;
 use App\Models\Atribut;
 use App\Models\Classification;
@@ -9,20 +9,26 @@ use App\Models\NilaiAtribut;
 use App\Models\TestingData;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class TestingDataController extends Controller
 {
+	public function export() 
+	{
+	    return Excel::download(new TestingExport, 'testing.xlsx');
+	}
 	public function import() 
 	{
+		$request->validate(TestingData::$filerule);
 		Excel::import(new TestingImport, request()->file('testing_data'));
 		return response()->json(['message'=>'Berhasil diimpor']);
 	}
 	public function count()
 	{
 		$test = TestingData::get();
-		$testUnique = $test->unique(['name']);
+		$testUnique = $test->unique(['nama']);
 		return [
 			'total' => count($test),
 			// 'missing' => '',
@@ -54,7 +60,7 @@ class TestingDataController extends Controller
 	{
 		$dt = DataTables::of(TestingData::query());
 		foreach (Atribut::get() as $attr) {
-			if ($attr->type !== 'numeric') {
+			if ($attr->type === 'categorical') {
 				$dt->editColumn($attr->slug, function (TestingData $test) use ($attr) {
 					$atrib = NilaiAtribut::find($test[$attr->slug]);
 					return $atrib->name;
@@ -84,6 +90,7 @@ class TestingDataController extends Controller
 				return response()->json(['message' => 'Berhasil diinput']);
 			}
 		} catch (QueryException $e) {
+			Log::error($e);
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
 	}
@@ -112,6 +119,7 @@ class TestingDataController extends Controller
 			TestingData::truncate();
 			return response()->json(['message' => 'Berhasil dihapus']);
 		} catch (QueryException $e) {
+			Log::error($e);
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
 	}

@@ -2,6 +2,7 @@
 @section('title','Performa')
 @section('content')
 <div class="card mb-3">
+  <div class="card-header"><b>Hasil tanpa Particle Swarm Optimization</b></div>
   <div class="card-body">
     <div class="row">
       <div class="col-lg-6">
@@ -9,26 +10,35 @@
           <caption></caption>
           <thead>
             <tr>
-              <th>#</th>
-              <th colspan="2">Prediksi</th>
+              <th>{{round($performa['accuracy'],2)}}%</th>
+              <th colspan="2">Aktual</th>
+              <th>Presisi</th>
             </tr>
             <tr>
-              <th>Aktual</th>
-              <td>Layak</td>
-              <td>Tidak Layak</td>
+              <th>Prediksi</th>
+              <th>Layak</th>
+              <th>Tidak Layak</th>
+              <th>{{round($performa['precision'],2)}}%</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <th>Layak</th>
-              <td>{{$data['ll']}}</td>
-              <td>{{$data['ltl']}}</td>
+              <td class="table-success">{{$data['ll']}}</td>
+              <td class="table-danger">{{$data['tll']}}</td>
+              <td>{{round($data['pl'],2)}}%</td>
             </tr>
             <tr>
               <th>Tidak Layak</th>
-              <td>{{$data['tll']}}</td>
-              <td>{{$data['tltl']}}</td>
+              <td class="table-danger">{{$data['ltl']}}</td>
+              <td class="table-success">{{$data['tltl']}}</td>
+              <td>{{round($data['ptl'],2)}}%</td>
             </tr>
+            <tr>
+              <th>Recall</th>
+              <td>{{round($data['rl'],2)}}%</td>
+              <td>{{round($data['rtl'],2)}}%</td>
+              <td>{{round($performa['recall'],2)}}%</td>
           </tbody>
         </table>
       </div>
@@ -38,115 +48,10 @@
     </div>
     <div class="row">
       <div class="col-lg-6">
-        <table class="table table-bordered caption-top">
-          <caption>Confusion Matrix</caption>
-          <thead>
-            <tr>
-              <th>#</th>
-              <td>Layak</td>
-              <td>Tidak Layak</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>Layak</th>
-              <td class="table-success">0</td>
-              <td class="table-danger">0</td>
-            </tr>
-            <tr>
-              <th>Tidak Layak</th>
-              <td class="table-danger">0</td>
-              <td class="table-success">0</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="col-lg-6">
-        <div id="cm"></div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="card mb-3">
-  <div class="card-header"><b>Hasil tanpa Particle Swarm Optimization</b></div>
-  <div class="card-body">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Layak</th>
-          <th>Tidak Layak</th>
-          <th>Hasil Akhir</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>Akurasi</th>
-          <td colspan="2">-</td>
-          <td>{{$performa['accuracy']*100}}%</td>
-        </tr>
-        <tr>
-          <th>Precision</th>
-          <td>0</td>
-          <td>0</td>
-          <td>0%</td>
-        </tr>
-        <tr>
-          <th>Recall</th>
-          <td>0</td>
-          <td>0</td>
-          <td>0%</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="row">
-      <div class="col-lg-6">
         <div id="perform-vector"></div>
       </div>
       <div class="col-lg-6">
         <div id="perform-radial"></div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="card mb-3">
-  <div class="card-header"><b>Hasil dengan Particle Swarm Optimization</b></div>
-  <div class="card-body">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Layak</th>
-          <th>Tidak Layak</th>
-          <th>Hasil Akhir</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>Akurasi</th>
-          <td colspan="2">-</td>
-          <td>0%</td>
-        </tr>
-        <tr>
-          <th>Presisi</th>
-          <td>0</td>
-          <td>0</td>
-          <td>0%</td>
-        </tr>
-        <tr>
-          <th>Recall</th>
-          <td>0</td>
-          <td>0</td>
-          <td>0%</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="row">
-      <div class="col-lg-6">
-        <div id="perform-vector-pso"></div>
-      </div>
-      <div class="col-lg-6">
-        <div id="perform-radial-pso"></div>
       </div>
     </div>
   </div>
@@ -181,43 +86,16 @@
       text: 'Hasil Prediksi'
     }
   };
-  const bar2Opt={
-    series: [
-      {
-        name: "Layak (Prediksi)",
-        data: [44, 55]
-      },
-      {
-        name: "Tidak Layak (Prediksi)",
-        data: [76, 85]
-      }
-    ],
-    chart: {
-      type: "bar"
-    },
-    dataLabels: {
-      enabled: false
-    },
-    tooltip: {
-      theme: 'dark'
-    },
-    xaxis: {
-      categories: ["Layak (Aktual)", "Tidak Layak (Aktual)"]
-    },
-    title: {
-      text: 'Confusion Matrix'
-    }
-  };
-  const bar3Opt={
+  const vectorOptions = {
     series: [
       {
         name: "Layak",
-        data: [0.4, 0.5, 0.8]
+        data: [{{$data['al']}}, {{$data['pl']}}, {{$data['rl']}}]
       },
       {
         name: "Tidak Layak",
-        data: [0.6, 0.5, 0.2]
-      }
+        data: [{{$data['atl']}}, {{$data['ptl']}}, {{$data['rtl']}}]
+      },
     ],
     chart: {
       type: "bar"
@@ -232,14 +110,14 @@
       categories: ["Akurasi", "Presisi", "Recall"]
     },
     title: {
-      text: 'Performa'
+      text: 'Performance Vector'
     }
   };
   const radials={
     series: [
-      {{$performa['accuracy']*100}}, 
-      {{$performa['precision']*100}}, 
-      {{$performa['recall']*100}}
+      {{$performa['accuracy']}}, 
+      {{$performa['precision']}}, 
+      {{$performa['recall']}}
     ],
     chart: {
       type: 'radialBar'
@@ -253,12 +131,10 @@
     labels: ['Akurasi', 'Presisi', 'Recall']
   };
   const bar = new ApexCharts(document.querySelector("#predict-actual"), barOptions),
-  bar2 = new ApexCharts(document.querySelector("#cm"), bar2Opt),
-  bar3 = new ApexCharts(document.querySelector("#perform-vector"), bar3Opt),
+  performBar=new ApexCharts(document.querySelector("#perform-vector"), vectorOptions),
   rad=new ApexCharts(document.querySelector("#perform-radial"), radials);
   bar.render();
-  bar2.render();
-  bar3.render();
+  performBar.render();
   rad.render();
   function pso_init(y) {
     var nDims= y.min.length;

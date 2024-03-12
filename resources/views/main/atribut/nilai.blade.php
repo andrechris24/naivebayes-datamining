@@ -67,7 +67,8 @@
 	<div class="col-md-4 mb-3">
 		<div class="card">
 			<div class="card-body">
-				<div class="d-flex align-items-start justify-content-between">
+				<div class="d-flex align-items-start justify-content-between" data-bs-toggle="tooltip"
+					title="Terbanyak per Atribut">
 					<div class="content-left">
 						<span>Terbanyak</span>
 						<div class="d-flex align-items-end mt-2">
@@ -101,7 +102,7 @@
 </div>
 <div class="card">
 	<div class="card-body">
-		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddNilaiAtribut"
+		<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAddNilaiAtribut"
 			id="spare-button">
 			<i class="bi bi-plus-lg"></i> Tambah Nilai Atribut
 		</button>
@@ -140,11 +141,13 @@
 				],
 				columnDefs: [{
 					targets: 0,
+					searchable: false,
 					render: function (data, type, full, meta) {
 						return meta.settings._iDisplayStart + meta.row + 1;
 					}
 				}, { //Aksi
 					orderable: false,
+					searchable: false,
 					targets: -1,
 					render: function (data, type, full) {
 						return ('<div class="btn-group btn-group-sm" role="group">' +
@@ -169,24 +172,6 @@
 								"data-bs-toggle": "modal",
 								"data-bs-target": "#modalAddNilaiAtribut"
 							}
-						}, {
-							extend: "collection",
-							text: '<i class="bi bi-download"></i> Ekspor Data',
-							buttons: [{
-								extend: "excel",
-								title: "Nilai Atribut",
-								text: '<i class="bi bi-file-earmark-spreadsheet"></i> Excel',
-								exportOptions: {
-									columns: [1, 2]
-								}
-							}, {
-								extend: "pdf",
-								title: "Nilai Atribut",
-								text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
-								exportOptions: {
-									columns: [1, 2]
-								}
-							}]
 						}]
 					}
 				}
@@ -201,6 +186,10 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					swal.fire({
 						icon: 'error',
+					  customClass: {
+					    popup: 'bg-danger',
+					    title: 'text-light'
+					  },
 						title: 'Gagal memuat jumlah',
 						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`
 					});
@@ -243,6 +232,10 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
+				  customClass: {
+				    popup: 'bg-success',
+				    title: 'text-light'
+				  },
 					title: "Berhasil dihapus"
 				});
 			}
@@ -266,6 +259,10 @@
 			}
 			swal.fire({
 				icon: "error",
+				customClass: {
+				  popup: 'bg-danger',
+				  title: 'text-light'
+				},
 				title: "Gagal memuat data",
 				text: errmsg
 			});
@@ -291,6 +288,10 @@
 				modalForm.modal("hide");
 				swal.fire({
 					icon: "success",
+				  customClass: {
+				    popup: 'bg-success',
+				    title: 'text-light'
+				  },
 					titleText: status.message
 				});
 			},
@@ -313,7 +314,11 @@
 				swal.fire({
 					title: "Gagal",
 					text: errmsg,
-					icon: "error"
+					icon: "error",
+					  customClass: {
+					    popup: 'bg-danger',
+					    title: 'text-light'
+					  }
 				});
 			}
 		});

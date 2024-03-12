@@ -24,7 +24,7 @@
 						<select name="type" class="form-select" id="attrType" required>
 							<option value="">Pilih</option>
 							<option value="numeric">Numerik</option>
-							<option value="categorical">Kategorikal</option>
+							<option value="categorical">Kategoris (Categorical)</option>
 						</select>
 						<label for="attrType">Tipe Atribut</label>
 						<div class="invalid-feedback" id="type-error">
@@ -75,7 +75,8 @@
 	<div class="col-sm-6 mb-3">
 		<div class="card">
 			<div class="card-body">
-				<div class="d-flex align-items-start justify-content-between">
+				<div class="d-flex align-items-start justify-content-between" data-bs-toggle="tooltip"
+					title="Atribut Kategoris yang tidak digunakan">
 					<div class="content-left">
 						<span>Tidak digunakan</span>
 						<div class="d-flex align-items-end mt-2">
@@ -92,7 +93,7 @@
 </div>
 <div class="card">
 	<div class="card-body">
-		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddAtribut"
+		<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAddAtribut"
 			id="spare-button">
 			<i class="bi bi-plus-lg"></i> Tambah Atribut
 		</button>
@@ -133,6 +134,7 @@
 				],
 				columnDefs: [{
 					targets: 0,
+					searchable: false,
 					render: function (data, type, full, meta) {
 						return meta.settings._iDisplayStart + meta.row + 1;
 					}
@@ -144,6 +146,7 @@
 					}
 				}, { //Aksi
 					orderable: false,
+					searchable: false,
 					targets: -1,
 					render: function (data, type, full) {
 						return ('<div class="btn-group btn-group-sm" role="group">' +
@@ -168,24 +171,6 @@
 								"data-bs-toggle": "modal",
 								"data-bs-target": "#modalAddAtribut"
 							}
-						}, {
-							extend: "collection",
-							text: '<i class="bi bi-download"></i> Ekspor Data',
-							buttons: [{
-								extend: "excel",
-								title: "Atribut",
-								text: '<i class="bi bi-file-earmark-spreadsheet"></i> Excel',
-								exportOptions: {
-									columns: [1, 2, 3]
-								}
-							}, {
-								extend: "pdf",
-								title: "Atribut",
-								text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
-								exportOptions: {
-									columns: [1, 2, 3]
-								}
-							}]
 						}]
 					}
 				}
@@ -200,7 +185,11 @@
 					swal.fire({
 						icon: 'error',
 						title: 'Gagal memuat jumlah',
-						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`
+						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`,
+					  customClass: {
+					    popup: 'bg-danger',
+					    title: 'text-light'
+					  }
 					});
 				});
 			}).on('preInit.dt', removeBtn());
@@ -241,6 +230,10 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
+				  customClass: {
+				    popup: 'bg-success',
+				    title: 'text-light'
+				  },
 					title: "Berhasil dihapus"
 				});
 			}
@@ -265,6 +258,10 @@
 			}
 			swal.fire({
 				icon: "error",
+			  customClass: {
+			    popup: 'bg-danger',
+			    title: 'text-light'
+			  },
 				title: "Gagal memuat data",
 				text: errmsg
 			});
@@ -290,6 +287,10 @@
 				modalForm.modal("hide");
 				swal.fire({
 					icon: "success",
+				  customClass: {
+				    popup: 'bg-success',
+				    title: 'text-light'
+				  },
 					titleText: status.message
 				});
 			},
@@ -316,7 +317,11 @@
 				swal.fire({
 					title: "Gagal",
 					text: errmsg,
-					icon: "error"
+					icon: "error",
+				  customClass: {
+				    popup: 'bg-danger',
+				    title: 'text-light'
+				  }
 				});
 			}
 		});

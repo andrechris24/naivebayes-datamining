@@ -9,6 +9,7 @@ use App\Models\TestingData;
 use App\Models\TrainingData;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 
 class ClassificationController extends Controller
@@ -32,15 +33,7 @@ class ClassificationController extends Controller
 				return response()->json(['message' => 'Probabilitas belum dihitung'], 400);
 
 			//Prior start
-			if($request->type==='train'){
-				if(TrainingData::count()===0)
-					return response()->json(['message' => "Data Training kosong"], 400);
-				$semuadata=TrainingData::get();
-			}else{
-				if (TestingData::count() === 0) 
-					return response()->json(['message' => "Data Testing kosong"], 400);
-				$semuadata=TestingData::get();
-			}
+			$semuadata=$this->getData($request->type);
 			$probab = Controller::probabKelas();
 			//Prior end
 
@@ -49,23 +42,15 @@ class ClassificationController extends Controller
 				$plf['l'] = $plf['tl'] = 1;
 				foreach (Atribut::get() as $at) {
 					if ($at->type === 'categorical') {
-						$probabilitas = Probability::where('nilai_atribut_id', $dataset[$at->slug])
-						->first();
+						$probabilitas = Probability::firstWhere(
+							'nilai_atribut_id', $dataset[$at->slug]
+						);
 						$plf['l'] *= $probabilitas['layak'];
 						$plf['tl'] *= $probabilitas['tidak_layak'];
-					} else {
-						$probabilitas = Probability::where('atribut_id', $at->id)->first();
-						// dd($test[$at->slug]);
-						$plf['l'] = pow(
-							(1 / ($probabilitas->sd_layak * sqrt(2 * pi()))) * exp(1),
-							-((pow($dataset[$at->slug] - $probabilitas->mean_layak,2)) / 
-								(2 * pow($probabilitas->sd_layak,2)))
-						);
-						$plf['tl'] = pow(
-							(1 / ($probabilitas->sd_tidak_layak * sqrt(2 * pi()))) * exp(1),
-							-((pow($dataset[$at->slug] - $probabilitas->mean_tidak_layak,2)) / 
-								(2 * pow($probabilitas->sd_tidak_layak,2)))
-						);
+					} else {//Numeric
+						$probabilitas = Probability::firstWhere('atribut_id', $at->id);
+						$plf['l']*= $this->normalDistribution($dataset[$at->slug],$probabilitas->sd_layak,$probabilitas->mean_layak);
+						$plf['tl'] *= $this->normalDistribution($dataset[$at->slug],$probabilitas->sd_tidak_layak,$probabilitas->mean_tidak_layak);
 					}
 				}
 				$p['layak'] = $plf['l'] == 0 ? 0 : ($plf['l'] * $probab['l']) / $plf['l'];
@@ -85,6 +70,7 @@ class ClassificationController extends Controller
 			}
 			return response()->json(['message' => 'Berhasil dihitung']);
 		} catch (QueryException $e) {
+			Log::error($e);
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
 	}
@@ -103,13 +89,37 @@ class ClassificationController extends Controller
 	/**
 	 * Remove the specified resource from storage.
 	 */
-	public function destroy()
+	public function destroy(Request $request)
 	{
+		$request->validate(Classification::$rule);
 		try {
-			Classification::truncate();
+			if($request->type==='all')
+				Classification::truncate();
+			else
+				Classification::where('type',$request->type)->delete();
 			return response()->json(['message' => 'Berhasil direset']);
 		} catch (QueryException $e) {
+			Log::error($e);
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
+	}
+	private function getData($type){
+		if($type==='all'){
+			$training=TrainingData::get();
+			$testing=TestingData::get();
+			$data=$training->merge($testing);
+		}else if($type==='train'){
+			if(TrainingData::count()===0)
+				return response()->json(['message' => "Data Training kosong"], 400);
+			$data=TrainingData::get();
+		}else{
+			if (TestingData::count() === 0) 
+				return response()->json(['message' => "Data Testing kosong"], 400);
+			$data=TestingData::get();
+		}
+		return $data;
+	}
+	private function normalDistribution($x,$sd,$mean){
+		return (1 / ($sd * sqrt(2 * pi()))) * exp(-0.5*pow(($x - $mean)/$sd,2));
 	}
 }

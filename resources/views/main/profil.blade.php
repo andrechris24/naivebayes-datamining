@@ -104,6 +104,10 @@
 				resetvalidation();
 				swal.fire({
 					icon: "success",
+				  customClass: {
+				    popup: 'bg-success',
+				    title: 'text-light'
+				  },
 					title: "Tersimpan"
 				});
 			},
@@ -144,7 +148,11 @@
 				swal.fire({
 					title: "Gagal simpan",
 					text: errmsg,
-					icon: "error"
+					icon: "error",
+					  customClass: {
+					    popup: 'bg-danger',
+					    title: 'text-light'
+					  }
 				});
 			}
 		});
@@ -199,7 +207,11 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					title: "Akun sudah dihapus",
-					icon: "success"
+					icon: "success",
+				  customClass: {
+				    popup: 'bg-success',
+				    title: 'text-light'
+				  }
 				});
 				location.href = "{{ route('login') }}";
 			}

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -44,6 +45,7 @@ class AdminController extends Controller
 			User::create($req);
 			return to_route('login')->withSuccess('Akun berhasil dibuat');
 		} catch (QueryException $e) {
+			Log::error($e);
 			return back()->withInput()->withError('Gagal membuat akun:')
 				->withErrors($e->errorInfo);
 		}
@@ -89,10 +91,12 @@ class AdminController extends Controller
 			elseif ($status === Password::RESET_THROTTLED)
 				return back()->withInput()->withError(__('passwords.throttled'));
 		} catch (TransportException $err) {
+			Log::error($err);
 			// DB::table('password_reset_tokens')->where('email',$request->email)->delete();
 			return back()->withInput()->withError("Gagal mengirim link reset password:")
 				->withErrors($err);
 		} catch (QueryException $sql) {
+			Log::error($sql);
 			return back()->withInput()->withErrors($sql->errorInfo)
 				->withError("Gagal membuat token reset password:");
 		}
@@ -112,6 +116,7 @@ class AdminController extends Controller
 				return to_route('password.request')->withError(__('passwords.token'));
 			return view('auth.reset', ['token' => $_GET['token'], 'email' => $_GET['email']]);
 		} catch (QueryException $e) {
+			Log::error($e);
 			return to_route('password.request')->withError("Kesalahan:")
 				->withErrors($e->errorInfo);
 		}
@@ -136,6 +141,7 @@ class AdminController extends Controller
 				return back()->withError(__('passwords.user'));
 			return back()->withError('Reset password gagal: Kesalahan tidak diketahui');
 		} catch (QueryException $e) {
+			Log::error($e);
 			return back()->withError("Reset password gagal:")
 				->withErrors($e->errorInfo);
 		}
@@ -166,6 +172,7 @@ class AdminController extends Controller
 					'errors' => ['email' => "Email sudah digunakan"]
 				], 422);
 			}
+			Log::error($e);
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
 	}
@@ -181,6 +188,7 @@ class AdminController extends Controller
 		} catch (ModelNotFoundException) {
 			return response()->json(['message' => 'Akun tidak ditemukan'], 404);
 		} catch (QueryException $db) {
+			Log::error($db);
 			return response()->json(['message' => $db->errorInfo[2]], 500);
 		}
 	}
