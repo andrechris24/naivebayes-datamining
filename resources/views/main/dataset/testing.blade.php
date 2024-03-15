@@ -16,18 +16,14 @@
 					<div class="form-floating mb-3">
 						<input type="text" class="form-control" id="testName" name="nama" placeholder="Nama" required />
 						<label for="testName">Nama</label>
-						<div class="invalid-feedback" id="name-error">
-							Masukkan Nama
-						</div>
+						<div class="invalid-feedback" id="name-error">Masukkan Nama</div>
 					</div>
 					@foreach ($atribut as $attr)
 					<div class="form-floating mb-3" data-bs-toggle="tooltip" title="{{$attr->desc}}">
 						@if ($attr->type==='numeric')
-						@php($msg="Isikan ")
 						<input type="number" class="form-control" min="0" name="q[{{$attr->slug}}]"
 							id="test-{{$attr->slug}}" placeholder="123456789">
 						@else
-						@php($msg="Pilih ")
 						<select name="q[{{$attr->slug}}]" class="form-select" id="test-{{$attr->slug}}">
 							<option value="">Pilih</option>
 							@foreach ($nilai->where('atribut_id',$attr->id) as $sub)
@@ -37,7 +33,7 @@
 						@endif
 						<label for="test-{{$attr->slug}}">{{$attr->name}}</label>
 						<div class="invalid-feedback" id="{{$attr->slug}}-error">
-							{{$msg.$attr->name}}
+							{{($attr->type==='numeric'?'Isikan ':'Pilih ').$attr->name}}
 						</div>
 					</div>
 					@endforeach
@@ -81,7 +77,7 @@
 					@csrf
 					<input type="file" class="form-control" id="testData" name="data"  aria-describedby="importFormats" accept=".csv, .tsv, .ods, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
 					<div id="importFormats" class="form-text">
-					  Format yang diperbolehkan: .xls, .xlsx, .csv, .tsv
+						Format yang diperbolehkan: .xls, .xlsx, .csv, .tsv
 					</div>
 				</form>
 			</div>
@@ -139,21 +135,21 @@
 	<div class="card-body">
 		<div class="btn-group mb-3" role="group" id="spare-button">
 			<div class="btn-group" role="group">
-			  <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-			    <i class="bi bi-plus-lg"></i> Tambah Data
-			  </button>
-			  <ul class="dropdown-menu">
-			    <li>
-			    	<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalAddTesting">
-			    		<i class="bi bi-pencil"></i> Input Manual
-			    	</a>
-			    </li>
-			    <li>
-			    	<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalImportTesting">
-			    	<i class="bi bi-upload"></i> Upload File
-			    	</a>
-			    </li>
-			  </ul>
+				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					<i class="bi bi-plus-lg"></i> Tambah Data
+				</button>
+				<ul class="dropdown-menu">
+					<li>
+						<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalAddTesting">
+							<i class="bi bi-pencil"></i> Input Manual
+						</a>
+					</li>
+					<li>
+						<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalImportTesting">
+						<i class="bi bi-upload"></i> Upload File
+						</a>
+					</li>
+				</ul>
 			</div>
 			<button type="button" class="btn btn-danger delete-all">
 				<i class="bi bi-trash3-fill"></i> Hapus Data
@@ -212,9 +208,9 @@
 				},
 				@foreach ($atribut as $attr)
 				{
-					targets: 1+{{$loop->index}},
+					targets: 1 + {{$loop->index}},
 					render:function(data){
-						if(data===null) return '?';
+						if(data === null) return '?';
 						else return data;
 					}
 				},
@@ -261,9 +257,9 @@
 							className: "delete-all"
 						}, {
 							text: '<i class="bi bi-download"></i> Ekspor Data',
-				      action: function () {
-				        location.href = "{{route('testing.export')}}";
-				    	}
+							action: function () {
+								location.href = "{{route('testing.export')}}";
+							}
 						}]
 					}
 				}
@@ -277,11 +273,11 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					swal.fire({
 						icon: 'error',
-					  customClass: {
-					    popup: 'bg-danger',
-					    title: 'text-light'
-					  },
-						title: 'Gagal memuat jumlah',
+						customClass: {
+							popup: 'bg-danger',
+							title: 'text-light'
+						},
+						titleText: 'Gagal memuat jumlah',
 						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`
 					});
 				});
@@ -291,7 +287,7 @@
 		}
 	}).on("click", ".delete-all", function () {
 		confirm.fire({
-			title: "Hapus semua Data Testing?",
+			titleText: "Hapus semua Data Testing?",
 			text: 'Anda akan menghapus semua Data Testing yang akan mempengaruhi klasifikasi terkait.',
 			preConfirm: async () => {
 				try {
@@ -306,8 +302,7 @@
 						error: function (xhr, st) {
 							console.warn(xhr.responseJSON.message ?? st);
 							return Swal.showValidationMessage(
-								`Gagal hapus: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`
-							);
+								`Gagal hapus: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`);
 						}
 					});
 				} catch (error) {
@@ -318,18 +313,18 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
-				  customClass: {
-				    popup: 'bg-success',
-				    title: 'text-light'
-				  },
-					title: "Berhasil dihapus"
+					customClass: {
+						popup: 'bg-success',
+						title: 'text-light'
+					},
+					titleText: "Berhasil dihapus"
 				});
 			}
 		});
 	}).on("click", ".delete-record", function () {
 		let test_id = $(this).data("id"), test_name = $(this).data("name");
 		confirm.fire({
-			title: "Hapus Data Testing?",
+			titleText: "Hapus Data Testing?",
 			text: `Anda akan menghapus Data Testing ${test_name}.`,
 			preConfirm: async () => {
 				try {
@@ -360,11 +355,11 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
-				  customClass: {
-				    popup: 'bg-success',
-				    title: 'text-light'
-				  },
-					title: "Berhasil dihapus"
+					customClass: {
+						popup: 'bg-success',
+						title: 'text-light'
+					},
+					titleText: "Berhasil dihapus"
 				});
 			}
 		});
@@ -391,10 +386,10 @@
 			swal.fire({
 				icon: "error",
 				customClass: {
-				  popup: 'bg-danger',
-				  title: 'text-light'
+					popup: 'bg-danger',
+					title: 'text-light'
 				},
-				title: "Gagal memuat data",
+				titleText: "Gagal memuat data",
 				text: errmsg
 			});
 		}).always(function () {
@@ -404,55 +399,55 @@
 	$('#importTestingData').submit(function(e){//form Upload Data
 		e.preventDefault();
 		$.ajax({
-        type: "POST",
-        url: "{{route('testing.import')}}",
-        dataType: 'JSON',
-        data: new FormData(this),
-        contentType: false,
-        cache: false,
-        processData: false,
-        beforeSend: function () {
-					formloading("#importTestingData :input",true);
-					$("#importTestingData :input").removeClass("is-invalid");
-				},
-				complete: function () {
-					formloading("#importTestingData :input",false);
-				},
-				success: function (status) {
-					if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
-					$('#modalImportTesting').modal("hide");
-					swal.fire({
-						icon: "success",
-					  customClass: {
-					    popup: 'bg-success',
-					    title: 'text-light'
-					  },
-						titleText: "Berhasil diupload"
-					});
-				},
-				error: function (xhr, st) {
-					if (xhr.status === 422) {
-						resetvalidation();
-						if (typeof xhr.responseJSON.errors.data !== "undefined") {
-							$("#testData").addClass("is-invalid");
-							$("#data-error").text(xhr.responseJSON.errors.data);
-						}
-						errmsg = xhr.responseJSON.message;
-					} else {
-						console.warn(xhr.responseJSON.message ?? st);
-						errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+			type: "POST",
+			url: "{{route('testing.import')}}",
+			dataType: 'JSON',
+			data: new FormData(this),
+			contentType: false,
+			cache: false,
+			processData: false,
+			beforeSend: function () {
+				formloading("#importTestingData :input",true);
+				$("#importTestingData :input").removeClass("is-invalid");
+			},
+			complete: function () {
+				formloading("#importTestingData :input",false);
+			},
+			success: function (status) {
+				if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
+				$('#modalImportTesting').modal("hide");
+				swal.fire({
+					icon: "success",
+					customClass: {
+						popup: 'bg-success',
+						title: 'text-light'
+					},
+					titleText: "Berhasil diupload"
+				});
+			},
+			error: function (xhr, st) {
+				if (xhr.status === 422) {
+					resetvalidation();
+					if (typeof xhr.responseJSON.errors.data !== "undefined") {
+						$("#testData").addClass("is-invalid");
+						$("#data-error").text(xhr.responseJSON.errors.data);
 					}
-					swal.fire({
-						title: "Gagal",
-						text: errmsg,
-						icon: "error",
-					  customClass: {
-					    popup: 'bg-danger',
-					    title: 'text-light'
-					  }
-					});
+					errmsg = xhr.responseJSON.message;
+				} else {
+					console.warn(xhr.responseJSON.message ?? st);
+					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 				}
-    });
+				swal.fire({
+					titleText: "Gagal",
+					text: errmsg,
+					icon: "error",
+					customClass: {
+						popup: 'bg-danger',
+						title: 'text-light'
+					}
+				});
+			}
+		});
 	});
 	function submitform(ev) {//form Input Manual
 		ev.preventDefault();
@@ -472,10 +467,10 @@
 				modalForm.modal("hide");
 				swal.fire({
 					icon: "success",
-				  customClass: {
-				    popup: 'bg-success',
-				    title: 'text-light'
-				  },
+					customClass: {
+						popup: 'bg-success',
+						title: 'text-light'
+					},
 					titleText: status.message
 				});
 			},
@@ -502,12 +497,12 @@
 					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 				}
 				swal.fire({
-					title: "Gagal",
+					titleText: "Gagal",
 					text: errmsg,
 					icon: "error",
 					customClass: {
-					  popup: 'bg-danger',
-					  title: 'text-light'
+						popup: 'bg-danger',
+						title: 'text-light'
 					}
 				});
 			}

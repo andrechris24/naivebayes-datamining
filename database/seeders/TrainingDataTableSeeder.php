@@ -16,6 +16,69 @@ class TrainingDataTableSeeder extends Seeder
 	{
 		\App\Models\TrainingData::insert(array (
 			array (
+				'nama' => 'Nurhayati',
+				'kepemilikan_rumah' => 1,
+				'pekerjaan' => 6,
+				'penghasilan' => 800000,
+				'listrik' => 11,
+				'tanggungan' => 1,
+				'status' => 'Layak'
+			),
+					array (
+						'nama' => 'Hartini',
+						'kepemilikan_rumah' => 1,
+						'pekerjaan' => 5,
+						'penghasilan' => 1600000,
+						'listrik' => 11,
+						'tanggungan' => 3,
+						'status' => 'Layak'
+					),
+					array (
+						'nama' => 'Dalima Lubis',
+						'kepemilikan_rumah' => 2,
+						'pekerjaan' => 5,
+						'penghasilan' => 1600000,
+						'listrik' => 12,
+						'tanggungan' => 4,
+						'status' => 'Layak'
+					),
+					array (
+						'nama' => 'Halimah',
+						'kepemilikan_rumah' => 3,
+						'pekerjaan' => 9,
+						'penghasilan' => 1500000,
+						'listrik' => 12,
+						'tanggungan' => 4,
+						'status' => 'Layak'
+					),
+					array (
+						'nama' => 'Maharani Laili',
+						'kepemilikan_rumah' => 1,
+						'pekerjaan' => 8,
+						'penghasilan' => 4000000,
+						'listrik' => 12,
+						'tanggungan' => 3,
+						'status' => 'Tidak Layak'
+					),
+					array (
+						'nama' => 'Marina',
+						'kepemilikan_rumah' => 1,
+						'pekerjaan' => 5,
+						'penghasilan' => 3000000,
+						'listrik' => 12,
+						'tanggungan' => 3,
+						'status' => 'Tidak Layak'
+					),
+					array (
+						'nama' => 'Asnindar',
+						'kepemilikan_rumah' => 2,
+						'pekerjaan' => 4,
+						'penghasilan' => 3500000,
+						'listrik' => 12,
+						'tanggungan' => 5,
+						'status' => 'Tidak Layak'
+					),
+			array (
 				'nama' => 'Armadani',
 				'kepemilikan_rumah' => 2,
 				'pekerjaan' => 9,

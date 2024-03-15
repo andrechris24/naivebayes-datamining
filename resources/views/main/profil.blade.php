@@ -104,11 +104,11 @@
 				resetvalidation();
 				swal.fire({
 					icon: "success",
-				  customClass: {
-				    popup: 'bg-success',
-				    title: 'text-light'
-				  },
-					title: "Tersimpan"
+					customClass: {
+						popup: 'bg-success',
+						title: 'text-light'
+					},
+					titleText: "Tersimpan"
 				});
 			},
 			error: function (xhr, st) {
@@ -146,20 +146,20 @@
 					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 				}
 				swal.fire({
-					title: "Gagal simpan",
+					titleText: "Gagal simpan",
 					text: errmsg,
 					icon: "error",
-					  customClass: {
-					    popup: 'bg-danger',
-					    title: 'text-light'
-					  }
+					customClass: {
+						popup: 'bg-danger',
+						title: 'text-light'
+					}
 				});
 			}
 		});
 	};
 	$(document).on("click", "#DelAccountBtn", function () {
 		confirm.fire({
-			title: "Hapus Akun?",
+			titleText: "Hapus Akun?",
 			text: "Jika Anda sudah yakin ingin menghapus akun, " +
 				"masukkan password Anda untuk melanjutkan.",
 			input: "password",
@@ -206,12 +206,12 @@
 		}).then((result) => {
 			if (result.isConfirmed) {
 				swal.fire({
-					title: "Akun sudah dihapus",
+					titleText: "Akun sudah dihapus",
 					icon: "success",
-				  customClass: {
-				    popup: 'bg-success',
-				    title: 'text-light'
-				  }
+					customClass: {
+						popup: 'bg-success',
+						title: 'text-light'
+					}
 				});
 				location.href = "{{ route('login') }}";
 			}

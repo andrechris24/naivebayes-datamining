@@ -33,12 +33,10 @@ class Controller extends BaseController
 			$r1 = $r2 = (rand(0, 10)/10);
 			foreach($data as $key => $value){
 				$fungsi = $this->fungsi_tujuan($value);
-				if($fungsi < $this->fungsi_tujuan($pbest[$key])){
+				if($fungsi < $this->fungsi_tujuan($pbest[$key]))
 					$pbest[$key] = $value;
-				}
-				if($fungsi < $this->fungsi_tujuan($gbest)){
+				if($fungsi < $this->fungsi_tujuan($gbest))
 					$gbest = $value;
-				}
 				$v[$i+1] = $i + $c1 * $r1* ($pbest[$key] - $value)  + $c2 * $r2 *($gbest - $value);
 			//	echo $v[$i+1]."<br>";
 			
@@ -53,8 +51,7 @@ class Controller extends BaseController
 		}
 	}
 	public static function fungsi_tujuan($nilai){
-		$hasil = pow((100 - $nilai), 2);
-		return $hasil;
+		return pow((100 - $nilai), 2);
 	}
 	public static function getGbest($pbest){
 		$gbest = $pbest[0];
@@ -84,9 +81,8 @@ class Controller extends BaseController
 		$carry = 0.0;
 		foreach ($a as $val) {
 			$d = ((double) $val) - $mean;
-			$carry += $d * $d;
+			$carry += pow($d,2);
 		}
-		;
 		if ($sample)
 			--$n;
 		return sqrt($carry / $n);

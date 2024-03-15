@@ -24,7 +24,7 @@
 </head>
 
 <body onload="switchvalidation()">
-	{{-- <x-theme /> --}}
+	<x-theme />
 	<header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
 		<a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="{{ route('home') }}">
 			Data Mining
@@ -169,8 +169,8 @@
 			document.getElementById('logout-form').submit();
 		});
 		function formloading(element, disable){
-			$(element).prop('disabled',disable);
-			$('.data-submit').prop('disabled',disable);
+			$(element).prop('disabled', disable);
+			$('.data-submit').prop('disabled', disable);
 			if(disable) $('.spinner-grow').removeClass('d-none');
 			else $('.spinner-grow').addClass('d-none');
 		}

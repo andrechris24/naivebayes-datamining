@@ -17,7 +17,7 @@ class TestingDataController extends Controller
 {
 	public function export() 
 	{
-	    return Excel::download(new TestingExport, 'testing.xlsx');
+			return Excel::download(new TestingExport, 'testing.xlsx');
 	}
 	public function import() 
 	{
@@ -31,7 +31,6 @@ class TestingDataController extends Controller
 		$testUnique = $test->unique(['nama']);
 		return [
 			'total' => count($test),
-			// 'missing' => '',
 			'duplicate' => $test->diff($testUnique)->count()
 		];
 	}

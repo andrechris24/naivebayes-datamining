@@ -26,9 +26,7 @@
 							@endforeach
 						</select>
 						<label for="attrType">Atribut</label>
-						<div class="invalid-feedback" id="type-error">
-							Pilih Atribut
-						</div>
+						<div class="invalid-feedback" id="type-error">Pilih Atribut</div>
 					</div>
 				</form>
 			</div>
@@ -186,11 +184,11 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					swal.fire({
 						icon: 'error',
-					  customClass: {
-					    popup: 'bg-danger',
-					    title: 'text-light'
-					  },
-						title: 'Gagal memuat jumlah',
+						customClass: {
+							popup: 'bg-danger',
+							title: 'text-light'
+						},
+						titleText: 'Gagal memuat jumlah',
 						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`
 					});
 				});
@@ -201,7 +199,7 @@
 	}).on("click", ".delete-record", function () {
 		let attr_id = $(this).data("id"), attr_name = $(this).data("name");
 		confirm.fire({
-			title: "Hapus Atribut?",
+			titleText: "Hapus Atribut?",
 			text: `Anda akan menghapus Nilai Atribut ${attr_name}.`,
 			preConfirm: async () => {
 				try {
@@ -232,11 +230,11 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
-				  customClass: {
-				    popup: 'bg-success',
-				    title: 'text-light'
-				  },
-					title: "Berhasil dihapus"
+					customClass: {
+						popup: 'bg-success',
+						title: 'text-light'
+					},
+					titleText: "Berhasil dihapus"
 				});
 			}
 		});
@@ -260,14 +258,14 @@
 			swal.fire({
 				icon: "error",
 				customClass: {
-				  popup: 'bg-danger',
-				  title: 'text-light'
+					popup: 'bg-danger',
+					title: 'text-light'
 				},
-				title: "Gagal memuat data",
+				titleText: "Gagal memuat data",
 				text: errmsg
 			});
 		}).always(function () {
-			formloading("#addNewNilaiAtributForm :input",false);
+			formloading("#addNewNilaiAtributForm :input", false);
 		});
 	});
 	function submitform(ev) {
@@ -277,21 +275,21 @@
 			url: "{{ route('atribut.nilai.store') }}",
 			type: "POST",
 			beforeSend: function () {
-				formloading("#addNewNilaiAtributForm :input",true);
+				formloading("#addNewNilaiAtributForm :input", true);
 				$("#addNewNilaiAtributForm :input").removeClass("is-invalid");
 			},
 			complete: function () {
-				formloading("#addNewNilaiAtributForm :input",false);
+				formloading("#addNewNilaiAtributForm :input", false);
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-atribut")) dt_atribut.draw();
 				modalForm.modal("hide");
 				swal.fire({
 					icon: "success",
-				  customClass: {
-				    popup: 'bg-success',
-				    title: 'text-light'
-				  },
+					customClass: {
+						popup: 'bg-success',
+						title: 'text-light'
+					},
 					titleText: status.message
 				});
 			},
@@ -312,13 +310,13 @@
 					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 				}
 				swal.fire({
-					title: "Gagal",
+					titleText: "Gagal",
 					text: errmsg,
 					icon: "error",
-					  customClass: {
-					    popup: 'bg-danger',
-					    title: 'text-light'
-					  }
+					customClass: {
+						popup: 'bg-danger',
+						title: 'text-light'
+					}
 				});
 			}
 		});

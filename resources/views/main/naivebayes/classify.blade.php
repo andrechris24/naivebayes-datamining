@@ -76,7 +76,7 @@
 		}
 	}).on("click", ".reset-class", function () {
 		confirm.fire({
-			title: "Reset Klasifikasi?",
+			titleText: "Reset Klasifikasi?",
 			text: 'Anda akan mereset hasil klasifikasi. Pilih tipe data yang akan direset hasilnya.',
 		  input: "select",
 		  inputOptions: {
@@ -119,15 +119,16 @@
 					icon: "success",
 				  customClass: {
 				    popup: 'bg-success',
-				    title: 'text-light'
+				    title: 'text-light',
+				    text: 'text-light'
 				  },
-					title: "Berhasil direset"
+					titleText: "Berhasil direset"
 				});
 			}
 		});
-	}).on('click','.calc-class',function(){
+	}).on('click', '.calc-class', function(){
 		Swal.fire({
-		  title: "Pilih tipe data yang akan dihitung",
+		  titleText: "Pilih tipe data yang akan dihitung",
 		  input: "select",
 		  inputOptions: {
 		    train: "Data Training (Data Latih)",
@@ -174,7 +175,7 @@
 			if (result.isConfirmed) {
 				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
 				swal.fire({
-					title: "Berhasil dihitung",
+					titleText: "Berhasil dihitung",
 					icon: "success",
 				  customClass: {
 				    popup: 'bg-success',

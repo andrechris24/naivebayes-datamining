@@ -138,10 +138,10 @@
 					render: function (data, type, full, meta) {
 						return meta.settings._iDisplayStart + meta.row + 1;
 					}
-				},{
+				}, {
 					targets: 3,
 					render: function(data){
-						if(data===null) return '-';
+						if(data === null) return '-';
 						else return data;
 					}
 				}, { //Aksi
@@ -184,7 +184,7 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					swal.fire({
 						icon: 'error',
-						title: 'Gagal memuat jumlah',
+						titleText: 'Gagal memuat jumlah',
 						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`,
 					  customClass: {
 					    popup: 'bg-danger',
@@ -199,7 +199,7 @@
 	}).on("click", ".delete-record", function () {
 		let attr_id = $(this).data("id"), attr_name = $(this).data("name");
 		confirm.fire({
-			title: "Hapus Atribut?",
+			titleText: "Hapus Atribut?",
 			text: `Anda akan menghapus Atribut ${attr_name}.`,
 			preConfirm: async () => {
 				try {
@@ -234,14 +234,14 @@
 				    popup: 'bg-success',
 				    title: 'text-light'
 				  },
-					title: "Berhasil dihapus"
+					titleText: "Berhasil dihapus"
 				});
 			}
 		});
 	}).on("click", ".edit-record", function () {
 		let attr_id = $(this).data("id");
 		$("#modalAddAtributLabel").html("Edit Atribut");
-		formloading("#addNewAtributForm :input",true);
+		formloading("#addNewAtributForm :input", true);
 		$.get(`atribut/${attr_id}/edit`, function (data) {
 			$("#attr_id").val(data.id);
 			$("#attrName").val(data.name);
@@ -262,11 +262,11 @@
 			    popup: 'bg-danger',
 			    title: 'text-light'
 			  },
-				title: "Gagal memuat data",
+				titleText: "Gagal memuat data",
 				text: errmsg
 			});
 		}).always(function () {
-			formloading("#addNewAtributForm :input",false);
+			formloading("#addNewAtributForm :input", false);
 		});
 	});
 	function submitform(ev) {
@@ -276,11 +276,11 @@
 			url: "{{ route('atribut.store') }}",
 			type: "POST",
 			beforeSend: function () {
-				formloading("#addNewAtributForm :input",true);
+				formloading("#addNewAtributForm :input", true);
 				$("#addNewAtributForm :input").removeClass("is-invalid");
 			},
 			complete: function () {
-				formloading("#addNewAtributForm :input",false);
+				formloading("#addNewAtributForm :input", false);
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-atribut")) dt_atribut.draw();
@@ -315,7 +315,7 @@
 					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 				}
 				swal.fire({
-					title: "Gagal",
+					titleText: "Gagal",
 					text: errmsg,
 					icon: "error",
 				  customClass: {

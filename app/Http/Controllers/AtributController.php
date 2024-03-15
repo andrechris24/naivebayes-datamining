@@ -80,8 +80,8 @@ class AtributController extends Controller
 						if ($req['type'] === 'numeric')
 							$table->integer($req['slug'])->default(0)->after('nama');
 						else {
-							$table->foreignId($req['slug'])->nullable()->constrained('nilai_atributs')
-								->nullOnDelete()->cascadeOnUpdate()->after('nama');
+							$table->foreignId($req['slug'])->constrained('nilai_atributs')
+							->nullOnDelete()->cascadeOnUpdate()->nullable()->after('nama');
 						}
 					});
 				}
@@ -90,8 +90,8 @@ class AtributController extends Controller
 						if ($req['type'] === 'numeric')
 							$table->integer($req['slug'])->default(0)->after('nama');
 						else {
-							$table->foreignId($req['slug'])->nullable()->constrained('nilai_atributs')
-								->nullOnDelete()->cascadeOnUpdate()->after('nama');
+							$table->foreignId($req['slug'])->constrained('nilai_atributs')
+								->nullOnDelete()->cascadeOnUpdate()->nullable()->after('nama');
 						}
 					});
 				}

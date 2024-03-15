@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Atribut;
+use App\Models\Classification;
 use App\Models\NilaiAtribut;
 use App\Models\Probability;
 use App\Models\TestingData;
@@ -21,13 +22,13 @@ class ProbabilityController extends Controller
 		$atribut = Atribut::get();
 		if (count($atribut) === 0) {
 			return to_route('atribut.index')
-				->withWarning('Tambahkan Atribut dan Nilai Atribut dulu sebelum menginput Dataset');
+			->withWarning('Atribut dan Nilai Atribut Kosong');
 		}
 		$nilaiattr = NilaiAtribut::get();
-		if (count($nilaiattr) === 0) {
-			return to_route('atribut.nilai.index')
-				->withWarning('Tambahkan Nilai Atribut dulu sebelum menginput Dataset');
-		}
+		// if (count($nilaiattr) === 0) {
+		// 	return to_route('atribut.nilai.index')
+		// 		->withWarning('Tambahkan Nilai Atribut dulu sebelum menginput Dataset');
+		// }
 		$data = Probability::get();
 		$kelas = Controller::probabKelas();
 		$training=[
@@ -59,17 +60,25 @@ class ProbabilityController extends Controller
 
 			//Prior start
 			$probabs = Controller::probabKelas();
+			$total=[
+				'l'=>TrainingData::where('status',"Layak")->count(),
+				'tl'=>TrainingData::where('status',"Tidak Layak")->count()
+			];
 			//Prior end
 
 			//Likelihood Start
 			foreach (NilaiAtribut::get() as $nilai) {//Categorical
 				if ($nilai->atribut->type === 'categorical') {
 					$ll[$nilai->name]['Layak'] =
-						($probabs['l'] == 0 ? 0 : TrainingData::where($nilai->atribut->slug, $nilai->id)
-							->where('status', 'Layak')->count() / $probabs['l']);
+						($total['l'] == 0 ? 
+							0 : 
+							TrainingData::where($nilai->atribut->slug, $nilai->id)
+							->where('status', 'Layak')->count() / $total['l']);
 					$ll[$nilai->name]['Tidak Layak'] =
-						($probabs['tl'] == 0 ? 0 : TrainingData::where($nilai->atribut->slug, $nilai->id)
-							->where('status', 'Tidak Layak')->count() / $probabs['tl']);
+						($total['tl'] == 0 ? 
+							0 : 
+							TrainingData::where($nilai->atribut->slug, $nilai->id)
+							->where('status', 'Tidak Layak')->count() / $total['tl']);
 				}
 				Probability::updateOrCreate([
 					'atribut_id' => $nilai->atribut_id,
@@ -115,7 +124,8 @@ class ProbabilityController extends Controller
 	{
 		try {
 			Probability::truncate();
-			return back()->withSuccess('Perhitungan berhasil direset');
+			Classification::truncate();
+			return back()->withSuccess('Perhitungan probabilitas sudah direset');
 		} catch (QueryException $e) {
 			return back()->withError('Gagal reset:')->withErrors($e);
 		}

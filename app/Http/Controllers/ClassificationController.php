@@ -37,6 +37,11 @@ class ClassificationController extends Controller
 			$probab = Controller::probabKelas();
 			//Prior end
 
+			if(!$semuadata){
+				return response()->json([
+					'message'=>'Tipe Data yang dipilih kosong'
+				],400);
+			}
 			foreach ($semuadata as $dataset) {
 				//Posterior Start
 				$plf['l'] = $plf['tl'] = 1;
@@ -49,8 +54,15 @@ class ClassificationController extends Controller
 						$plf['tl'] *= $probabilitas['tidak_layak'];
 					} else {//Numeric
 						$probabilitas = Probability::firstWhere('atribut_id', $at->id);
-						$plf['l']*= $this->normalDistribution($dataset[$at->slug],$probabilitas->sd_layak,$probabilitas->mean_layak);
-						$plf['tl'] *= $this->normalDistribution($dataset[$at->slug],$probabilitas->sd_tidak_layak,$probabilitas->mean_tidak_layak);
+						$plf['l']*= $this->normalDistribution(
+							$dataset[$at->slug],
+							$probabilitas->sd_layak,
+							$probabilitas->mean_layak
+						);
+						$plf['tl'] *= $this->normalDistribution(
+							$dataset[$at->slug],
+							$probabilitas->sd_tidak_layak,
+							$probabilitas->mean_tidak_layak);
 					}
 				}
 				$p['layak'] = $plf['l'] == 0 ? 0 : ($plf['l'] * $probab['l']) / $plf['l'];
@@ -109,12 +121,12 @@ class ClassificationController extends Controller
 			$testing=TestingData::get();
 			$data=$training->merge($testing);
 		}else if($type==='train'){
-			if(TrainingData::count()===0)
-				return response()->json(['message' => "Data Training kosong"], 400);
+			if(TrainingData::count() === 0)
+				return false;
 			$data=TrainingData::get();
 		}else{
 			if (TestingData::count() === 0) 
-				return response()->json(['message' => "Data Testing kosong"], 400);
+				return false;
 			$data=TestingData::get();
 		}
 		return $data;

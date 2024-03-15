@@ -20,7 +20,7 @@ class TrainingImport implements ToModel,WithHeadingRow
 		$rows['nama']=$row['nama'];
 		foreach($atrib as $attr){
 			if($attr->type==='categorical'){
-				$foreign=NilaiAtribut::where('name',$row[$attr->slug])->first();
+				$foreign=NilaiAtribut::firstWhere('name','like',"%{$row[$attr->slug]}%");
 				$row[$attr->slug]=$foreign->id;
 			}
 			$rows[$attr->slug]=$row[$attr->slug];

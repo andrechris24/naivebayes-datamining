@@ -16,18 +16,14 @@
 					<div class="form-floating mb-3">
 						<input type="text" class="form-control" id="trainName" name="nama" placeholder="Nama" required />
 						<label for="trainName">Nama</label>
-						<div class="invalid-feedback" id="name-error">
-							Masukkan Nama
-						</div>
+						<div class="invalid-feedback" id="name-error">Masukkan Nama</div>
 					</div>
 					@foreach ($atribut as $attr)
 					<div class="form-floating mb-3" data-bs-toggle="tooltip" title="{{$attr->desc}}">
 						@if ($attr->type==='numeric')
-						@php($msg="Isikan ")
 						<input type="number" class="form-control" min="0" name="q[{{$attr->slug}}]" placeholder="123"
 							id="train-{{$attr->slug}}">
 						@else
-						@php($msg="Pilih ")
 						<select name="q[{{$attr->slug}}]" class="form-select" id="train-{{$attr->slug}}">
 							<option value="">Pilih</option>
 							@foreach ($nilai->where('atribut_id',$attr->id) as $sub)
@@ -37,7 +33,7 @@
 						@endif
 						<label for="train-{{$attr->slug}}">{{$attr->name}}</label>
 						<div class="invalid-feedback" id="{{$attr->slug}}-error">
-							{{$msg.$attr->name}}
+							{{($attr->type==='numeric'?'Isikan ':'Pilih ').$attr->name}}
 						</div>
 					</div>
 					@endforeach
@@ -48,9 +44,7 @@
 							<option value="Tidak Layak">Tidak Layak</option>
 						</select>
 						<label for="trainResult">Hasil</label>
-						<div class="invalid-feedback" id="result-error">
-							Pilih hasil
-						</div>
+						<div class="invalid-feedback" id="result-error">Pilih hasil</div>
 					</div>
 				</form>
 			</div>
@@ -81,7 +75,7 @@
 					@csrf
 					<input type="file" class="form-control" id="trainData" name="data"  aria-describedby="importFormats" accept=".csv, .tsv, .ods, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
 					<div id="importFormats" class="form-text">
-					  Format yang diperbolehkan: .xls, .xlsx, .csv, .tsv
+						Format yang diperbolehkan: .xls, .xlsx, .csv, .tsv
 					</div>
 				</form>
 			</div>
@@ -139,21 +133,21 @@
 	<div class="card-body">
 		<div class="btn-group mb-3" role="group" id="spare-button">
 			<div class="btn-group" role="group">
-			  <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-			    <i class="bi bi-plus-lg"></i> Tambah Data
-			  </button>
-			  <ul class="dropdown-menu">
-			    <li>
-			    	<a class="dropdown-item" href="#modalAddTraining" data-bs-toggle="modal">
-			    		<i class="bi bi-pencil"></i> Input Manual
-			    	</a>
-			    </li>
-			    <li>
-			    	<a class="dropdown-item" href="#modalImportTraining" data-bs-toggle="modal">
-			    	<i class="bi bi-upload"></i> Upload File
-			    	</a>
-			    </li>
-			  </ul>
+				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					<i class="bi bi-plus-lg"></i> Tambah Data
+				</button>
+				<ul class="dropdown-menu">
+					<li>
+						<a class="dropdown-item" href="#modalAddTraining" data-bs-toggle="modal">
+							<i class="bi bi-pencil"></i> Input Manual
+						</a>
+					</li>
+					<li>
+						<a class="dropdown-item" href="#modalImportTraining" data-bs-toggle="modal">
+						<i class="bi bi-upload"></i> Upload File
+						</a>
+					</li>
+				</ul>
 			</div>
 			<button type="button" class="btn btn-danger delete-all">
 				<i class="bi bi-trash3-fill"></i> Hapus Data
@@ -212,9 +206,9 @@
 				},
 				@foreach ($atribut as $attr)
 					{
-						targets: 2+{{$loop->index}},
+						targets: 2 + {{$loop->index}},
 						render:function(data){
-							if(data===null) return '?';
+							if(data === null) return '?';
 							else return data;
 						}
 					},
@@ -261,9 +255,9 @@
 							className: "delete-all"
 						}, {
 							text: '<i class="bi bi-download"></i> Ekspor Data',
-				      action: function () {
-				        location.href = "{{route('training.export')}}";
-				      }
+							action: function () {
+								location.href = "{{route('training.export')}}";
+							}
 						}]
 					}
 				}
@@ -277,8 +271,12 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					swal.fire({
 						icon: 'error',
-						title: 'Gagal memuat jumlah',
-						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`
+						titleText: 'Gagal memuat jumlah',
+						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`,
+						customClass: {
+							popup: 'bg-danger',
+							title: 'text-light'
+						}
 					});
 				});
 			}).on('preInit.dt', removeBtn());
@@ -287,7 +285,7 @@
 		}
 	}).on("click", ".delete-all", function () {
 		confirm.fire({
-			title: "Hapus semua Data Training?",
+			titleText: "Hapus semua Data Training?",
 			text: 'Anda akan menghapus semua Data Training yang akan mempengaruhi klasifikasi terkait.',
 			preConfirm: async () => {
 				try {
@@ -303,8 +301,7 @@
 						error: function (xhr, st) {
 							console.warn(xhr.responseJSON.message ?? st);
 							return Swal.showValidationMessage(
-								`Gagal hapus: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`
-							);
+								`Gagal hapus: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`);
 						}
 					});
 				} catch (error) {
@@ -315,18 +312,18 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
-				  customClass: {
-				    popup: 'bg-success',
-				    title: 'text-light'
-				  },
-					title: "Berhasil dihapus"
+					customClass: {
+						popup: 'bg-success',
+						title: 'text-light'
+					},
+					titleText: "Berhasil dihapus"
 				});
 			}
 		});
 	}).on("click", ".delete-record", function () {
 		let train_id = $(this).data("id"), train_name = $(this).data("name");
 		confirm.fire({
-			title: "Hapus Data Training?",
+			titleText: "Hapus Data Training?",
 			text: `Anda akan menghapus Data Training ${train_name}.`,
 			preConfirm: async () => {
 				try {
@@ -357,11 +354,11 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
-				  customClass: {
-				    popup: 'bg-success',
-				    title: 'text-light'
-				  },
-					title: "Berhasil dihapus"
+					customClass: {
+						popup: 'bg-success',
+						title: 'text-light'
+					},
+					titleText: "Berhasil dihapus"
 				});
 			}
 		});
@@ -388,27 +385,27 @@
 			swal.fire({
 				icon: "error",
 				customClass: {
-				  popup: 'bg-danger',
-				  title: 'text-light'
+					popup: 'bg-danger',
+					title: 'text-light'
 				},
-				title: "Gagal memuat data",
+				titleText: "Gagal memuat data",
 				text: errmsg
 			});
 		}).always(function () {
-			formloading("#addNewTrainingForm :input",false);
+			formloading("#addNewTrainingForm :input", false);
 		});
 	});
 	$('#importTrainingData').submit(function(e){//form Upload Data
 		e.preventDefault();
 		$.ajax({
-        type: "POST",
-        url: "{{route('training.import')}}",
-        dataType: 'JSON',
-        data: new FormData(this),
-        contentType: false,
-        cache: false,
-        processData: false,
-        beforeSend: function () {
+				type: "POST",
+				url: "{{route('training.import')}}",
+				dataType: 'JSON',
+				data: new FormData(this),
+				contentType: false,
+				cache: false,
+				processData: false,
+				beforeSend: function () {
 					formloading("#importTrainingData :input",true);
 					$("#importTrainingData :input").removeClass("is-invalid");
 				},
@@ -420,10 +417,10 @@
 					$('#modalImportTraining').modal("hide");
 					swal.fire({
 						icon: "success",
-					  customClass: {
-					    popup: 'bg-success',
-					    title: 'text-light'
-					  },
+						customClass: {
+							popup: 'bg-success',
+							title: 'text-light'
+						},
 						titleText: "Berhasil diupload"
 					});
 				},
@@ -440,16 +437,16 @@
 						errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 					}
 					swal.fire({
-						title: "Gagal",
+						titleText : "Gagal",
 						text: errmsg,
 						icon: "error",
-					  customClass: {
-					    popup: 'bg-danger',
-					    title: 'text-light'
-					  }
+						customClass: {
+							popup: 'bg-danger',
+							title: 'text-light'
+						}
 					});
 				}
-    });
+		});
 	});
 	function submitform(ev) {//form Input Manual
 		ev.preventDefault();
@@ -469,10 +466,10 @@
 				modalForm.modal("hide");
 				swal.fire({
 					icon: "success",
-				  customClass: {
-				    popup: 'bg-success',
-				    title: 'text-light'
-				  },
+					customClass: {
+						popup: 'bg-success',
+						title: 'text-light'
+					},
 					titleText: status.message
 				});
 			},
@@ -499,13 +496,13 @@
 					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 				}
 				swal.fire({
-					title: "Gagal",
+					titleText: "Gagal",
 					text: errmsg,
 					icon: "error",
-					  customClass: {
-					    popup: 'bg-danger',
-					    title: 'text-light'
-					  }
+					customClass: {
+						popup: 'bg-danger',
+						title: 'text-light'
+					}
 				});
 			}
 		});

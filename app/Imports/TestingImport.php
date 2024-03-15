@@ -18,9 +18,9 @@ class TestingImport implements ToModel,WithHeadingRow
 		$rows=[];
 		$atrib=Atribut::get();
 		$rows['nama']=$row['nama'];
-		foreach($attrib as $attr){
-			if($atrib->type==='categorical'){
-				$foreign=NilaiAtribut::where('slug',$row[$attr->slug])->first();
+		foreach($atrib as $attr){
+			if($attr->type==='categorical'){
+				$foreign=NilaiAtribut::firstWhere('name','like',"%{$row[$attr->slug]}%");
 				$row[$attr->slug]=$foreign->id;
 			}
 			$rows[$attr->slug]=$row[$attr->slug];

@@ -16,7 +16,7 @@ class TrainingDataController extends Controller
 {
 	public function export() 
 	{
-	    return Excel::download(new TrainingExport, 'training.xlsx');
+			return Excel::download(new TrainingExport, 'training.xlsx');
 	}
 	public function import(Request $request) 
 	{
@@ -30,7 +30,6 @@ class TrainingDataController extends Controller
 		$trainUnique = $train->unique(['nama']);
 		return [
 			'total' => count($train),
-			// 'missing' => '',
 			'duplicate' => $train->diff($trainUnique)->count()
 		];
 	}

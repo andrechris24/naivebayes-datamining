@@ -15,7 +15,7 @@ return new class extends Migration {
 			$table->id();
 			$table->foreignIdFor(Atribut::class)->cascadeOnDelete();
 			$table->foreignIdFor(NilaiAtribut::class)->nullable()
-				->nullOnDelete()->comment('Kategorikal saja');
+				->cascadeOnDelete()->comment('Kategorikal saja');
 			$table->double('layak', 33, 15)->comment('Kategorikal saja')
 				->default(0.00000);
 			$table->double('tidak_layak', 33, 15)->comment('Kategorikal saja')
