@@ -49,7 +49,7 @@
   <div class="card-body">
     @foreach ($attribs['atribut'] as $attr)
     @php
-    $layak = $tidak_layak = 0.00000;
+    $layak = $tidak_layak = $semua = 0.00000;
     $tot['l'] = $tot['tl'] = 0;
     $prob = $data->where('atribut_id', $attr->id)->first();
     @endphp
@@ -57,9 +57,10 @@
       <caption>{{ $attr->name }}</caption>
       <thead>
         <tr>
-          <th>#</th>
+          <th>Sub Atribut</th>
           <th>Layak</th>
           <th>Tidak Layak</th>
+          <th>Total Probabilitas</th>
         </tr>
       </thead>
       <tbody>
@@ -68,11 +69,13 @@
             @php
             $layak += $prob->layak;
             $tidak_layak += $prob->tidak_layak;
+            $semua+=$prob->total;
             @endphp
             <tr>
               <td>{{ $prob->nilai_atribut->name }}</td>
               <td>{{ $prob->layak }}</td>
               <td>{{ $prob->tidak_layak }}</td>
+              <td>{{$prob->total}}</td>
             </tr>
           @empty
             @foreach($attribs['nilai']->where('atribut_id', $attr->id) as $nilai)
@@ -80,13 +83,15 @@
               <td>{{ $nilai->name }}</td>
               <td>0</td>
               <td>0</td>
+              <td>0</td>
             </tr>
             @endforeach
           @endforelse
           <tr class="table-secondary">
             <td>Total</td>
-            <td>{{ $layak ?? 0 }}</td>
-            <td>{{ $tidak_layak ?? 0 }}</td>
+            <td>{{ $layak }}</td>
+            <td>{{ $tidak_layak }}</td>
+            <td>{{$semua}}</td>
           </tr>
         @else
         <tr>
@@ -107,21 +112,25 @@
             @endphp
             @endforeach
           </td>
+          <td></td>
         </tr>
         <tr>
           <th>Jumlah</th>
           <td>{{ number_format($tot["l"]) }}</td>
           <td>{{ number_format($tot['tl']) }}</td>
+          <td>{{number_format($tot['l']+$tot['tl'])}}</td>
         </tr>
         <tr>
           <th>Rata-rata</th>
           <td>{{ $prob->mean_layak ?? 0 }}</td>
           <td>{{ $prob->mean_tidak_layak ?? 0 }}</td>
+          <td>{{$prob->mean_total??0}}</td>
         </tr>
         <tr>
           <th>Standard Deviation</th>
           <td>{{ $prob->sd_layak ?? 0 }}</td>
           <td>{{ $prob->sd_tidak_layak ?? 0 }}</td>
+          <td>{{$prob->sd_total??0}}</td>
         </tr>
         @endif
       </tbody>

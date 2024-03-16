@@ -43,17 +43,20 @@ class ClassificationController extends Controller
 				],400);
 			}
 			foreach ($semuadata as $dataset) {
-				//Posterior Start
+				//Likelihood Start
 				$plf['l'] = $plf['tl'] = 1;
-				foreach (Atribut::get() as $at) {
+				// $evidence=[];
+				foreach (Atribut::get() as $idx=>$at) {
 					if ($at->type === 'categorical') {
 						$probabilitas = Probability::firstWhere(
 							'nilai_atribut_id', $dataset[$at->slug]
 						);
 						$plf['l'] *= $probabilitas['layak'];
 						$plf['tl'] *= $probabilitas['tidak_layak'];
+						// $evidence[$idx]=TrainingData::where($at->slug,$dataset[$at->slug])->count()/count($semuadata);
 					} else {//Numeric
-						$probabilitas = Probability::firstWhere('atribut_id', $at->id);
+						$probabilitas = Probability::where('atribut_id', $at->id)
+						->firstWhere('nilai_atribut_id',null);
 						$plf['l']*= $this->normalDistribution(
 							$dataset[$at->slug],
 							$probabilitas->sd_layak,
@@ -63,10 +66,18 @@ class ClassificationController extends Controller
 							$dataset[$at->slug],
 							$probabilitas->sd_tidak_layak,
 							$probabilitas->mean_tidak_layak);
+						// $evidence[$idx]=$this->normalDistribution(
+						// 	$dataset[$at->slug],
+						// 	Controller::stats_standard_deviation(a),
+						// 	a/count($semuadata)
+						// );
 					}
 				}
-				$p['layak'] = $plf['l'] == 0 ? 0 : ($plf['l'] * $probab['l']) / $plf['l'];
-				$p['tidak_layak'] = $plf['tl'] == 0 ? 0 : ($plf['tl'] * $probab['tl']) / $plf['tl'];
+				//Likelihood End
+
+				//Posterior Start
+				$p['layak'] = $plf['l'] * $probab['l'];
+				$p['tidak_layak'] = $plf['tl'] * $probab['tl'];
 				//Posterior End
 
 				$predict = $p['layak'] >= $p['tidak_layak'] ? 'Layak' : "Tidak Layak";

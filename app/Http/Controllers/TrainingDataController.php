@@ -6,6 +6,7 @@ use App\Imports\TrainingImport;
 use App\Models\Atribut;
 use App\Models\Classification;
 use App\Models\NilaiAtribut;
+use App\Models\Probability;
 use App\Models\TrainingData;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -108,12 +109,14 @@ class TrainingDataController extends Controller
 		Classification::where('name',$training->nama)->where('type','train')
 		->delete();
 		$training->delete();
+		// Probability::truncate();
 		return response()->json(['message' => 'Berhasil dihapus']);
 	}
 	public function clear()
 	{
 		try {
 			Classification::where('type','train')->delete();
+			Probability::truncate();
 			TrainingData::truncate();
 			return response()->json(['message' => 'Berhasil dihapus']);
 		} catch (QueryException $e) {

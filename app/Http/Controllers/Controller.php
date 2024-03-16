@@ -80,8 +80,7 @@ class Controller extends BaseController
 		$mean = array_sum($a) / $n;
 		$carry = 0.0;
 		foreach ($a as $val) {
-			$d = ((double) $val) - $mean;
-			$carry += pow($d,2);
+			$carry += pow(((double) $val) - $mean,2);
 		}
 		if ($sample)
 			--$n;

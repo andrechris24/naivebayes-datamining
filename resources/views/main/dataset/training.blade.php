@@ -286,7 +286,7 @@
 	}).on("click", ".delete-all", function () {
 		confirm.fire({
 			titleText: "Hapus semua Data Training?",
-			text: 'Anda akan menghapus semua Data Training yang akan mempengaruhi klasifikasi terkait.',
+			text: 'Anda akan menghapus semua Data Training yang akan mempengaruhi klasifikasi terkait. Probabilitas akan direset!',
 			preConfirm: async () => {
 				try {
 					await $.ajax({
@@ -377,7 +377,7 @@
 			if (xhr.status === 404) {
 				dt_training.draw();
 				modalForm.modal('hide');
-				errmsg = "Data Training tidak ditemukan";
+				errmsg = "Data yang Anda cari tidak ditemukan";
 			} else {
 				console.warn(xhr.responseJSON.message ?? st);
 				errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;

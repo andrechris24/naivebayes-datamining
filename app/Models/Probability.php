@@ -13,10 +13,13 @@ class Probability extends Model
 		'nilai_atribut_id',
 		'layak',
 		'tidak_layak',
+		'total',
 		'mean_layak',
 		'mean_tidak_layak',
+		'mean_total',
 		'sd_layak',
-		'sd_tidak_layak'
+		'sd_tidak_layak',
+		'sd_total'
 	];
 	public function atribut()
 	{

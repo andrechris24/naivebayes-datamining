@@ -24,6 +24,5 @@ class DatabaseSeeder extends Seeder
             TrainingDataTableSeeder::class,
             TestingDataTableSeeder::class
         ]);
-        $this->call();
     }
 }
