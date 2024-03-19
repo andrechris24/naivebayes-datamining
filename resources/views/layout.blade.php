@@ -52,58 +52,58 @@
 					<div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a href="{{ route('home') }}" @class(['nav-link', 'd-flex',
-								'align-items-center', 'gap-2', 'active'=> request()->is('/')])
-									{{ request()->is('/') ? 'aria-current="page"' : '' }}>
+								<a href="{{ route('home') }}" class="nav-link d-flex align-items-center gap-2">
 									<i class="bi bi-house-fill"></i> Dashboard
 								</a>
 							</li>
 							<li class="nav-item">
-								<a href="{{ route('atribut.index') }}" @class(['nav-link', 'd-flex',
-								'align-items-center', 'gap-2', 'active'=> request()->is('atribut')])
-									{{ request()->is('atribut') ? 'aria-current="page"' : '' }}>
+								<a href="{{ route('atribut.index') }}" class="nav-link d-flex align-items-center gap-2">
 									<i class="bi bi-file-earmark"></i> Atribut
 								</a>
 							</li>
 							<li class="nav-item">
-								<a href="{{ route('atribut.nilai.index') }}" @class(['nav-link', 'd-flex',
-								'align-items-center', 'gap-2', 'active'=> request()->is('atribut/nilai')])
-									{{ request()->is('atribut/nilai') ? 'aria-current="page"' : '' }}>
+								<a href="{{ route('atribut.nilai.index') }}" class="nav-link d-flex align-items-center gap-2">
 									<i class="bi bi-file-earmark"></i> Nilai Atribut
 								</a>
 							</li>
-							<li class="nav-item">
-								<a href="{{ route('training.index') }}" @class(['nav-link', 'd-flex',
-								'align-items-center', 'gap-2', 'active'=> request()->is('training')])
-									{{ request()->is('training') ? 'aria-current="page"' : '' }}>
-									<i class="bi bi-file-earmark-text"></i> Data Training
+							<li class="nav-item dropdown">
+								<a href="#" class="nav-link dropdown-toggle d-flex align-items-center gap-2"
+								role="button" data-bs-toggle="dropdown" aria-expanded="false">
+									<i class="bi bi-file-earmark-text"></i> Dataset
 								</a>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="{{ route('training.index') }}" class="dropdown-item">
+											<i class="bi bi-file-earmark-text"></i> Data Training
+										</a>
+									</li>
+									<li>
+										<a href="{{ route('testing.index') }}" class="dropdown-item">
+											<i class="bi bi-file-earmark-text"></i> Data Testing
+										</a>
+									</li>
+								</ul>
+							</li>
+							<li class="nav-item dropdown">
+								<a href="#" class="nav-link dropdown-toggle d-flex align-items-center gap-2"
+								role="button" data-bs-toggle="dropdown" aria-expanded="false">
+									<i class="bi bi-calculator"></i> Naive Bayes
+								</a>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="{{ route('probab.index') }}" class="dropdown-item">
+											<i class="bi bi-calculator"></i> Probabilitas
+										</a>
+									</li>
+									<li>
+										<a href="{{ route('class.index') }}" class="dropdown-item">
+											<i class="bi bi-calculator"></i> Klasifikasi
+										</a>
+									</li>
+								</ul>
 							</li>
 							<li class="nav-item">
-								<a href="{{ route('testing.index') }}" @class(['nav-link', 'd-flex',
-								'align-items-center', 'gap-2', 'active'=> request()->is('testing')])
-									{{ request()->is('testing') ? 'aria-current="page"' : '' }}>
-									<i class="bi bi-file-earmark-text"></i> Data Testing
-								</a>
-							</li>
-							<li class="nav-item">
-								<a href="{{ route('probab.index') }}" @class(['nav-link', 'd-flex',
-								'align-items-center', 'gap-2', 'active'=> request()->is('probab')])
-									{{ request()->is('probab') ? 'aria-current="page"' : '' }}>
-									<i class="bi bi-calculator"></i> Probabilitas
-								</a>
-							</li>
-							<li class="nav-item">
-								<a href="{{ route('class.index') }}" @class(['nav-link', 'd-flex',
-								'align-items-center', 'gap-2', 'active'=> request()->is('class')])
-									{{ request()->is('class') ? 'aria-current="page"' : '' }}>
-									<i class="bi bi-calculator"></i> Klasifikasi
-								</a>
-							</li>
-							<li class="nav-item">
-								<a href="{{ route('result') }}" @class(['nav-link', 'd-flex',
-								'align-items-center', 'gap-2', 'active'=> request()->is('performa')])
-									{{ request()->is('performa') ? 'aria-current="page"' : '' }}>
+								<a href="{{ route('result') }}" class="nav-link d-flex align-items-center gap-2">
 									<i class="bi bi-graph-up"></i> Performa
 								</a>
 							</li>
@@ -111,9 +111,7 @@
 						<hr class="my-3">
 						<ul class="nav flex-column mb-auto">
 							<li class="nav-item">
-								<a href="{{ route('profil.edit') }}" @class(['nav-link', 'd-flex',
-								'align-items-center', 'gap-2', 'active'=> request()->is('profile')])
-									{{ request()->is('profile') ? 'aria-current="page"' : '' }}>
+								<a href="{{ route('profil.edit') }}" class="nav-link d-flex align-items-center gap-2">
 									<i class="bi bi-person-fill"></i> Profil
 								</a>
 							</li>
@@ -138,12 +136,13 @@
 			</main>
 			<footer class="py-3 my-4">
 				<p class="text-center text-body-secondary">
-					&copy; Copyright {{ date('Y') }} Data Mining
+					Data Mining {{ date('Y') }}
 				</p>
 			</footer>
 		</div>
 	</div>
 	<form method="POST" id="logout-form" action="{{ route('logout') }}">@csrf</form>
+	<script type="text/javascript" src="{{asset('assets/js/navbar.js')}}"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
 	</script>

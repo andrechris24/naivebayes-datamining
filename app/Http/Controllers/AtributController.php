@@ -18,7 +18,7 @@ class AtributController extends Controller
 	{
 		$attr = Atribut::get();
 		$unused = 0;
-		foreach (Atribut::where('type','categorical') as $at) {
+		foreach (Atribut::where('type', 'categorical') as $at) {
 			if (NilaiAtribut::where('atribut_id', $at->id)->count() === 0)
 				$unused++;
 		}
@@ -81,7 +81,7 @@ class AtributController extends Controller
 							$table->integer($req['slug'])->default(0)->after('nama');
 						else {
 							$table->foreignId($req['slug'])->constrained('nilai_atributs')
-							->nullOnDelete()->cascadeOnUpdate()->nullable()->after('nama');
+								->nullOnDelete()->cascadeOnUpdate()->nullable()->after('nama');
 						}
 					});
 				}

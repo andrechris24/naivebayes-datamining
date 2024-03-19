@@ -1,77 +1,106 @@
 @extends('layout')
 @section('title', 'Edit Profil')
 @section('content')
+<p>Untuk melakukan perubahan, masukkan password Anda. Kosongkan password baru jika tidak ganti password.</p>
 <x-caps-lock />
 <form action="{{ route('profil.update') }}" class="needs-validation" method="POST" enctype="multipart/form-data"
 	id="form-edit-account">
 	@csrf
 	<input type="hidden" name="id" value="{{ auth()->id() }}">
 	<div class="row mb-3">
-		<div class="col-md-3"><label for="nama">Nama</label></div>
+		<div class="col-md-3"><label for="nama-user">Nama</label></div>
 		<div class="col-md-9">
-			<input type="text" name="name" id="nama" value="{{ old('name') ?? auth()->user()->name }}"
-				class="form-control @error('name') is-invalid @enderror " required>
-			@error('name')
-			<div class="invalid-feedback" id="name-error">{{ $message }}</div>
-			@enderror
+			<div class="input-group has-validation">
+				<span class="input-group-text"><i class="bi bi-person"></i></span>
+				<input type="text" name="name" id="nama-user" value="{{ old('name') ?? auth()->user()->name }}"
+					class="form-control @error('name') is-invalid @enderror " required>
+				<div class="invalid-feedback" id="name-error">
+					@error('name') {{ $message }}
+					@else Masukkan Nama
+					@enderror
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="row mb-3">
-		<div class="col-md-3"><label for="email">Email</label></div>
+		<div class="col-md-3"><label for="email-user">Email</label></div>
 		<div class="col-md-9">
-			<input type="email" name="email" value="{{ old('email') ?? auth()->user()->email }}"
-				class="form-control @error('email') is-invalid @enderror " id="email" required>
-			@error('email')
-			<div class="invalid-feedback">{{ $message }}</div>
-			@enderror
+			<div class="input-group has-validation">
+				<span class="input-group-text"><i class="bi bi-envelope"></i></span>
+				<input type="email" name="email" value="{{ old('email') ?? auth()->user()->email }}"
+					class="form-control @error('email') is-invalid @enderror " id="email-user" required>
+				<div class="invalid-feedback" id="email-error">
+					@error('email') {{ $message }}
+					@else Masukkan Email (email@example.com)
+					@enderror
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="row mb-3">
-		<div class="col-md-3"><label for="password-lama">Password Anda</label></div>
+		<div class="col-md-3"><label for="password-current">Password Anda</label></div>
 		<div class="col-md-9">
-			<input type="password" name="current_password" placeholder="Password Akun Anda"
-				class="form-control @error('current_password') is-invalid @enderror " minlength="8" maxlength="20"
-				id="password-lama" required>
-			@error('current_password')
-			<div class="invalid-feedback">{{ $message }}</div>
-			@enderror
+			<div class="input-group has-validation">
+				<span class="input-group-text"><i class="bi bi-lock"></i></span>
+				<input type="password" name="current_password" placeholder="Password Akun Anda"
+					class="form-control @error('current_password') is-invalid @enderror " minlength="8" maxlength="20"
+					id="password-current" required>
+				<div class="invalid-feedback" id="current-password-error">
+					@error('current_password') {{ $message }}
+					@else Masukkan Password Anda
+					@enderror
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="row mb-3">
-		<div class="col-md-3"><label for="password-baru">Password baru</label></div>
+		<div class="col-md-3"><label for="newpassword">Password baru</label></div>
 		<div class="col-md-9">
-			<input type="password" name="password" id="password-baru" oninput="checkpassword()"
-				class="form-control @error('password') is-invalid @enderror "
-				placeholder="Kosongkan jika tidak ganti password" minlength="8" maxlength="20">
-			@error('password')
-			<div class="invalid-feedback">{{ $message }}</div>
-			@enderror
+			<div class="input-group has-validation">
+				<span class="input-group-text"><i class="bi bi-lock"></i></span>
+				<input type="password" name="password" id="newpassword" oninput="checkpassword()"
+					class="form-control @error('password') is-invalid @enderror "
+					placeholder="Kosongkan jika tidak ganti password" minlength="8" maxlength="20">
+				<div class="invalid-feedback" id="newpassword-error">
+					@error('password') {{ $message }}
+					@else Password baru harus di antara 8-20 karakter
+					@enderror
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="row mb-3">
 		<div class="col-md-3">
-			<label for="konfirmasi">Konfirmasi Password baru</label>
+			<label for="conf-password">Konfirmasi Password baru</label>
 		</div>
 		<div class="col-md-9">
-			<input type="password" name="password_confirmation" id="konfirmasi" minlength="8"
-				class="form-control @error('password_confirmation') is-invalid @enderror " maxlength="20"
-				placeholder="Password konfirmasi" oninput="checkpassword()">
-			@error('password_confirmation')
-			<div class="invalid-feedback">{{ $message }}</div>
-			@enderror
+			<div class="input-group has-validation">
+				<span class="input-group-text"><i class="bi bi-lock"></i></span>
+				<input type="password" name="password_confirmation" id="conf-password" minlength="8"
+					class="form-control @error('password_confirmation') is-invalid @enderror " maxlength="20"
+					placeholder="Password konfirmasi" oninput="checkpassword()">
+				<div class="invalid-feedback" id="confirm-password-error">
+					@error('password_confirmation') {{ $message }}
+					@else Password Konfirmasi salah
+					@enderror
+				</div>
+			</div>
 		</div>
 	</div>
 	<hr>
 	<div class="btn-group">
-		<button type="submit" class="btn btn-primary data-submit">
-			<i class="bi bi-save"></i> Simpan perubahan
-		</button>
 		<a href="{{ route('home') }}" class="btn btn-warning">
 			<i class="bi bi-arrow-left-circle"></i> Kembali
 		</a>
 		<button type="button" class="btn btn-danger" id="DelAccountBtn">
 			<i class="bi bi-trash3-fill"></i> Hapus Akun
 		</button>
+		<button type="submit" class="btn btn-primary data-submit">
+			<i class="bi bi-save"></i> Simpan perubahan
+		</button>
+	</div>
+	<div class="spinner-grow text-primary d-none" role="status">
+		<span class="visually-hidden">Menyimpan...</span>
 	</div>
 </form>
 @endsection
@@ -104,10 +133,6 @@
 				resetvalidation();
 				swal.fire({
 					icon: "success",
-					customClass: {
-						popup: 'bg-success',
-						title: 'text-light'
-					},
 					titleText: "Tersimpan"
 				});
 			},
@@ -148,11 +173,7 @@
 				swal.fire({
 					titleText: "Gagal simpan",
 					text: errmsg,
-					icon: "error",
-					customClass: {
-						popup: 'bg-danger',
-						title: 'text-light'
-					}
+					icon: "error"
 				});
 			}
 		});
@@ -207,11 +228,7 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					titleText: "Akun sudah dihapus",
-					icon: "success",
-					customClass: {
-						popup: 'bg-success',
-						title: 'text-light'
-					}
+					icon: "success"
 				});
 				location.href = "{{ route('login') }}";
 			}

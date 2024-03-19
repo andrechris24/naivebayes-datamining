@@ -17,10 +17,10 @@ return new class extends Migration {
 				->constrained('nilai_atributs')->nullOnDelete()->cascadeOnUpdate();
 			$table->foreignId('pekerjaan')->nullable()->constrained('nilai_atributs')
 				->nullOnDelete()->cascadeOnUpdate();
-			$table->integer('penghasilan')->default(0);
+			$table->integer('penghasilan')->nullable()->default(0);
 			$table->foreignId('listrik')->nullable()->constrained('nilai_atributs')
 				->nullOnDelete()->cascadeOnUpdate();
-			$table->integer('tanggungan')->default(0);
+			$table->integer('tanggungan')->nullable()->default(0);
 			$table->enum('status', ['Layak', 'Tidak Layak'])->nullable();
 			$table->timestamps();
 		});

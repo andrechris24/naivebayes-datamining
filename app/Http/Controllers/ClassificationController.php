@@ -29,35 +29,44 @@ class ClassificationController extends Controller
 	{
 		$request->validate(Classification::$rule);
 		try {
-			if (Probability::count() === 0) 
+			if (Probability::count() === 0)
 				return response()->json(['message' => 'Probabilitas belum dihitung'], 400);
 
+			//Preprocessor Start
+			if ($request->type === 'test') {
+				foreach (Atribut::get() as $attr) {
+					Controller::preprocess($attr, 'test');
+				}
+			}
+			//Preprocessor End
+
 			//Prior start
-			$semuadata=$this->getData($request->type);
+			$semuadata = $this->getData($request->type);
 			$probab = Controller::probabKelas();
 			//Prior end
 
-			if(!$semuadata){
+			if (!$semuadata) {
 				return response()->json([
-					'message'=>'Tipe Data yang dipilih kosong'
-				],400);
+					'message' => 'Tipe Data yang dipilih kosong'
+				], 400);
 			}
 			foreach ($semuadata as $dataset) {
-				//Likelihood Start
-				$plf['l'] = $plf['tl'] = 1;
-				// $evidence=[];
-				foreach (Atribut::get() as $idx=>$at) {
+				//Likelihood & Evidence Start
+				$plf['l'] = $plf['tl'] = $evi = 1;
+				foreach (Atribut::get() as $at) {
 					if ($at->type === 'categorical') {
 						$probabilitas = Probability::firstWhere(
-							'nilai_atribut_id', $dataset[$at->slug]
+							'nilai_atribut_id',
+							$dataset[$at->slug]
 						);
 						$plf['l'] *= $probabilitas['layak'];
 						$plf['tl'] *= $probabilitas['tidak_layak'];
-						// $evidence[$idx]=TrainingData::where($at->slug,$dataset[$at->slug])->count()/count($semuadata);
+						$evi *= TrainingData::where($at->slug, $dataset[$at->slug])->count() /
+							count($semuadata);
 					} else {//Numeric
 						$probabilitas = Probability::where('atribut_id', $at->id)
-						->firstWhere('nilai_atribut_id',null);
-						$plf['l']*= $this->normalDistribution(
+							->whereNull('nilai_atribut_id')->first();
+						$plf['l'] *= $this->normalDistribution(
 							$dataset[$at->slug],
 							$probabilitas->sd_layak,
 							$probabilitas->mean_layak
@@ -65,26 +74,27 @@ class ClassificationController extends Controller
 						$plf['tl'] *= $this->normalDistribution(
 							$dataset[$at->slug],
 							$probabilitas->sd_tidak_layak,
-							$probabilitas->mean_tidak_layak);
-						// $evidence[$idx]=$this->normalDistribution(
-						// 	$dataset[$at->slug],
-						// 	Controller::stats_standard_deviation(a),
-						// 	a/count($semuadata)
-						// );
+							$probabilitas->mean_tidak_layak
+						);
+						$evi *= $this->normalDistribution(
+							$dataset[$at->slug],
+							$probabilitas->sd_total,
+							$probabilitas->mean_total
+						);
 					}
 				}
-				//Likelihood End
+				//Likelihood & Evidence End
 
 				//Posterior Start
-				$p['layak'] = $plf['l'] * $probab['l'];
-				$p['tidak_layak'] = $plf['tl'] * $probab['tl'];
+				$p['layak'] = ($evi === 0 ? 0 : (($plf['l'] * $probab['l']) / $evi));
+				$p['tidak_layak'] = ($evi === 0 ? 0 : (($plf['tl'] * $probab['tl']) / $evi));
 				//Posterior End
 
 				$predict = $p['layak'] >= $p['tidak_layak'] ? 'Layak' : "Tidak Layak";
 				Classification::updateOrCreate([
 					'name' => $dataset->nama,
-					'type'=>$request->type
-				],[
+					'type' => $request->type
+				], [
 					'layak' => $p['layak'],
 					'tidak_layak' => $p['tidak_layak'],
 					'predicted' => $predict,
@@ -104,9 +114,9 @@ class ClassificationController extends Controller
 	public function show()
 	{
 		return DataTables::of(Classification::query())
-		->editColumn('type',function (Classification $class){
-			return Classification::$tipedata[$class->type];
-		})->make();
+			->editColumn('type', function (Classification $class) {
+				return Classification::$tipedata[$class->type];
+			})->make();
 	}
 
 	/**
@@ -116,33 +126,36 @@ class ClassificationController extends Controller
 	{
 		$request->validate(Classification::$rule);
 		try {
-			if($request->type==='all')
+			if ($request->type === 'all')
 				Classification::truncate();
 			else
-				Classification::where('type',$request->type)->delete();
+				Classification::where('type', $request->type)->delete();
 			return response()->json(['message' => 'Berhasil direset']);
 		} catch (QueryException $e) {
 			Log::error($e);
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
 	}
-	private function getData($type){
-		if($type==='all'){
-			$training=TrainingData::get();
-			$testing=TestingData::get();
-			$data=$training->merge($testing);
-		}else if($type==='train'){
-			if(TrainingData::count() === 0)
+	private function getData($type)
+	{
+		// if($type==='all'){
+		// 	$training=TrainingData::get();
+		// 	$testing=TestingData::get();
+		// 	$data=$training->merge($testing);
+		// }else 
+		if ($type === 'train') {
+			if (TrainingData::count() === 0)
 				return false;
-			$data=TrainingData::get();
-		}else{
-			if (TestingData::count() === 0) 
+			$data = TrainingData::get();
+		} else {
+			if (TestingData::count() === 0)
 				return false;
-			$data=TestingData::get();
+			$data = TestingData::get();
 		}
 		return $data;
 	}
-	private function normalDistribution($x,$sd,$mean){
-		return (1 / ($sd * sqrt(2 * pi()))) * exp(-0.5*pow(($x - $mean)/$sd,2));
+	private function normalDistribution($x, $sd, $mean)
+	{
+		return (1 / ($sd * sqrt(2 * pi()))) * exp(-0.5 * pow(($x - $mean) / $sd, 2));
 	}
 }

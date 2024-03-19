@@ -68,7 +68,7 @@
 						}]
 					}
 				}
-			}).on("error.dt", function (e, settings, techNote, message) {
+			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
 			}).on('preInit.dt', removeBtn());
 		} catch (dterr) {
@@ -78,14 +78,14 @@
 		confirm.fire({
 			titleText: "Reset Klasifikasi?",
 			text: 'Anda akan mereset hasil klasifikasi. Pilih tipe data yang akan direset hasilnya.',
-		  input: "select",
-		  inputOptions: {
-		    train: "Data Training (Data Latih)",
-		    test: "Data Testing (Data Uji)",
-		    all: "Semua Data"
-		  },
-		  inputPlaceholder: "Pilih Tipe Data",
-		  inputValidator: (value) => {
+			input: "select",
+			inputOptions: {
+				train: "Data Training (Data Latih)",
+				test: "Data Testing (Data Uji)",
+				all: "Semua Data"
+			},
+			inputPlaceholder: "Pilih Tipe Data",
+			inputValidator: (value) => {
 				if (!value) return "Anda harus memilih tipe data";
 			},
 			preConfirm: async (tipe) => {
@@ -117,31 +117,26 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
-				  customClass: {
-				    popup: 'bg-success',
-				    title: 'text-light',
-				    text: 'text-light'
-				  },
 					titleText: "Berhasil direset"
 				});
 			}
 		});
 	}).on('click', '.calc-class', function(){
 		Swal.fire({
-		  titleText: "Pilih tipe data yang akan dihitung",
-		  input: "select",
-		  inputOptions: {
-		    train: "Data Training (Data Latih)",
-		    test: "Data Testing (Data Uji)"
-		    // all: "Semua Data"
-		  },
-		  inputPlaceholder: "Pilih Tipe Data",
-		  showCancelButton: true,
-	    confirmButtonText: `<i class="bi bi-calculator"></i> Hitung`,
-	    cancelButtonText: `<i class="bi bi-x-lg"></i> Batal`,
-	    showLoaderOnConfirm: true,
-	    allowOutsideClick: () => !Swal.isLoading(),
-		  inputValidator: (value) => {
+			titleText: "Pilih tipe data yang akan dihitung",
+			input: "select",
+			inputOptions: {
+				train: "Data Training (Data Latih)",
+				test: "Data Testing (Data Uji)"
+				// all: "Semua Data"
+			},
+			inputPlaceholder: "Pilih Tipe Data",
+			showCancelButton: true,
+			confirmButtonText: `<i class="bi bi-calculator"></i> Hitung`,
+			cancelButtonText: `<i class="bi bi-x-lg"></i> Batal`,
+			showLoaderOnConfirm: true,
+			allowOutsideClick: () => !Swal.isLoading(),
+			inputValidator: (value) => {
 				if (!value) return "Anda harus memilih tipe data";
 			},
 			preConfirm: async (tipe) => {
@@ -176,11 +171,7 @@
 				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
 				swal.fire({
 					titleText: "Berhasil dihitung",
-					icon: "success",
-				  customClass: {
-				    popup: 'bg-success',
-				    title: 'text-light'
-				  }
+					icon: "success"
 				});
 			}
 		});

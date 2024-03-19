@@ -1,24 +1,30 @@
 @extends('layout')
-@section('title','Performa')
+@section('title', 'Performa')
 @section('content')
+@if($semua)
+<div class="alert alert-info" role="alert">
+	<i class="bi bi-info-circle"></i>
+	Performa yang ditampilkan adalah performa hasil klasifikasi dari semua jenis data.
+	Reset salah satu klasifikasi untuk menampilkan performa dari salah satu jenis data saja.
+</div>
+@endif
 <div class="card mb-3">
 	<div class="card-header"><b>Hasil</b></div>
 	<div class="card-body">
 		<div class="row">
 			<div class="col-lg-6">
 				<table class="table table-bordered caption-top">
-					<caption></caption>
+					<caption>Hasil Prediksi</caption>
 					<thead>
 						<tr>
-							<th>{{round($performa['accuracy'], 2)}}%</th>
-							<th colspan="2">Aktual</th>
-							<th>Presisi</th>
+							<th>#</th>
+							<th colspan="3">Aktual</th>
 						</tr>
 						<tr>
 							<th>Prediksi</th>
 							<th>Layak</th>
 							<th>Tidak Layak</th>
-							<th>{{round($performa['precision'], 2)}}%</th>
+							<th>Total</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -26,27 +32,50 @@
 							<th>Layak</th>
 							<td class="table-success">{{$data['ll']}}</td>
 							<td class="table-danger">{{$data['tll']}}</td>
-							<td>{{round($data['pl'], 2)}}%</td>
+							<td>{{$data['ll']+$data['tll']}}</td>
 						</tr>
 						<tr>
 							<th>Tidak Layak</th>
 							<td class="table-danger">{{$data['ltl']}}</td>
 							<td class="table-success">{{$data['tltl']}}</td>
-							<td>{{round($data['ptl'], 2)}}%</td>
+							<td>{{$data['ltl']+$data['tltl']}}</td>
 						</tr>
 						<tr>
-							<th>Recall</th>
-							<td>{{round($data['rl'], 2)}}%</td>
-							<td>{{round($data['rtl'], 2)}}%</td>
-							<td>{{round($performa['recall'], 2)}}%</td>
+							<th>Total</th>
+							<td>{{$data['ll']+$data['ltl']}}</td>
+							<td>{{$data['tll']+$data['tltl']}}</td>
+							<td>{{$data['total']}}</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
-			<div class="col-lg-6"><div id="predict-actual"></div></div>
+			<div class="col-lg-6">
+				<table class="table table-bordered caption-top">
+					<caption>Performa</caption>
+					<tbody>
+						<tr>
+							<th>Akurasi</th>
+							<td>{{round($performa['accuracy'], 2)}}%</td>
+						</tr>
+						<tr>
+							<th>Presisi</th>
+							<td>{{round($performa['precision'], 2)}}%</td>
+						</tr>
+						<tr>
+							<th>Recall</th>
+							<td>{{round($performa['recall'], 2)}}%</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 		<div class="row">
-			<div class="col-lg-6"><div id="perform-vector"></div></div>
-			<div class="col-lg-6"><div id="perform-radial"></div></div>
+			<div class="col-lg-6">
+				<div id="predict-actual"></div>
+			</div>
+			<div class="col-lg-6">
+				<div id="perform-radial"></div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -62,7 +91,8 @@
 			data: [{{$data['ltl']}}, {{$data['tltl']}}]
 		}],
 		chart: {
-			type: "bar"
+			type: "bar",
+			foreColor: '#feb019'
 		},
 		dataLabels: {
 			enabled: false
@@ -77,52 +107,37 @@
 			text: 'Hasil Prediksi'
 		}
 	};
-	const vectorOptions = {
-		series: [{
-			name: "Layak",
-			data: [{{$data['al']}}, {{$data['pl']}}, {{$data['rl']}}]
-		}, {
-			name: "Tidak Layak",
-			data: [{{$data['atl']}}, {{$data['ptl']}}, {{$data['rtl']}}]
-		}],
-		chart: {
-			type: "bar"
-		},
-		dataLabels: {
-			enabled: false
-		},
-		tooltip: {
-			theme: 'dark'
-		},
-		xaxis: {
-			categories: ["Akurasi", "Presisi", "Recall"]
-		},
-		title: {
-			text: 'Performance Vector'
-		}
-	};
 	const radials={
 		series: [
-			{{$performa['accuracy']}}, 
-			{{$performa['precision']}}, 
-			{{$performa['recall']}}
+			{{round($performa['accuracy'],2)}}, 
+			{{round($performa['precision'],2)}}, 
+			{{round($performa['recall'],2)}}
 		],
 		chart: {
-			type: 'radialBar'
+			type: 'radialBar',
+			foreColor: '#008ffb'
 		},
-		// theme:{
-		//   mode: 'auto'
-		// },
 		title: {
 			text: "Hasil Akhir"
+		},
+		plotOptions: {
+			radialBar: {
+				dataLabels: {
+					total: {
+						show: true,
+						label: "Total Data",
+						formatter: function(){
+							return {{$data['total']}};
+						}
+					}
+				}
+			}
 		},
 		labels: ['Akurasi', 'Presisi', 'Recall']
 	};
 	const bar = new ApexCharts(document.querySelector("#predict-actual"), barOptions),
-	performBar = new ApexCharts(document.querySelector("#perform-vector"), vectorOptions),
 	rad = new ApexCharts(document.querySelector("#perform-radial"), radials);
 	bar.render();
-	performBar.render();
 	rad.render();
 </script>
 @endsection

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Exports\TrainingExport;
 use App\Imports\TrainingImport;
 use App\Models\Atribut;
@@ -15,15 +16,15 @@ use Yajra\DataTables\Facades\DataTables;
 
 class TrainingDataController extends Controller
 {
-	public function export() 
+	public function export()
 	{
-			return Excel::download(new TrainingExport, 'training.xlsx');
+		return Excel::download(new TrainingExport, 'training.xlsx');
 	}
-	public function import(Request $request) 
+	public function import(Request $request)
 	{
 		$request->validate(TrainingData::$filerule);
 		Excel::import(new TrainingImport, $request->file('data'));
-		return response()->json(['message'=>'Berhasil diimpor']);
+		return response()->json(['message' => 'Berhasil diimpor']);
 	}
 	public function count()
 	{
@@ -106,8 +107,8 @@ class TrainingDataController extends Controller
 	 */
 	public function destroy(TrainingData $training)
 	{
-		Classification::where('name',$training->nama)->where('type','train')
-		->delete();
+		Classification::where('name', $training->nama)->where('type', 'train')
+			->delete();
 		$training->delete();
 		// Probability::truncate();
 		return response()->json(['message' => 'Berhasil dihapus']);
@@ -115,7 +116,7 @@ class TrainingDataController extends Controller
 	public function clear()
 	{
 		try {
-			Classification::where('type','train')->delete();
+			Classification::where('type', 'train')->delete();
 			Probability::truncate();
 			TrainingData::truncate();
 			return response()->json(['message' => 'Berhasil dihapus']);

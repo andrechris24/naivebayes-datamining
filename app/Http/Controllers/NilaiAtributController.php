@@ -35,7 +35,7 @@ class NilaiAtributController extends Controller
 	public function index()
 	{
 		$atribut = Atribut::where('type', 'categorical')->get();
-		if (Atribut::count() == 0) {
+		if (Atribut::count() === 0) {
 			return to_route('atribut.index')
 				->withWarning('Tambahkan Atribut dulu sebelum menambah nilai atribut');
 		}

@@ -4,6 +4,7 @@ App\Http\Controllers\AtributController,
 App\Http\Controllers\ClassificationController,
 App\Http\Controllers\NilaiAtributController,
 App\Http\Controllers\ProbabilityController,
+App\Http\Controllers\PSOController,
 App\Http\Controllers\ResultController,
 App\Http\Controllers\TestingDataController,
 App\Http\Controllers\TrainingDataController,
@@ -52,15 +53,15 @@ Route::middleware(['auth'])->group(function () {
 	Route::controller(TrainingDataController::class)->prefix('training')
 		->name('training.')->group(function () {
 			Route::get('count', 'count')->name('count')->block();
-			Route::get('download','export')->name('export')->block();
-			Route::post('upload','import')->name('import')->block();
+			Route::get('download', 'export')->name('export')->block();
+			Route::post('upload', 'import')->name('import')->block();
 			Route::delete('/', 'clear')->name('clear')->block();
 		});
 	Route::controller(TestingDataController::class)->prefix('testing')
 		->name('testing.')->group(function () {
 			Route::get('count', 'count')->name('count')->block();
-			Route::get('download','export')->name('export')->block();
-			Route::post('upload','import')->name('import')->block();
+			Route::get('download', 'export')->name('export')->block();
+			Route::post('upload', 'import')->name('import')->block();
 			Route::delete('/', 'clear')->name('clear')->block();
 		});
 	Route::controller(ProbabilityController::class)->prefix('probab')
@@ -68,6 +69,13 @@ Route::middleware(['auth'])->group(function () {
 			Route::get('/', 'index')->name('index');
 			Route::get('calc', 'create')->name('create');
 			Route::delete('/', 'destroy')->name('reset');
+		});
+	Route::controller(PSOController::class)->prefix('pso')->name('pso.')
+		->group(function () {
+			Route::get('/', 'index')->name('index');
+			Route::get('data','create')->name('datatable');
+			Route::post('store','store')->name('store');
+			Route::delete('clear','destroy')->name('reset');
 		});
 	Route::prefix('atribut')->name('atribut.')->group(function () {
 		Route::get('count', [AtributController::class, 'count'])->name('count');

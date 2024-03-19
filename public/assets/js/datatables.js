@@ -11,7 +11,7 @@ function removeBtn() {
 function initError(message) {
     swal.fire({
         icon: "error",
-        title: "Data gagal dimuat",
+        title: "Data gagal dimuat"
     });
     console.error(message);
 }
@@ -19,11 +19,14 @@ function errorDT(message, note) {
     Toastify({
         text: message,
         style: {
-            background: "#ffc107",
+            background: "#ffc107"
         },
         destination: "https://datatables.net/tn/" + note,
         newWindow: true,
         duration: 10000,
+        offset: {
+            y: 36
+        }
     }).showToast();
     console.warn(message);
 }

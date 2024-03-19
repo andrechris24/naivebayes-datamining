@@ -7,10 +7,10 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 id="modalAddTestingLabel" class="modal-title">Tambah Data Testing</h5>
-				<button type="button" class="btn-close text-reset" data-bs-dismiss="modal" aria-label="Close"></button>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form class="add-new-category needs-validation" id="addNewTestingForm">
+				<form class="needs-validation" id="addNewTestingForm">
 					@csrf
 					<input type="hidden" name="id" id="test_id">
 					<div class="form-floating mb-3">
@@ -20,13 +20,13 @@
 					</div>
 					@foreach ($atribut as $attr)
 					<div class="form-floating mb-3" data-bs-toggle="tooltip" title="{{$attr->desc}}">
-						@if ($attr->type==='numeric')
+						@if ($attr->type === 'numeric')
 						<input type="number" class="form-control" min="0" name="q[{{$attr->slug}}]"
 							id="test-{{$attr->slug}}" placeholder="123456789">
 						@else
 						<select name="q[{{$attr->slug}}]" class="form-select" id="test-{{$attr->slug}}">
 							<option value="">Pilih</option>
-							@foreach ($nilai->where('atribut_id',$attr->id) as $sub)
+							@foreach ($nilai->where('atribut_id', $attr->id) as $sub)
 							<option value="{{$sub->id}}">{{$sub->name}}</option>
 							@endforeach
 						</select>
@@ -75,7 +75,9 @@
 			<div class="modal-body">
 				<form id="importTestingData">
 					@csrf
-					<input type="file" class="form-control" id="testData" name="data"  aria-describedby="importFormats" accept=".csv, .tsv, .ods, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+					<input type="file" class="form-control" id="testData" name="data" aria-describedby="importFormats"
+						accept=".csv, .tsv, .ods, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+						required>
 					<div id="importFormats" class="form-text">
 						Format yang diperbolehkan: .xls, .xlsx, .csv, .tsv
 					</div>
@@ -135,7 +137,8 @@
 	<div class="card-body">
 		<div class="btn-group mb-3" role="group" id="spare-button">
 			<div class="btn-group" role="group">
-				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+					aria-expanded="false">
 					<i class="bi bi-plus-lg"></i> Tambah Data
 				</button>
 				<ul class="dropdown-menu">
@@ -146,7 +149,7 @@
 					</li>
 					<li>
 						<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalImportTesting">
-						<i class="bi bi-upload"></i> Upload File
+							<i class="bi bi-upload"></i> Upload File
 						</a>
 					</li>
 				</ul>
@@ -209,7 +212,7 @@
 				@foreach ($atribut as $attr)
 				{
 					targets: 1 + {{$loop->index}},
-					render:function(data){
+					render: function(data){
 						if(data === null) return '?';
 						else return data;
 					}
@@ -263,7 +266,7 @@
 						}]
 					}
 				}
-			}).on("error.dt", function (e, settings, techNote, message) {
+			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
 			}).on('preXhr', function () {
 				$.get("{{ route('testing.count') }}", function (data) {
@@ -273,10 +276,6 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					swal.fire({
 						icon: 'error',
-						customClass: {
-							popup: 'bg-danger',
-							title: 'text-light'
-						},
 						titleText: 'Gagal memuat jumlah',
 						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`
 					});
@@ -313,10 +312,6 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
-					customClass: {
-						popup: 'bg-success',
-						title: 'text-light'
-					},
 					titleText: "Berhasil dihapus"
 				});
 			}
@@ -355,10 +350,6 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
-					customClass: {
-						popup: 'bg-success',
-						title: 'text-light'
-					},
 					titleText: "Berhasil dihapus"
 				});
 			}
@@ -366,7 +357,7 @@
 	}).on("click", ".edit-record", function () {
 		let test_id = $(this).data("id");
 		$("#modalAddTestingLabel").html("Edit Data Testing");
-		formloading("#addNewTestingForm :input",true);
+		formloading("#addNewTestingForm :input", true);
 		$.get(`testing/${test_id}/edit`, function (data) {
 			$("#test_id").val(data.id);
 			$("#testName").val(data.nama);
@@ -385,15 +376,11 @@
 			}
 			swal.fire({
 				icon: "error",
-				customClass: {
-					popup: 'bg-danger',
-					title: 'text-light'
-				},
 				titleText: "Gagal memuat data",
 				text: errmsg
 			});
 		}).always(function () {
-			formloading("#addNewTestingForm :input",false);
+			formloading("#addNewTestingForm :input", false);
 		});
 	});
 	$('#importTestingData').submit(function(e){//form Upload Data
@@ -407,21 +394,17 @@
 			cache: false,
 			processData: false,
 			beforeSend: function () {
-				formloading("#importTestingData :input",true);
+				formloading("#importTestingData :input", true);
 				$("#importTestingData :input").removeClass("is-invalid");
 			},
 			complete: function () {
-				formloading("#importTestingData :input",false);
+				formloading("#importTestingData :input", false);
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
 				$('#modalImportTesting').modal("hide");
 				swal.fire({
 					icon: "success",
-					customClass: {
-						popup: 'bg-success',
-						title: 'text-light'
-					},
 					titleText: "Berhasil diupload"
 				});
 			},
@@ -440,11 +423,7 @@
 				swal.fire({
 					titleText: "Gagal",
 					text: errmsg,
-					icon: "error",
-					customClass: {
-						popup: 'bg-danger',
-						title: 'text-light'
-					}
+					icon: "error"
 				});
 			}
 		});
@@ -456,21 +435,17 @@
 			url: "{{ route('testing.store') }}",
 			type: "POST",
 			beforeSend: function () {
-				formloading("#addNewTestingForm :input",true);
+				formloading("#addNewTestingForm :input", true);
 				$("#addNewTestingForm :input").removeClass("is-invalid");
 			},
 			complete: function () {
-				formloading("#addNewTestingForm :input",false);
+				formloading("#addNewTestingForm :input", false);
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
 				modalForm.modal("hide");
 				swal.fire({
 					icon: "success",
-					customClass: {
-						popup: 'bg-success',
-						title: 'text-light'
-					},
 					titleText: status.message
 				});
 			},
@@ -499,11 +474,7 @@
 				swal.fire({
 					titleText: "Gagal",
 					text: errmsg,
-					icon: "error",
-					customClass: {
-						popup: 'bg-danger',
-						title: 'text-light'
-					}
+					icon: "error"
 				});
 			}
 		});

@@ -11,10 +11,10 @@ return new class extends Migration {
     {
         Schema::create('classifications', function (Blueprint $table) {
             $table->id();
-            $table->string('name',99);
-            $table->enum('type',['train','test']);
-            $table->double('layak', 30, 20)->default(0.00000);
-            $table->double('tidak_layak', 30, 20)->default(0.00000);
+            $table->string('name', 99);
+            $table->enum('type', ['train', 'test']);
+            $table->double('layak', 30, 20)->default(0.00);
+            $table->double('tidak_layak', 30, 20)->default(0.00);
             $table->enum('predicted', ['Layak', 'Tidak Layak']);
             $table->enum('real', ['Layak', 'Tidak Layak']);
             $table->timestamps();

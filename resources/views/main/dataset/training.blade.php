@@ -26,7 +26,7 @@
 						@else
 						<select name="q[{{$attr->slug}}]" class="form-select" id="train-{{$attr->slug}}">
 							<option value="">Pilih</option>
-							@foreach ($nilai->where('atribut_id',$attr->id) as $sub)
+							@foreach ($nilai->where('atribut_id', $attr->id) as $sub)
 							<option value="{{$sub->id}}">{{$sub->name}}</option>
 							@endforeach
 						</select>
@@ -73,7 +73,9 @@
 			<div class="modal-body">
 				<form id="importTrainingData">
 					@csrf
-					<input type="file" class="form-control" id="trainData" name="data"  aria-describedby="importFormats" accept=".csv, .tsv, .ods, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+					<input type="file" class="form-control" id="trainData" name="data" aria-describedby="importFormats"
+						accept=".csv, .tsv, .ods, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+						required>
 					<div id="importFormats" class="form-text">
 						Format yang diperbolehkan: .xls, .xlsx, .csv, .tsv
 					</div>
@@ -133,7 +135,8 @@
 	<div class="card-body">
 		<div class="btn-group mb-3" role="group" id="spare-button">
 			<div class="btn-group" role="group">
-				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+					aria-expanded="false">
 					<i class="bi bi-plus-lg"></i> Tambah Data
 				</button>
 				<ul class="dropdown-menu">
@@ -144,7 +147,7 @@
 					</li>
 					<li>
 						<a class="dropdown-item" href="#modalImportTraining" data-bs-toggle="modal">
-						<i class="bi bi-upload"></i> Upload File
+							<i class="bi bi-upload"></i> Upload File
 						</a>
 					</li>
 				</ul>
@@ -192,7 +195,7 @@
 					{ data: "id" },
 					{ data: "nama" },
 					@foreach ($atribut as $attr)
-						{data: "{{$attr->slug}}"},
+					{data: "{{$attr->slug}}"},
 					@endforeach
 					{ data: "status" },
 					{ data: "id" }
@@ -205,13 +208,13 @@
 					}
 				},
 				@foreach ($atribut as $attr)
-					{
-						targets: 2 + {{$loop->index}},
-						render:function(data){
-							if(data === null) return '?';
-							else return data;
-						}
-					},
+				{
+					targets: 2 + {{$loop->index}},
+					render: function(data){
+						if(data === null) return '?';
+						else return data;
+					}
+				},
 				@endforeach
 				{ //Aksi
 					orderable: false,
@@ -250,7 +253,7 @@
 									"data-bs-target": "#modalImportTraining"
 								}
 							}]
-						},{
+						}, {
 							text: '<i class="bi bi-trash3-fill"></i> Hapus Data',
 							className: "delete-all"
 						}, {
@@ -261,7 +264,7 @@
 						}]
 					}
 				}
-			}).on("error.dt", function (e, settings, techNote, message) {
+			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
 			}).on('preXhr', function () {
 				$.get("{{ route('training.count') }}", function (data) {
@@ -272,11 +275,7 @@
 					swal.fire({
 						icon: 'error',
 						titleText: 'Gagal memuat jumlah',
-						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`,
-						customClass: {
-							popup: 'bg-danger',
-							title: 'text-light'
-						}
+						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`
 					});
 				});
 			}).on('preInit.dt', removeBtn());
@@ -312,10 +311,6 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
-					customClass: {
-						popup: 'bg-success',
-						title: 'text-light'
-					},
 					titleText: "Berhasil dihapus"
 				});
 			}
@@ -354,10 +349,6 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
-					customClass: {
-						popup: 'bg-success',
-						title: 'text-light'
-					},
 					titleText: "Berhasil dihapus"
 				});
 			}
@@ -384,10 +375,6 @@
 			}
 			swal.fire({
 				icon: "error",
-				customClass: {
-					popup: 'bg-danger',
-					title: 'text-light'
-				},
 				titleText: "Gagal memuat data",
 				text: errmsg
 			});
@@ -417,10 +404,6 @@
 					$('#modalImportTraining').modal("hide");
 					swal.fire({
 						icon: "success",
-						customClass: {
-							popup: 'bg-success',
-							title: 'text-light'
-						},
 						titleText: "Berhasil diupload"
 					});
 				},
@@ -437,13 +420,9 @@
 						errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 					}
 					swal.fire({
-						titleText : "Gagal",
+						titleText: "Gagal upload",
 						text: errmsg,
-						icon: "error",
-						customClass: {
-							popup: 'bg-danger',
-							title: 'text-light'
-						}
+						icon: "error"
 					});
 				}
 		});
@@ -466,10 +445,6 @@
 				modalForm.modal("hide");
 				swal.fire({
 					icon: "success",
-					customClass: {
-						popup: 'bg-success',
-						title: 'text-light'
-					},
 					titleText: status.message
 				});
 			},
@@ -498,11 +473,7 @@
 				swal.fire({
 					titleText: "Gagal",
 					text: errmsg,
-					icon: "error",
-					customClass: {
-						popup: 'bg-danger',
-						title: 'text-light'
-					}
+					icon: "error"
 				});
 			}
 		});

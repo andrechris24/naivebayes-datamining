@@ -14,8 +14,8 @@ class TrainingData extends Model
 		'status' => ['bail', 'required', 'in:Layak,Tidak Layak'],
 		'q' => 'required',
 		'q.*' => ['bail', 'required', 'numeric']
-	], $filerule=[
-		'data'=>[
+	], $filerule = [
+		'data' => [
 			'bail',
 			'required',
 			'file',

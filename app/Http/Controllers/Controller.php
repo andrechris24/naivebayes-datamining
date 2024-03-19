@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TestingData;
 use App\Models\TrainingData;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -17,48 +18,42 @@ class Controller extends BaseController
 		$tidak_layak = TrainingData::where('status', 'Tidak Layak')->count() / $total;
 		return ['l' => $layak, 'tl' => $tidak_layak];
 	}
-	public static function pso($data,$looptotal){
-		$jumlah = count($data);
-		$v = array_fill(0, $jumlah, 0);
-		$pbest = $data;
-		$gbest = $this->getGbest($data);
-		//echo $gbest;
-		$c1 = $c2 = 1;
-		/*for($i = 0; $i<$jumlah; $i++){
-			$data[$i] = rand();
-			echo $data[$i]."<br>";
-		}*/
-		$literasi = $looptotal;
-		for($i=0;$i<$literasi;$i++){
-			$r1 = $r2 = (rand(0, 10)/10);
-			foreach($data as $key => $value){
-				$fungsi = $this->fungsi_tujuan($value);
-				if($fungsi < $this->fungsi_tujuan($pbest[$key]))
-					$pbest[$key] = $value;
-				if($fungsi < $this->fungsi_tujuan($gbest))
-					$gbest = $value;
-				$v[$i+1] = $i + $c1 * $r1* ($pbest[$key] - $value)  + $c2 * $r2 *($gbest - $value);
-			//	echo $v[$i+1]."<br>";
-			
-				$hasil["data"][$i][$key] = $data[$key]; 
-				$hasil["v"][$i][$key] =$v[$i+1];
-				$hasil["pbest"][$i][$key] =$pbest[$key];
-				
-				$hasil["fungsi"][$i][$key] = $fungsi; 
-				$data[$key] = $data[$key] + $v[$i+1];
-			}	
-			$hasil["gbest"][$i] = $gbest;
+	public static function preprocess($col, $type): void
+	{//Mengatasi missing value
+		if ($type === 'test') {
+			$missing = TestingData::whereNull($col->slug)->get();
+			if (count($missing) > 0) {
+				if ($col->type === 'numeric')
+					$avg = TestingData::avg($col->slug);
+				else {
+					$most = TestingData::select($col->slug)->groupBy($col->slug)
+						->orderByRaw("COUNT(*) desc")->first();
+				}
+				$missing->update([$col->slug => $most[$col->slug] ?? $avg]);
+			}
+		} else {
+			$missing = TrainingData::whereNull($col->slug)->get();
+			if (count($missing) > 0) {
+				if ($col->type === 'numeric')
+					$avg = TrainingData::avg($col->slug);
+				else {
+					$most = TrainingData::select($col->slug)->groupBy($col->slug)
+						->orderByRaw("COUNT(*) desc")->first();
+				}
+				$missing->update([$col->slug => $most[$col->slug] ?? $avg]);
+			}
 		}
 	}
-	public static function fungsi_tujuan($nilai){
+	public function fungsi_tujuan($nilai)
+	{
 		return pow((100 - $nilai), 2);
 	}
-	public static function getGbest($pbest){
+	public function getGbest($pbest)
+	{
 		$gbest = $pbest[0];
-		for($i=1; $i<count($pbest);$i++){
-			if($this->fungsi_tujuan($pbest[$i]) < $this->fungsi_tujuan($gbest)){
+		for ($i = 1; $i < count($pbest); $i++) {
+			if ($this->fungsi_tujuan($pbest[$i]) < $this->fungsi_tujuan($gbest))
 				$gbest = $pbest[$i];
-			}
 		}
 		return $gbest;
 	}
@@ -80,7 +75,7 @@ class Controller extends BaseController
 		$mean = array_sum($a) / $n;
 		$carry = 0.0;
 		foreach ($a as $val) {
-			$carry += pow(((double) $val) - $mean,2);
+			$carry += pow(((double) $val) - $mean, 2);
 		}
 		if ($sample)
 			--$n;

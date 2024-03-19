@@ -115,7 +115,8 @@ class AdminController extends Controller
 			if (!Hash::check($_GET['token'], $enctoken->token))
 				return to_route('password.request')->withError(__('passwords.token'));
 			return view(
-				'auth.reset', ['token' => $_GET['token'], 'email' => $_GET['email']]
+				'auth.reset',
+				['token' => $_GET['token'], 'email' => $_GET['email']]
 			);
 		} catch (QueryException $e) {
 			Log::error($e);

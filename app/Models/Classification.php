@@ -16,6 +16,6 @@ class Classification extends Model
 		'predicted',
 		'real'
 	];
-	public static array $rule=['type'=>['bail','required','in:train,test,all']],
-	$tipedata=['train'=>'Training','test'=>'Testing'];
+	public static array $rule = ['type' => ['bail', 'required', 'in:train,test']],
+	$tipedata = ['train' => 'Training', 'test' => 'Testing'];
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Exports\TestingExport;
 use App\Imports\TestingImport;
 use App\Models\Atribut;
@@ -15,15 +16,15 @@ use Yajra\DataTables\Facades\DataTables;
 
 class TestingDataController extends Controller
 {
-	public function export() 
+	public function export()
 	{
-			return Excel::download(new TestingExport, 'testing.xlsx');
+		return Excel::download(new TestingExport, 'testing.xlsx');
 	}
-	public function import() 
+	public function import(Request $request)
 	{
 		$request->validate(TestingData::$filerule);
 		Excel::import(new TestingImport, request()->file('testing_data'));
-		return response()->json(['message'=>'Berhasil diimpor']);
+		return response()->json(['message' => 'Berhasil diimpor']);
 	}
 	public function count()
 	{
@@ -107,14 +108,15 @@ class TestingDataController extends Controller
 	 */
 	public function destroy(TestingData $testing)
 	{
-		Classification::where('name',$testing->nama)->where('type','test')->delete();
+		Classification::where('name', $testing->nama)->where('type', 'test')
+			->delete();
 		$testing->delete();
 		return response()->json(['message' => 'Berhasil dihapus']);
 	}
 	public function clear()
 	{
 		try {
-			Classification::where('type','test')->delete();
+			Classification::where('type', 'test')->delete();
 			TestingData::truncate();
 			return response()->json(['message' => 'Berhasil dihapus']);
 		} catch (QueryException $e) {

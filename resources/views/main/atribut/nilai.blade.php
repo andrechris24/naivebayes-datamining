@@ -100,8 +100,8 @@
 </div>
 <div class="card">
 	<div class="card-body">
-		<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAddNilaiAtribut"
-			id="spare-button">
+		<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
+			data-bs-target="#modalAddNilaiAtribut" id="spare-button">
 			<i class="bi bi-plus-lg"></i> Tambah Nilai Atribut
 		</button>
 		<table class="table table-bordered" id="table-atribut" width="100%">
@@ -173,7 +173,7 @@
 						}]
 					}
 				}
-			}).on("error.dt", function (e, settings, techNote, message) {
+			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
 			}).on('preXhr', function () {
 				$.get("{{ route('atribut.nilai.count') }}", function (data) {
@@ -184,10 +184,6 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					swal.fire({
 						icon: 'error',
-						customClass: {
-							popup: 'bg-danger',
-							title: 'text-light'
-						},
 						titleText: 'Gagal memuat jumlah',
 						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`
 					});
@@ -230,10 +226,6 @@
 			if (result.isConfirmed) {
 				swal.fire({
 					icon: "success",
-					customClass: {
-						popup: 'bg-success',
-						title: 'text-light'
-					},
 					titleText: "Berhasil dihapus"
 				});
 			}
@@ -257,10 +249,6 @@
 			}
 			swal.fire({
 				icon: "error",
-				customClass: {
-					popup: 'bg-danger',
-					title: 'text-light'
-				},
 				titleText: "Gagal memuat data",
 				text: errmsg
 			});
@@ -286,10 +274,6 @@
 				modalForm.modal("hide");
 				swal.fire({
 					icon: "success",
-					customClass: {
-						popup: 'bg-success',
-						title: 'text-light'
-					},
 					titleText: status.message
 				});
 			},
@@ -312,11 +296,7 @@
 				swal.fire({
 					titleText: "Gagal",
 					text: errmsg,
-					icon: "error",
-					customClass: {
-						popup: 'bg-danger',
-						title: 'text-light'
-					}
+					icon: "error"
 				});
 			}
 		});

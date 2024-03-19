@@ -15,7 +15,7 @@
 <div class="card my-3">
   <div class="card-header">Probabilitas Label Kelas</div>
   <div class="card-body">
-    <table class="table table-bordered" id="table-training">
+    <table class="table table-bordered">
       <thead>
         <tr>
           <th>Atribut</th>
@@ -65,34 +65,34 @@
       </thead>
       <tbody>
         @if($attr->type==='categorical')
-          @forelse($data->where('atribut_id', $attr->id) as $prob)
-            @php
-            $layak += $prob->layak;
-            $tidak_layak += $prob->tidak_layak;
-            $semua+=$prob->total;
-            @endphp
-            <tr>
-              <td>{{ $prob->nilai_atribut->name }}</td>
-              <td>{{ $prob->layak }}</td>
-              <td>{{ $prob->tidak_layak }}</td>
-              <td>{{$prob->total}}</td>
-            </tr>
-          @empty
-            @foreach($attribs['nilai']->where('atribut_id', $attr->id) as $nilai)
-            <tr>
-              <td>{{ $nilai->name }}</td>
-              <td>0</td>
-              <td>0</td>
-              <td>0</td>
-            </tr>
-            @endforeach
-          @endforelse
-          <tr class="table-secondary">
-            <td>Total</td>
-            <td>{{ $layak }}</td>
-            <td>{{ $tidak_layak }}</td>
-            <td>{{$semua}}</td>
-          </tr>
+        @forelse($data->where('atribut_id', $attr->id) as $prob)
+        @php
+        $layak += $prob->layak;
+        $tidak_layak += $prob->tidak_layak;
+        $semua += $prob->total;
+        @endphp
+        <tr>
+          <td>{{ $prob->nilai_atribut->name }}</td>
+          <td>{{ $prob->layak }}</td>
+          <td>{{ $prob->tidak_layak }}</td>
+          <td>{{$prob->total}}</td>
+        </tr>
+        @empty
+        @foreach($attribs['nilai']->where('atribut_id', $attr->id) as $nilai)
+        <tr>
+          <td>{{ $nilai->name }}</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+        @endforeach
+        @endforelse
+        <tr class="table-secondary">
+          <td>Total</td>
+          <td>{{ $layak }}</td>
+          <td>{{ $tidak_layak }}</td>
+          <td>{{$semua}}</td>
+        </tr>
         @else
         <tr>
           <th>Data</th>
@@ -100,7 +100,7 @@
             @foreach($training['layak'] as $l)
             @php
             $tot['l'] += $l[$attr->slug];
-            echo number_format($l[$attr->slug]) . (!$loop->last ? '; ' : '');
+            echo $l[$attr->slug] . (!$loop->last ? '; ' : '');
             @endphp
             @endforeach
           </td>
@@ -108,7 +108,7 @@
             @foreach($training['tidak_layak'] as $tl)
             @php
             $tot['tl'] += $tl[$attr->slug];
-            echo number_format($tl[$attr->slug]) . (!$loop->last ? '; ' : '');
+            echo $tl[$attr->slug] . (!$loop->last ? '; ' : '');
             @endphp
             @endforeach
           </td>
@@ -116,9 +116,9 @@
         </tr>
         <tr>
           <th>Jumlah</th>
-          <td>{{ number_format($tot["l"]) }}</td>
-          <td>{{ number_format($tot['tl']) }}</td>
-          <td>{{number_format($tot['l']+$tot['tl'])}}</td>
+          <td>{{ $tot["l"] }}</td>
+          <td>{{ $tot['tl'] }}</td>
+          <td>{{ $tot['l']+$tot['tl'] }}</td>
         </tr>
         <tr>
           <th>Rata-rata</th>
@@ -127,7 +127,7 @@
           <td>{{$prob->mean_total??0}}</td>
         </tr>
         <tr>
-          <th>Standard Deviation</th>
+          <th>Simpangan Baku</th>
           <td>{{ $prob->sd_layak ?? 0 }}</td>
           <td>{{ $prob->sd_tidak_layak ?? 0 }}</td>
           <td>{{$prob->sd_total??0}}</td>
