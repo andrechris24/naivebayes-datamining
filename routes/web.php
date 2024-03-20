@@ -48,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
 				Route::delete('/', 'delete')->name('delete');
 			});
 		});
-		Route::post('/', 'logout')->name('logout');
+		Route::post('/logout', 'logout')->name('logout');
 	});
 	Route::controller(TrainingDataController::class)->prefix('training')
 		->name('training.')->group(function () {
@@ -73,9 +73,9 @@ Route::middleware(['auth'])->group(function () {
 	Route::controller(PSOController::class)->prefix('pso')->name('pso.')
 		->group(function () {
 			Route::get('/', 'index')->name('index');
-			Route::get('data','create')->name('datatable');
-			Route::post('store','store')->name('store');
-			Route::delete('clear','destroy')->name('reset');
+			Route::get('data', 'create')->name('datatable');
+			Route::post('store', 'store')->name('store');
+			Route::delete('clear', 'destroy')->name('reset');
 		});
 	Route::prefix('atribut')->name('atribut.')->group(function () {
 		Route::get('count', [AtributController::class, 'count'])->name('count');

@@ -63,7 +63,7 @@ class TestingDataController extends Controller
 			if ($attr->type === 'categorical') {
 				$dt->editColumn($attr->slug, function (TestingData $test) use ($attr) {
 					$atrib = NilaiAtribut::find($test[$attr->slug]);
-					return $atrib->name;
+					return $atrib->name??"?";
 				});
 			}
 		}

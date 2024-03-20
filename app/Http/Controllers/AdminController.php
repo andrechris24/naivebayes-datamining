@@ -24,7 +24,8 @@ class AdminController extends Controller
 	{
 		$datas = [
 			'test' => TestingData::count(),
-			'train' => TrainingData::count()
+			'train' => TrainingData::count(),
+			'total' => TestingData::count() + TrainingData::count()
 		];
 		return view('main.index', compact('datas'));
 	}

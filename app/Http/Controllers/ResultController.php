@@ -18,9 +18,9 @@ class ResultController extends Controller
 			'precision' => ($data['ll'] / ($data['ll'] + $data['tll'])) * 100,
 			'recall' => ($data['ll'] / ($data['ll'] + $data['ltl'])) * 100
 		];
-		$semua=(Classification::where('type','train')->count()>0&&
-			Classification::where('type','test')->count()>0);
-		return view('main.performa', compact('data', 'performa','semua'));
+		$semua = (Classification::where('type', 'train')->count() > 0 &&
+			Classification::where('type', 'test')->count() > 0);
+		return view('main.performa', compact('data', 'performa', 'semua'));
 	}
 	private static function cm()
 	{

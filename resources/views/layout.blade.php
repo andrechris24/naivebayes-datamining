@@ -67,8 +67,8 @@
 								</a>
 							</li>
 							<li class="nav-item dropdown">
-								<a href="#" class="nav-link dropdown-toggle d-flex align-items-center gap-2"
-								role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<a href="#" class="nav-link dropdown-toggle d-flex align-items-center gap-2" role="button"
+									data-bs-toggle="dropdown" aria-expanded="false">
 									<i class="bi bi-file-earmark-text"></i> Dataset
 								</a>
 								<ul class="dropdown-menu">
@@ -85,8 +85,8 @@
 								</ul>
 							</li>
 							<li class="nav-item dropdown">
-								<a href="#" class="nav-link dropdown-toggle d-flex align-items-center gap-2"
-								role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<a href="#" class="nav-link dropdown-toggle d-flex align-items-center gap-2" role="button"
+									data-bs-toggle="dropdown" aria-expanded="false">
 									<i class="bi bi-calculator"></i> Naive Bayes
 								</a>
 								<ul class="dropdown-menu">

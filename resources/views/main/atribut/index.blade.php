@@ -10,8 +10,7 @@
 				<button type="button" class="btn-close text-reset" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form class="needs-validation" id="addNewAtributForm">
-					@csrf
+				<form class="needs-validation" id="addNewAtributForm">@csrf
 					<input type="hidden" name="id" id="attr_id">
 					<div class="form-floating mb-3">
 						<input type="text" class="form-control" id="attrName" name="name" placeholder="Nama" required />
@@ -166,7 +165,6 @@
 					topStart: {
 						buttons: [{
 							text: '<i class="bi bi-plus-lg"></i> Tambah Atribut',
-							className: "add-new",
 							attr: {
 								"data-bs-toggle": "modal",
 								"data-bs-target": "#modalAddAtribut"

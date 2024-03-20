@@ -10,8 +10,7 @@
 				<button type="button" class="btn-close text-reset" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form class="needs-validation" id="addNewTrainingForm">
-					@csrf
+				<form class="needs-validation" id="addNewTrainingForm">@csrf
 					<input type="hidden" name="id" id="train_id">
 					<div class="form-floating mb-3">
 						<input type="text" class="form-control" id="trainName" name="nama" placeholder="Nama" required />
@@ -71,14 +70,9 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form id="importTrainingData">
-					@csrf
-					<input type="file" class="form-control" id="trainData" name="data" aria-describedby="importFormats"
-						accept=".csv, .tsv, .ods, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-						required>
-					<div id="importFormats" class="form-text">
-						Format yang diperbolehkan: .xls, .xlsx, .csv, .tsv
-					</div>
+				<form id="importTrainingData">@csrf
+					<input type="file" class="form-control" id="trainData" name="data" data-bs-toggle="tooltip" title="Format: xls, xlsx, csv, tsv, dan ods" aria-describedby="importFormats" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.oasis.opendocument.spreadsheet,text/csv,.tsv" required>
+					<div class="invalid-feedback" id="data-error"></div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -131,6 +125,7 @@
 		</div>
 	</div>
 </div>
+<p>Data Training akan digunakan untuk melatih algoritma Naive Bayes sebagai algoritma klasifikasi.</p>
 <div class="card">
 	<div class="card-body">
 		<div class="btn-group mb-3" role="group" id="spare-button">
@@ -195,7 +190,7 @@
 					{ data: "id" },
 					{ data: "nama" },
 					@foreach ($atribut as $attr)
-					{data: "{{$attr->slug}}"},
+					{ data: "{{$attr->slug}}" },
 					@endforeach
 					{ data: "status" },
 					{ data: "id" }
@@ -211,8 +206,7 @@
 				{
 					targets: 2 + {{$loop->index}},
 					render: function(data){
-						if(data === null) return '?';
-						else return data;
+						return data??"?";
 					}
 				},
 				@endforeach
@@ -241,7 +235,6 @@
 							extend: "collection",
 							buttons: [{
 								text: '<i class="bi bi-pencil"></i> Input Manual',
-								className: "add-new",
 								attr: {
 									"data-bs-toggle": "modal",
 									"data-bs-target": "#modalAddTraining"
@@ -408,22 +401,23 @@
 					});
 				},
 				error: function (xhr, st) {
-					if (xhr.status === 422) {
-						resetvalidation();
-						if (typeof xhr.responseJSON.errors.data !== "undefined") {
-							$("#trainData").addClass("is-invalid");
-							$("#data-error").text(xhr.responseJSON.errors.data);
-						}
-						errmsg = xhr.responseJSON.message;
-					} else {
-						console.warn(xhr.responseJSON.message ?? st);
-						errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
-					}
-					swal.fire({
-						titleText: "Gagal upload",
-						text: errmsg,
-						icon: "error"
-					});
+					$("#trainData").addClass("is-invalid");
+					$("#data-error").text(xhr.responseJSON.errors.data);
+					// if (xhr.status === 422) {
+					// 	resetvalidation();
+					// 	if (typeof xhr.responseJSON.errors.data !== "undefined") {
+							
+					// 	}
+					// 	errmsg = xhr.responseJSON.message;
+					// } else {
+					// 	console.warn(xhr.responseJSON.message ?? st);
+					// 	errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+					// }
+					// swal.fire({
+					// 	titleText: "Gagal upload",
+					// 	text: errmsg,
+					// 	icon: "error"
+					// });
 				}
 		});
 	});

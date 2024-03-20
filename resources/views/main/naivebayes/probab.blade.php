@@ -99,6 +99,7 @@
           <td>
             @foreach($training['layak'] as $l)
             @php
+            if(empty($l[$attr->slug])) continue;
             $tot['l'] += $l[$attr->slug];
             echo $l[$attr->slug] . (!$loop->last ? '; ' : '');
             @endphp
@@ -107,6 +108,7 @@
           <td>
             @foreach($training['tidak_layak'] as $tl)
             @php
+            if(empty($tl[$attr->slug])) continue;
             $tot['tl'] += $tl[$attr->slug];
             echo $tl[$attr->slug] . (!$loop->last ? '; ' : '');
             @endphp
@@ -118,19 +120,19 @@
           <th>Jumlah</th>
           <td>{{ $tot["l"] }}</td>
           <td>{{ $tot['tl'] }}</td>
-          <td>{{ $tot['l']+$tot['tl'] }}</td>
+          <td>{{ $tot['l'] + $tot['tl'] }}</td>
         </tr>
         <tr>
           <th>Rata-rata</th>
           <td>{{ $prob->mean_layak ?? 0 }}</td>
           <td>{{ $prob->mean_tidak_layak ?? 0 }}</td>
-          <td>{{$prob->mean_total??0}}</td>
+          <td>{{$prob->mean_total ?? 0}}</td>
         </tr>
         <tr>
           <th>Simpangan Baku</th>
           <td>{{ $prob->sd_layak ?? 0 }}</td>
           <td>{{ $prob->sd_tidak_layak ?? 0 }}</td>
-          <td>{{$prob->sd_total??0}}</td>
+          <td>{{$prob->sd_total ?? 0}}</td>
         </tr>
         @endif
       </tbody>

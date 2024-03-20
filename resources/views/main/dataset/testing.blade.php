@@ -10,8 +10,7 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form class="needs-validation" id="addNewTestingForm">
-					@csrf
+				<form class="needs-validation" id="addNewTestingForm">@csrf
 					<input type="hidden" name="id" id="test_id">
 					<div class="form-floating mb-3">
 						<input type="text" class="form-control" id="testName" name="nama" placeholder="Nama" required />
@@ -44,9 +43,7 @@
 							<option value="Tidak Layak">Tidak Layak</option>
 						</select>
 						<label for="testResult">Hasil</label>
-						<div class="invalid-feedback" id="result-error">
-							Pilih hasil
-						</div>
+						<div class="invalid-feedback" id="result-error">Pilih hasil</div>
 					</div>
 				</form>
 			</div>
@@ -73,14 +70,11 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form id="importTestingData">
-					@csrf
-					<input type="file" class="form-control" id="testData" name="data" aria-describedby="importFormats"
-						accept=".csv, .tsv, .ods, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+				<form id="importTestingData">@csrf
+					<input type="file" class="form-control" id="testData" name="data" aria-describedby="importFormats" data-bs-toggle="tooltip" title="Format: xls, xlsx, csv, tsv, dan ods" 
+						accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.oasis.opendocument.spreadsheet,text/csv,.tsv"
 						required>
-					<div id="importFormats" class="form-text">
-						Format yang diperbolehkan: .xls, .xlsx, .csv, .tsv
-					</div>
+					<div class="invalid-feedback" id="data-error"></div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -97,6 +91,10 @@
 		</div>
 	</div>
 </div>
+{{-- <div class="alert alert-info" role="alert">
+	<i class="bi bi-info-circle"></i>
+	Mohon untuk tidak menginput atau mengupload data yang sama dengan data training
+</div> --}}
 <div class="row">
 	<div class="col-sm-6 mb-3">
 		<div class="card">
@@ -213,8 +211,7 @@
 				{
 					targets: 1 + {{$loop->index}},
 					render: function(data){
-						if(data === null) return '?';
-						else return data;
+						return data??"?";
 					}
 				},
 				@endforeach
@@ -243,7 +240,6 @@
 							extend: "collection",
 							buttons: [{
 								text: '<i class="bi bi-pencil"></i> Input Manual',
-								className: "add-new",
 								attr: {
 									"data-bs-toggle": "modal",
 									"data-bs-target": "#modalAddTesting"
@@ -383,7 +379,7 @@
 			formloading("#addNewTestingForm :input", false);
 		});
 	});
-	$('#importTestingData').submit(function(e){//form Upload Data
+	$('#importTestingData').submit(function(e) {//form Upload Data
 		e.preventDefault();
 		$.ajax({
 			type: "POST",
@@ -409,22 +405,23 @@
 				});
 			},
 			error: function (xhr, st) {
-				if (xhr.status === 422) {
-					resetvalidation();
-					if (typeof xhr.responseJSON.errors.data !== "undefined") {
-						$("#testData").addClass("is-invalid");
-						$("#data-error").text(xhr.responseJSON.errors.data);
-					}
-					errmsg = xhr.responseJSON.message;
-				} else {
-					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
-				}
-				swal.fire({
-					titleText: "Gagal",
-					text: errmsg,
-					icon: "error"
-				});
+				$("#testData").addClass("is-invalid");
+				$("#data-error").text(xhr.responseJSON.errors.data);
+				// if (xhr.status === 422) {
+				// 	resetvalidation();
+				// 	if (typeof xhr.responseJSON.errors.data !== "undefined") {
+						
+				// 	}
+				// 	errmsg = xhr.responseJSON.message;
+				// } else {
+				// 	console.warn(xhr.responseJSON.message ?? st);
+				// 	errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+				// }
+				// swal.fire({
+				// 	titleText: "Gagal",
+				// 	text: errmsg,
+				// 	icon: "error"
+				// });
 			}
 		});
 	});

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Atribut;
 use App\Models\TestingData;
 use App\Models\TrainingData;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -18,30 +18,28 @@ class Controller extends BaseController
 		$tidak_layak = TrainingData::where('status', 'Tidak Layak')->count() / $total;
 		return ['l' => $layak, 'tl' => $tidak_layak];
 	}
-	public static function preprocess($col, $type): void
-	{//Mengatasi missing value
-		if ($type === 'test') {
-			$missing = TestingData::whereNull($col->slug)->get();
-			if (count($missing) > 0) {
-				if ($col->type === 'numeric')
-					$avg = TestingData::avg($col->slug);
-				else {
-					$most = TestingData::select($col->slug)->groupBy($col->slug)
-						->orderByRaw("COUNT(*) desc")->first();
+	public static function preprocess($type): void
+	{//Impute missing values
+		try {
+			if ($type === 'test')
+				$data=new TestingData();
+			else
+				$data=new TrainingData();
+			foreach (Atribut::get() as $attr) {
+				$missing=$data->whereNull($attr->slug)->get();
+				if (count($missing) > 0) {
+					if ($attr->type === 'numeric')//Jika numeric, mean/rata-rata yang dicari
+						$avg = $data->avg($attr->slug);
+					else {//Jika categorical, modus (Terbanyak) yang dicari
+						$most = $data->select($attr->slug)->groupBy($attr->slug)
+							->orderByRaw("COUNT(*) desc")->first();
+					}
+					$data->whereNull($attr->slug)
+					->update([$attr->slug => $most[$attr->slug] ?? $avg]);
 				}
-				$missing->update([$col->slug => $most[$col->slug] ?? $avg]);
 			}
-		} else {
-			$missing = TrainingData::whereNull($col->slug)->get();
-			if (count($missing) > 0) {
-				if ($col->type === 'numeric')
-					$avg = TrainingData::avg($col->slug);
-				else {
-					$most = TrainingData::select($col->slug)->groupBy($col->slug)
-						->orderByRaw("COUNT(*) desc")->first();
-				}
-				$missing->update([$col->slug => $most[$col->slug] ?? $avg]);
-			}
+		} catch (QueryException $e) {
+			Log::error($e);
 		}
 	}
 	public function fungsi_tujuan($nilai)

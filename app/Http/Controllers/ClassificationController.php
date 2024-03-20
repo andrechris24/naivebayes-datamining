@@ -33,11 +33,7 @@ class ClassificationController extends Controller
 				return response()->json(['message' => 'Probabilitas belum dihitung'], 400);
 
 			//Preprocessor Start
-			if ($request->type === 'test') {
-				foreach (Atribut::get() as $attr) {
-					Controller::preprocess($attr, 'test');
-				}
-			}
+			if ($request->type === 'test') Controller::preprocess('test');
 			//Preprocessor End
 
 			//Prior start

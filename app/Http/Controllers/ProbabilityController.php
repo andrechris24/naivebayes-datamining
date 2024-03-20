@@ -53,9 +53,7 @@ class ProbabilityController extends Controller
 			}
 
 			//Preprocessor Start
-			foreach (Atribut::get() as $attr) {
-				Controller::preprocess($attr, 'train');
-			}
+			Controller::preprocess('train');
 			//Preprocessor End
 
 			//Prior start

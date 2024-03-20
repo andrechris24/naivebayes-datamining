@@ -34,7 +34,6 @@
             svgOfActiveBtn = btnToActive
                 .querySelector("svg use")
                 .getAttribute("href");
-
         document
             .querySelectorAll("[data-bs-theme-value]")
             .forEach((element) => {

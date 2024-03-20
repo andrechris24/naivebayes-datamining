@@ -32,18 +32,18 @@
 							<th>Layak</th>
 							<td class="table-success">{{$data['ll']}}</td>
 							<td class="table-danger">{{$data['tll']}}</td>
-							<td>{{$data['ll']+$data['tll']}}</td>
+							<td>{{$data['ll'] + $data['tll']}}</td>
 						</tr>
 						<tr>
 							<th>Tidak Layak</th>
 							<td class="table-danger">{{$data['ltl']}}</td>
 							<td class="table-success">{{$data['tltl']}}</td>
-							<td>{{$data['ltl']+$data['tltl']}}</td>
+							<td>{{$data['ltl'] + $data['tltl']}}</td>
 						</tr>
 						<tr>
 							<th>Total</th>
-							<td>{{$data['ll']+$data['ltl']}}</td>
-							<td>{{$data['tll']+$data['tltl']}}</td>
+							<td>{{$data['ll'] + $data['ltl']}}</td>
+							<td>{{$data['tll'] + $data['tltl']}}</td>
 							<td>{{$data['total']}}</td>
 						</tr>
 					</tbody>
@@ -92,7 +92,7 @@
 		}],
 		chart: {
 			type: "bar",
-			foreColor: '#feb019'
+			foreColor: '#777'
 		},
 		dataLabels: {
 			enabled: false
@@ -107,15 +107,15 @@
 			text: 'Hasil Prediksi'
 		}
 	};
-	const radials={
+	const radials = {
 		series: [
-			{{round($performa['accuracy'],2)}}, 
-			{{round($performa['precision'],2)}}, 
-			{{round($performa['recall'],2)}}
+			{{round($performa['accuracy'], 2)}}, 
+			{{round($performa['precision'], 2)}}, 
+			{{round($performa['recall'], 2)}}
 		],
 		chart: {
 			type: 'radialBar',
-			foreColor: '#008ffb'
+			foreColor: '#777'
 		},
 		title: {
 			text: "Hasil Akhir"
@@ -135,8 +135,8 @@
 		},
 		labels: ['Akurasi', 'Presisi', 'Recall']
 	};
-	const bar = new ApexCharts(document.querySelector("#predict-actual"), barOptions),
-	rad = new ApexCharts(document.querySelector("#perform-radial"), radials);
+	const bar = new ApexCharts(document.getElementById("predict-actual"), barOptions),
+	rad = new ApexCharts(document.getElementById("perform-radial"), radials);
 	bar.render();
 	rad.render();
 </script>

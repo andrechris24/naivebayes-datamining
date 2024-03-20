@@ -5,7 +5,7 @@
 	{{ auth()->user()->name }}. Aplikasi ini menggunakan Naive Bayes sebagai
 	algoritma klasifikasi dengan optimasi Particle Swarm Optimization (On Progress).</p>
 <div class="row">
-	<div class="col-sm-6">
+	<div class="col-md-4">
 		<div class="card">
 			<div class="card-body">
 				<div class="d-flex align-items-start justify-content-between">
@@ -22,7 +22,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-6">
+	<div class="col-md-4">
 		<div class="card">
 			<div class="card-body">
 				<div class="d-flex align-items-start justify-content-between">
@@ -33,6 +33,23 @@
 						</div>
 					</div>
 					<span class="badge bg-success rounded p-2">
+						<i class="bi bi-file-earmark-text"></i>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="card">
+			<div class="card-body">
+				<div class="d-flex align-items-start justify-content-between">
+					<div class="content-left">
+						<span>Total Data</span>
+						<div class="d-flex align-items-end mt-2">
+							<h3 class="mb-0 me-2">{{$datas['total']}}</h3>
+						</div>
+					</div>
+					<span class="badge bg-secondary rounded p-2">
 						<i class="bi bi-file-earmark-text"></i>
 					</span>
 				</div>
