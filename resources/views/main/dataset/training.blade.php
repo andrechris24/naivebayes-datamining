@@ -185,6 +185,7 @@
 				serverSide: true,
 				processing: true,
 				responsive: true,
+				searching: false,
 				ajax: "{{ route('training.create') }}",
 				columns: [
 					{ data: "id" },

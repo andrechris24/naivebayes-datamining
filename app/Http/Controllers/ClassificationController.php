@@ -33,7 +33,8 @@ class ClassificationController extends Controller
 				return response()->json(['message' => 'Probabilitas belum dihitung'], 400);
 
 			//Preprocessor Start
-			if ($request->type === 'test') Controller::preprocess('test');
+			if ($request->type === 'test')
+				Controller::preprocess('test');
 			//Preprocessor End
 
 			//Prior start
@@ -48,7 +49,7 @@ class ClassificationController extends Controller
 			}
 			foreach ($semuadata as $dataset) {
 				//Likelihood & Evidence Start
-				$plf['l'] = $plf['tl'] = $evi = 1;
+				$plf['l'] = $plf['tl'] = $evi = 1;//Inisialisasi variabel untuk perkalian
 				foreach (Atribut::get() as $at) {
 					if ($at->type === 'categorical') {
 						$probabilitas = Probability::firstWhere(
@@ -132,13 +133,8 @@ class ClassificationController extends Controller
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
 	}
-	private function getData($type)
+	private function getData(string $type)
 	{
-		// if($type==='all'){
-		// 	$training=TrainingData::get();
-		// 	$testing=TestingData::get();
-		// 	$data=$training->merge($testing);
-		// }else 
 		if ($type === 'train') {
 			if (TrainingData::count() === 0)
 				return false;

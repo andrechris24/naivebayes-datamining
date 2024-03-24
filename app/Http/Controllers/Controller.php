@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Atribut;
 use App\Models\TestingData;
 use App\Models\TrainingData;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Log;
 
 class Controller extends BaseController
 {
@@ -18,24 +21,24 @@ class Controller extends BaseController
 		$tidak_layak = TrainingData::where('status', 'Tidak Layak')->count() / $total;
 		return ['l' => $layak, 'tl' => $tidak_layak];
 	}
-	public static function preprocess($type): void
+	public static function preprocess(string $type): void
 	{//Impute missing values
 		try {
 			if ($type === 'test')
-				$data=new TestingData();
+				$data = new TestingData();
 			else
-				$data=new TrainingData();
+				$data = new TrainingData();
 			foreach (Atribut::get() as $attr) {
-				$missing=$data->whereNull($attr->slug)->get();
+				$missing = $data->whereNull($attr->slug)->get();
 				if (count($missing) > 0) {
-					if ($attr->type === 'numeric')//Jika numeric, mean/rata-rata yang dicari
+					if ($attr->type === 'numeric')//Jika numeric, rata-rata yang dicari
 						$avg = $data->avg($attr->slug);
-					else {//Jika categorical, modus (Terbanyak) yang dicari
+					else {//Jika categorical, terbanyak yang dicari
 						$most = $data->select($attr->slug)->groupBy($attr->slug)
 							->orderByRaw("COUNT(*) desc")->first();
 					}
 					$data->whereNull($attr->slug)
-					->update([$attr->slug => $most[$attr->slug] ?? $avg]);
+						->update([$attr->slug => $most[$attr->slug] ?? $avg]);
 				}
 			}
 		} catch (QueryException $e) {
@@ -63,7 +66,7 @@ class Controller extends BaseController
 	 * @param bool $sample [optional] Defaults to false
 	 * @return float|bool The standard deviation or false on error.
 	 */
-	public static function stats_standard_deviation(array $a, $sample = false)
+	public static function stats_standard_deviation(array $a, bool $sample = false)
 	{
 		$n = count($a);
 		if ($n === 0)

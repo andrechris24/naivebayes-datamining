@@ -22,8 +22,9 @@ class TestingImport implements ToModel, WithHeadingRow
 		$rows['nama'] = $row['nama'];
 		foreach ($atrib as $attr) {
 			if ($attr->type === 'categorical') {
-				if(empty($row[$attr->slug])) $row[$attr->slug]=null;
-				else{
+				if (empty ($row[$attr->slug]))
+					$row[$attr->slug] = null;
+				else {
 					$foreign = NilaiAtribut::firstWhere('name', 'like', "%{$row[$attr->slug]}%");
 					$row[$attr->slug] = $foreign->id;
 				}

@@ -63,7 +63,7 @@ class TrainingDataController extends Controller
 			if ($attr->type === 'categorical') {
 				$dt->editColumn($attr->slug, function (TrainingData $train) use ($attr) {
 					$atrib = NilaiAtribut::find($train[$attr->slug]);
-					return $atrib->name??"?";
+					return $atrib->name ?? "?";
 				});
 			}
 		}

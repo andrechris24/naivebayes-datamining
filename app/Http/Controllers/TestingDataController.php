@@ -23,7 +23,7 @@ class TestingDataController extends Controller
 	public function import(Request $request)
 	{
 		$request->validate(TestingData::$filerule);
-		Excel::import(new TestingImport, request()->file('testing_data'));
+		Excel::import(new TestingImport, request()->file('data'));
 		return response()->json(['message' => 'Berhasil diimpor']);
 	}
 	public function count()
@@ -63,7 +63,7 @@ class TestingDataController extends Controller
 			if ($attr->type === 'categorical') {
 				$dt->editColumn($attr->slug, function (TestingData $test) use ($attr) {
 					$atrib = NilaiAtribut::find($test[$attr->slug]);
-					return $atrib->name??"?";
+					return $atrib->name ?? "?";
 				});
 			}
 		}

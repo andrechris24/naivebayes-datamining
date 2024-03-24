@@ -13,11 +13,7 @@ class ResultController extends Controller
 				->withWarning('Lakukan klasifikasi dulu sebelum melihat hasil pengujian');
 		}
 		$data = $this->cm();
-		$performa = [
-			'accuracy' => (($data['ll'] + $data['tltl']) / $data['total']) * 100,
-			'precision' => ($data['ll'] / ($data['ll'] + $data['tll'])) * 100,
-			'recall' => ($data['ll'] / ($data['ll'] + $data['ltl'])) * 100
-		];
+		$performa =$this->performa($data);
 		$semua = (Classification::where('type', 'train')->count() > 0 &&
 			Classification::where('type', 'test')->count() > 0);
 		return view('main.performa', compact('data', 'performa', 'semua'));
@@ -39,6 +35,18 @@ class ResultController extends Controller
 			'tll' => $tll,
 			'tltl' => $tltl,
 			'total' => $total
+		];
+	}
+	private static function performa($data){
+		$accu=(($data['ll'] + $data['tltl']) / $data['total']) * 100;
+		$prec=($data['ll'] / ($data['ll'] + $data['tll'])) * 100;
+		$rec=($data['ll'] / ($data['ll'] + $data['ltl'])) * 100;
+		$f1=2*($prec*$rec)/($prec+$rec);
+		return [
+			'accuracy'=>$accu,
+			'precision'=>$prec,
+			'recall'=>$rec,
+			'f1'=>$f1
 		];
 	}
 }

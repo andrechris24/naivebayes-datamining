@@ -190,6 +190,7 @@
 				serverSide: true,
 				processing: true,
 				responsive: true,
+				searching: false,
 				ajax: "{{ route('testing.create') }}",
 				columns: [
 					{ data: "id" },
@@ -405,23 +406,22 @@
 				});
 			},
 			error: function (xhr, st) {
-				$("#testData").addClass("is-invalid");
-				$("#data-error").text(xhr.responseJSON.errors.data);
-				// if (xhr.status === 422) {
-				// 	resetvalidation();
-				// 	if (typeof xhr.responseJSON.errors.data !== "undefined") {
-						
-				// 	}
-				// 	errmsg = xhr.responseJSON.message;
-				// } else {
-				// 	console.warn(xhr.responseJSON.message ?? st);
-				// 	errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
-				// }
-				// swal.fire({
-				// 	titleText: "Gagal",
-				// 	text: errmsg,
-				// 	icon: "error"
-				// });
+				if (xhr.status === 422) {
+					resetvalidation();
+					if (typeof xhr.responseJSON.errors.data !== "undefined") {
+						$("#testData").addClass("is-invalid");
+						$("#data-error").text(xhr.responseJSON.errors.data);
+					}
+					errmsg = xhr.responseJSON.message;
+				} else {
+					console.warn(xhr.responseJSON.message ?? st);
+					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+				}
+				swal.fire({
+					titleText: "Gagal",
+					text: errmsg,
+					icon: "error"
+				});
 			}
 		});
 	});

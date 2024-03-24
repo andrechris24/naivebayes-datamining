@@ -104,8 +104,12 @@
 							return "Dihapus";
 						},
 						error: function (xhr, st) {
-							console.warn(xhr.responseJSON.message ?? st);
-							errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+							if (xhr.status === 422 || xhr.status === 400)
+								errmsg = xhr.responseJSON.message;
+							else {
+								console.warn(xhr.responseJSON.message ?? st);
+								errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+							}
 							return Swal.showValidationMessage('Gagal reset: ' + errmsg);
 						}
 					});

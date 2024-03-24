@@ -137,7 +137,7 @@ class ProbabilityController extends Controller
 			return back()->withError('Gagal reset:')->withErrors($e);
 		}
 	}
-	public static function getNumbers($col)
+	public static function getNumbers(string $col)
 	{
 		$data = [];
 		foreach (TrainingData::select($col, 'status')->get() as $train) {

@@ -22,10 +22,7 @@ class AtributController extends Controller
 			if (NilaiAtribut::where('atribut_id', $at->id)->count() === 0)
 				$unused++;
 		}
-		return [
-			'total' => count($attr),
-			'unused' => $unused
-		];
+		return ['total' => count($attr), 'unused' => $unused];
 	}
 	/**
 	 * Display a listing of the resource.
@@ -125,14 +122,14 @@ class AtributController extends Controller
 	{
 		if (Schema::hasColumn('training_data', $atribut->slug)) {
 			Schema::table('training_data', function (Blueprint $table) use ($atribut) {
-				if ($atribut->type !== 'numeric')
+				if ($atribut->type === 'categorical')
 					$table->dropForeign([$atribut->slug]);
 				$table->dropColumn($atribut->slug);
 			});
 		}
 		if (Schema::hasColumn('testing_data', $atribut->slug)) {
 			Schema::table("testing_data", function (Blueprint $table) use ($atribut) {
-				if ($atribut->type !== 'numeric')
+				if ($atribut->type === 'categorical')
 					$table->dropForeign([$atribut->slug]);
 				$table->dropColumn($atribut->slug);
 			});

@@ -103,4 +103,3 @@ Route::middleware(['auth'])->group(function () {
 		return phpinfo();
 	});
 });
-

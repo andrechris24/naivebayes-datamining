@@ -65,17 +65,17 @@
 							<th>Recall</th>
 							<td>{{round($performa['recall'], 2)}}%</td>
 						</tr>
+						<tr>
+							<th>Skor F1</th>
+							<td>{{round($performa['f1'],2)}}%</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-lg-6">
-				<div id="predict-actual"></div>
-			</div>
-			<div class="col-lg-6">
-				<div id="perform-radial"></div>
-			</div>
+			<div class="col-lg-6"><div id="predict-actual"></div></div>
+			<div class="col-lg-6"><div id="perform-radial"></div></div>
 		</div>
 	</div>
 </div>
@@ -111,7 +111,8 @@
 		series: [
 			{{round($performa['accuracy'], 2)}}, 
 			{{round($performa['precision'], 2)}}, 
-			{{round($performa['recall'], 2)}}
+			{{round($performa['recall'], 2)}},
+			{{round($performa['f1'],2)}}
 		],
 		chart: {
 			type: 'radialBar',
@@ -133,7 +134,7 @@
 				}
 			}
 		},
-		labels: ['Akurasi', 'Presisi', 'Recall']
+		labels: ['Akurasi', 'Presisi', 'Recall', 'Skor F1']
 	};
 	const bar = new ApexCharts(document.getElementById("predict-actual"), barOptions),
 	rad = new ApexCharts(document.getElementById("perform-radial"), radials);

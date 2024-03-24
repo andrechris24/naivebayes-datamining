@@ -123,6 +123,7 @@
 				serverSide: true,
 				processing: true,
 				responsive: true,
+				searching: false,
 				ajax: "{{ route('atribut.create') }}",
 				columns: [
 					{ data: "id" },
