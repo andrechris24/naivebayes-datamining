@@ -18,7 +18,7 @@ class AtributController extends Controller
 	{
 		$attr = Atribut::get();
 		$unused = 0;
-		foreach (Atribut::where('type', 'categorical') as $at) {
+		foreach (Atribut::where('type', 'categorical')->get() as $at) {
 			if (NilaiAtribut::where('atribut_id', $at->id)->count() === 0)
 				$unused++;
 		}
@@ -49,54 +49,42 @@ class AtributController extends Controller
 	public function store(Request $request)
 	{
 		try {
-			$request->validate(Atribut::$rules);
-			$colslug = Str::slug($request->name, '_');
+			$req = $request->all();
+			$req['slug'] = Str::slug($request->name, '_');
 			if ($request->id) {
+				$request->validate(Atribut::$updrules);
 				$atribut = Atribut::findOrFail($request->id);
-				if ($request->name !== $atribut->name) {
-					$oldslug = $atribut->slug;
-					Schema::table('training_data', function (Blueprint $table) use ($colslug, $oldslug) {
-						$table->renameColumn($oldslug, $colslug);
+				if ($atribut->name !== $req['name']) {
+					Schema::table('training_data', function (Blueprint $table) use ($req, $atribut) {
+						$table->renameColumn($atribut->slug, $req['slug']);
 					});
-					Schema::table('testing_data', function (Blueprint $table) use ($colslug, $oldslug) {
-						$table->renameColumn($oldslug, $colslug);
+					Schema::table('testing_data', function (Blueprint $table) use ($req, $atribut) {
+						$table->renameColumn($atribut->slug, $req['slug']);
 					});
 				}
 				$atribut->update([
-					'name' => $request->name,
-					'slug' => $colslug,
-					'type' => $request->type,
-					'desc' => $request->desc
+					'name' => $req['name'],
+					'slug' => $req['slug'],
+					'desc' => $req['desc']
 				]);
 				return response()->json(['message' => 'Berhasil diupdate']);
 			} else {
-				$req = $request->all();
-				$req['slug'] = $colslug;
-				if (!Schema::hasColumn('training_data', $colslug)) {
+				$request->validate(Atribut::$rules);
+				if (!Schema::hasColumn('training_data', $req['slug'])) {
 					Schema::table('training_data', function (Blueprint $table) use ($req) {
-						if ($req['type'] === 'numeric')
-							$table->integer($req['slug'])->default(0)->after('nama');
-						else {
-							$table->foreignId($req['slug'])->constrained('nilai_atributs')
-								->nullOnDelete()->cascadeOnUpdate()->nullable()->after('nama');
-						}
+						$this->addColumn($table, $req);
 					});
 				}
-				if (!Schema::hasColumn('testing_data', $colslug)) {
+				if (!Schema::hasColumn('testing_data', $req['slug'])) {
 					Schema::table('testing_data', function (Blueprint $table) use ($req) {
-						if ($req['type'] === 'numeric')
-							$table->integer($req['slug'])->default(0)->after('nama');
-						else {
-							$table->foreignId($req['slug'])->constrained('nilai_atributs')
-								->nullOnDelete()->cascadeOnUpdate()->nullable()->after('nama');
-						}
+						$this->addColumn($table, $req);
 					});
 				}
 				Atribut::create($req);
 				return response()->json(['message' => 'Berhasil diinput']);
 			}
 		} catch (QueryException $e) {
-			if ($e->errorInfo[1] === 1062) {
+			if ($e->errorInfo[1] === 1062 || $e->errorInfo[1] === 1060) {
 				return response()->json([
 					'message' => "Nama Atribut \"$request->name\" sudah digunakan",
 					'errors' => ['name' => 'Nama Atribut sudah digunakan']
@@ -122,19 +110,30 @@ class AtributController extends Controller
 	{
 		if (Schema::hasColumn('training_data', $atribut->slug)) {
 			Schema::table('training_data', function (Blueprint $table) use ($atribut) {
-				if ($atribut->type === 'categorical')
-					$table->dropForeign([$atribut->slug]);
-				$table->dropColumn($atribut->slug);
+				$this->delColumn($table, $atribut);
 			});
 		}
 		if (Schema::hasColumn('testing_data', $atribut->slug)) {
 			Schema::table("testing_data", function (Blueprint $table) use ($atribut) {
-				if ($atribut->type === 'categorical')
-					$table->dropForeign([$atribut->slug]);
-				$table->dropColumn($atribut->slug);
+				$this->delColumn($table, $atribut);
 			});
 		}
 		$atribut->delete();
 		return response()->json(['message' => "Berhasil dihapus"]);
+	}
+	private function addColumn($tabel, $req): void
+	{
+		if ($req['type'] === 'numeric')
+			$tabel->integer($req['slug'])->nullable()->after('nama');
+		else {
+			$tabel->foreignId($req['slug'])->nullable()->constrained('nilai_atributs')
+				->nullOnDelete()->cascadeOnUpdate()->after('nama');
+		}
+	}
+	private function delColumn($tabel, $attr): void
+	{
+		if ($attr->type === 'categorical')
+			$tabel->dropForeign([$attr->slug]);
+		$tabel->dropColumn($attr->slug);
 	}
 }

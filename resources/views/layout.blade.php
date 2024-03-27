@@ -17,6 +17,7 @@
 		rel="stylesheet">
 	<link rel="stylesheet"
 		href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="{{ asset('assets/css/dashboard.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/theme.css') }}">
 	<script type="text/javascript" src="{{ asset('assets/js/theme.js') }}"></script>
@@ -158,6 +159,7 @@
 	</script> --}}
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/swal.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/datatables.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/tooltip.js') }}"></script>

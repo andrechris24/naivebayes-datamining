@@ -74,8 +74,12 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-lg-6"><div id="predict-actual"></div></div>
-			<div class="col-lg-6"><div id="perform-radial"></div></div>
+			<div class="col-lg-6">
+				<div id="predict-actual"></div>
+			</div>
+			<div class="col-lg-6">
+				<div id="perform-radial"></div>
+			</div>
 		</div>
 	</div>
 </div>

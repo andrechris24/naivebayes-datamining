@@ -218,7 +218,7 @@
 						}
 					});
 				} catch (error) {
-					console.error(error);
+					console.error(error.responseJSON);
 				}
 			}
 		}).then(function (result) {

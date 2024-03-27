@@ -1,14 +1,15 @@
 <?php
+
 use App\Http\Controllers\AdminController,
-App\Http\Controllers\AtributController,
-App\Http\Controllers\ClassificationController,
-App\Http\Controllers\NilaiAtributController,
-App\Http\Controllers\ProbabilityController,
-App\Http\Controllers\PSOController,
-App\Http\Controllers\ResultController,
-App\Http\Controllers\TestingDataController,
-App\Http\Controllers\TrainingDataController,
-Illuminate\Support\Facades\Route;
+	App\Http\Controllers\AtributController,
+	App\Http\Controllers\ClassificationController,
+	App\Http\Controllers\NilaiAtributController,
+	App\Http\Controllers\ProbabilityController,
+	App\Http\Controllers\PSOController,
+	App\Http\Controllers\ResultController,
+	App\Http\Controllers\TestingDataController,
+	App\Http\Controllers\TrainingDataController,
+	Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,7 @@ Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 Route::controller(AdminController::class)->middleware(['guest'])->group(function () {
 	Route::prefix('register')->name('register')->group(function () {
 		Route::get('/', 'register');

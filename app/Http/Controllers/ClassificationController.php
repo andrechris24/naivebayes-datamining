@@ -37,64 +37,21 @@ class ClassificationController extends Controller
 				Controller::preprocess('test');
 			//Preprocessor End
 
-			//Prior start
-			$semuadata = $this->getData($request->type);
-			$probab = Controller::probabKelas();
-			//Prior end
-
+			$semuadata = $this->getData($request->type); //Dataset
 			if (!$semuadata) {
 				return response()->json([
 					'message' => 'Tipe Data yang dipilih kosong'
 				], 400);
 			}
 			foreach ($semuadata as $dataset) {
-				//Likelihood & Evidence Start
-				$plf['l'] = $plf['tl'] = $evi = 1;//Inisialisasi variabel untuk perkalian
-				foreach (Atribut::get() as $at) {
-					if ($at->type === 'categorical') {
-						$probabilitas = Probability::firstWhere(
-							'nilai_atribut_id',
-							$dataset[$at->slug]
-						);
-						$plf['l'] *= $probabilitas['layak'];
-						$plf['tl'] *= $probabilitas['tidak_layak'];
-						$evi *= TrainingData::where($at->slug, $dataset[$at->slug])->count() /
-							count($semuadata);
-					} else {//Numeric
-						$probabilitas = Probability::where('atribut_id', $at->id)
-							->whereNull('nilai_atribut_id')->first();
-						$plf['l'] *= $this->normalDistribution(
-							$dataset[$at->slug],
-							$probabilitas->sd_layak,
-							$probabilitas->mean_layak
-						);
-						$plf['tl'] *= $this->normalDistribution(
-							$dataset[$at->slug],
-							$probabilitas->sd_tidak_layak,
-							$probabilitas->mean_tidak_layak
-						);
-						$evi *= $this->normalDistribution(
-							$dataset[$at->slug],
-							$probabilitas->sd_total,
-							$probabilitas->mean_total
-						);
-					}
-				}
-				//Likelihood & Evidence End
-
-				//Posterior Start
-				$p['layak'] = ($evi === 0 ? 0 : (($plf['l'] * $probab['l']) / $evi));
-				$p['tidak_layak'] = ($evi === 0 ? 0 : (($plf['tl'] * $probab['tl']) / $evi));
-				//Posterior End
-
-				$predict = $p['layak'] >= $p['tidak_layak'] ? 'Layak' : "Tidak Layak";
+				$klasifikasi = Controller::hitungProbab($dataset);
 				Classification::updateOrCreate([
 					'name' => $dataset->nama,
 					'type' => $request->type
 				], [
-					'layak' => $p['layak'],
-					'tidak_layak' => $p['tidak_layak'],
-					'predicted' => $predict,
+					'layak' => $klasifikasi['layak'],
+					'tidak_layak' => $klasifikasi['tidak_layak'],
+					'predicted' => $klasifikasi['predict'],
 					'real' => $dataset->status
 				]);
 			}
@@ -145,9 +102,5 @@ class ClassificationController extends Controller
 			$data = TestingData::get();
 		}
 		return $data;
-	}
-	private function normalDistribution($x, $sd, $mean)
-	{
-		return (1 / ($sd * sqrt(2 * pi()))) * exp(-0.5 * pow(($x - $mean) / $sd, 2));
 	}
 }

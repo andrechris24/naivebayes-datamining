@@ -7,6 +7,7 @@ use App\Imports\TestingImport;
 use App\Models\Atribut;
 use App\Models\Classification;
 use App\Models\NilaiAtribut;
+use App\Models\Probability;
 use App\Models\TestingData;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -50,7 +51,8 @@ class TestingDataController extends Controller
 			return to_route('atribut.nilai.index')
 				->withWarning('Tambahkan Nilai Atribut dulu sebelum menginput Dataset');
 		}
-		return view('main.dataset.testing', compact('atribut', 'nilai'));
+		$calculated = Probability::count();
+		return view('main.dataset.testing', compact('atribut', 'nilai', 'calculated'));
 	}
 
 	/**
@@ -81,7 +83,10 @@ class TestingDataController extends Controller
 				$req[$id] = $q;
 			}
 			$req['nama'] = $request->nama;
-			$req['status'] = $request->status;
+			if ($request->status === 'Otomatis') {
+				$hasil = Controller::hitungProbab($req);
+				$req['status'] = $hasil['predict'];
+			} else $req['status'] = $request->status;
 			if ($request->id) {
 				TestingData::updateOrCreate(['id' => $request->id], $req);
 				return response()->json(['message' => 'Berhasil diupdate']);

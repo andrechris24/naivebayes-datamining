@@ -21,9 +21,9 @@
 					<div class="form-floating mb-3" data-bs-toggle="tooltip" title="{{$attr->desc}}">
 						@if ($attr->type === 'numeric')
 						<input type="number" class="form-control" min="0" name="q[{{$attr->slug}}]"
-							id="test-{{$attr->slug}}" placeholder="123456789">
+							id="test-{{$attr->slug}}" placeholder="123" required>
 						@else
-						<select name="q[{{$attr->slug}}]" class="form-select" id="test-{{$attr->slug}}">
+						<select name="q[{{$attr->slug}}]" class="form-select" id="test-{{$attr->slug}}" required>
 							<option value="">Pilih</option>
 							@foreach ($nilai->where('atribut_id', $attr->id) as $sub)
 							<option value="{{$sub->id}}">{{$sub->name}}</option>
@@ -38,9 +38,12 @@
 					@endforeach
 					<div class="form-floating mb-3">
 						<select name="status" class="form-select" id="testResult" required>
-							<option value="" selected>Pilih</option>
+							<option value="">Pilih</option>
 							<option value="Layak">Layak</option>
 							<option value="Tidak Layak">Tidak Layak</option>
+							<option value="Otomatis" @if($calculated===0) disabled @endif>
+								Pilih otomatis
+							</option>
 						</select>
 						<label for="testResult">Hasil</label>
 						<div class="invalid-feedback" id="result-error">Pilih hasil</div>
@@ -71,7 +74,8 @@
 			</div>
 			<div class="modal-body">
 				<form id="importTestingData">@csrf
-					<input type="file" class="form-control" id="testData" name="data" aria-describedby="importFormats" data-bs-toggle="tooltip" title="Format: xls, xlsx, csv, tsv, dan ods" 
+					<input type="file" class="form-control" id="testData" name="data" aria-describedby="importFormats"
+						data-bs-toggle="tooltip" title="Format: xls, xlsx, csv, dan tsv"
 						accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.oasis.opendocument.spreadsheet,text/csv,.tsv"
 						required>
 					<div class="invalid-feedback" id="data-error"></div>
@@ -212,7 +216,7 @@
 				{
 					targets: 1 + {{$loop->index}},
 					render: function(data){
-						return data??"?";
+						return data ?? "?";
 					}
 				},
 				@endforeach
@@ -225,7 +229,7 @@
 							`<button class="btn btn-primary edit-record" data-id="${data}" data-bs-toggle="modal" data-bs-target="#modalAddTesting">` +
 							'<i class="bi bi-pencil-square"></i>' +
 							'</button>' +
-							`<button class="btn btn-danger delete-record" data-id="${data}" data-name="${full['name']}">` +
+							`<button class="btn btn-danger delete-record" data-id="${data}" data-name="${full['nama']}">` +
 							'<i class="bi bi-trash3-fill"></i>' +
 							'</button>' +
 							"</div>");
@@ -302,7 +306,7 @@
 						}
 					});
 				} catch (error) {
-					console.error(error);
+					console.error(error.responseJSON);
 				}
 			}
 		}).then(function (result) {
@@ -340,7 +344,7 @@
 						}
 					});
 				} catch (error) {
-					console.error(error);
+					console.error(error.responseJSON);
 				}
 			}
 		}).then(function (result) {
@@ -461,7 +465,7 @@
 					@endforeach
 					if (typeof xhr.responseJSON.errors.status !== "undefined") {
 						$("#testResult").addClass("is-invalid");
-						$("#status-error").text(xhr.responseJSON.errors.status);
+						$("#result-error").text(xhr.responseJSON.errors.status);
 					}
 					errmsg = xhr.responseJSON.message;
 				} else {

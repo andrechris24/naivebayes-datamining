@@ -15,6 +15,7 @@
 			<thead>
 				<tr>
 					<th>#</th>
+					<th>Nama</th>
 					<th>Tipe Data</th>
 					<th>Layak</th>
 					<th>Tidak Layak</th>
@@ -42,6 +43,7 @@
 				ajax: "{{ route('class.datatable') }}",
 				columns: [
 					{ data: "id" },
+					{ data: "name" },
 					{ data: "type" },
 					{ data: "layak" },
 					{ data: "tidak_layak" },
@@ -114,7 +116,7 @@
 						}
 					});
 				} catch (error) {
-					console.error(error);
+					console.error(error.responseJSON);
 				}
 			}
 		}).then(function (result) {
@@ -130,9 +132,8 @@
 			titleText: "Pilih tipe data yang akan dihitung",
 			input: "select",
 			inputOptions: {
-				train: "Data Training (Data Latih)",
-				test: "Data Testing (Data Uji)"
-				// all: "Semua Data"
+				test: "Data Testing (Data Uji)",
+				train: "Data Training (Data Latih)"
 			},
 			inputPlaceholder: "Pilih Tipe Data",
 			showCancelButton: true,
@@ -167,7 +168,7 @@
 						}
 					});
 				} catch (error) {
-					console.error(error);
+					console.error(error.responseJSON);
 				}
 			}
 		}).then((result) => {

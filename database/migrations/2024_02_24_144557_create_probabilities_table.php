@@ -1,11 +1,13 @@
 <?php
+
 use App\Models\Atribut;
 use App\Models\NilaiAtribut;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
 	/**
 	 * Run the migrations.
 	 */
@@ -15,11 +17,11 @@ return new class extends Migration {
 			$table->id();
 			$table->foreignIdFor(Atribut::class)->cascadeOnDelete();
 			$table->foreignIdFor(NilaiAtribut::class)->nullable()
-				->cascadeOnDelete()->comment('Kategoris saja');
-			$table->double('layak', 30, 20)->comment('Kategoris saja')->default(0.00);
-			$table->double('tidak_layak', 30, 20)->comment('Kategoris saja')
+				->cascadeOnDelete()->comment('Kategorikal saja');
+			$table->double('layak', 25, 20)->comment('Kategorikal saja')->default(0.00);
+			$table->double('tidak_layak', 25, 20)->comment('Kategorikal saja')
 				->default(0.00);
-			$table->double('total', 30, 20)->comment('Total Probabilitas (Kategoris)')
+			$table->double('total', 25, 20)->comment('Total Probabilitas (Kategorikal)')
 				->default(0.00);
 			$table->double('mean_layak', 35, 15)->default(0.00)->comment('Numerik saja');
 			$table->double('mean_tidak_layak', 35, 15)->default(0.00)

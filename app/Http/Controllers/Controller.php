@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Atribut;
+use App\Models\Probability;
 use App\Models\TestingData;
 use App\Models\TrainingData;
 use Illuminate\Database\QueryException;
@@ -22,7 +23,7 @@ class Controller extends BaseController
 		return ['l' => $layak, 'tl' => $tidak_layak];
 	}
 	public static function preprocess(string $type): void
-	{//Impute missing values
+	{ //Impute missing values
 		try {
 			if ($type === 'test')
 				$data = new TestingData();
@@ -31,9 +32,9 @@ class Controller extends BaseController
 			foreach (Atribut::get() as $attr) {
 				$missing = $data->whereNull($attr->slug)->get();
 				if (count($missing) > 0) {
-					if ($attr->type === 'numeric')//Jika numeric, rata-rata yang dicari
+					if ($attr->type === 'numeric') //Jika Numerik, rata-rata yang dicari
 						$avg = $data->avg($attr->slug);
-					else {//Jika categorical, terbanyak yang dicari
+					else { //Jika Kategorikal, terbanyak yang dicari
 						$most = $data->select($attr->slug)->groupBy($attr->slug)
 							->orderByRaw("COUNT(*) desc")->first();
 					}
@@ -58,6 +59,78 @@ class Controller extends BaseController
 		}
 		return $gbest;
 	}
+	public function hitungProbab($data)
+	{
+		$semuadata = TrainingData::count();
+
+		/**==================================================
+		 * PRIOR
+		 * ==================================================
+		 * Jumlah Probabilitas berlabel Layak dan Tidak Layak
+		 */
+		$prior = $this->probabKelas();
+
+		/**========================================================================
+		 * LIKELIHOOD & EVIDENCE
+		 * ========================================================================
+		 * Likelihood: Jumlah probabilitas dari label Layak dan Tidak Layak
+		 * Evidence: Jumlah probabilitas dari semua label
+		 * 
+		 * Likelihood dan Evidence diinisialisasi dengan angka 1 untuk perkalian
+		 */
+		$likelihood['l'] = $likelihood['tl'] = $evidence = 1;
+		foreach (Atribut::get() as $at) {
+			if ($at->type === 'categorical') {
+				//Jika Kategorikal, nilai probabilitas yang dicari
+				$probabilitas = Probability::firstWhere(
+					'nilai_atribut_id',
+					$data[$at->slug]
+				);
+				$likelihood['l'] *= $probabilitas['layak'];
+				$likelihood['tl'] *= $probabilitas['tidak_layak'];
+				$evidence *= TrainingData::where($at->slug, $data[$at->slug])->count() /
+					$semuadata;
+			} else { //Jika Numerik, Normal Distribution yang dicari
+				$probabilitas = Probability::where('atribut_id', $at->id)
+					->whereNull('nilai_atribut_id')->first();
+				$likelihood['l'] *= $this->normalDistribution(
+					$data[$at->slug],
+					$probabilitas->sd_layak,
+					$probabilitas->mean_layak
+				);
+				$likelihood['tl'] *= $this->normalDistribution(
+					$data[$at->slug],
+					$probabilitas->sd_tidak_layak,
+					$probabilitas->mean_tidak_layak
+				);
+				$evidence *= $this->normalDistribution(
+					$data[$at->slug],
+					$probabilitas->sd_total,
+					$probabilitas->mean_total
+				);
+			}
+		}
+
+		/**====================================================
+		 * POSTERIOR
+		 * ====================================================
+		 * Rumus: Prior dikali Likelihood, lalu dibagi Evidence
+		 * Jika Evidence 0, maka nilai posteriornya 0
+		 */
+		$posterior['layak'] = ($prior['l'] * $likelihood['l']) / $evidence;
+		$posterior['tidak_layak'] = ($prior['tl'] * $likelihood['tl']) / $evidence;
+
+		$predict = $posterior['layak'] >= $posterior['tidak_layak'] ? 'Layak' : "Tidak Layak";
+		return [
+			'layak' => $posterior['layak'],
+			'tidak_layak' => $posterior['tidak_layak'],
+			'predict' => $predict
+		];
+	}
+	private function normalDistribution($x, float $sd, float $mean)
+	{
+		return (1 / ($sd * sqrt(2 * pi()))) * exp(-0.5 * pow(($x - $mean) / $sd, 2));
+	}
 	/**
 	 * This user-land implementation follows the implementation quite strictly;
 	 * it does not attempt to improve the code or algorithm in any way.
@@ -76,7 +149,7 @@ class Controller extends BaseController
 		$mean = array_sum($a) / $n;
 		$carry = 0.0;
 		foreach ($a as $val) {
-			$carry += pow(((double) $val) - $mean, 2);
+			$carry += pow(((float) $val) - $mean, 2);
 		}
 		if ($sample)
 			--$n;

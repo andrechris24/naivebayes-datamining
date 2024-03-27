@@ -126,13 +126,13 @@
           <th>Rata-rata</th>
           <td>{{ $prob->mean_layak ?? 0 }}</td>
           <td>{{ $prob->mean_tidak_layak ?? 0 }}</td>
-          <td>{{$prob->mean_total ?? 0}}</td>
+          <td>{{ $prob->mean_total ?? 0 }}</td>
         </tr>
         <tr>
           <th>Simpangan Baku</th>
           <td>{{ $prob->sd_layak ?? 0 }}</td>
           <td>{{ $prob->sd_tidak_layak ?? 0 }}</td>
-          <td>{{$prob->sd_total ?? 0}}</td>
+          <td>{{ $prob->sd_total ?? 0 }}</td>
         </tr>
         @endif
       </tbody>

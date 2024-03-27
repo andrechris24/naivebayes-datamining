@@ -21,9 +21,9 @@
 					<div class="form-floating mb-3" data-bs-toggle="tooltip" title="{{$attr->desc}}">
 						@if ($attr->type==='numeric')
 						<input type="number" class="form-control" min="0" name="q[{{$attr->slug}}]" placeholder="123"
-							id="train-{{$attr->slug}}">
+							id="train-{{$attr->slug}}" required>
 						@else
-						<select name="q[{{$attr->slug}}]" class="form-select" id="train-{{$attr->slug}}">
+						<select name="q[{{$attr->slug}}]" class="form-select" id="train-{{$attr->slug}}" required>
 							<option value="">Pilih</option>
 							@foreach ($nilai->where('atribut_id', $attr->id) as $sub)
 							<option value="{{$sub->id}}">{{$sub->name}}</option>
@@ -38,7 +38,7 @@
 					@endforeach
 					<div class="form-floating mb-3">
 						<select name="status" class="form-select" id="trainResult" required>
-							<option value="" selected>Pilih</option>
+							<option value="">Pilih</option>
 							<option value="Layak">Layak</option>
 							<option value="Tidak Layak">Tidak Layak</option>
 						</select>
@@ -71,7 +71,10 @@
 			</div>
 			<div class="modal-body">
 				<form id="importTrainingData">@csrf
-					<input type="file" class="form-control" id="trainData" name="data" data-bs-toggle="tooltip" title="Format: xls, xlsx, csv, tsv, dan ods" aria-describedby="importFormats" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.oasis.opendocument.spreadsheet,text/csv,.tsv" required>
+					<input type="file" class="form-control" id="trainData" name="data" data-bs-toggle="tooltip"
+						title="Format: xls, xlsx, csv, dan tsv" aria-describedby="importFormats"
+						accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.oasis.opendocument.spreadsheet,text/csv,.tsv"
+						required>
 					<div class="invalid-feedback" id="data-error"></div>
 				</form>
 			</div>
@@ -207,7 +210,7 @@
 				{
 					targets: 2 + {{$loop->index}},
 					render: function(data){
-						return data??"?";
+						return data ?? "?";
 					}
 				},
 				@endforeach
@@ -220,7 +223,7 @@
 							`<button class="btn btn-primary edit-record" data-id="${data}" data-bs-toggle="modal" data-bs-target="#modalAddTraining">` +
 							'<i class="bi bi-pencil-square"></i>' +
 							'</button>' +
-							`<button class="btn btn-danger delete-record" data-id="${data}" data-name="${full['name']}">` +
+							`<button class="btn btn-danger delete-record" data-id="${data}" data-name="${full['nama']}">` +
 							'<i class="bi bi-trash3-fill"></i>' +
 							'</button>' +
 							"</div>");
@@ -298,7 +301,7 @@
 						}
 					});
 				} catch (error) {
-					console.error(error);
+					console.error(error.responseJSON);
 				}
 			}
 		}).then(function (result) {
@@ -336,7 +339,7 @@
 						}
 					});
 				} catch (error) {
-					console.error(error);
+					console.error(error.responseJSON);
 				}
 			}
 		}).then(function (result) {
@@ -402,23 +405,22 @@
 					});
 				},
 				error: function (xhr, st) {
-					$("#trainData").addClass("is-invalid");
-					$("#data-error").text(xhr.responseJSON.errors.data);
-					// if (xhr.status === 422) {
-					// 	resetvalidation();
-					// 	if (typeof xhr.responseJSON.errors.data !== "undefined") {
-							
-					// 	}
-					// 	errmsg = xhr.responseJSON.message;
-					// } else {
-					// 	console.warn(xhr.responseJSON.message ?? st);
-					// 	errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
-					// }
-					// swal.fire({
-					// 	titleText: "Gagal upload",
-					// 	text: errmsg,
-					// 	icon: "error"
-					// });
+					if (xhr.status === 422) {
+						resetvalidation();
+						if (typeof xhr.responseJSON.errors.data !== "undefined") {
+							$("#trainData").addClass("is-invalid");
+							$("#data-error").text(xhr.responseJSON.errors.data);
+						}
+						errmsg = xhr.responseJSON.message;
+					} else {
+						console.warn(xhr.responseJSON.message ?? st);
+						errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+					}
+					swal.fire({
+						titleText: "Gagal upload",
+						text: errmsg,
+						icon: "error"
+					});
 				}
 		});
 	});

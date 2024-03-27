@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Traits;
 
 trait Excludable
@@ -9,8 +10,7 @@ trait Excludable
 	 */
 	private function getTableColumns()
 	{
-		return $this->getConnection()->getSchemaBuilder()->
-			getColumnListing($this->getTable());
+		return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
 	}
 
 	/**

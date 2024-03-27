@@ -51,6 +51,7 @@ class ProbabilityController extends Controller
 				return to_route("training.index")
 					->withWarning('Masukkan Data Training dulu sebelum menghitung Probabilitas');
 			}
+			$warning = false;
 
 			//Preprocessor Start
 			Controller::preprocess('train');
@@ -65,16 +66,16 @@ class ProbabilityController extends Controller
 			//Prior end
 
 			//Likelihood Start
-			foreach (NilaiAtribut::get() as $nilai) {//Categorical
+			foreach (NilaiAtribut::get() as $nilai) { //Categorical
 				if ($nilai->atribut->type === 'categorical') {
 					$ll[$nilai->name]['Layak'] =
 						($total['l'] === 0 ? 0 :
 							TrainingData::where($nilai->atribut->slug, $nilai->id)
-								->where('status', 'Layak')->count() / $total['l']);
+							->where('status', 'Layak')->count() / $total['l']);
 					$ll[$nilai->name]['Tidak Layak'] =
 						($total['tl'] === 0 ? 0 :
 							TrainingData::where($nilai->atribut->slug, $nilai->id)
-								->where('status', 'Tidak Layak')->count() / $total['tl']);
+							->where('status', 'Tidak Layak')->count() / $total['tl']);
 					$ll[$nilai->name]['Total'] =
 						TrainingData::where($nilai->atribut->slug, $nilai->id)->count() /
 						$total['all'];
@@ -88,7 +89,7 @@ class ProbabilityController extends Controller
 					'total' => $ll[$nilai->name]['Total'] ?? 0
 				]);
 			}
-			foreach (Atribut::where('type', 'numeric')->get() as $nilainum) {//Numeric
+			foreach (Atribut::where('type', 'numeric')->get() as $nilainum) { //Numeric
 				$p = array_filter($this->getNumbers($nilainum->slug));
 				if (count($p['l'])) {
 					$avg[$nilainum->name]['l'] = array_sum($p['l']) / count($p['l']);
@@ -103,6 +104,12 @@ class ProbabilityController extends Controller
 				$avg[$nilainum->name]['all'] = array_sum($p['all']) / count($p['all']);
 				$sd[$nilainum->name]['all'] =
 					Controller::stats_standard_deviation($p['all'], true);
+				if (
+					!$sd[$nilainum->name]['l'] || !$sd[$nilainum->name]['tl'] || !$sd[$nilainum->name]['all']
+				) {
+					$warning = true;
+					continue;
+				}
 				Probability::updateOrCreate([
 					'atribut_id' => $nilainum->id,
 					'nilai_atribut_id' => null
@@ -117,6 +124,10 @@ class ProbabilityController extends Controller
 			}
 			//Likelihood End
 
+			if ($warning) {
+				return back()
+					->withWarning('Satu atau lebih atribut probabilitas Gagal dihitung');
+			}
 			return back()->withSuccess('Probabilitas berhasil dihitung');
 		} catch (QueryException $e) {
 			Log::error($e);

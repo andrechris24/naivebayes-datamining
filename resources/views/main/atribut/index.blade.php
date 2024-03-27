@@ -23,7 +23,7 @@
 						<select name="type" class="form-select" id="attrType" required>
 							<option value="">Pilih</option>
 							<option value="numeric">Numerik</option>
-							<option value="categorical">Kategoris (Categorical)</option>
+							<option value="categorical">Kategorikal</option>
 						</select>
 						<label for="attrType">Tipe Atribut</label>
 						<div class="invalid-feedback" id="type-error">
@@ -75,7 +75,7 @@
 		<div class="card">
 			<div class="card-body">
 				<div class="d-flex align-items-start justify-content-between" data-bs-toggle="tooltip"
-					title="Atribut Kategoris yang tidak digunakan">
+					title="Atribut Kategorikal yang tidak digunakan">
 					<div class="content-left">
 						<span>Tidak digunakan</span>
 						<div class="d-flex align-items-end mt-2">
@@ -218,7 +218,7 @@
 						}
 					});
 				} catch (error) {
-					console.error(error);
+					console.error(error.responseJSON);
 				}
 			}
 		}).then(function (result) {
@@ -254,6 +254,7 @@
 			});
 		}).always(function () {
 			formloading("#addNewAtributForm :input", false);
+			$("#attrType").prop('disabled',true);
 		});
 	});
 	function submitform(ev) {
@@ -268,6 +269,7 @@
 			},
 			complete: function () {
 				formloading("#addNewAtributForm :input", false);
+				if($("#attr_id").val()) $("#attrType").prop('disabled',true);
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-atribut")) dt_atribut.draw();
@@ -310,6 +312,7 @@
 		$("#modalAddAtributLabel").html("Tambah Atribut");
 		$("#addNewAtributForm")[0].reset();
 		$("#attr_id").val("");
+		$("#attrType").prop('disabled',false);
 	});
 </script>
 @endsection

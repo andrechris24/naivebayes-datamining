@@ -3,8 +3,7 @@
 @section('content')
 <p>Untuk melakukan perubahan, masukkan password Anda. Kosongkan password baru jika tidak ganti password.</p>
 <x-caps-lock />
-<form action="{{ route('profil.update') }}" class="needs-validation" method="POST" enctype="multipart/form-data"
-	id="form-edit-account">
+<form class="needs-validation" enctype="multipart/form-data" id="form-edit-account">
 	@csrf
 	<input type="hidden" name="id" value="{{ auth()->id() }}">
 	<div class="row mb-3">
@@ -13,12 +12,8 @@
 			<div class="input-group has-validation">
 				<span class="input-group-text"><i class="bi bi-person"></i></span>
 				<input type="text" name="name" id="nama-user" value="{{ old('name') ?? auth()->user()->name }}"
-					class="form-control @error('name') is-invalid @enderror " required>
-				<div class="invalid-feedback" id="name-error">
-					@error('name') {{ $message }}
-					@else Masukkan Nama
-					@enderror
-				</div>
+					class="form-control" required>
+				<div class="invalid-feedback" id="name-error">Masukkan Nama</div>
 			</div>
 		</div>
 	</div>
@@ -28,11 +23,9 @@
 			<div class="input-group has-validation">
 				<span class="input-group-text"><i class="bi bi-envelope"></i></span>
 				<input type="email" name="email" value="{{ old('email') ?? auth()->user()->email }}"
-					class="form-control @error('email') is-invalid @enderror " id="email-user" required>
+					class="form-control" id="email-user" required>
 				<div class="invalid-feedback" id="email-error">
-					@error('email') {{ $message }}
-					@else Masukkan Email (email@example.com)
-					@enderror
+					Masukkan Email (email@example.com)
 				</div>
 			</div>
 		</div>
@@ -42,13 +35,10 @@
 		<div class="col-md-9">
 			<div class="input-group has-validation">
 				<span class="input-group-text"><i class="bi bi-lock"></i></span>
-				<input type="password" name="current_password" placeholder="Password Akun Anda"
-					class="form-control @error('current_password') is-invalid @enderror " minlength="8" maxlength="20"
-					id="password-current" required>
+				<input type="password" name="current_password" placeholder="Password Akun Anda" class="form-control"
+					minlength="8" maxlength="20" id="password-current" required>
 				<div class="invalid-feedback" id="current-password-error">
-					@error('current_password') {{ $message }}
-					@else Masukkan Password Anda
-					@enderror
+					Masukkan Password Anda
 				</div>
 			</div>
 		</div>
@@ -58,13 +48,10 @@
 		<div class="col-md-9">
 			<div class="input-group has-validation">
 				<span class="input-group-text"><i class="bi bi-lock"></i></span>
-				<input type="password" name="password" id="newpassword" oninput="checkpassword()"
-					class="form-control @error('password') is-invalid @enderror "
-					placeholder="Kosongkan jika tidak ganti password" minlength="8" maxlength="20">
+				<input type="password" name="password" id="newpassword" oninput="checkpassword()" class="form-control"
+					minlength="8" maxlength="20" placeholder="Kosongkan jika tidak ganti password">
 				<div class="invalid-feedback" id="newpassword-error">
-					@error('password') {{ $message }}
-					@else Password baru harus di antara 8-20 karakter
-					@enderror
+					Password baru harus di antara 8-20 karakter
 				</div>
 			</div>
 		</div>
@@ -77,12 +64,9 @@
 			<div class="input-group has-validation">
 				<span class="input-group-text"><i class="bi bi-lock"></i></span>
 				<input type="password" name="password_confirmation" id="conf-password" minlength="8"
-					class="form-control @error('password_confirmation') is-invalid @enderror " maxlength="20"
-					placeholder="Password konfirmasi" oninput="checkpassword()">
+					class="form-control" maxlength="20" placeholder="Password konfirmasi" oninput="checkpassword()">
 				<div class="invalid-feedback" id="confirm-password-error">
-					@error('password_confirmation') {{ $message }}
-					@else Password Konfirmasi salah
-					@enderror
+					Password Konfirmasi salah
 				</div>
 			</div>
 		</div>
@@ -221,7 +205,7 @@
 						}
 					});
 				} catch (error) {
-					console.error(error);
+					console.error(error.responseJSON);
 				}
 			}
 		}).then((result) => {
