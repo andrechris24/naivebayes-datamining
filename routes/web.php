@@ -1,16 +1,15 @@
 <?php
 
+use App\Exports\DatasetTemplate;
 use App\Http\Controllers\AdminController,
 	App\Http\Controllers\AtributController,
 	App\Http\Controllers\ClassificationController,
 	App\Http\Controllers\NilaiAtributController,
 	App\Http\Controllers\ProbabilityController,
-	App\Http\Controllers\PSOController,
 	App\Http\Controllers\ResultController,
 	App\Http\Controllers\TestingDataController,
 	App\Http\Controllers\TrainingDataController,
 	Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -72,13 +71,6 @@ Route::middleware(['auth'])->group(function () {
 			Route::get('calc', 'create')->name('create');
 			Route::delete('/', 'destroy')->name('reset');
 		});
-	Route::controller(PSOController::class)->prefix('pso')->name('pso.')
-		->group(function () {
-			Route::get('/', 'index')->name('index');
-			Route::get('data', 'create')->name('datatable');
-			Route::post('store', 'store')->name('store');
-			Route::delete('clear', 'destroy')->name('reset');
-		});
 	Route::prefix('atribut')->name('atribut.')->group(function () {
 		Route::get('count', [AtributController::class, 'count'])->name('count');
 		Route::get('nilai/count', [NilaiAtributController::class, 'count'])
@@ -94,10 +86,14 @@ Route::middleware(['auth'])->group(function () {
 		->name('class.')->group(function () {
 			Route::get('/', 'index')->name('index')->block();
 			Route::get('datatable', 'show')->name('datatable')->block();
+			Route::get('export', 'export')->name('export')->block();
 			Route::post('calc', 'create')->name('create')->block();
 			Route::delete('/', 'destroy')->name('reset')->block();
 		});
 	Route::get('result', [ResultController::class, 'index'])->name('result');
+	Route::get('template', function () {
+		return (new DatasetTemplate)->download('template.xlsx');
+	})->name('template-data');
 	Route::get('laravel', function () {
 		return view('welcome');
 	});

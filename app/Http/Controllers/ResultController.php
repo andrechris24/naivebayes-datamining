@@ -10,23 +10,23 @@ class ResultController extends Controller
 	{
 		if (Classification::count() === 0) {
 			return to_route('class.index')
-				->withWarning('Lakukan klasifikasi dulu sebelum melihat hasil pengujian');
+				->withWarning('Lakukan klasifikasi dulu sebelum melihat performa klasifikasi');
 		}
-		$data = $this->cm();
-		$performa = $this->performa($data);
-		$semua = (Classification::where('type', 'train')->count() > 0 &&
-			Classification::where('type', 'test')->count() > 0);
-		return view('main.performa', compact('data', 'performa', 'semua'));
+		$data['train'] = $this->cm('train');
+		$data['test'] = $this->cm('test');
+		$performa['train'] = $this->performa($data['train']);
+		$performa['test'] = $this->performa($data['test']);
+		return view('main.performa', compact('data', 'performa'));
 	}
-	private static function cm()
+	private static function cm($type)
 	{
-		$ll = Classification::where('predicted', 'Layak')->where('real', 'Layak')
-			->count(); //True Positive
-		$ltl = Classification::where('predicted', 'Tidak Layak')
+		$ll = Classification::where('type', $type)->where('predicted', 'Layak')
+			->where('real', 'Layak')->count(); //True Positive
+		$ltl = Classification::where('type', $type)->where('predicted', 'Tidak Layak')
 			->where('real', 'Layak')->count(); //False Positive
-		$tll = Classification::where('predicted', 'Layak')
+		$tll = Classification::where('type', $type)->where('predicted', 'Layak')
 			->where('real', 'Tidak Layak')->count(); //False Negative
-		$tltl = Classification::where('predicted', 'Tidak Layak')
+		$tltl = Classification::where('type', $type)->where('predicted', 'Tidak Layak')
 			->where('real', 'Tidak Layak')->count(); //True Negative
 		$total = $ll + $ltl + $tll + $tltl;
 		return [
@@ -39,15 +39,15 @@ class ResultController extends Controller
 	}
 	private static function performa($data)
 	{
-		$accu = (($data['ll'] + $data['tltl']) / $data['total']) * 100;
-		$prec = ($data['ll'] / ($data['ll'] + $data['tll'])) * 100;
-		$rec = ($data['ll'] / ($data['ll'] + $data['ltl'])) * 100;
-		$f1 = 2 * ($prec * $rec) / ($prec + $rec);
+		if ($data['total'] === 0) $accu = $prec = $rec = $f1 = 0;
+		else {
+			$accu = (($data['ll'] + $data['tltl']) / $data['total']) * 100;
+			$prec = ($data['ll'] / ($data['ll'] + $data['tll'])) * 100;
+			$rec = ($data['ll'] / ($data['ll'] + $data['ltl'])) * 100;
+			$f1 = 2 * ($prec * $rec) / ($prec + $rec);
+		}
 		return [
-			'accuracy' => $accu,
-			'precision' => $prec,
-			'recall' => $rec,
-			'f1' => $f1
+			'accuracy' => $accu, 'precision' => $prec, 'recall' => $rec, 'f1' => $f1
 		];
 	}
 }

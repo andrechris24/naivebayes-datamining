@@ -2,7 +2,7 @@
 @section('title','Atribut')
 @section('content')
 <div class="modal fade" tabindex="-1" id="modalAddAtribut" aria-labelledby="modalAddAtributLabel" role="dialog"
-	aria-hidden="true">
+	aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -254,7 +254,6 @@
 			});
 		}).always(function () {
 			formloading("#addNewAtributForm :input", false);
-			$("#attrType").prop('disabled',true);
 		});
 	});
 	function submitform(ev) {
@@ -264,12 +263,13 @@
 			url: "{{ route('atribut.store') }}",
 			type: "POST",
 			beforeSend: function () {
-				formloading("#addNewAtributForm :input", true);
 				$("#addNewAtributForm :input").removeClass("is-invalid");
+				$('#modalAddAtribut :button').prop('disabled',true);
+				formloading("#addNewAtributForm :input", true);
 			},
 			complete: function () {
+				$('#modalAddAtribut :button').prop('disabled',false);
 				formloading("#addNewAtributForm :input", false);
-				if($("#attr_id").val()) $("#attrType").prop('disabled',true);
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-atribut")) dt_atribut.draw();

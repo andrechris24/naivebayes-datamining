@@ -25,10 +25,8 @@ class Controller extends BaseController
 	public static function preprocess(string $type): void
 	{ //Impute missing values
 		try {
-			if ($type === 'test')
-				$data = new TestingData();
-			else
-				$data = new TrainingData();
+			if ($type === 'test') $data = new TestingData();
+			else $data = new TrainingData();
 			foreach (Atribut::get() as $attr) {
 				$missing = $data->whereNull($attr->slug)->get();
 				if (count($missing) > 0) {
@@ -142,17 +140,12 @@ class Controller extends BaseController
 	public static function stats_standard_deviation(array $a, bool $sample = false)
 	{
 		$n = count($a);
-		if ($n === 0)
-			return false;
-		if ($sample && $n === 1)
-			return false;
+		if ($n === 0) return false;
+		if ($sample && $n === 1) return false;
 		$mean = array_sum($a) / $n;
 		$carry = 0.0;
-		foreach ($a as $val) {
-			$carry += pow(((float) $val) - $mean, 2);
-		}
-		if ($sample)
-			--$n;
+		foreach ($a as $val) $carry += pow(((float) $val) - $mean, 2);
+		if ($sample) --$n;
 		return sqrt($carry / $n);
 	}
 }

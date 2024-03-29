@@ -15,8 +15,7 @@ class TestingExport implements FromCollection, WithHeadings, WithMapping
 	{
 		$col[] = '#';
 		$col[] = "Nama";
-		foreach (Atribut::get() as $value)
-			$col[] = $value->name;
+		foreach (Atribut::get() as $value) $col[] = $value->name;
 		$col[] = "Keterangan";
 		return $col;
 	}
@@ -35,8 +34,7 @@ class TestingExport implements FromCollection, WithHeadings, WithMapping
 			if ($val->type === 'categorical') {
 				$foreign = NilaiAtribut::firstWhere('id', $test[$val->slug]);
 				$row[] = $foreign->name;
-			} else
-				$row[] = $test[$val->slug];
+			} else $row[] = $test[$val->slug];
 		}
 		$row[] = $test->status;
 		return $row;

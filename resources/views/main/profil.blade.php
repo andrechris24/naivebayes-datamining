@@ -100,17 +100,13 @@
 			url: "{{ route('profil.update') }}",
 			type: "PATCH",
 			beforeSend: function () {
-				$("#form-edit-account :input").removeClass("is-invalid")
-					.prop("disabled", true);
-				$(".data-submit").prop("disabled", true);
-				$('#DelAccountBtn').prop('disabled', true);
-				$(".spinner-grow.text-primary").removeClass("d-none");
+				$("#form-edit-account :input").removeClass("is-invalid");
+				$(".form-edit-account :button").prop("disabled", true);
+				formloading("#form-edit-account :input",true);
 			},
 			complete: function () {
-				$("#form-edit-account :input").prop("disabled", false);
-				$(".data-submit").prop("disabled", false);
-				$('#DelAccountBtn').prop('disabled', false);
-				$(".spinner-grow.text-primary").addClass("d-none");
+				$(".form-edit-account").prop("disabled", false);
+				formloading("#form-edit-account :input",false);
 			},
 			success: function () {
 				$("input[type=password]").val("");

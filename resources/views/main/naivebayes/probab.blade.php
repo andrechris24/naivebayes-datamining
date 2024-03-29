@@ -101,7 +101,7 @@
             @php
             if(empty($l[$attr->slug])) continue;
             $tot['l'] += $l[$attr->slug];
-            echo $l[$attr->slug] . (!$loop->last ? '; ' : '');
+            echo $l[$attr->slug] . (!$loop->last ? ', ' : '');
             @endphp
             @endforeach
           </td>
@@ -110,7 +110,7 @@
             @php
             if(empty($tl[$attr->slug])) continue;
             $tot['tl'] += $tl[$attr->slug];
-            echo $tl[$attr->slug] . (!$loop->last ? '; ' : '');
+            echo $tl[$attr->slug] . (!$loop->last ? ', ' : '');
             @endphp
             @endforeach
           </td>

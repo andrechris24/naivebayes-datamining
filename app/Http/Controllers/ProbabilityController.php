@@ -23,10 +23,6 @@ class ProbabilityController extends Controller
 				->withWarning('Atribut dan Nilai Atribut Kosong');
 		}
 		$nilaiattr = NilaiAtribut::get();
-		// if (count($nilaiattr) === 0) {
-		// 	return to_route('atribut.nilai.index')
-		// 		->withWarning('Tambahkan Nilai Atribut dulu sebelum menginput Dataset');
-		// }
 		$data = Probability::get();
 		$kelas = Controller::probabKelas();
 		$training = [
@@ -81,8 +77,7 @@ class ProbabilityController extends Controller
 						$total['all'];
 				}
 				Probability::updateOrCreate([
-					'atribut_id' => $nilai->atribut_id,
-					'nilai_atribut_id' => $nilai->id
+					'atribut_id' => $nilai->atribut_id, 'nilai_atribut_id' => $nilai->id
 				], [
 					'layak' => $ll[$nilai->name]['Layak'] ?? 0,
 					'tidak_layak' => $ll[$nilai->name]['Tidak Layak'] ?? 0,
@@ -111,8 +106,7 @@ class ProbabilityController extends Controller
 					continue;
 				}
 				Probability::updateOrCreate([
-					'atribut_id' => $nilainum->id,
-					'nilai_atribut_id' => null
+					'atribut_id' => $nilainum->id, 'nilai_atribut_id' => null
 				], [
 					'mean_layak' => $avg[$nilainum->name]['l'] ?? 0,
 					'mean_tidak_layak' => $avg[$nilainum->name]['tl'] ?? 0,
@@ -148,14 +142,12 @@ class ProbabilityController extends Controller
 			return back()->withError('Gagal reset:')->withErrors($e);
 		}
 	}
-	public static function getNumbers(string $col)
+	private static function getNumbers(string $col)
 	{
 		$data = [];
 		foreach (TrainingData::select($col, 'status')->get() as $train) {
-			if ($train->status === 'Layak')
-				$data['l'][] = $train[$col];
-			else
-				$data['tl'][] = $train[$col];
+			if ($train->status === 'Layak') $data['l'][] = $train[$col];
+			else $data['tl'][] = $train[$col];
 			$data['all'][] = $train[$col];
 		}
 		return $data;

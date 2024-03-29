@@ -2,7 +2,7 @@
 @section('title', 'Data Testing')
 @section('content')
 <div class="modal fade" tabindex="-1" id="modalAddTesting" aria-labelledby="modalAddTestingLabel" role="dialog"
-	aria-hidden="true">
+	aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -57,6 +57,10 @@
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
 					<i class="bi bi-x-lg"></i> Batal
 				</button>
+				<button type="button" class="btn btn-success" data-bs-toggle="modal"
+					data-bs-target="#modalImportTesting">
+					<i class="bi bi-upload"></i> Upload File
+				</button>
 				<button type="submit" class="btn btn-primary data-submit" form="addNewTestingForm">
 					<i class="bi bi-save"></i> Simpan
 				</button>
@@ -65,7 +69,7 @@
 	</div>
 </div>
 <div class="modal fade" tabindex="-1" id="modalImportTesting" aria-labelledby="modalImportTestingLabel"
-	role="dialog" aria-hidden="true">
+	data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -73,6 +77,9 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
+				<div class="alert alert-info" role="alert">
+					<a href="{{route('template-data')}}">Klik disini</a> untuk mendownload template Dataset
+				</div>
 				<form id="importTestingData">@csrf
 					<input type="file" class="form-control" id="testData" name="data" aria-describedby="importFormats"
 						data-bs-toggle="tooltip" title="Format: xls, xlsx, csv, dan tsv"
@@ -87,6 +94,9 @@
 				</div>
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
 					<i class="bi bi-x-lg"></i> Batal
+				</button>
+				<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddTesting">
+					<i class="bi bi-pencil"></i> Input Manual
 				</button>
 				<button type="submit" class="btn btn-primary data-submit" form="importTestingData">
 					<i class="bi bi-upload"></i> Upload
@@ -261,11 +271,16 @@
 							className: "delete-all"
 						}, {
 							text: '<i class="bi bi-download"></i> Ekspor Data',
+							className: "download-data",
 							action: function () {
 								location.href = "{{route('testing.export')}}";
 							}
 						}]
 					}
+				}, drawCallback: function(){
+					if(this.api().page.info().recordsTotal===0)
+						$('.download-data').prop('disabled',true);
+					else $('.download-data').prop('disabled',false);
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
@@ -358,6 +373,7 @@
 	}).on("click", ".edit-record", function () {
 		let test_id = $(this).data("id");
 		$("#modalAddTestingLabel").html("Edit Data Testing");
+		$('.btn-success').prop('disabled',true);
 		formloading("#addNewTestingForm :input", true);
 		$.get(`testing/${test_id}/edit`, function (data) {
 			$("#test_id").val(data.id);
@@ -382,6 +398,7 @@
 			});
 		}).always(function () {
 			formloading("#addNewTestingForm :input", false);
+			$('.btn-success').prop('disabled',false);
 		});
 	});
 	$('#importTestingData').submit(function(e) {//form Upload Data
@@ -396,9 +413,11 @@
 			processData: false,
 			beforeSend: function () {
 				formloading("#importTestingData :input", true);
+				$('#modalImportTesting :button').prop('disabled',true);
 				$("#importTestingData :input").removeClass("is-invalid");
 			},
 			complete: function () {
+				$('modalImportTesting :button').prop('disabled',false);
 				formloading("#importTestingData :input", false);
 			},
 			success: function (status) {
@@ -436,10 +455,12 @@
 			url: "{{ route('testing.store') }}",
 			type: "POST",
 			beforeSend: function () {
-				formloading("#addNewTestingForm :input", true);
 				$("#addNewTestingForm :input").removeClass("is-invalid");
+				$('#modalAddTesting :button').prop('disabled',true);
+				formloading("#addNewTestingForm :input", true);
 			},
 			complete: function () {
+				$('#modalAddTesting :button').prop('disabled',false);
 				formloading("#addNewTestingForm :input", false);
 			},
 			success: function (status) {

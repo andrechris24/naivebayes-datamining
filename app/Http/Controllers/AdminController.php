@@ -31,8 +31,7 @@ class AdminController extends Controller
 	}
 	public function register()
 	{
-		if (Auth::viaRemember() || Auth::check())
-			return to_route('home');
+		if (Auth::viaRemember() || Auth::check()) return to_route('home');
 		return view('auth.register');
 	}
 	public function postRegister(Request $request)
@@ -53,8 +52,7 @@ class AdminController extends Controller
 	}
 	public function login()
 	{
-		if (Auth::viaRemember() || Auth::check())
-			return to_route('home');
+		if (Auth::viaRemember() || Auth::check()) return to_route('home');
 		return view('auth.login');
 	}
 	public function postLogin(Request $request)
@@ -78,8 +76,7 @@ class AdminController extends Controller
 	}
 	public function forget()
 	{
-		if (Auth::viaRemember() || Auth::check())
-			return to_route('home');
+		if (Auth::viaRemember() || Auth::check()) return to_route('home');
 		return view('auth.forget');
 	}
 	public function forgetLink(Request $request)
@@ -161,8 +158,7 @@ class AdminController extends Controller
 			$req = $request->all();
 			if ($request->has('password'))
 				$req['password'] = Hash::make($request->password);
-			else
-				unset($req['password']);
+			else unset($req['password']);
 			$req['name'] = ucwords($request->name);
 			$req['email'] = Str::lower($request->email);
 			User::findOrFail(Auth::id())->update($req);

@@ -169,9 +169,8 @@
 			e.preventDefault();
 			document.getElementById('logout-form').submit();
 		});
-		function formloading(element, disable){
-			$(element).prop('disabled', disable);
-			$('.data-submit').prop('disabled', disable);
+		function formloading(formEl, disable){
+			$(formEl).prop('disabled', disable);
 			if(disable) $('.spinner-grow').removeClass('d-none');
 			else $('.spinner-grow').addClass('d-none');
 		}

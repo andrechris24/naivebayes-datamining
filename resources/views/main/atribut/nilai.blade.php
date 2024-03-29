@@ -2,7 +2,7 @@
 @section('title','Nilai Atribut')
 @section('content')
 <div class="modal fade" tabindex="-1" id="modalAddNilaiAtribut" aria-labelledby="modalAddNilaiAtributLabel"
-	role="dialog" aria-hidden="true">
+	role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -262,11 +262,13 @@
 			url: "{{ route('atribut.nilai.store') }}",
 			type: "POST",
 			beforeSend: function () {
-				formloading("#addNewNilaiAtributForm :input", true);
 				$("#addNewNilaiAtributForm :input").removeClass("is-invalid");
+				$('#modalAddNilaiAtribut :button').prop('disabled',true);
+				formloading("#addNewNilaiAtributForm :input", true);
 			},
 			complete: function () {
 				formloading("#addNewNilaiAtributForm :input", false);
+				$('#modalAddNilaiAtribut :button').prop('disabled',false);
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-atribut")) dt_atribut.draw();

@@ -23,15 +23,15 @@ return new class extends Migration
 				->default(0.00);
 			$table->double('total', 25, 20)->comment('Total Probabilitas (Kategorikal)')
 				->default(0.00);
-			$table->double('mean_layak', 35, 15)->default(0.00)->comment('Numerik saja');
-			$table->double('mean_tidak_layak', 35, 15)->default(0.00)
+			$table->double('mean_layak', 40, 20)->default(0.00)->comment('Numerik saja');
+			$table->double('mean_tidak_layak', 40, 20)->default(0.00)
 				->comment('Numerik saja');
-			$table->double('mean_total', 35, 15)->default(0.00)
+			$table->double('mean_total', 40, 20)->default(0.00)
 				->comment('Rata-rata Probabilitas Numerik');
-			$table->double('sd_layak', 35, 15)->default(0.00)->comment('Numerik saja');
-			$table->double('sd_tidak_layak', 35, 15)->default(0.00)
+			$table->double('sd_layak', 40, 20)->default(0.00)->comment('Numerik saja');
+			$table->double('sd_tidak_layak', 40, 20)->default(0.00)
 				->comment('Numerik saja');
-			$table->double('sd_total', 35, 15)->default(0.00)
+			$table->double('sd_total', 40, 20)->default(0.00)
 				->comment('Simpangan baku Probabilias Numerik');
 			$table->timestamps();
 		});

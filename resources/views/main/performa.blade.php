@@ -1,84 +1,177 @@
 @extends('layout')
 @section('title', 'Performa')
 @section('content')
-@if($semua)
-<div class="alert alert-info" role="alert">
-	<i class="bi bi-info-circle"></i>
-	Performa yang ditampilkan adalah performa hasil klasifikasi dari semua jenis data.
-	Reset salah satu klasifikasi untuk menampilkan performa dari salah satu jenis data saja.
-</div>
-@endif
-<div class="card mb-3">
-	<div class="card-header"><b>Hasil</b></div>
-	<div class="card-body">
-		<div class="row">
-			<div class="col-lg-6">
-				<table class="table table-bordered caption-top">
-					<caption>Hasil Prediksi</caption>
-					<thead>
-						<tr>
-							<th>#</th>
-							<th colspan="3">Aktual</th>
-						</tr>
-						<tr>
-							<th>Prediksi</th>
-							<th>Layak</th>
-							<th>Tidak Layak</th>
-							<th>Total</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<th>Layak</th>
-							<td class="table-success">{{$data['ll']}}</td>
-							<td class="table-danger">{{$data['tll']}}</td>
-							<td>{{$data['ll'] + $data['tll']}}</td>
-						</tr>
-						<tr>
-							<th>Tidak Layak</th>
-							<td class="table-danger">{{$data['ltl']}}</td>
-							<td class="table-success">{{$data['tltl']}}</td>
-							<td>{{$data['ltl'] + $data['tltl']}}</td>
-						</tr>
-						<tr>
-							<th>Total</th>
-							<td>{{$data['ll'] + $data['ltl']}}</td>
-							<td>{{$data['tll'] + $data['tltl']}}</td>
-							<td>{{$data['total']}}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="col-lg-6">
-				<table class="table table-bordered caption-top">
-					<caption>Performa</caption>
-					<tbody>
-						<tr>
-							<th>Akurasi</th>
-							<td>{{round($performa['accuracy'], 2)}}%</td>
-						</tr>
-						<tr>
-							<th>Presisi</th>
-							<td>{{round($performa['precision'], 2)}}%</td>
-						</tr>
-						<tr>
-							<th>Recall</th>
-							<td>{{round($performa['recall'], 2)}}%</td>
-						</tr>
-						<tr>
-							<th>Skor F1</th>
-							<td>{{round($performa['f1'],2)}}%</td>
-						</tr>
-					</tbody>
-				</table>
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+	<li class="nav-item" role="presentation">
+		<button @class(['nav-link','active'=>$data['test']['total']>0]) id="pills-testing-tab" data-bs-toggle="pill"
+			data-bs-target="#pills-testing" type="button" role="tab" aria-controls="pills-testing"
+			@if($data['test']['total']>0) aria-selected="true" @else aria-selected="false" disabled @endif >
+			Data Testing
+		</button>
+	</li>
+	<li class="nav-item" role="presentation">
+		<button @class(['nav-link','active'=>$data['test']['total']===0]) id="pills-training-tab"
+			data-bs-toggle="pill" data-bs-target="#pills-training" type="button" role="tab"
+			aria-controls="pills-training" @if($data['test']['total']===0) aria-selected="true" @else
+			aria-selected="false" @endif @if($data['train']['total']===0) disabled @endif >
+			Data Training
+		</button>
+	</li>
+</ul>
+<div class="tab-content" id="pills-tabContent">
+	<div class="tab-pane fade @if($data['test']['total']>0) show active @endif " id="pills-testing"
+		role="tabpanel" aria-labelledby="pills-testing-tab" tabindex="0">
+		<div class="card mb-3">
+			<div class="card-header"><b>Performa Klasifikasi Data Testing</b></div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-lg-6">
+						<table class="table table-bordered caption-top">
+							<caption>Hasil Prediksi</caption>
+							<thead>
+								<tr>
+									<th>#</th>
+									<th colspan="3">Aktual</th>
+								</tr>
+								<tr>
+									<th>Prediksi</th>
+									<th>Layak</th>
+									<th>Tidak Layak</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>Layak</th>
+									<td class="table-success">{{$data['test']['ll']}}</td>
+									<td class="table-danger">{{$data['test']['tll']}}</td>
+									<td>{{$data['test']['ll'] + $data['test']['tll']}}</td>
+								</tr>
+								<tr>
+									<th>Tidak Layak</th>
+									<td class="table-danger">{{$data['test']['ltl']}}</td>
+									<td class="table-success">{{$data['test']['tltl']}}</td>
+									<td>{{$data['test']['ltl'] + $data['test']['tltl']}}</td>
+								</tr>
+								<tr>
+									<th>Total</th>
+									<td>{{$data['test']['ll'] + $data['test']['ltl']}}</td>
+									<td>{{$data['test']['tll'] + $data['test']['tltl']}}</td>
+									<td>{{$data['test']['total']}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-lg-6">
+						<table class="table table-bordered caption-top">
+							<caption>Performa</caption>
+							<tbody>
+								<tr>
+									<th>Akurasi</th>
+									<td>{{round($performa['test']['accuracy'], 2)}}%</td>
+								</tr>
+								<tr>
+									<th>Presisi</th>
+									<td>{{round($performa['test']['precision'], 2)}}%</td>
+								</tr>
+								<tr>
+									<th>Recall</th>
+									<td>{{round($performa['test']['recall'], 2)}}%</td>
+								</tr>
+								<tr>
+									<th>Skor F1</th>
+									<td>{{round($performa['test']['f1'],2)}}%</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6">
+						<div id="predict-actual-test"></div>
+					</div>
+					<div class="col-lg-6">
+						<div id="perform-radial-test"></div>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-lg-6">
-				<div id="predict-actual"></div>
-			</div>
-			<div class="col-lg-6">
-				<div id="perform-radial"></div>
+	</div>
+	<div class="tab-pane fade @if($data['test']['total']===0) show active @endif " id="pills-training"
+		role="tabpanel" aria-labelledby="pills-training-tab" tabindex="0">
+		<div class="card mb-3">
+			<div class="card-header"><b>Performa Klasifikasi Data Training</b></div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-lg-6">
+						<table class="table table-bordered caption-top">
+							<caption>Hasil Prediksi</caption>
+							<thead>
+								<tr>
+									<th>#</th>
+									<th colspan="3">Aktual</th>
+								</tr>
+								<tr>
+									<th>Prediksi</th>
+									<th>Layak</th>
+									<th>Tidak Layak</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>Layak</th>
+									<td class="table-success">{{$data['train']['ll']}}</td>
+									<td class="table-danger">{{$data['train']['tll']}}</td>
+									<td>{{$data['train']['ll'] + $data['train']['tll']}}</td>
+								</tr>
+								<tr>
+									<th>Tidak Layak</th>
+									<td class="table-danger">{{$data['train']['ltl']}}</td>
+									<td class="table-success">{{$data['train']['tltl']}}</td>
+									<td>{{$data['train']['ltl'] + $data['train']['tltl']}}</td>
+								</tr>
+								<tr>
+									<th>Total</th>
+									<td>{{$data['train']['ll'] + $data['train']['ltl']}}</td>
+									<td>{{$data['train']['tll'] + $data['train']['tltl']}}</td>
+									<td>{{$data['train']['total']}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-lg-6">
+						<table class="table table-bordered caption-top">
+							<caption>Performa</caption>
+							<tbody>
+								<tr>
+									<th>Akurasi</th>
+									<td>{{round($performa['train']['accuracy'], 2)}}%</td>
+								</tr>
+								<tr>
+									<th>Presisi</th>
+									<td>{{round($performa['train']['precision'], 2)}}%</td>
+								</tr>
+								<tr>
+									<th>Recall</th>
+									<td>{{round($performa['train']['recall'], 2)}}%</td>
+								</tr>
+								<tr>
+									<th>Skor F1</th>
+									<td>{{round($performa['train']['f1'],2)}}%</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6">
+						<div id="predict-actual-train"></div>
+					</div>
+					<div class="col-lg-6">
+						<div id="perform-radial-train"></div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -86,13 +179,13 @@
 @endsection
 @section('js')
 <script type="text/javascript">
-	const barOptions = {
+	const testBarOptions = {
 		series: [{
 			name: "Layak (Prediksi)",
-			data: [{{$data['ll']}}, {{$data['tll']}}]
+			data: [{{$data['test']['ll']}}, {{$data['test']['tll']}}]
 		}, {
 			name: "Tidak Layak (Prediksi)",
-			data: [{{$data['ltl']}}, {{$data['tltl']}}]
+			data: [{{$data['test']['ltl']}}, {{$data['test']['tltl']}}]
 		}],
 		chart: {
 			type: "bar",
@@ -111,12 +204,37 @@
 			text: 'Hasil Prediksi'
 		}
 	};
-	const radials = {
+	const trainBarOptions = {
+		series: [{
+			name: "Layak (Prediksi)",
+			data: [{{$data['train']['ll']}}, {{$data['train']['tll']}}]
+		}, {
+			name: "Tidak Layak (Prediksi)",
+			data: [{{$data['train']['ltl']}}, {{$data['train']['tltl']}}]
+		}],
+		chart: {
+			type: "bar",
+			foreColor: '#777'
+		},
+		dataLabels: {
+			enabled: false
+		},
+		tooltip: {
+			theme: 'dark'
+		},
+		xaxis: {
+			categories: ["Layak (Aktual)", "Tidak Layak (Aktual)"]
+		},
+		title: {
+			text: 'Hasil Prediksi'
+		}
+	};
+	const testRadials = {
 		series: [
-			{{round($performa['accuracy'], 2)}}, 
-			{{round($performa['precision'], 2)}}, 
-			{{round($performa['recall'], 2)}},
-			{{round($performa['f1'],2)}}
+			{{round($performa['test']['accuracy'], 2)}}, 
+			{{round($performa['test']['precision'], 2)}}, 
+			{{round($performa['test']['recall'], 2)}},
+			{{round($performa['test']['f1'],2)}}
 		],
 		chart: {
 			type: 'radialBar',
@@ -132,7 +250,7 @@
 						show: true,
 						label: "Total Data",
 						formatter: function(){
-							return {{$data['total']}};
+							return {{$data['test']['total']}};
 						}
 					}
 				}
@@ -140,9 +258,51 @@
 		},
 		labels: ['Akurasi', 'Presisi', 'Recall', 'Skor F1']
 	};
-	const bar = new ApexCharts(document.getElementById("predict-actual"), barOptions),
-	rad = new ApexCharts(document.getElementById("perform-radial"), radials);
-	bar.render();
-	rad.render();
+	const trainRadials = {
+		series: [
+			{{round($performa['train']['accuracy'], 2)}}, 
+			{{round($performa['train']['precision'], 2)}}, 
+			{{round($performa['train']['recall'], 2)}},
+			{{round($performa['train']['f1'],2)}}
+		],
+		chart: {
+			type: 'radialBar',
+			foreColor: '#777'
+		},
+		title: {
+			text: "Hasil Akhir"
+		},
+		plotOptions: {
+			radialBar: {
+				dataLabels: {
+					total: {
+						show: true,
+						label: "Total Data",
+						formatter: function(){
+							return {{$data['train']['total']}};
+						}
+					}
+				}
+			}
+		},
+		labels: ['Akurasi', 'Presisi', 'Recall', 'Skor F1']
+	};
+	const barTest = new ApexCharts(
+		document.getElementById("predict-actual-test"), testBarOptions
+	), radTest = new ApexCharts(
+		document.getElementById("perform-radial-test"), testRadials
+	), barTrain=new ApexCharts(
+		document.getElementById("predict-actual-train"), trainBarOptions
+	), radTrain = new ApexCharts(
+		document.getElementById("perform-radial-train"), trainRadials
+	);
+	@if($data['test']['total']>0)
+	barTest.render();
+	radTest.render();
+	@endif
+	@if($data['train']['total']>0)
+	barTrain.render();
+	radTrain.render();
+	@endif
 </script>
 @endsection

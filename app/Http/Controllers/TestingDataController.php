@@ -32,8 +32,7 @@ class TestingDataController extends Controller
 		$test = TestingData::get();
 		$testUnique = $test->unique(['nama']);
 		return [
-			'total' => count($test),
-			'duplicate' => $test->diff($testUnique)->count()
+			'total' => count($test), 'duplicate' => $test->diff($testUnique)->count()
 		];
 	}
 	/**
@@ -54,7 +53,6 @@ class TestingDataController extends Controller
 		$calculated = Probability::count();
 		return view('main.dataset.testing', compact('atribut', 'nilai', 'calculated'));
 	}
-
 	/**
 	 * Show the form for creating a new resource.
 	 */
@@ -71,7 +69,6 @@ class TestingDataController extends Controller
 		}
 		return $dt->make();
 	}
-
 	/**
 	 * Store a newly created resource in storage.
 	 */
@@ -79,9 +76,7 @@ class TestingDataController extends Controller
 	{
 		try {
 			$request->validate(TestingData::$rules);
-			foreach ($request->q as $id => $q) {
-				$req[$id] = $q;
-			}
+			foreach ($request->q as $id => $q) $req[$id] = $q;
 			$req['nama'] = $request->nama;
 			if ($request->status === 'Otomatis') {
 				$hasil = Controller::hitungProbab($req);
@@ -99,7 +94,6 @@ class TestingDataController extends Controller
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
 	}
-
 	/**
 	 * Show the form for editing the specified resource.
 	 */
@@ -107,7 +101,6 @@ class TestingDataController extends Controller
 	{
 		return response()->json($testing);
 	}
-
 	/**
 	 * Remove the specified resource from storage.
 	 */

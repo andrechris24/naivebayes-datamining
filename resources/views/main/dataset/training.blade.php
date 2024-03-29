@@ -2,7 +2,7 @@
 @section('title', 'Data Training')
 @section('content')
 <div class="modal fade" tabindex="-1" id="modalAddTraining" aria-labelledby="modalAddTrainingLabel"
-	role="dialog" aria-hidden="true">
+	data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -54,6 +54,10 @@
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
 					<i class="bi bi-x-lg"></i> Batal
 				</button>
+				<button type="button" class="btn btn-success" data-bs-toggle="modal"
+					data-bs-target="#modalImportTraining">
+					<i class="bi bi-upload"></i> Upload File
+				</button>
 				<button type="submit" class="btn btn-primary data-submit" form="addNewTrainingForm">
 					<i class="bi bi-save"></i> Simpan
 				</button>
@@ -62,7 +66,7 @@
 	</div>
 </div>
 <div class="modal fade" tabindex="-1" id="modalImportTraining" aria-labelledby="modalImportTrainingLabel"
-	role="dialog" aria-hidden="true">
+	data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -70,6 +74,9 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
+				<div class="alert alert-info" role="alert">
+					<a href="{{route('template-data')}}">Klik disini</a> untuk mendownload template Dataset
+				</div>
 				<form id="importTrainingData">@csrf
 					<input type="file" class="form-control" id="trainData" name="data" data-bs-toggle="tooltip"
 						title="Format: xls, xlsx, csv, dan tsv" aria-describedby="importFormats"
@@ -84,6 +91,9 @@
 				</div>
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
 					<i class="bi bi-x-lg"></i> Batal
+				</button>
+				<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddTraining">
+					<i class="bi bi-pencil"></i> Input Manual
 				</button>
 				<button type="submit" class="btn btn-primary data-submit" form="importTrainingData">
 					<i class="bi bi-upload"></i> Upload
@@ -255,11 +265,16 @@
 							className: "delete-all"
 						}, {
 							text: '<i class="bi bi-download"></i> Ekspor Data',
+							className: 'download-data',
 							action: function () {
 								location.href = "{{route('training.export')}}";
 							}
 						}]
 					}
+				}, drawCallback: function(){
+					if(this.api().page.info().recordsTotal===0)
+						$('.download-data').prop('disabled',true);
+					else $('.download-data').prop('disabled',false);
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
@@ -354,6 +369,7 @@
 		let train_id = $(this).data("id");
 		$("#modalAddTrainingLabel").html("Edit Data Training");
 		formloading("#addNewTrainingForm :input",true);
+		$('.btn-success').prop('disabled',true);
 		$.get(`training/${train_id}/edit`, function (data) {
 			$("#train_id").val(data.id);
 			$("#trainName").val(data.nama);
@@ -376,52 +392,55 @@
 				text: errmsg
 			});
 		}).always(function () {
+			$('.btn-success').prop('disabled',false);
 			formloading("#addNewTrainingForm :input", false);
 		});
 	});
 	$('#importTrainingData').submit(function(e){//form Upload Data
 		e.preventDefault();
 		$.ajax({
-				type: "POST",
-				url: "{{route('training.import')}}",
-				dataType: 'JSON',
-				data: new FormData(this),
-				contentType: false,
-				cache: false,
-				processData: false,
-				beforeSend: function () {
-					formloading("#importTrainingData :input",true);
-					$("#importTrainingData :input").removeClass("is-invalid");
-				},
-				complete: function () {
-					formloading("#importTrainingData :input",false);
-				},
-				success: function (status) {
-					if ($.fn.DataTable.isDataTable("#table-training")) dt_training.draw();
-					$('#modalImportTraining').modal("hide");
-					swal.fire({
-						icon: "success",
-						titleText: "Berhasil diupload"
-					});
-				},
-				error: function (xhr, st) {
-					if (xhr.status === 422) {
-						resetvalidation();
-						if (typeof xhr.responseJSON.errors.data !== "undefined") {
-							$("#trainData").addClass("is-invalid");
-							$("#data-error").text(xhr.responseJSON.errors.data);
-						}
-						errmsg = xhr.responseJSON.message;
-					} else {
-						console.warn(xhr.responseJSON.message ?? st);
-						errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+			type: "POST",
+			url: "{{route('training.import')}}",
+			dataType: 'JSON',
+			data: new FormData(this),
+			contentType: false,
+			cache: false,
+			processData: false,
+			beforeSend: function () {
+				$("#importTrainingData :input").removeClass("is-invalid");
+				$('#modalImportTraining :button').prop('disabled',true);
+				formloading("#importTrainingData :input",true);
+			},
+			complete: function () {
+				$('#modalImportTraining :button').prop('disabled',false);
+				formloading("#importTrainingData :input",false);
+			},
+			success: function (status) {
+				if ($.fn.DataTable.isDataTable("#table-training")) dt_training.draw();
+				$('#modalImportTraining').modal("hide");
+				swal.fire({
+					icon: "success",
+					titleText: "Berhasil diupload"
+				});
+			},
+			error: function (xhr, st) {
+				if (xhr.status === 422) {
+					resetvalidation();
+					if (typeof xhr.responseJSON.errors.data !== "undefined") {
+						$("#trainData").addClass("is-invalid");
+						$("#data-error").text(xhr.responseJSON.errors.data);
 					}
-					swal.fire({
-						titleText: "Gagal upload",
-						text: errmsg,
-						icon: "error"
-					});
+					errmsg = xhr.responseJSON.message;
+				} else {
+					console.warn(xhr.responseJSON.message ?? st);
+					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 				}
+				swal.fire({
+					titleText: "Gagal upload",
+					text: errmsg,
+					icon: "error"
+				});
+			}
 		});
 	});
 	function submitform(ev) {//form Input Manual
@@ -431,10 +450,12 @@
 			url: "{{ route('training.store') }}",
 			type: "POST",
 			beforeSend: function () {
-				formloading("#addNewTrainingForm :input",true);
 				$("#addNewTrainingForm :input").removeClass("is-invalid");
+				$('#modalAddTraining').prop('disabled',true);
+				formloading("#addNewTrainingForm :input",true);
 			},
 			complete: function () {
+				$('#modalAddTraining').prop('disabled',false);
 				formloading("#addNewTrainingForm :input",false);
 			},
 			success: function (status) {

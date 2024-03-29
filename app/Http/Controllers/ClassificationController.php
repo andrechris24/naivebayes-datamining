@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ClassificationExport;
 use App\Models\Classification;
-use App\Models\Atribut;
 use App\Models\Probability;
 use App\Models\TestingData;
 use App\Models\TrainingData;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class ClassificationController extends Controller
 {
+	public function export(Request $req)
+	{
+		return Excel::download(
+			new ClassificationExport($req->type), "klasifikasi_{$req->type}.xlsx"
+		);
+	}
 	/**
 	 * Display a listing of the resource.
 	 */
@@ -33,8 +40,7 @@ class ClassificationController extends Controller
 				return response()->json(['message' => 'Probabilitas belum dihitung'], 400);
 
 			//Preprocessor Start
-			if ($request->type === 'test')
-				Controller::preprocess('test');
+			if ($request->type === 'test') Controller::preprocess('test');
 			//Preprocessor End
 
 			$semuadata = $this->getData($request->type); //Dataset
@@ -46,8 +52,7 @@ class ClassificationController extends Controller
 			foreach ($semuadata as $dataset) {
 				$klasifikasi = Controller::hitungProbab($dataset);
 				Classification::updateOrCreate([
-					'name' => $dataset->nama,
-					'type' => $request->type
+					'name' => $dataset->nama, 'type' => $request->type
 				], [
 					'layak' => $klasifikasi['layak'],
 					'tidak_layak' => $klasifikasi['tidak_layak'],
@@ -80,10 +85,8 @@ class ClassificationController extends Controller
 	{
 		$request->validate(Classification::$rule);
 		try {
-			if ($request->type === 'all')
-				Classification::truncate();
-			else
-				Classification::where('type', $request->type)->delete();
+			if ($request->type === 'all') Classification::truncate();
+			else Classification::where('type', $request->type)->delete();
 			return response()->json(['message' => 'Berhasil direset']);
 		} catch (QueryException $e) {
 			Log::error($e);
@@ -93,12 +96,10 @@ class ClassificationController extends Controller
 	private function getData(string $type)
 	{
 		if ($type === 'train') {
-			if (TrainingData::count() === 0)
-				return false;
+			if (TrainingData::count() === 0) return false;
 			$data = TrainingData::get();
 		} else {
-			if (TestingData::count() === 0)
-				return false;
+			if (TestingData::count() === 0) return false;
 			$data = TestingData::get();
 		}
 		return $data;

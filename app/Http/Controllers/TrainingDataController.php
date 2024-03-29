@@ -77,9 +77,7 @@ class TrainingDataController extends Controller
 	{
 		try {
 			$request->validate(TrainingData::$rules);
-			foreach ($request->q as $id => $q) {
-				$req[$id] = $q;
-			}
+			foreach ($request->q as $id => $q) $req[$id] = $q;
 			$req['nama'] = $request->nama;
 			$req['status'] = $request->status;
 			if ($request->id) {

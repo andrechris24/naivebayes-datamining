@@ -9,12 +9,7 @@ class Classification extends Model
 {
 	use HasFactory;
 	protected $fillable = [
-		'name',
-		'type',
-		'layak',
-		'tidak_layak',
-		'predicted',
-		'real'
+		'name', 'type', 'layak', 'tidak_layak', 'predicted', 'real'
 	];
 	public static array $rule = ['type' => ['bail', 'required', 'in:train,test,all']],
 		$tipedata = ['train' => 'Training', 'test' => 'Testing'];

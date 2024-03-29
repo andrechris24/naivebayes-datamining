@@ -46,8 +46,7 @@ class User extends Authenticatable
 			'password_confirmation' => 'required_with:password'
 		],
 		$loginrules = [
-			'email' => ['bail', 'required', 'email'],
-			'password' => 'required'
+			'email' => ['bail', 'required', 'email'], 'password' => 'required'
 		],
 		$forgetrules = ['email' => ['bail', 'required', 'email', 'exists:users']],
 		$resetrules = [

@@ -15,8 +15,7 @@ class TrainingExport implements FromCollection, WithHeadings, WithMapping
 	{
 		$col[] = '#';
 		$col[] = "Nama";
-		foreach (Atribut::get() as $value)
-			$col[] = $value->name;
+		foreach (Atribut::get() as $value) $col[] = $value->name;
 		$col[] = "Keterangan";
 		return $col;
 	}
@@ -35,8 +34,7 @@ class TrainingExport implements FromCollection, WithHeadings, WithMapping
 			if ($val->type === 'categorical') {
 				$foreign = NilaiAtribut::firstWhere('id', $train[$val->slug]);
 				$row[] = $foreign->name;
-			} else
-				$row[] = $train[$val->slug];
+			} else $row[] = $train[$val->slug];
 		}
 		$row[] = $train->status;
 		return $row;

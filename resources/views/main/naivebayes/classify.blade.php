@@ -10,6 +10,27 @@
 			<button type="button" class="btn btn-danger reset-class">
 				<i class="bi bi-arrow-clockwise"></i> Reset
 			</button>
+			<button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"
+				aria-expanded="false">
+				<i class="bi bi-download"></i> Ekspor
+			</button>
+				<ul class="dropdown-menu">
+					<li>
+						<a class="dropdown-item" href="{{route('class.export')}}?type=test">
+							Data Testing
+						</a>
+					</li>
+					<li>
+						<a class="dropdown-item" href="{{route('class.export')}}?type=test">
+							Data Training
+						</a>
+					</li>
+					<li>
+						<a class="dropdown-item" href="{{route('class.export')}}?type=all">
+							Semua Data
+						</a>
+					</li>
+				</ul>
 		</div>
 		<table class="table table-bordered" id="table-classify" width="100%">
 			<thead>
@@ -67,8 +88,32 @@
 						}, {
 							text: '<i class="bi bi-arrow-clockwise"></i> Reset',
 							className: 'reset-class'
+						},{
+							text: '<i class="bi bi-download"></i> Ekspor',
+							className: 'download-data',
+							extend: 'collection',
+							buttons: [{
+								text: 'Data Testing',
+								action: function(){
+									location.href="{{route('class.export')}}?type=test";
+								}
+							}, {
+								text: 'Data Training',
+								action: function(){
+									location.href="{{route('class.export')}}?type=train";
+								}
+							},{
+								text: 'Semua Data',
+								action: function(){
+									location.href="{{route('class.export')}}?type=all";
+								}
+							}]
 						}]
 					}
+				}, drawCallback: function(){
+					if(this.api().page.info().recordsTotal===0)
+						$('.download-data').prop('disabled',true);
+					else $('.download-data').prop('disabled',false);
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
@@ -132,9 +177,10 @@
 			titleText: "Pilih tipe data yang akan dihitung",
 			input: "select",
 			inputOptions: {
-				test: "Data Testing (Data Uji)",
-				train: "Data Training (Data Latih)"
+				train: "Data Training (Data Latih)",
+				test: "Data Testing (Data Uji)"
 			},
+			inputValue: "test",
 			inputPlaceholder: "Pilih Tipe Data",
 			showCancelButton: true,
 			confirmButtonText: `<i class="bi bi-calculator"></i> Hitung`,
