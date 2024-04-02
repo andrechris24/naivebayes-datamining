@@ -1,7 +1,7 @@
 <?php
 
-use App\Exports\DatasetTemplate;
-use App\Http\Controllers\AdminController,
+use App\Exports\DatasetTemplate,
+	App\Http\Controllers\AdminController,
 	App\Http\Controllers\AtributController,
 	App\Http\Controllers\ClassificationController,
 	App\Http\Controllers\NilaiAtributController,
@@ -94,10 +94,11 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('template', function () {
 		return (new DatasetTemplate)->download('template.xlsx');
 	})->name('template-data');
+	Route::view('test', 'layout2');
 	Route::get('laravel', function () {
 		return view('welcome');
-	});
+	})->name('laravel');
 	Route::get('php', function () {
 		return phpinfo();
-	});
+	})->name('phpinfo');
 });

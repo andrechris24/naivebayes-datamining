@@ -1,32 +1,25 @@
 const setTableColor = () => {
-    document
-        .querySelectorAll(".dataTables_paginate .pagination")
-        .forEach((dt) => {
-            dt.classList.add("pagination-primary");
-        });
+	document
+		.querySelectorAll(".dataTables_paginate .pagination")
+		.forEach((dt) => {
+			dt.classList.add("pagination-primary");
+		});
 };
 function removeBtn() {
-    $("#spare-button").addClass("d-none");
+	$("#spare-button").addClass("d-none");
 }
 function initError(message) {
-    swal.fire({
-        icon: "error",
-        title: "Data gagal dimuat",
-    });
-    console.error(message);
+	notif.error("Data gagal dimuat");
+	console.error(message);
 }
 function errorDT(message, note) {
-    Toastify({
-        text: message,
-        style: {
-            background: "#ffc107",
-        },
-        destination: "https://datatables.net/tn/" + note,
-        newWindow: true,
-        duration: 10000,
-        offset: {
-            y: 36,
-        },
-    }).showToast();
-    console.warn(message);
+	const err = notif.open({ type: "warning", message: message });
+	if (note) {
+		err.on("click", () => {
+			// target: the notification being clicked
+			// event: the mouseevent
+			window.open("https://datatables.net/tn/" + note, "_blank");
+		});
+	}
+	console.warn(message);
 }

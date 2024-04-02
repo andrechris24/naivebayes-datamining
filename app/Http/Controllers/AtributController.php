@@ -99,7 +99,7 @@ class AtributController extends Controller
 		$atribut->delete();
 		return response()->json(['message' => "Berhasil dihapus"]);
 	}
-	private function addColumn($tabel, $req): void
+	private function addColumn(string $tabel, array $req): void
 	{
 		if (!Schema::hasColumn($tabel, $req['slug'])) {
 			Schema::table($tabel, function (Blueprint $table) use ($req) {
@@ -112,7 +112,7 @@ class AtributController extends Controller
 			});
 		}
 	}
-	private function editColumn($tabel, $attr, $req): void
+	private function editColumn(string $tabel, $attr, array $req): void
 	{
 		Schema::table($tabel, function (Blueprint $table) use ($attr, $req) {
 			if ($attr->type !== $req['type']) {
@@ -134,7 +134,7 @@ class AtributController extends Controller
 			}
 		});
 	}
-	private function delColumn($tabel, $attr): void
+	private function delColumn(string $tabel, $attr): void
 	{
 		if (Schema::hasColumn($tabel, $attr->slug)) {
 			Schema::table($tabel, function (Blueprint $table) use ($attr) {

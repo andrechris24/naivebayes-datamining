@@ -12,28 +12,28 @@
 			<div class="modal-body">
 				<form class="needs-validation" id="addNewAtributForm">@csrf
 					<input type="hidden" name="id" id="attr_id">
-					<div class="form-floating mb-3">
+					<div class="form-floating mb-4">
 						<input type="text" class="form-control" id="attrName" name="name" placeholder="Nama" required />
 						<label for="attrName">Nama</label>
-						<div class="invalid-feedback" id="name-error">
+						<div class="invalid-tooltip" id="name-error">
 							Masukkan Nama Atribut
 						</div>
 					</div>
-					<div class="form-floating mb-3">
+					<div class="form-floating mb-4">
 						<select name="type" class="form-select" id="attrType" required>
 							<option value="">Pilih</option>
 							<option value="numeric">Numerik</option>
 							<option value="categorical">Kategorikal</option>
 						</select>
 						<label for="attrType">Tipe Atribut</label>
-						<div class="invalid-feedback" id="type-error">
+						<div class="invalid-tooltip" id="type-error">
 							Pilih tipe atribut
 						</div>
 					</div>
-					<div class="form-floating mb-3">
+					<div class="form-floating mb-4">
 						<input type="text" class="form-control" id="attrDesc" name="desc" placeholder="Keterangan" />
 						<label for="attrDesc">Keterangan</label>
-						<div class="invalid-feedback" id="desc-error">
+						<div class="invalid-tooltip" id="desc-error">
 							Masukkan Keterangan
 						</div>
 					</div>
@@ -44,10 +44,10 @@
 					<span class="visually-hidden">Menyimpan...</span>
 				</div>
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
-					<i class="bi bi-x-lg"></i> Batal
+					<i class="fas fa-x"></i> Batal
 				</button>
 				<button type="submit" class="btn btn-primary data-submit" form="addNewAtributForm">
-					<i class="bi bi-save"></i> Simpan
+					<i class="fas fa-floppy-disk"></i> Simpan
 				</button>
 			</div>
 		</div>
@@ -65,7 +65,7 @@
 						</div>
 					</div>
 					<span class="badge bg-primary rounded p-2">
-						<i class="bi bi-list-ul"></i>
+						<i class="fas fa-list-ul"></i>
 					</span>
 				</div>
 			</div>
@@ -83,7 +83,7 @@
 						</div>
 					</div>
 					<span class="badge bg-danger rounded p-2">
-						<i class="bi bi-exclamation-circle-fill"></i>
+						<i class="fas fa-circle-exclamation"></i>
 					</span>
 				</div>
 			</div>
@@ -94,7 +94,7 @@
 	<div class="card-body">
 		<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAddAtribut"
 			id="spare-button">
-			<i class="bi bi-plus-lg"></i> Tambah Atribut
+			<i class="fas fa-plus"></i> Tambah Atribut
 		</button>
 		<table class="table table-bordered" id="table-atribut" width="100%">
 			<thead>
@@ -151,10 +151,10 @@
 					render: function (data, type, full) {
 						return ('<div class="btn-group btn-group-sm" role="group">' +
 							`<button class="btn btn-primary edit-record" data-id="${data}" data-bs-toggle="modal" data-bs-target="#modalAddAtribut">` +
-							'<i class="bi bi-pencil-square"></i>' +
+							'<i class="fas fa-pen-to-square"></i>' +
 							'</button>' +
 							`<button class="btn btn-danger delete-record" data-id="${data}" data-name="${full['name']}">` +
-							'<i class="bi bi-trash3-fill"></i>' +
+							'<i class="fas fa-trash"></i>' +
 							'</button>' +
 							"</div>");
 					}
@@ -165,7 +165,7 @@
 				layout: {
 					topStart: {
 						buttons: [{
-							text: '<i class="bi bi-plus-lg"></i> Tambah Atribut',
+							text: '<i class="fas fa-plus"></i> Tambah Atribut',
 							attr: {
 								"data-bs-toggle": "modal",
 								"data-bs-target": "#modalAddAtribut"
@@ -181,11 +181,7 @@
 					$('#total-unused').text(data.unused);
 				}).fail(function (xhr, st) {
 					console.warn(xhr.responseJSON.message ?? st);
-					swal.fire({
-						icon: 'error',
-						titleText: 'Gagal memuat jumlah',
-						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`
-					});
+					notif.error(`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`);
 				});
 			}).on('preInit.dt', removeBtn());
 		} catch (dterr) {

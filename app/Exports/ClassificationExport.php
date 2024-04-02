@@ -11,37 +11,41 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 class ClassificationExport implements FromQuery, WithHeadings, WithMapping
 {
 	use Exportable;
+	private string $tipe;
+	private int $index = 0;
 	public function __construct(string $type)
 	{
-		$this->type = $type;
-		$this->idx = 0;
+		$tipe = $type;
 	}
 	public function headings(): array
 	{
 		return array(
 			'#',
-			'Nama', 
+			'Nama',
 			'Layak',
 			'Tidak Layak',
 			'Kelas Prediksi',
-			'Kelas Asli');
+			'Kelas Asli'
+		);
 	}
 	/**
 	 * @return \Illuminate\Support\Collection
 	 */
 	public function query()
 	{
-		if($this->type==='train'||$this->type==='test') 
-			return Classification::query()->where('type',$this->type);
+		global $tipe;
+		if ($tipe === 'train' || $tipe === 'test')
+			return Classification::query()->where('type', $tipe);
 		return Classification::query();
 	}
 	public function map($class): array
 	{
+		global $index;
 		return array(
-			++$this->idx, 
-			$class->name, 
-			$class->layak,
-			$class->tidak_layak,
+			++$index,
+			$class->name,
+			$class->layak ?? 0.00,
+			$class->tidak_layak ?? 0.00,
 			$class->predicted,
 			$class->real
 		);

@@ -18,7 +18,7 @@ class ResultController extends Controller
 		$performa['test'] = $this->performa($data['test']);
 		return view('main.performa', compact('data', 'performa'));
 	}
-	private static function cm($type)
+	private static function cm(string $type)
 	{
 		$ll = Classification::where('type', $type)->where('predicted', 'Layak')
 			->where('real', 'Layak')->count(); //True Positive
@@ -37,7 +37,7 @@ class ResultController extends Controller
 			'total' => $total
 		];
 	}
-	private static function performa($data)
+	private static function performa(array $data)
 	{
 		if ($data['total'] === 0) $accu = $prec = $rec = $f1 = 0;
 		else {

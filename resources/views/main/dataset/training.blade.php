@@ -6,19 +6,21 @@
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="modalAddTrainingLabel" class="modal-title">Tambah Data Training</h5>
+				<h5 id="modalAddTrainingLabel" class="modal-title">
+					Tambah Data Training
+				</h5>
 				<button type="button" class="btn-close text-reset" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
 				<form class="needs-validation" id="addNewTrainingForm">@csrf
 					<input type="hidden" name="id" id="train_id">
-					<div class="form-floating mb-3">
+					<div class="form-floating mb-4">
 						<input type="text" class="form-control" id="trainName" name="nama" placeholder="Nama" required />
 						<label for="trainName">Nama</label>
-						<div class="invalid-feedback" id="name-error">Masukkan Nama</div>
+						<div class="invalid-tooltip" id="name-error">Masukkan Nama</div>
 					</div>
 					@foreach ($atribut as $attr)
-					<div class="form-floating mb-3" data-bs-toggle="tooltip" title="{{$attr->desc}}">
+					<div class="form-floating mb-4" data-bs-toggle="tooltip" title="{{$attr->desc}}">
 						@if ($attr->type==='numeric')
 						<input type="number" class="form-control" min="0" name="q[{{$attr->slug}}]" placeholder="123"
 							id="train-{{$attr->slug}}" required>
@@ -31,19 +33,19 @@
 						</select>
 						@endif
 						<label for="train-{{$attr->slug}}">{{$attr->name}}</label>
-						<div class="invalid-feedback" id="{{$attr->slug}}-error">
+						<div class="invalid-tooltip" id="{{$attr->slug}}-error">
 							{{($attr->type==='numeric'?'Isikan ':'Pilih ').$attr->name}}
 						</div>
 					</div>
 					@endforeach
-					<div class="form-floating mb-3">
+					<div class="form-floating mb-4">
 						<select name="status" class="form-select" id="trainResult" required>
 							<option value="">Pilih</option>
 							<option value="Layak">Layak</option>
 							<option value="Tidak Layak">Tidak Layak</option>
 						</select>
 						<label for="trainResult">Hasil</label>
-						<div class="invalid-feedback" id="result-error">Pilih hasil</div>
+						<div class="invalid-tooltip" id="result-error">Pilih hasil</div>
 					</div>
 				</form>
 			</div>
@@ -52,14 +54,14 @@
 					<span class="visually-hidden">Menyimpan...</span>
 				</div>
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
-					<i class="bi bi-x-lg"></i> Batal
+					<i class="fas fa-x"></i> Batal
 				</button>
 				<button type="button" class="btn btn-success" data-bs-toggle="modal"
 					data-bs-target="#modalImportTraining">
-					<i class="bi bi-upload"></i> Upload File
+					<i class="fas fa-upload"></i> Upload File
 				</button>
 				<button type="submit" class="btn btn-primary data-submit" form="addNewTrainingForm">
-					<i class="bi bi-save"></i> Simpan
+					<i class="fas fa-floppy-disk"></i> Simpan
 				</button>
 			</div>
 		</div>
@@ -82,7 +84,7 @@
 						title="Format: xls, xlsx, csv, dan tsv" aria-describedby="importFormats"
 						accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.oasis.opendocument.spreadsheet,text/csv,.tsv"
 						required>
-					<div class="invalid-feedback" id="data-error"></div>
+					<div class="invalid-tooltip" id="data-error"></div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -90,13 +92,13 @@
 					<span class="visually-hidden">Mengupload..</span>
 				</div>
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
-					<i class="bi bi-x-lg"></i> Batal
+					<i class="fas fa-x"></i> Batal
 				</button>
 				<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddTraining">
-					<i class="bi bi-pencil"></i> Input Manual
+					<i class="fas fa-pen"></i> Input Manual
 				</button>
 				<button type="submit" class="btn btn-primary data-submit" form="importTrainingData">
-					<i class="bi bi-upload"></i> Upload
+					<i class="fas fa-upload"></i> Upload
 				</button>
 			</div>
 		</div>
@@ -114,7 +116,7 @@
 						</div>
 					</div>
 					<span class="badge bg-primary rounded p-2">
-						<i class="bi bi-list-ul"></i>
+						<i class="fas fa-list-ul"></i>
 					</span>
 				</div>
 			</div>
@@ -131,7 +133,7 @@
 						</div>
 					</div>
 					<span class="badge bg-warning rounded p-2">
-						<i class="bi bi-copy"></i>
+						<i class="fas fa-copy"></i>
 					</span>
 				</div>
 			</div>
@@ -145,26 +147,26 @@
 			<div class="btn-group" role="group">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
 					aria-expanded="false">
-					<i class="bi bi-plus-lg"></i> Tambah Data
+					<i class="fas fa-plus"></i> Tambah Data
 				</button>
 				<ul class="dropdown-menu">
 					<li>
 						<a class="dropdown-item" href="#modalAddTraining" data-bs-toggle="modal">
-							<i class="bi bi-pencil"></i> Input Manual
+							<i class="fas fa-pen"></i> Input Manual
 						</a>
 					</li>
 					<li>
 						<a class="dropdown-item" href="#modalImportTraining" data-bs-toggle="modal">
-							<i class="bi bi-upload"></i> Upload File
+							<i class="fas fa-upload"></i> Upload File
 						</a>
 					</li>
 				</ul>
 			</div>
 			<button type="button" class="btn btn-danger delete-all">
-				<i class="bi bi-trash3-fill"></i> Hapus Data
+				<i class="fas fa-trash"></i> Hapus Data
 			</button>
 			<a href="{{route('training.export')}}" class="btn btn-success">
-				<i class="bi bi-download"></i> Ekspor Data
+				<i class="fas fa-download"></i> Ekspor Data
 			</a>
 		</div>
 		<table class="table table-bordered" id="table-training" width="100%">
@@ -231,10 +233,10 @@
 					render: function (data, type, full) {
 						return ('<div class="btn-group btn-group-sm" role="group">' +
 							`<button class="btn btn-primary edit-record" data-id="${data}" data-bs-toggle="modal" data-bs-target="#modalAddTraining">` +
-							'<i class="bi bi-pencil-square"></i>' +
+							'<i class="fas fa-pen-to-square"></i>' +
 							'</button>' +
 							`<button class="btn btn-danger delete-record" data-id="${data}" data-name="${full['nama']}">` +
-							'<i class="bi bi-trash3-fill"></i>' +
+							'<i class="fas fa-trash"></i>' +
 							'</button>' +
 							"</div>");
 					}
@@ -245,26 +247,26 @@
 				layout: {
 					topStart: {
 						buttons: [{
-							text: '<i class="bi bi-plus-lg"></i> Tambah Data',
+							text: '<i class="fas fa-plus"></i> Tambah Data',
 							extend: "collection",
 							buttons: [{
-								text: '<i class="bi bi-pencil"></i> Input Manual',
+								text: '<i class="fas fa-pen"></i> Input Manual',
 								attr: {
 									"data-bs-toggle": "modal",
 									"data-bs-target": "#modalAddTraining"
 								}
 							}, {
-								text: '<i class="bi bi-upload"></i> Upload File',
+								text: '<i class="fas fa-upload"></i> Upload File',
 								attr: {
 									"data-bs-toggle": "modal",
 									"data-bs-target": "#modalImportTraining"
 								}
 							}]
 						}, {
-							text: '<i class="bi bi-trash3-fill"></i> Hapus Data',
+							text: '<i class="fas fa-trash"></i> Hapus Data',
 							className: "delete-all"
 						}, {
-							text: '<i class="bi bi-download"></i> Ekspor Data',
+							text: '<i class="fas fa-download"></i> Ekspor Data',
 							className: 'download-data',
 							action: function () {
 								location.href = "{{route('training.export')}}";
@@ -284,11 +286,7 @@
 					$('#total-duplicate').text(data.duplicate);
 				}).fail(function (xhr, st) {
 					console.warn(xhr.responseJSON.message ?? st);
-					swal.fire({
-						icon: 'error',
-						titleText: 'Gagal memuat jumlah',
-						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`
-					});
+					notif.error(`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`);
 				});
 			}).on('preInit.dt', removeBtn());
 		} catch (dterr) {

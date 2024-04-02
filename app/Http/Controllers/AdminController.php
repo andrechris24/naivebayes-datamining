@@ -103,8 +103,7 @@ class AdminController extends Controller
 	}
 	public function showReset()
 	{
-		if (Auth::viaRemember() || Auth::check())
-			return to_route('admin.home');
+		if (Auth::viaRemember() || Auth::check()) return to_route('home');
 		try {
 			$enctoken = DB::table('password_reset_tokens')
 				->where('email', $_GET['email'])->first();

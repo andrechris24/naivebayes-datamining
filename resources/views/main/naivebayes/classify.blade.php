@@ -5,32 +5,32 @@
 	<div class="card-body">
 		<div class="btn-group mb-3" role="button" id="spare-button">
 			<button type="button" class="btn btn-primary calc-class">
-				<i class="bi bi-calculator"></i> Hitung
+				<i class="fas fa-calculator"></i> Hitung
 			</button>
 			<button type="button" class="btn btn-danger reset-class">
-				<i class="bi bi-arrow-clockwise"></i> Reset
+				<i class="fa-solid fa-arrow-rotate-right"></i> Reset
 			</button>
 			<button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"
 				aria-expanded="false">
-				<i class="bi bi-download"></i> Ekspor
+				<i class="fas fa-download"></i> Ekspor
 			</button>
-				<ul class="dropdown-menu">
-					<li>
-						<a class="dropdown-item" href="{{route('class.export')}}?type=test">
-							Data Testing
-						</a>
-					</li>
-					<li>
-						<a class="dropdown-item" href="{{route('class.export')}}?type=test">
-							Data Training
-						</a>
-					</li>
-					<li>
-						<a class="dropdown-item" href="{{route('class.export')}}?type=all">
-							Semua Data
-						</a>
-					</li>
-				</ul>
+			<ul class="dropdown-menu">
+				<li>
+					<a class="dropdown-item" href="{{route('class.export')}}?type=test">
+						Data Testing
+					</a>
+				</li>
+				<li>
+					<a class="dropdown-item" href="{{route('class.export')}}?type=test">
+						Data Training
+					</a>
+				</li>
+				<li>
+					<a class="dropdown-item" href="{{route('class.export')}}?type=all">
+						Semua Data
+					</a>
+				</li>
+			</ul>
 		</div>
 		<table class="table table-bordered" id="table-classify" width="100%">
 			<thead>
@@ -83,13 +83,13 @@
 				layout: {
 					topStart: {
 						buttons: [{
-							text: '<i class="bi bi-calculator"></i> Hitung',
+							text: '<i class="fas fa-calculator"></i> Hitung',
 							className: 'calc-class'
 						}, {
-							text: '<i class="bi bi-arrow-clockwise"></i> Reset',
+							text: '<i class="fas fa-arrow-rotate-right"></i> Reset',
 							className: 'reset-class'
 						},{
-							text: '<i class="bi bi-download"></i> Ekspor',
+							text: '<i class="fas fa-download"></i> Ekspor',
 							className: 'download-data',
 							extend: 'collection',
 							buttons: [{
@@ -186,6 +186,11 @@
 			confirmButtonText: `<i class="bi bi-calculator"></i> Hitung`,
 			cancelButtonText: `<i class="bi bi-x-lg"></i> Batal`,
 			showLoaderOnConfirm: true,
+			customClass: {
+					confirmButton: 'btn btn-primary me-2',
+					cancelButton: 'btn btn-tertiary'
+			},
+			buttonsStyling: false,
 			allowOutsideClick: () => !Swal.isLoading(),
 			inputValidator: (value) => {
 				if (!value) return "Anda harus memilih tipe data";

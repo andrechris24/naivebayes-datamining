@@ -2,7 +2,7 @@
 @section('title','Particle Swarm Optimization')
 @section('content')
 <div class="modal fade" tabindex="-1" id="modalPSO" aria-labelledby="modalPSOLabel" role="dialog"
-	aria-hidden="true">
+	aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -11,7 +11,7 @@
 			</div>
 			<div class="modal-body">
 				<form class="needs-validation" id="PSOForm">@csrf
-					<div class="form-floating mb-3">
+					<div class="form-floating mb-4">
 						<select name="atribut" id="data-select" class="form-control" required>
 							<option value="" selected>Pilih</option>
 							@foreach($atribut as $attr)
@@ -19,15 +19,15 @@
 							@endforeach
 						</select>
 						<label for="data-select">Pilih Atribut</label>
-						<div class="invalid-feedback" id="data-error">
+						<div class="invalid-tooltip" id="data-error">
 							Pilih Atribut yang akan dihitung
 						</div>
 					</div>
-					<div class="form-floating mb-3">
+					<div class="form-floating mb-4">
 						<input type="number" name="loop" class="form-control" min="1" max="20" id="iterasi"
 							placeholder="Maksimal 20" required>
 						<label for="iterasi">Jumlah iterasi (Perulangan)</label>
-						<div class="invalid-feedback" id="loop-error">
+						<div class="invalid-tooltip" id="loop-error">
 							Masukkan jumlah (1-20)
 						</div>
 					</div>
@@ -38,10 +38,10 @@
 					<span class="visually-hidden">Menyimpan...</span>
 				</div>
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
-					<i class="bi bi-x-lg"></i> Batal
+					<i class="fas fa-x"></i> Batal
 				</button>
 				<button type="submit" class="btn btn-primary data-submit" form="PSOForm">
-					<i class="bi bi-save"></i> Simpan
+					<i class="fas fa-floppy-disk"></i> Simpan
 				</button>
 			</div>
 		</div>
@@ -49,10 +49,10 @@
 </div>
 <div class="btn-group" role="button" id="spare-button">
 	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPSO">
-		<i class="mdi mdi-calculator"></i> Input
+		<i class="fas fa-calculator"></i> Input
 	</button>
 	<button type="button" class="btn btn-danger clear-data">
-		<i class="mdi mdi-reload"></i> Reset
+		<i class="fas fa-arrow-rotate-right"></i> Reset
 	</button>
 </div>
 <div class="card my-3">
@@ -103,13 +103,13 @@
 				layout: {
 					topStart: {
 						buttons: [{
-							text: '<i class="mdi mdi-calculator"></i> Input',
+							text: '<i class="fas fa-calculator"></i> Input',
 							attr: {
 								"data-bs-toggle": "modal",
 								"data-bs-target": "#modalPSO"
 							}
 						}, {
-							text: '<i class="mdi mdi-reload"></i> Reset',
+							text: '<i class="fas fa-arrow-rotate-right"></i> Reset',
 							className: 'clear-data'
 						}]
 					}

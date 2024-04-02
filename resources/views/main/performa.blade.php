@@ -3,7 +3,8 @@
 @section('content')
 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 	<li class="nav-item" role="presentation">
-		<button @class(['nav-link','active'=>$data['test']['total']>0]) id="pills-testing-tab" data-bs-toggle="pill"
+		<button @class(['nav-link','active'=>$data['test']['total']>0]) id="pills-testing-tab"
+			data-bs-toggle="pill"
 			data-bs-target="#pills-testing" type="button" role="tab" aria-controls="pills-testing"
 			@if($data['test']['total']>0) aria-selected="true" @else aria-selected="false" disabled @endif >
 			Data Testing
@@ -24,11 +25,11 @@
 		<div class="card mb-3">
 			<div class="card-header"><b>Performa Klasifikasi Data Testing</b></div>
 			<div class="card-body">
-				<div class="row">
-					<div class="col-lg-6">
+				<div class="row mb-5">
+					<div class="col-md-8">
 						<table class="table table-bordered caption-top">
 							<caption>Hasil Prediksi</caption>
-							<thead>
+							<thead class="thead-light">
 								<tr>
 									<th>#</th>
 									<th colspan="3">Aktual</th>
@@ -62,7 +63,7 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="col-lg-6">
+					<div class="col-md-4">
 						<table class="table table-bordered caption-top">
 							<caption>Performa</caption>
 							<tbody>
@@ -87,10 +88,10 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-md-6">
 						<div id="predict-actual-test"></div>
 					</div>
-					<div class="col-lg-6">
+					<div class="col-md-6">
 						<div id="perform-radial-test"></div>
 					</div>
 				</div>
@@ -102,11 +103,11 @@
 		<div class="card mb-3">
 			<div class="card-header"><b>Performa Klasifikasi Data Training</b></div>
 			<div class="card-body">
-				<div class="row">
-					<div class="col-lg-6">
+				<div class="row mb-5">
+					<div class="col-md-8">
 						<table class="table table-bordered caption-top">
 							<caption>Hasil Prediksi</caption>
-							<thead>
+							<thead class="thead-light">
 								<tr>
 									<th>#</th>
 									<th colspan="3">Aktual</th>
@@ -140,7 +141,7 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="col-lg-6">
+					<div class="col-md-4">
 						<table class="table table-bordered caption-top">
 							<caption>Performa</caption>
 							<tbody>
@@ -165,10 +166,10 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-lg-6">
+					<div class="col-md-6">
 						<div id="predict-actual-train"></div>
 					</div>
-					<div class="col-lg-6">
+					<div class="col-md-6">
 						<div id="perform-radial-train"></div>
 					</div>
 				</div>
@@ -188,8 +189,7 @@
 			data: [{{$data['test']['ltl']}}, {{$data['test']['tltl']}}]
 		}],
 		chart: {
-			type: "bar",
-			foreColor: '#777'
+			type: "bar"
 		},
 		dataLabels: {
 			enabled: false
@@ -213,8 +213,7 @@
 			data: [{{$data['train']['ltl']}}, {{$data['train']['tltl']}}]
 		}],
 		chart: {
-			type: "bar",
-			foreColor: '#777'
+			type: "bar"
 		},
 		dataLabels: {
 			enabled: false
@@ -231,15 +230,12 @@
 	};
 	const testRadials = {
 		series: [
-			{{round($performa['test']['accuracy'], 2)}}, 
-			{{round($performa['test']['precision'], 2)}}, 
+			{{round($performa['test']['accuracy'], 2)}},
+			{{round($performa['test']['precision'], 2)}},
 			{{round($performa['test']['recall'], 2)}},
 			{{round($performa['test']['f1'],2)}}
 		],
-		chart: {
-			type: 'radialBar',
-			foreColor: '#777'
-		},
+		chart: {type: 'radialBar'},
 		title: {
 			text: "Hasil Akhir"
 		},
@@ -260,14 +256,13 @@
 	};
 	const trainRadials = {
 		series: [
-			{{round($performa['train']['accuracy'], 2)}}, 
-			{{round($performa['train']['precision'], 2)}}, 
+			{{round($performa['train']['accuracy'], 2)}},
+			{{round($performa['train']['precision'], 2)}},
 			{{round($performa['train']['recall'], 2)}},
 			{{round($performa['train']['f1'],2)}}
 		],
 		chart: {
-			type: 'radialBar',
-			foreColor: '#777'
+			type: 'radialBar'
 		},
 		title: {
 			text: "Hasil Akhir"

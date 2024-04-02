@@ -68,11 +68,11 @@ class Controller extends BaseController
 		 */
 		$prior = $this->probabKelas();
 
-		/**========================================================================
+		/**=====================================================================
 		 * LIKELIHOOD & EVIDENCE
-		 * ========================================================================
+		 * =====================================================================
 		 * Likelihood: Jumlah probabilitas dari label Layak dan Tidak Layak
-		 * Evidence: Jumlah probabilitas dari semua label
+		 * Evidence: Jumlah probabilitas total
 		 * 
 		 * Likelihood dan Evidence diinisialisasi dengan angka 1 untuk perkalian
 		 */
@@ -125,7 +125,7 @@ class Controller extends BaseController
 			'predict' => $predict
 		];
 	}
-	private function normalDistribution($x, float $sd, float $mean)
+	private function normalDistribution(int $x, float $sd, float $mean)
 	{
 		return (1 / ($sd * sqrt(2 * pi()))) * exp(-0.5 * pow(($x - $mean) / $sd, 2));
 	}

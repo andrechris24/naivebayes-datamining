@@ -18,7 +18,8 @@ class ClassificationController extends Controller
 	public function export(Request $req)
 	{
 		return Excel::download(
-			new ClassificationExport($req->type), "klasifikasi_{$req->type}.xlsx"
+			new ClassificationExport($req->type),
+			"klasifikasi_{$req->type}.xlsx"
 		);
 	}
 	/**

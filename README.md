@@ -5,11 +5,11 @@
 -   [Laravel 10](https://laravel.com/)
 -   [PHP 8.2.9](https://www.php.net/)
 -   [Bootstrap 5.3](https://getbootstrap.com/)
--   [Bootstrap Icons](https://icons.getbootstrap.com/)
+-   [FontAwesome](https://fontawesome.com)
 -   [ApexCharts](https://apexcharts.com/)
 -   [DataTables](https://datatables.net/)
 -   [sweetalert2](https://sweetalert2.github.io)
--   [toastify-js](https://apvarun.github.io/toastify-js/)
+-   [notyf](https://carlosroso.com/notyf/)
 
 ## Cara Menggunakan
 

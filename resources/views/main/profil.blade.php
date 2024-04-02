@@ -1,92 +1,93 @@
 @extends('layout')
 @section('title', 'Edit Profil')
 @section('content')
-<p>Untuk melakukan perubahan, masukkan password Anda. Kosongkan password baru jika tidak ganti password.</p>
-<x-caps-lock />
-<form class="needs-validation" enctype="multipart/form-data" id="form-edit-account">
-	@csrf
-	<input type="hidden" name="id" value="{{ auth()->id() }}">
-	<div class="row mb-3">
-		<div class="col-md-3"><label for="nama-user">Nama</label></div>
-		<div class="col-md-9">
-			<div class="input-group has-validation">
-				<span class="input-group-text"><i class="bi bi-person"></i></span>
-				<input type="text" name="name" id="nama-user" value="{{ old('name') ?? auth()->user()->name }}"
-					class="form-control" required>
-				<div class="invalid-feedback" id="name-error">Masukkan Nama</div>
-			</div>
-		</div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-md-3"><label for="email-user">Email</label></div>
-		<div class="col-md-9">
-			<div class="input-group has-validation">
-				<span class="input-group-text"><i class="bi bi-envelope"></i></span>
-				<input type="email" name="email" value="{{ old('email') ?? auth()->user()->email }}"
-					class="form-control" id="email-user" required>
-				<div class="invalid-feedback" id="email-error">
-					Masukkan Email (email@example.com)
+<p>Untuk melakukan perubahan, masukkan password Anda.
+	Kosongkan password baru jika tidak ganti password.</p>
+<div class="card card-body border-0 shadow mb-4">
+	<x-caps-lock />
+	<form action="#" class="needs-validation" enctype="multipart/form-data" id="form-edit-account">
+		@csrf
+		<input type="hidden" name="id" value="{{ auth()->id() }}">
+		<div class="form-group position-relative mb-4">
+			<div class="row">
+				<div class="col-lg-3"><label for="name">Nama</label></div>
+				<div class="col-lg-9">
+					<input class="form-control" id="name" type="text" name="name" placeholder="Masukkan Nama Anda"
+						value="{{ auth()->user()->name }}" required>
+					<div class="invalid-tooltip" id="name-error">Masukkan Nama</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-md-3"><label for="password-current">Password Anda</label></div>
-		<div class="col-md-9">
-			<div class="input-group has-validation">
-				<span class="input-group-text"><i class="bi bi-lock"></i></span>
-				<input type="password" name="current_password" placeholder="Password Akun Anda" class="form-control"
-					minlength="8" maxlength="20" id="password-current" required>
-				<div class="invalid-feedback" id="current-password-error">
-					Masukkan Password Anda
+		<div class="form-group position-relative mb-4">
+			<div class="row">
+				<div class="col-lg-3"><label for="email">Email</label></div>
+				<div class="col-lg-9">
+					<input class="form-control" id="email" type="email" name="email" placeholder="email@example.com"
+						value="{{ auth()->user()->email }}" required>
+					<div class="invalid-tooltip" id="email-error">
+						Masukkan Email (email@example.com)
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-md-3"><label for="newpassword">Password baru</label></div>
-		<div class="col-md-9">
-			<div class="input-group has-validation">
-				<span class="input-group-text"><i class="bi bi-lock"></i></span>
-				<input type="password" name="password" id="newpassword" oninput="checkpassword()" class="form-control"
-					minlength="8" maxlength="20" placeholder="Kosongkan jika tidak ganti password">
-				<div class="invalid-feedback" id="newpassword-error">
-					Password baru harus di antara 8-20 karakter
+		<div class="form-group position-relative mb-4">
+			<div class="row">
+				<div class="col-lg-3">
+					<label for="password-current">Password Anda</label>
+				</div>
+				<div class="col-lg-9">
+					<input class="form-control" id="password-current" type="password" minlength="8" maxlength="20"
+						placeholder="Password Anda" name="current_password" required>
+					<div class="invalid-tooltip" id="current-password-error">
+						Masukkan Password Anda
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-md-3">
-			<label for="conf-password">Konfirmasi Password baru</label>
-		</div>
-		<div class="col-md-9">
-			<div class="input-group has-validation">
-				<span class="input-group-text"><i class="bi bi-lock"></i></span>
-				<input type="password" name="password_confirmation" id="conf-password" minlength="8"
-					class="form-control" maxlength="20" placeholder="Password konfirmasi" oninput="checkpassword()">
-				<div class="invalid-feedback" id="confirm-password-error">
-					Password Konfirmasi salah
+		<div class="form-group position-relative mb-4">
+			<div class="row">
+				<div class="col-lg-3">
+					<label for="newpassword">Password Baru</label>
+				</div>
+				<div class="col-lg-9">
+					<input class="form-control" id="newpassword" type="password" oninput="checkpassword()" minlength="8"
+						maxlength="20" placeholder="Kosongkan jika tidak ganti password" name="password">
+					<div class="invalid-tooltip" id="newpassword-error">
+						Password baru harus di antara 8-20 karakter
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<hr>
-	<div class="btn-group">
-		<a href="{{ route('home') }}" class="btn btn-warning">
-			<i class="bi bi-arrow-left-circle"></i> Kembali
-		</a>
-		<button type="button" class="btn btn-danger" id="DelAccountBtn">
-			<i class="bi bi-trash3-fill"></i> Hapus Akun
-		</button>
-		<button type="submit" class="btn btn-primary data-submit">
-			<i class="bi bi-save"></i> Simpan perubahan
-		</button>
-	</div>
-	<div class="spinner-grow text-primary d-none" role="status">
-		<span class="visually-hidden">Menyimpan...</span>
-	</div>
-</form>
+		<div class="form-group position-relative mb-4">
+			<div class="row">
+				<div class="col-lg-3">
+					<label for="conf-password">Konfirmasi Password Baru</label>
+				</div>
+				<div class="col-lg-9">
+					<input class="form-control" id="conf-password" type="password" minlength="8" maxlength="20"
+						placeholder="Konfirmasi password baru" name="password_confirmation" oninput="checkpassword()">
+					<div class="invalid-tooltip" id="confirm-password-error">
+						Password Konfirmasi salah
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="btn-group mt-3">
+			<a href="{{ route('home') }}" class="btn btn-warning">
+				<i class="fas fa-arrow-left"></i> Kembali
+			</a>
+			<button type="button" class="btn btn-danger" id="DelAccountBtn">
+				<i class="fas fa-trash"></i> Hapus Akun
+			</button>
+			<button type="submit" class="btn btn-primary animate-up-2">
+				<i class="fas fa-floppy-disk"></i> Simpan Perubahan
+			</button>
+		</div>
+		<div class="spinner-grow text-primary d-none" role="status">
+			<span class="visually-hidden">Menyimpan...</span>
+		</div>
+	</form>
+</div>
 @endsection
 @section('js')
 <script type="text/javascript" src="{{ asset('assets/js/capslock.js') }}"></script>
@@ -101,11 +102,11 @@
 			type: "PATCH",
 			beforeSend: function () {
 				$("#form-edit-account :input").removeClass("is-invalid");
-				$(".form-edit-account :button").prop("disabled", true);
+				$("#form-edit-account :button").prop("disabled", true);
 				formloading("#form-edit-account :input",true);
 			},
 			complete: function () {
-				$(".form-edit-account").prop("disabled", false);
+				$("#form-edit-account :button").prop("disabled", false);
 				formloading("#form-edit-account :input",false);
 			},
 			success: function () {
@@ -182,7 +183,7 @@
 						url: "{{ route('profil.delete') }}",
 						type: "DELETE",
 						data: {
-							del_password: password
+							current_password: password
 						},
 						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
 						success: function () {
@@ -210,7 +211,7 @@
 					titleText: "Akun sudah dihapus",
 					icon: "success"
 				});
-				location.href = "{{ route('login') }}";
+				location.replace = "{{ route('login') }}";
 			}
 		});
 	});

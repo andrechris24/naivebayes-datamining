@@ -12,20 +12,20 @@
 			<div class="modal-body">
 				<form class="needs-validation" id="addNewNilaiAtributForm">@csrf
 					<input type="hidden" name="id" id="attr_id">
-					<div class="form-floating mb-3">
+					<div class="form-floating mb-4">
 						<input type="text" class="form-control" id="attrName" name="name" placeholder="Nama" required />
 						<label for="attrName">Nama</label>
-						<div class="invalid-feedback" id="name-error">Masukkan Nama</div>
+						<div class="invalid-tooltip" id="name-error">Masukkan Nama</div>
 					</div>
-					<div class="form-floating mb-3">
-						<select name="atribut_id" class="form-select" id="attrType">
+					<div class="form-floating mb-4">
+						<select name="atribut_id" class="form-select" id="attrType" required>
 							<option value="">Pilih</option>
 							@foreach($atribut as $attr)
 							<option value="{{$attr->id}}">{{$attr->name}}</option>
 							@endforeach
 						</select>
 						<label for="attrType">Atribut</label>
-						<div class="invalid-feedback" id="type-error">Pilih Atribut</div>
+						<div class="invalid-tooltip" id="type-error">Pilih Atribut</div>
 					</div>
 				</form>
 			</div>
@@ -34,10 +34,10 @@
 					<span class="visually-hidden">Menyimpan...</span>
 				</div>
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
-					<i class="bi bi-x-lg"></i> Batal
+					<i class="fas fa-x"></i> Batal
 				</button>
 				<button type="submit" class="btn btn-primary data-submit" form="addNewNilaiAtributForm">
-					<i class="bi bi-save"></i> Simpan
+					<i class="fas fa-floppy-disk"></i> Simpan
 				</button>
 			</div>
 		</div>
@@ -55,7 +55,7 @@
 						</div>
 					</div>
 					<span class="badge bg-primary rounded p-2">
-						<i class="bi bi-list-ul"></i>
+						<i class="fas fa-list-ul"></i>
 					</span>
 				</div>
 			</div>
@@ -73,7 +73,7 @@
 						</div>
 					</div>
 					<span class="badge bg-success rounded p-2">
-						<i class="bi bi-list-stars"></i>
+						<i class="fas fa-list"></i>
 					</span>
 				</div>
 			</div>
@@ -90,7 +90,7 @@
 						</div>
 					</div>
 					<span class="badge bg-warning rounded p-2">
-						<i class="bi bi-copy"></i>
+						<i class="fas fa-copy"></i>
 					</span>
 				</div>
 			</div>
@@ -101,7 +101,7 @@
 	<div class="card-body">
 		<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
 			data-bs-target="#modalAddNilaiAtribut" id="spare-button">
-			<i class="bi bi-plus-lg"></i> Tambah Nilai Atribut
+			<i class="fas fa-plus"></i> Tambah Nilai Atribut
 		</button>
 		<table class="table table-bordered" id="table-atribut" width="100%">
 			<thead>
@@ -150,10 +150,10 @@
 					render: function (data, type, full) {
 						return ('<div class="btn-group btn-group-sm" role="group">' +
 							`<button class="btn btn-primary edit-record" data-id="${data}" data-bs-toggle="modal" data-bs-target="#modalAddNilaiAtribut">` +
-							'<i class="bi bi-pencil-square"></i>' +
+							'<i class="fas fa-pen-to-square"></i>' +
 							'</button>' +
 							`<button class="btn btn-danger delete-record" data-id="${data}" data-name="${full['name']}">` +
-							'<i class="bi bi-trash3-fill"></i>' +
+							'<i class="fas fa-trash"></i>' +
 							'</button>' +
 							"</div>");
 					}
@@ -164,7 +164,7 @@
 				layout: {
 					topStart: {
 						buttons: [{
-							text: '<i class="bi bi-plus-lg"></i> Tambah Nilai Atribut',
+							text: '<i class="fas fa-plus"></i> Tambah Nilai Atribut',
 							attr: {
 								"data-bs-toggle": "modal",
 								"data-bs-target": "#modalAddNilaiAtribut"
@@ -181,11 +181,7 @@
 					$('#total-duplicate').text(data.duplicate);
 				}).fail(function (xhr, st) {
 					console.warn(xhr.responseJSON.message ?? st);
-					swal.fire({
-						icon: 'error',
-						titleText: 'Gagal memuat jumlah',
-						text: `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`
-					});
+					notif.error(`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`);
 				});
 			}).on('preInit.dt', removeBtn());
 		} catch (dterr) {

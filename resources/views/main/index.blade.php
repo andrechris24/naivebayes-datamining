@@ -5,7 +5,7 @@
 	{{ auth()->user()->name }}. Aplikasi ini menggunakan Naive Bayes sebagai
 	algoritma klasifikasi.</p>
 <div class="row">
-	<div class="col-md-4">
+	<div class="col-md-4 mb-3 mb-md-0">
 		<div class="card">
 			<div class="card-body">
 				<div class="d-flex align-items-start justify-content-between">
@@ -16,13 +16,13 @@
 						</div>
 					</div>
 					<span class="badge bg-primary rounded p-2">
-						<i class="bi bi-file-earmark-text"></i>
+						<i class="fas fa-file-lines"></i>
 					</span>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-4 mb-3 mb-md-0">
 		<div class="card">
 			<div class="card-body">
 				<div class="d-flex align-items-start justify-content-between">
@@ -33,13 +33,13 @@
 						</div>
 					</div>
 					<span class="badge bg-success rounded p-2">
-						<i class="bi bi-file-earmark-text"></i>
+						<i class="fas fa-file-lines"></i>
 					</span>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-4 mb-3 mb-md-0">
 		<div class="card">
 			<div class="card-body">
 				<div class="d-flex align-items-start justify-content-between">
@@ -50,7 +50,7 @@
 						</div>
 					</div>
 					<span class="badge bg-secondary rounded p-2">
-						<i class="bi bi-file-earmark-text"></i>
+						<i class="fas fa-file-lines"></i>
 					</span>
 				</div>
 			</div>
