@@ -21,7 +21,7 @@ class DatasetTemplate implements FromGenerator
 			if ($attr->type === 'categorical') {
 				$val[] = NilaiAtribut::select('name')->where('atribut_id', $attr->id)
 					->get();
-			} else $val[] = rand(0, 5);
+			} else $val[] = rand(1, 5);
 		}
 		$col[] = 'Keterangan';
 		$val[] = 'Layak/Tidak Layak';

@@ -7,7 +7,7 @@ const swal = Swal.mixin({
 	didOpen: (toast) => {
 		toast.onmouseenter = Swal.stopTimer;
 		toast.onmouseleave = Swal.resumeTimer;
-	},
+	}
 });
 const confirm = Swal.mixin({
 	icon: "question",
@@ -18,7 +18,7 @@ const confirm = Swal.mixin({
 	allowOutsideClick: () => !Swal.isLoading(),
 	customClass: {
 		confirmButton: "btn btn-primary me-2",
-		cancelButton: "btn btn-tertiary",
+		cancelButton: "btn btn-tertiary"
 	},
-	buttonsStyling: false,
+	buttonsStyling: false
 });

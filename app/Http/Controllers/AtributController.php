@@ -62,12 +62,12 @@ class AtributController extends Controller
 					'type' => $req['type'],
 					'desc' => $req['desc']
 				]);
-				return response()->json(['message' => 'Berhasil diupdate']);
+				return response()->json(['message' => 'Berhasil diedit']);
 			} else {
 				$this->addColumn('training_data', $req);
 				$this->addColumn('testing_data', $req);
 				Atribut::create($req);
-				return response()->json(['message' => 'Berhasil diinput']);
+				return response()->json(['message' => 'Berhasil disimpan']);
 			}
 		} catch (QueryException $e) {
 			Log::error($e);

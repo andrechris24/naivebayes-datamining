@@ -449,11 +449,11 @@
 			type: "POST",
 			beforeSend: function () {
 				$("#addNewTrainingForm :input").removeClass("is-invalid");
-				$('#modalAddTraining').prop('disabled',true);
+				$('#modalAddTraining :button').prop('disabled',true);
 				formloading("#addNewTrainingForm :input",true);
 			},
 			complete: function () {
-				$('#modalAddTraining').prop('disabled',false);
+				$('#modalAddTraining :button').prop('disabled',false);
 				formloading("#addNewTrainingForm :input",false);
 			},
 			success: function (status) {

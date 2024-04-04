@@ -18,6 +18,8 @@ class TrainingDataController extends Controller
 {
 	public function export()
 	{
+		if (TrainingData::count() === 0)
+			return back()->withError('Gagal download: Data Training kosong');
 		return Excel::download(new TrainingExport, 'training.xlsx');
 	}
 	public function import(Request $request)
@@ -82,10 +84,10 @@ class TrainingDataController extends Controller
 			$req['status'] = $request->status;
 			if ($request->id) {
 				TrainingData::updateOrCreate(['id' => $request->id], $req);
-				return response()->json(['message' => 'Berhasil diupdate']);
+				return response()->json(['message' => 'Berhasil diedit']);
 			} else {
 				TrainingData::create($req);
-				return response()->json(['message' => 'Berhasil diinput']);
+				return response()->json(['message' => 'Berhasil disimpan']);
 			}
 		} catch (QueryException $e) {
 			return response()->json(['message' => $e->errorInfo[2]], 500);

@@ -15,7 +15,7 @@
 <div class="card my-3">
 	<div class="card-header">Probabilitas Label Kelas</div>
 	<div class="card-body">
-		<div class="table-responsive">
+		{{-- <div class="table-responsive"> --}}
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -43,7 +43,8 @@
 					</tr>
 				</tbody>
 			</table>
-		</div>
+			{{--
+		</div> --}}
 	</div>
 </div>
 <div class="card">
@@ -53,6 +54,7 @@
 		@php
 		$layak = $tidak_layak = $semua = 0.00000;
 		$tot['l'] = $tot['tl'] = 0;
+		$str="";
 		$prob = $data->where('atribut_id', $attr->id)->first();
 		@endphp
 		<div class="table-responsive">
@@ -99,25 +101,27 @@
 					@else
 					<tr>
 						<th>Data</th>
-						<td>
+						<td class="text-wrap">
 							@foreach($training['layak'] as $l)
 							@php
 							if(empty($l[$attr->slug])) continue;
 							$tot['l'] += $l[$attr->slug];
+							$str.=$l[$attr->slug].', ';
 							echo $l[$attr->slug] . (!$loop->last ? ', ' : '');
 							@endphp
 							@endforeach
 						</td>
-						<td>
+						<td class="text-wrap">
 							@foreach($training['tidak_layak'] as $tl)
 							@php
 							if(empty($tl[$attr->slug])) continue;
 							$tot['tl'] += $tl[$attr->slug];
+							$str.=$l[$attr->slug].', ';
 							echo $tl[$attr->slug] . (!$loop->last ? ', ' : '');
 							@endphp
 							@endforeach
 						</td>
-						<td></td>
+						<td class="text-wrap">{{substr($str,0,strlen($str)-2)}}</td>
 					</tr>
 					<tr>
 						<th>Jumlah</th>

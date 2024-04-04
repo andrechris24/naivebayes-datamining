@@ -177,7 +177,7 @@
 				<i class="fas fa-download"></i> Ekspor Data
 			</a>
 		</div>
-		<table class="table table-bordered" id="table-testing" width="100%">
+		<table class="table table-bordered" id="table-testing" style="width: 100%">
 			<thead>
 				<tr>
 					<th>#</th>
@@ -417,7 +417,7 @@
 				$("#importTestingData :input").removeClass("is-invalid");
 			},
 			complete: function () {
-				$('modalImportTesting :button').prop('disabled',false);
+				$('#modalImportTesting :button').prop('disabled',false);
 				formloading("#importTestingData :input", false);
 			},
 			success: function (status) {

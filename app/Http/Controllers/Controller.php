@@ -18,8 +18,11 @@ class Controller extends BaseController
 	public static function probabKelas()
 	{
 		$total = TrainingData::count();
-		$layak = TrainingData::where('status', 'Layak')->count() / $total;
-		$tidak_layak = TrainingData::where('status', 'Tidak Layak')->count() / $total;
+		if ($total === 0) $layak = $tidak_layak = 0;
+		else {
+			$layak = TrainingData::where('status', 'Layak')->count() / $total;
+			$tidak_layak = TrainingData::where('status', 'Tidak Layak')->count() / $total;
+		}
 		return ['l' => $layak, 'tl' => $tidak_layak];
 	}
 	public static function preprocess(string $type): void
@@ -73,7 +76,7 @@ class Controller extends BaseController
 		 * =====================================================================
 		 * Likelihood: Jumlah probabilitas dari label Layak dan Tidak Layak
 		 * Evidence: Jumlah probabilitas total
-		 * 
+		 *
 		 * Likelihood dan Evidence diinisialisasi dengan angka 1 untuk perkalian
 		 */
 		$likelihood['l'] = $likelihood['tl'] = $evidence = 1;
@@ -132,8 +135,8 @@ class Controller extends BaseController
 	/**
 	 * This user-land implementation follows the implementation quite strictly;
 	 * it does not attempt to improve the code or algorithm in any way.
-	 * 
-	 * @param array $a 
+	 *
+	 * @param array $a
 	 * @param bool $sample [optional] Defaults to false
 	 * @return float|bool The standard deviation or false on error.
 	 */

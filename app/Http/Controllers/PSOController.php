@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Atribut;
 use App\Models\PSO;
-use App\Models\TestingData;
 use App\Models\TrainingData;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -70,7 +69,7 @@ class PSOController extends Controller
 					PSO::create($hasil);
 				}
 			}
-			return response()->json(['message' => 'Berhasil diinput']);
+			return response()->json(['message' => 'Berhasil dihitung']);
 		} catch (QueryException $e) {
 			Log::error($e);
 			return response()->json(['message' => $e->errorInfo[2]], 500);
@@ -82,7 +81,7 @@ class PSOController extends Controller
 	 */
 	public function show(PSO $pso)
 	{
-		//
+		return response()->json($pso);
 	}
 
 	/**
@@ -90,7 +89,7 @@ class PSOController extends Controller
 	 */
 	public function edit(PSO $pso)
 	{
-		//
+		return response()->json($pso);
 	}
 
 	/**

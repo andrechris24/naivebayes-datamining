@@ -65,12 +65,12 @@ class NilaiAtributController extends Controller
 					['id' => $request->id],
 					['name' => $request->name, 'atribut_id' => $request->atribut_id]
 				);
-				return response()->json(['message' => 'Berhasil diupdate']);
+				return response()->json(['message' => 'Berhasil diedit']);
 			} else {
 				NilaiAtribut::create([
 					'name' => $request->name, 'atribut_id' => $request->atribut_id
 				]);
-				return response()->json(['message' => 'Berhasil diinput']);
+				return response()->json(['message' => 'Berhasil disimpan']);
 			}
 		} catch (QueryException $th) {
 			Log::error($th);

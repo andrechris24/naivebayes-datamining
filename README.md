@@ -4,7 +4,7 @@
 
 -   [Laravel 10](https://laravel.com/)
 -   [PHP 8.2.9](https://www.php.net/)
--   [Bootstrap 5.3](https://getbootstrap.com/)
+-		[Volt Bootstrap 5 Dashboard](https://github.com/themesberg/volt-bootstrap-5-dashboard)
 -   [FontAwesome](https://fontawesome.com)
 -   [ApexCharts](https://apexcharts.com/)
 -   [DataTables](https://datatables.net/)

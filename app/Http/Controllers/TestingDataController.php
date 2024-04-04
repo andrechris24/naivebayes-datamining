@@ -19,6 +19,8 @@ class TestingDataController extends Controller
 {
 	public function export()
 	{
+		if (TestingData::count() === 0)
+			return back()->withError('Gagal download: Data Testing kosong');
 		return Excel::download(new TestingExport, 'testing.xlsx');
 	}
 	public function import(Request $request)
@@ -84,10 +86,10 @@ class TestingDataController extends Controller
 			} else $req['status'] = $request->status;
 			if ($request->id) {
 				TestingData::updateOrCreate(['id' => $request->id], $req);
-				return response()->json(['message' => 'Berhasil diupdate']);
+				return response()->json(['message' => 'Berhasil diedit']);
 			} else {
 				TestingData::create($req);
-				return response()->json(['message' => 'Berhasil diinput']);
+				return response()->json(['message' => 'Berhasil disimpan']);
 			}
 		} catch (QueryException $e) {
 			Log::error($e);
