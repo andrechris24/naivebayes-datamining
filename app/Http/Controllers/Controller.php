@@ -18,12 +18,12 @@ class Controller extends BaseController
 	public static function probabKelas()
 	{
 		$total = TrainingData::count();
-		if ($total === 0) $layak = $tidak_layak = 0;
+		if ($total === 0) $true = $false = 0;
 		else {
-			$layak = TrainingData::where('status', 'Layak')->count() / $total;
-			$tidak_layak = TrainingData::where('status', 'Tidak Layak')->count() / $total;
+			$true = TrainingData::where('status', true)->count() / $total;
+			$false = TrainingData::where('status', false)->count() / $total;
 		}
-		return ['l' => $layak, 'tl' => $tidak_layak];
+		return ['true' => $true, 'false' => $false];
 	}
 	public static function preprocess(string $type): void
 	{ //Impute missing values
@@ -47,19 +47,6 @@ class Controller extends BaseController
 			Log::error($e);
 		}
 	}
-	public function fungsi_tujuan($nilai)
-	{
-		return pow((100 - $nilai), 2);
-	}
-	public function getGbest($pbest)
-	{
-		$gbest = $pbest[0];
-		for ($i = 1; $i < count($pbest); $i++) {
-			if ($this->fungsi_tujuan($pbest[$i]) < $this->fungsi_tujuan($gbest))
-				$gbest = $pbest[$i];
-		}
-		return $gbest;
-	}
 	public function hitungProbab($data)
 	{
 		$semuadata = TrainingData::count();
@@ -79,35 +66,28 @@ class Controller extends BaseController
 		 *
 		 * Likelihood dan Evidence diinisialisasi dengan angka 1 untuk perkalian
 		 */
-		$likelihood['l'] = $likelihood['tl'] = $evidence = 1;
+		$likelihood['true'] = $likelihood['false'] = $evidence = 1;
 		foreach (Atribut::get() as $at) {
 			if ($at->type === 'categorical') {
 				//Jika Kategorikal, nilai probabilitas yang dicari
 				$probabilitas = Probability::firstWhere(
-					'nilai_atribut_id',
-					$data[$at->slug]
+					'nilai_atribut_id',	$data[$at->slug]
 				);
-				$likelihood['l'] *= $probabilitas['layak'];
-				$likelihood['tl'] *= $probabilitas['tidak_layak'];
+				$likelihood['true'] *= $probabilitas['true'];
+				$likelihood['false'] *= $probabilitas['false'];
 				$evidence *= TrainingData::where($at->slug, $data[$at->slug])->count() /
 					$semuadata;
 			} else { //Jika Numerik, Normal Distribution yang dicari
 				$probabilitas = Probability::where('atribut_id', $at->id)
 					->whereNull('nilai_atribut_id')->first();
-				$likelihood['l'] *= $this->normalDistribution(
-					$data[$at->slug],
-					$probabilitas->sd_layak,
-					$probabilitas->mean_layak
+				$likelihood['true'] *= $this->normalDistribution(
+					$data[$at->slug],$probabilitas->sd_true,$probabilitas->mean_true
 				);
-				$likelihood['tl'] *= $this->normalDistribution(
-					$data[$at->slug],
-					$probabilitas->sd_tidak_layak,
-					$probabilitas->mean_tidak_layak
+				$likelihood['false'] *= $this->normalDistribution(
+					$data[$at->slug],$probabilitas->sd_false,	$probabilitas->mean_false
 				);
 				$evidence *= $this->normalDistribution(
-					$data[$at->slug],
-					$probabilitas->sd_total,
-					$probabilitas->mean_total
+					$data[$at->slug],$probabilitas->sd_total,	$probabilitas->mean_total
 				);
 			}
 		}
@@ -118,13 +98,13 @@ class Controller extends BaseController
 		 * Rumus: Prior dikali Likelihood, lalu dibagi Evidence
 		 * Jika Evidence 0, maka nilai posteriornya 0
 		 */
-		$posterior['layak'] = ($prior['l'] * $likelihood['l']) / $evidence;
-		$posterior['tidak_layak'] = ($prior['tl'] * $likelihood['tl']) / $evidence;
+		$posterior['true'] = ($prior['true'] * $likelihood['true']) / $evidence;
+		$posterior['false'] = ($prior['false'] * $likelihood['false']) / $evidence;
 
-		$predict = $posterior['layak'] >= $posterior['tidak_layak'] ? 'Layak' : "Tidak Layak";
+		$predict = $posterior['true'] >= $posterior['false'];
 		return [
-			'layak' => $posterior['layak'],
-			'tidak_layak' => $posterior['tidak_layak'],
+			'true' => $posterior['true'],
+			'false' => $posterior['false'],
 			'predict' => $predict
 		];
 	}
@@ -132,6 +112,7 @@ class Controller extends BaseController
 	{
 		return (1 / ($sd * sqrt(2 * pi()))) * exp(-0.5 * pow(($x - $mean) / $sd, 2));
 	}
+	public static array $status=[false=>'Tidak Layak',true=>"Layak"];
 	/**
 	 * This user-land implementation follows the implementation quite strictly;
 	 * it does not attempt to improve the code or algorithm in any way.

@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class Theme extends Component
+class BackToHome extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class Theme extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.theme');
+        return view('components.back-to-home');
     }
 }

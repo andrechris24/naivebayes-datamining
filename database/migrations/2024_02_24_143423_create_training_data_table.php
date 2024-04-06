@@ -22,7 +22,7 @@ return new class extends Migration
 			$table->foreignId('listrik')->nullable()->constrained('nilai_atributs')
 				->nullOnDelete()->cascadeOnUpdate();
 			$table->integer('tanggungan')->nullable();
-			$table->enum('status', ['Layak', 'Tidak Layak']);
+			$table->boolean('status');
 			$table->timestamps();
 		});
 	}

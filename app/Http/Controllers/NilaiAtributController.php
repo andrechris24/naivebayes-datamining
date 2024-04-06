@@ -61,10 +61,9 @@ class NilaiAtributController extends Controller
 		try {
 			$request->validate(NilaiAtribut::$rules);
 			if ($request->id) {
-				NilaiAtribut::updateOrCreate(
-					['id' => $request->id],
-					['name' => $request->name, 'atribut_id' => $request->atribut_id]
-				);
+				NilaiAtribut::updateOrCreate(['id' => $request->id],[
+					'name' => $request->name, 'atribut_id' => $request->atribut_id
+				]);
 				return response()->json(['message' => 'Berhasil diedit']);
 			} else {
 				NilaiAtribut::create([

@@ -18,19 +18,16 @@ return new class extends Migration
 			$table->foreignIdFor(Atribut::class)->cascadeOnDelete();
 			$table->foreignIdFor(NilaiAtribut::class)->nullable()
 				->cascadeOnDelete()->comment('Kategorikal saja');
-			$table->double('layak', 25, 20)->comment('Kategorikal saja')->default(0.00);
-			$table->double('tidak_layak', 25, 20)->comment('Kategorikal saja')
-				->default(0.00);
+			$table->double('true', 25, 20)->comment('Kategorikal saja')->default(0.00);
+			$table->double('false', 25, 20)->comment('Kategorikal saja')->default(0.00);
 			$table->double('total', 25, 20)->comment('Total Probabilitas (Kategorikal)')
 				->default(0.00);
-			$table->double('mean_layak', 40, 20)->default(0.00)->comment('Numerik saja');
-			$table->double('mean_tidak_layak', 40, 20)->default(0.00)
-				->comment('Numerik saja');
+			$table->double('mean_true', 40, 20)->default(0.00)->comment('Numerik saja');
+			$table->double('mean_false', 40, 20)->default(0.00)->comment('Numerik saja');
 			$table->double('mean_total', 40, 20)->default(0.00)
 				->comment('Rata-rata Probabilitas Numerik');
-			$table->double('sd_layak', 40, 20)->default(0.00)->comment('Numerik saja');
-			$table->double('sd_tidak_layak', 40, 20)->default(0.00)
-				->comment('Numerik saja');
+			$table->double('sd_true', 40, 20)->default(0.00)->comment('Numerik saja');
+			$table->double('sd_false', 40, 20)->default(0.00)->comment('Numerik saja');
 			$table->double('sd_total', 40, 20)->default(0.00)
 				->comment('Simpangan baku Probabilias Numerik');
 			$table->timestamps();

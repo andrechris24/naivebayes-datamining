@@ -25,18 +25,18 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>Layak</td>
-						<td>{{$kelas['l']}}</td>
+						<td>{{$hasil[true]}}</td>
+						<td>{{$kelas['true']}}</td>
 					</tr>
 					<tr>
-						<td>Tidak Layak</td>
-						<td>{{$kelas['tl']}}</td>
+						<td>{{$hasil[false]}}</td>
+						<td>{{$kelas['false']}}</td>
 					</tr>
 					<tr class="table-secondary">
 						<td>Total</td>
 						<td>
 							@php
-							echo $kelas['tl'] + $kelas['l'];
+							echo $kelas['false'] + $kelas['true'];
 							$total = $training['total'];
 							@endphp
 						</td>
@@ -52,8 +52,8 @@
 	<div class="card-body">
 		@foreach ($attribs['atribut'] as $attr)
 		@php
-		$layak = $tidak_layak = $semua = 0.00000;
-		$tot['l'] = $tot['tl'] = 0;
+		$true = $false= $semua = 0.00000;
+		$tot['true'] = $tot['false'] = 0;
 		$str="";
 		$prob = $data->where('atribut_id', $attr->id)->first();
 		@endphp
@@ -63,8 +63,8 @@
 				<thead>
 					<tr>
 						<th>Sub Atribut</th>
-						<th>Layak</th>
-						<th>Tidak Layak</th>
+						<th>{{$hasil[true]}}</th>
+						<th>{{$hasil[false]}}</th>
 						<th>Total Probabilitas</th>
 					</tr>
 				</thead>
@@ -72,15 +72,15 @@
 					@if($attr->type==='categorical')
 					@forelse($data->where('atribut_id', $attr->id) as $prob)
 					@php
-					$layak += $prob->layak;
-					$tidak_layak += $prob->tidak_layak;
+					$true += $prob->true;
+					$false += $prob->false;
 					$semua += $prob->total;
 					@endphp
 					<tr>
 						<td>{{ $prob->nilai_atribut->name }}</td>
-						<td>{{ $prob->layak }}</td>
-						<td>{{ $prob->tidak_layak }}</td>
-						<td>{{$prob->total}}</td>
+						<td>{{ $prob->true }}</td>
+						<td>{{ $prob->false }}</td>
+						<td>{{ $prob->total }}</td>
 					</tr>
 					@empty
 					@foreach($attribs['nilai']->where('atribut_id', $attr->id) as $nilai)
@@ -94,30 +94,30 @@
 					@endforelse
 					<tr class="table-secondary">
 						<td>Total</td>
-						<td>{{ $layak }}</td>
-						<td>{{ $tidak_layak }}</td>
+						<td>{{ $true }}</td>
+						<td>{{ $false }}</td>
 						<td>{{$semua}}</td>
 					</tr>
 					@else
 					<tr>
 						<th>Data</th>
 						<td class="text-wrap">
-							@foreach($training['layak'] as $l)
+							@foreach($training['true'] as $t)
 							@php
-							if(empty($l[$attr->slug])) continue;
-							$tot['l'] += $l[$attr->slug];
-							$str.=$l[$attr->slug].', ';
-							echo $l[$attr->slug] . (!$loop->last ? ', ' : '');
+							if(empty($t[$attr->slug])) continue;
+							$tot['true'] += $t[$attr->slug];
+							$str.=$t[$attr->slug].', ';
+							echo $t[$attr->slug] . (!$loop->last ? ', ' : '');
 							@endphp
 							@endforeach
 						</td>
 						<td class="text-wrap">
-							@foreach($training['tidak_layak'] as $tl)
+							@foreach($training['false'] as $f)
 							@php
-							if(empty($tl[$attr->slug])) continue;
-							$tot['tl'] += $tl[$attr->slug];
-							$str.=$l[$attr->slug].', ';
-							echo $tl[$attr->slug] . (!$loop->last ? ', ' : '');
+							if(empty($f[$attr->slug])) continue;
+							$tot['false'] += $f[$attr->slug];
+							$str.=$f[$attr->slug].', ';
+							echo $f[$attr->slug] . (!$loop->last ? ', ' : '');
 							@endphp
 							@endforeach
 						</td>
@@ -125,20 +125,20 @@
 					</tr>
 					<tr>
 						<th>Jumlah</th>
-						<td>{{ $tot["l"] }}</td>
-						<td>{{ $tot['tl'] }}</td>
-						<td>{{ $tot['l'] + $tot['tl'] }}</td>
+						<td>{{ $tot["true"] }}</td>
+						<td>{{ $tot['false'] }}</td>
+						<td>{{ $tot['true'] + $tot['false'] }}</td>
 					</tr>
 					<tr>
 						<th>Rata-rata</th>
-						<td>{{ $prob->mean_layak ?? 0 }}</td>
-						<td>{{ $prob->mean_tidak_layak ?? 0 }}</td>
+						<td>{{ $prob->mean_true ?? 0 }}</td>
+						<td>{{ $prob->mean_false ?? 0 }}</td>
 						<td>{{ $prob->mean_total ?? 0 }}</td>
 					</tr>
 					<tr>
 						<th>Simpangan Baku</th>
-						<td>{{ $prob->sd_layak ?? 0 }}</td>
-						<td>{{ $prob->sd_tidak_layak ?? 0 }}</td>
+						<td>{{ $prob->sd_true ?? 0 }}</td>
+						<td>{{ $prob->sd_false ?? 0 }}</td>
 						<td>{{ $prob->sd_total ?? 0 }}</td>
 					</tr>
 					@endif

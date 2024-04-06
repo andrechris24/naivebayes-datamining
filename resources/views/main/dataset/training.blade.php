@@ -41,8 +41,8 @@
 					<div class="form-floating mb-4">
 						<select name="status" class="form-select" id="trainResult" required>
 							<option value="">Pilih</option>
-							<option value="Layak">Layak</option>
-							<option value="Tidak Layak">Tidak Layak</option>
+							<option value="1">{{$hasil[true]}}</option>
+							<option value="0">{{$hasil[false]}}</option>
 						</select>
 						<label for="trainResult">Hasil</label>
 						<div class="invalid-tooltip" id="result-error">Pilih hasil</div>

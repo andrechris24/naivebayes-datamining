@@ -11,14 +11,14 @@ class Probability extends Model
 	protected $fillable = [
 		'atribut_id',
 		'nilai_atribut_id',
-		'layak',
-		'tidak_layak',
+		'true',
+		'false',
 		'total',
-		'mean_layak',
-		'mean_tidak_layak',
+		'mean_true',
+		'mean_false',
 		'mean_total',
-		'sd_layak',
-		'sd_tidak_layak',
+		'sd_true',
+		'sd_false',
 		'sd_total'
 	];
 	public function atribut()

@@ -16,24 +16,25 @@ class ResultController extends Controller
 		$data['test'] = $this->cm('test');
 		$performa['train'] = $this->performa($data['train']);
 		$performa['test'] = $this->performa($data['test']);
-		return view('main.performa', compact('data', 'performa'));
+		$stat=Controller::$status;
+		return view('main.performa', compact('data', 'performa','stat'));
 	}
 	private static function cm(string $type)
 	{
-		$ll = Classification::where('type', $type)->where('predicted', 'Layak')
-			->where('real', 'Layak')->count(); //True Positive
-		$ltl = Classification::where('type', $type)->where('predicted', 'Tidak Layak')
-			->where('real', 'Layak')->count(); //False Positive
-		$tll = Classification::where('type', $type)->where('predicted', 'Layak')
-			->where('real', 'Tidak Layak')->count(); //False Negative
-		$tltl = Classification::where('type', $type)->where('predicted', 'Tidak Layak')
-			->where('real', 'Tidak Layak')->count(); //True Negative
-		$total = $ll + $ltl + $tll + $tltl;
+		$tp = Classification::where('type', $type)->where('predicted', true)
+			->where('real', true)->count(); //True Positive
+		$fp = Classification::where('type', $type)->where('predicted', false)
+			->where('real', true)->count(); //False Positive
+		$fn = Classification::where('type', $type)->where('predicted', true)
+			->where('real', false)->count(); //False Negative
+		$tn = Classification::where('type', $type)->where('predicted', false)
+			->where('real', false)->count(); //True Negative
+		$total = $tp + $fp + $fn + $tn;
 		return [
-			'll' => $ll,
-			'ltl' => $ltl,
-			'tll' => $tll,
-			'tltl' => $tltl,
+			'tp' => $tp,
+			'fp' => $fp,
+			'fn' => $fn,
+			'tn' => $tn,
 			'total' => $total
 		];
 	}
@@ -41,9 +42,9 @@ class ResultController extends Controller
 	{
 		if ($data['total'] === 0) $accu = $prec = $rec = $f1 = 0;
 		else {
-			$accu = (($data['ll'] + $data['tltl']) / $data['total']) * 100;
-			$prec = ($data['ll'] / ($data['ll'] + $data['tll'])) * 100;
-			$rec = ($data['ll'] / ($data['ll'] + $data['ltl'])) * 100;
+			$accu = (($data['tp'] + $data['tn']) / $data['total']) * 100;
+			$prec = ($data['tp'] / ($data['tp'] + $data['fn'])) * 100;
+			$rec = ($data['tp'] / ($data['tp'] + $data['fp'])) * 100;
 			$f1 = 2 * ($prec * $rec) / ($prec + $rec);
 		}
 		return [

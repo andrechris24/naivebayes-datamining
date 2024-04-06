@@ -2,9 +2,10 @@
 
 namespace App\Exports;
 
-use Generator;
+use App\Http\Controllers\Controller;
 use App\Models\Atribut;
 use App\Models\NilaiAtribut;
+use Generator;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromGenerator;
@@ -24,7 +25,7 @@ class DatasetTemplate implements FromGenerator
 			} else $val[] = rand(1, 5);
 		}
 		$col[] = 'Keterangan';
-		$val[] = 'Layak/Tidak Layak';
+		$val[] = json_encode(Controller::$status);
 		yield $col;
 		yield $val;
 	}

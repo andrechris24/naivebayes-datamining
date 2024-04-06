@@ -4,8 +4,8 @@
 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 	<li class="nav-item" role="presentation">
 		<button @class(['nav-link','active'=>$data['test']['total']>0]) id="pills-testing-tab"
-			data-bs-toggle="pill"
-			data-bs-target="#pills-testing" type="button" role="tab" aria-controls="pills-testing"
+			data-bs-toggle="pill" data-bs-target="#pills-testing" 
+			type="button" role="tab" aria-controls="pills-testing"
 			@if($data['test']['total']>0) aria-selected="true" @else aria-selected="false" disabled @endif >
 			Data Testing
 		</button>
@@ -44,20 +44,20 @@
 							<tbody>
 								<tr>
 									<th>Layak</th>
-									<td class="table-success">{{$data['test']['ll']}}</td>
-									<td class="table-danger">{{$data['test']['tll']}}</td>
-									<td>{{$data['test']['ll'] + $data['test']['tll']}}</td>
+									<td class="table-success">{{$data['test']['tp']}}</td>
+									<td class="table-danger">{{$data['test']['fp']}}</td>
+									<td>{{$data['test']['tp'] + $data['test']['fp']}}</td>
 								</tr>
 								<tr>
 									<th>Tidak Layak</th>
-									<td class="table-danger">{{$data['test']['ltl']}}</td>
-									<td class="table-success">{{$data['test']['tltl']}}</td>
-									<td>{{$data['test']['ltl'] + $data['test']['tltl']}}</td>
+									<td class="table-danger">{{$data['test']['fn']}}</td>
+									<td class="table-success">{{$data['test']['tn']}}</td>
+									<td>{{$data['test']['fn'] + $data['test']['tn']}}</td>
 								</tr>
 								<tr>
 									<th>Total</th>
-									<td>{{$data['test']['ll'] + $data['test']['ltl']}}</td>
-									<td>{{$data['test']['tll'] + $data['test']['tltl']}}</td>
+									<td>{{$data['test']['tp'] + $data['test']['fn']}}</td>
+									<td>{{$data['test']['fp'] + $data['test']['tn']}}</td>
 									<td>{{$data['test']['total']}}</td>
 								</tr>
 							</tbody>
@@ -122,20 +122,20 @@
 							<tbody>
 								<tr>
 									<th>Layak</th>
-									<td class="table-success">{{$data['train']['ll']}}</td>
-									<td class="table-danger">{{$data['train']['tll']}}</td>
-									<td>{{$data['train']['ll'] + $data['train']['tll']}}</td>
+									<td class="table-success">{{$data['train']['tp']}}</td>
+									<td class="table-danger">{{$data['train']['fp']}}</td>
+									<td>{{$data['train']['tp'] + $data['train']['fp']}}</td>
 								</tr>
 								<tr>
 									<th>Tidak Layak</th>
-									<td class="table-danger">{{$data['train']['ltl']}}</td>
-									<td class="table-success">{{$data['train']['tltl']}}</td>
-									<td>{{$data['train']['ltl'] + $data['train']['tltl']}}</td>
+									<td class="table-danger">{{$data['train']['fn']}}</td>
+									<td class="table-success">{{$data['train']['tn']}}</td>
+									<td>{{$data['train']['fn'] + $data['train']['tn']}}</td>
 								</tr>
 								<tr>
 									<th>Total</th>
-									<td>{{$data['train']['ll'] + $data['train']['ltl']}}</td>
-									<td>{{$data['train']['tll'] + $data['train']['tltl']}}</td>
+									<td>{{$data['train']['tp'] + $data['train']['fn']}}</td>
+									<td>{{$data['train']['fp'] + $data['train']['tn']}}</td>
 									<td>{{$data['train']['total']}}</td>
 								</tr>
 							</tbody>
@@ -183,10 +183,10 @@
 	const testBarOptions = {
 		series: [{
 			name: "Layak (Prediksi)",
-			data: [{{$data['test']['ll']}}, {{$data['test']['tll']}}]
+			data: [{{$data['test']['tp']}}, {{$data['test']['fp']}}]
 		}, {
 			name: "Tidak Layak (Prediksi)",
-			data: [{{$data['test']['ltl']}}, {{$data['test']['tltl']}}]
+			data: [{{$data['test']['fn']}}, {{$data['test']['tn']}}]
 		}],
 		chart: {
 			type: "bar"
@@ -207,10 +207,10 @@
 	const trainBarOptions = {
 		series: [{
 			name: "Layak (Prediksi)",
-			data: [{{$data['train']['ll']}}, {{$data['train']['tll']}}]
+			data: [{{$data['train']['tp']}}, {{$data['train']['fp']}}]
 		}, {
 			name: "Tidak Layak (Prediksi)",
-			data: [{{$data['train']['ltl']}}, {{$data['train']['tltl']}}]
+			data: [{{$data['train']['fn']}}, {{$data['train']['tn']}}]
 		}],
 		chart: {
 			type: "bar"

@@ -38,8 +38,8 @@
 					<th>#</th>
 					<th>Nama</th>
 					<th>Tipe Data</th>
-					<th>Layak</th>
-					<th>Tidak Layak</th>
+					<th>{{$hasil[true]}}</th>
+					<th>{{$hasil[false]}}</th>
 					<th>Kelas Prediksi</th>
 					<th>Kelas Asli</th>
 				</tr>
@@ -66,8 +66,8 @@
 					{ data: "id" },
 					{ data: "name" },
 					{ data: "type" },
-					{ data: "layak" },
-					{ data: "tidak_layak" },
+					{ data: "true" },
+					{ data: "false" },
 					{ data: "predicted" },
 					{ data: "real" }
 				],

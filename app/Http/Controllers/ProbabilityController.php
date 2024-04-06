@@ -26,14 +26,15 @@ class ProbabilityController extends Controller
 		$data = Probability::get();
 		$kelas = Controller::probabKelas();
 		$training = [
-			'layak' => TrainingData::where('status', 'Layak')->get(),
-			'tidak_layak' => TrainingData::where('status', 'Tidak Layak')->get(),
+			'true' => TrainingData::where('status', true)->get(),
+			'false' => TrainingData::where('status', false)->get(),
 			'total' => TrainingData::count()
 		];
 		$attribs = ['atribut' => $atribut, 'nilai' => $nilaiattr];
+		$hasil=Controller::$status;
 		return view(
-			'main.naivebayes.probab',
-			compact('attribs', 'data', 'kelas', 'training')
+			'main.naivebayes.probab',	
+			compact('attribs', 'data', 'kelas', 'training','hasil')
 		);
 	}
 
@@ -55,8 +56,8 @@ class ProbabilityController extends Controller
 
 			//Prior start
 			$total = [
-				'l' => TrainingData::where('status', "Layak")->count(),
-				'tl' => TrainingData::where('status', "Tidak Layak")->count(),
+				'true' => TrainingData::where('status', true)->count(),
+				'false' => TrainingData::where('status', false)->count(),
 				'all' => TrainingData::count()
 			];
 			//Prior end
@@ -64,14 +65,14 @@ class ProbabilityController extends Controller
 			//Likelihood Start
 			foreach (NilaiAtribut::get() as $nilai) { //Categorical
 				if ($nilai->atribut->type === 'categorical') {
-					$ll[$nilai->name]['Layak'] =
-						($total['l'] === 0 ? 0 :
+					$ll[$nilai->name]['true'] =
+						($total['true'] === 0 ? 0 :
 							TrainingData::where($nilai->atribut->slug, $nilai->id)
-							->where('status', 'Layak')->count() / $total['l']);
-					$ll[$nilai->name]['Tidak Layak'] =
-						($total['tl'] === 0 ? 0 :
+							->where('status', true)->count() / $total['true']);
+					$ll[$nilai->name]['false'] =
+						($total['false'] === 0 ? 0 :
 							TrainingData::where($nilai->atribut->slug, $nilai->id)
-							->where('status', 'Tidak Layak')->count() / $total['tl']);
+							->where('status', false)->count() / $total['false']);
 					$ll[$nilai->name]['Total'] =
 						TrainingData::where($nilai->atribut->slug, $nilai->id)->count() /
 						$total['all'];
@@ -79,28 +80,29 @@ class ProbabilityController extends Controller
 				Probability::updateOrCreate([
 					'atribut_id' => $nilai->atribut_id, 'nilai_atribut_id' => $nilai->id
 				], [
-					'layak' => $ll[$nilai->name]['Layak'] ?? 0,
-					'tidak_layak' => $ll[$nilai->name]['Tidak Layak'] ?? 0,
+					'true' => $ll[$nilai->name]['true'] ?? 0,
+					'false' => $ll[$nilai->name]['false'] ?? 0,
 					'total' => $ll[$nilai->name]['Total'] ?? 0
 				]);
 			}
 			foreach (Atribut::where('type', 'numeric')->get() as $nilainum) { //Numeric
 				$p = array_filter($this->getNumbers($nilainum->slug));
-				if (count($p['l'])) {
-					$avg[$nilainum->name]['l'] = array_sum($p['l']) / count($p['l']);
-					$sd[$nilainum->name]['l'] =
-						Controller::stats_standard_deviation($p['l'], true);
+				if (count($p['true'])) {
+					$avg[$nilainum->name]['true'] = array_sum($p['true']) / count($p['true']);
+					$sd[$nilainum->name]['true'] =
+						Controller::stats_standard_deviation($p['true'], true);
 				}
-				if (count($p['tl'])) {
-					$avg[$nilainum->name]['tl'] = array_sum($p['tl']) / count($p['tl']);
-					$sd[$nilainum->name]['tl'] =
-						Controller::stats_standard_deviation($p['tl'], true);
+				if (count($p['false'])) {
+					$avg[$nilainum->name]['false'] = 
+						array_sum($p['false']) / count($p['false']);
+					$sd[$nilainum->name]['false'] =
+						Controller::stats_standard_deviation($p['false'], true);
 				}
 				$avg[$nilainum->name]['all'] = array_sum($p['all']) / count($p['all']);
 				$sd[$nilainum->name]['all'] =
 					Controller::stats_standard_deviation($p['all'], true);
 				if (
-					!$sd[$nilainum->name]['l'] || !$sd[$nilainum->name]['tl'] || !$sd[$nilainum->name]['all']
+					!$sd[$nilainum->name]['true'] || !$sd[$nilainum->name]['false'] || !$sd[$nilainum->name]['all']
 				) {
 					$warning = true;
 					continue;
@@ -108,11 +110,11 @@ class ProbabilityController extends Controller
 				Probability::updateOrCreate([
 					'atribut_id' => $nilainum->id, 'nilai_atribut_id' => null
 				], [
-					'mean_layak' => $avg[$nilainum->name]['l'] ?? 0,
-					'mean_tidak_layak' => $avg[$nilainum->name]['tl'] ?? 0,
+					'mean_true' => $avg[$nilainum->name]['true'] ?? 0,
+					'mean_false' => $avg[$nilainum->name]['false'] ?? 0,
 					'mean_total' => $avg[$nilainum->name]['all'] ?? 0,
-					'sd_layak' => $sd[$nilainum->name]['l'] ?? 0,
-					'sd_tidak_layak' => $sd[$nilainum->name]['tl'] ?? 0,
+					'sd_true' => $sd[$nilainum->name]['true'] ?? 0,
+					'sd_false' => $sd[$nilainum->name]['false'] ?? 0,
 					'sd_total' => $sd[$nilainum->name]['all'] ?? 0
 				]);
 			}
@@ -144,10 +146,10 @@ class ProbabilityController extends Controller
 	}
 	private static function getNumbers(string $col)
 	{
-		$data = [];
+		$data = ['true'=>0,'false'=>0,'all'=>0];
 		foreach (TrainingData::select($col, 'status')->get() as $train) {
-			if ($train->status === 'Layak') $data['l'][] = $train[$col];
-			else $data['tl'][] = $train[$col];
+			if ($train->status == true) $data['true'][] = $train[$col];
+			else $data['false'][] = $train[$col];
 			$data['all'][] = $train[$col];
 		}
 		return $data;

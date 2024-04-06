@@ -12,14 +12,14 @@ class DatabaseSeeder extends Seeder
 	public function run(): void
 	{
 		\App\Models\User::factory()->create([
-			'name' => 'Andre Christian',
+			'name' => 'Test User',
 			'email' => 'test@example.com',
 		]);
 		$this->call([
 			AtributSeeder::class,
-			NilaiAtributSeeder::class,
-			TrainingDataTableSeeder::class,
-			TestingDataTableSeeder::class
+			NilaiAtributSeeder::class
+			// TrainingDataTableSeeder::class,
+			// TestingDataTableSeeder::class
 		]);
 	}
 }

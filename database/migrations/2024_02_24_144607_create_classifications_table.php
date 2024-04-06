@@ -15,11 +15,10 @@ return new class extends Migration
 			$table->id();
 			$table->string('name', 99);
 			$table->enum('type', ['train', 'test']);
-			$table->double('layak', 25, 20)->default(0.00);
-			$table->double('tidak_layak', 25, 20)->default(0.00);
-			$table->enum('predicted', ['Layak', 'Tidak Layak'])
-				->comment('Kelas prediksi');
-			$table->enum('real', ['Layak', 'Tidak Layak'])->comment('Kelas asli');
+			$table->double('true', 25, 20)->default(0.00);
+			$table->double('false', 25, 20)->default(0.00);
+			$table->boolean('predicted')->comment('Kelas prediksi');
+			$table->boolean('real')->comment('Kelas asli');
 			$table->timestamps();
 		});
 	}

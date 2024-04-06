@@ -2,14 +2,17 @@
 
 namespace App\Exports;
 
+use App\Http\Controllers\Controller;
 use App\Models\Atribut;
 use App\Models\NilaiAtribut;
 use App\Models\TrainingData;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class TrainingExport implements FromCollection, WithHeadings, WithMapping
+class TrainingExport 
+implements FromCollection, WithHeadings, WithMapping,WithStrictNullComparison
 {
 	public function headings(): array
 	{
@@ -36,7 +39,7 @@ class TrainingExport implements FromCollection, WithHeadings, WithMapping
 				$row[] = $foreign->name;
 			} else $row[] = $train[$val->slug];
 		}
-		$row[] = $train->status;
+		$row[] = Controller::$status[$train->status];
 		return $row;
 	}
 }

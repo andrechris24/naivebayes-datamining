@@ -2,13 +2,16 @@
 
 namespace App\Exports;
 
+use App\Http\Controllers\Controller;
 use App\Models\Classification;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class ClassificationExport implements FromQuery, WithHeadings, WithMapping
+class ClassificationExport 
+implements FromQuery, WithHeadings, WithMapping, WithStrictNullComparison
 {
 	use Exportable;
 	private string $tipe;
@@ -22,8 +25,8 @@ class ClassificationExport implements FromQuery, WithHeadings, WithMapping
 		return array(
 			'#',
 			'Nama',
-			'Layak',
-			'Tidak Layak',
+			Controller::$status[true],
+			Controller::$status[false],
 			'Kelas Prediksi',
 			'Kelas Asli'
 		);
@@ -44,10 +47,10 @@ class ClassificationExport implements FromQuery, WithHeadings, WithMapping
 		return array(
 			++$index,
 			$class->name,
-			$class->layak ?? 0.00,
-			$class->tidak_layak ?? 0.00,
-			$class->predicted,
-			$class->real
+			$class->true ?? 0.00,
+			$class->false ?? 0.00,
+			Controller::$status[$class->predicted],
+			Controller::$status[$class->real]
 		);
 	}
 }

@@ -41,8 +41,8 @@
 					<div class="form-floating mb-4">
 						<select name="status" class="form-select" id="testResult" required>
 							<option value="">Pilih</option>
-							<option value="Layak">Layak</option>
-							<option value="Tidak Layak">Tidak Layak</option>
+							<option value="1">{{$hasil[true]}}</option>
+							<option value="0">{{$hasil[false]}}</option>
 							<option value="Otomatis" @if($calculated===0) disabled @endif>
 								Pilih otomatis
 							</option>

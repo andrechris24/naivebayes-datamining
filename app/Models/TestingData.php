@@ -13,7 +13,7 @@ class TestingData extends Model
 		'nama' => 'required',
 		'q' => 'required',
 		'q.*' => ['bail', 'required', 'numeric'],
-		'status' => ['bail', 'required', 'in:Layak,Tidak Layak,Otomatis']
+		'status' => ['bail', 'required', 'boolean']
 	], $filerule = [
 		'data' => [
 			'bail',
