@@ -77,6 +77,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="alert alert-info" role="alert">
+					<i class="fas fa-info-circle"></i>
 					<a href="{{route('template-data')}}">Klik disini</a> untuk mendownload template Dataset
 				</div>
 				<form id="importTrainingData">@csrf

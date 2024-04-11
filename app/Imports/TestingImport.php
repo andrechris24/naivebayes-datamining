@@ -31,8 +31,8 @@ class TestingImport implements ToModel, WithHeadingRow
 			}
 			$rows[$attr->slug] = $row[$attr->slug];
 		}
-		$rows['status'] = array_search(//array_search dengan teknik case insensitive
-			strtolower(trim($row['keterangan'])), 
+		$rows['status'] = array_search( //array_search dengan teknik case insensitive
+			strtolower(trim($row['keterangan'])),
 			array_map('strtolower', Controller::$status)
 		);
 		return new TestingData($rows);

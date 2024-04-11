@@ -17,7 +17,7 @@ d.addEventListener("DOMContentLoaded", function () {
 	if (themeSettingsEl) {
 		let themeSettingsCollapse = new bootstrap.Collapse(themeSettingsEl, {
 			show: true,
-			toggle: false
+			toggle: false,
 		});
 		if (window.localStorage.getItem("settings_expanded") === "true") {
 			themeSettingsCollapse.show();
@@ -94,7 +94,7 @@ d.addEventListener("DOMContentLoaded", function () {
 	// Datepicker
 	let datepickers = [].slice.call(d.querySelectorAll("[data-datepicker]"));
 	datepickers.map(function (el) {
-		return new Datepicker(el, {buttonClass: "btn"});
+		return new Datepicker(el, { buttonClass: "btn" });
 	});
 
 	if (d.querySelector(".input-slider-container")) {
@@ -112,7 +112,7 @@ d.addEventListener("DOMContentLoaded", function () {
 					start: [parseInt(startValue)],
 					connect: [true, false],
 					//step: 1000,
-					range: { min: [parseInt(minValue)], max: [parseInt(maxValue)] }
+					range: { min: [parseInt(minValue)], max: [parseInt(maxValue)] },
 				});
 			});
 	}
@@ -126,14 +126,14 @@ d.addEventListener("DOMContentLoaded", function () {
 		noUiSlider.create(c, {
 			start: [
 				parseInt(low.getAttribute("data-range-value-low")),
-				parseInt(e.getAttribute("data-range-value-high"))
+				parseInt(e.getAttribute("data-range-value-high")),
 			],
 			connect: !0,
 			tooltips: true,
 			range: {
 				min: parseInt(c.getAttribute("data-range-value-min")),
-				max: parseInt(c.getAttribute("data-range-value-max"))
-			}
+				max: parseInt(c.getAttribute("data-range-value-max")),
+			},
 		});
 		c.noUiSlider.on("update", function (a, b) {
 			f[b].textContent = a[b];
@@ -156,7 +156,7 @@ d.addEventListener("DOMContentLoaded", function () {
 	}
 	new SmoothScroll('a[href*="#"]', {
 		speed: 500,
-		speedAsDuration: true
+		speedAsDuration: true,
 	});
 	if (d.querySelector(".current-year"))
 		d.querySelector(".current-year").textContent = new Date().getFullYear();
@@ -166,7 +166,7 @@ d.addEventListener("DOMContentLoaded", function () {
 		new Glide(".glide", {
 			type: "carousel",
 			startAt: 0,
-			perView: 3
+			perView: 3,
 		}).mount();
 	}
 	if (d.querySelector(".glide-testimonials")) {
@@ -174,7 +174,7 @@ d.addEventListener("DOMContentLoaded", function () {
 			type: "carousel",
 			startAt: 0,
 			perView: 1,
-			autoplay: 2000
+			autoplay: 2000,
 		}).mount();
 	}
 	if (d.querySelector(".glide-clients")) {
@@ -182,7 +182,7 @@ d.addEventListener("DOMContentLoaded", function () {
 			type: "carousel",
 			startAt: 0,
 			perView: 5,
-			autoplay: 2000
+			autoplay: 2000,
 		}).mount();
 	}
 	if (d.querySelector(".glide-news-widget")) {
@@ -190,7 +190,7 @@ d.addEventListener("DOMContentLoaded", function () {
 			type: "carousel",
 			startAt: 0,
 			perView: 1,
-			autoplay: 2000
+			autoplay: 2000,
 		}).mount();
 	}
 	if (d.querySelector(".glide-autoplay")) {
@@ -198,7 +198,7 @@ d.addEventListener("DOMContentLoaded", function () {
 			type: "carousel",
 			startAt: 0,
 			perView: 3,
-			autoplay: 2000
+			autoplay: 2000,
 		}).mount();
 	}
 });

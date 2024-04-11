@@ -5,7 +5,7 @@
 	Kosongkan password baru jika tidak ganti password.</p>
 <div class="card card-body border-0 shadow mb-4">
 	<x-caps-lock />
-	<form action="#" class="needs-validation" enctype="multipart/form-data" id="form-edit-account">
+	<form class="needs-validation" enctype="multipart/form-data" id="form-edit-account">
 		@csrf
 		<input type="hidden" name="id" value="{{ auth()->id() }}">
 		<div class="form-group position-relative mb-4">

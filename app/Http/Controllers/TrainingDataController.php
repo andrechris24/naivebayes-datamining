@@ -52,8 +52,8 @@ class TrainingDataController extends Controller
 			return to_route('atribut.nilai.index')
 				->withWarning('Tambahkan Nilai Atribut dulu sebelum menginput Dataset');
 		}
-		$hasil=Controller::$status;
-		return view('main.dataset.training', compact('atribut', 'nilai','hasil'));
+		$hasil = Controller::$status;
+		return view('main.dataset.training', compact('atribut', 'nilai', 'hasil'));
 	}
 
 	/**
@@ -70,7 +70,7 @@ class TrainingDataController extends Controller
 				});
 			}
 		}
-		$dt->editColumn('status',function(TrainingData $train){
+		$dt->editColumn('status', function (TrainingData $train) {
 			return Controller::$status[$train->status];
 		});
 		return $dt->make();

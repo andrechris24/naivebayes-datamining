@@ -18,8 +18,6 @@ class DatabaseSeeder extends Seeder
 		$this->call([
 			AtributSeeder::class,
 			NilaiAtributSeeder::class
-			// TrainingDataTableSeeder::class,
-			// TestingDataTableSeeder::class
 		]);
 	}
 }

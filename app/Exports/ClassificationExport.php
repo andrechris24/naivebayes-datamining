@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class ClassificationExport 
+class ClassificationExport
 implements FromQuery, WithHeadings, WithMapping, WithStrictNullComparison
 {
 	use Exportable;
@@ -18,7 +18,7 @@ implements FromQuery, WithHeadings, WithMapping, WithStrictNullComparison
 	private int $index = 0;
 	public function __construct(string $type)
 	{
-		$tipe = $type;
+		$this->tipe = $type;
 	}
 	public function headings(): array
 	{

@@ -39,9 +39,9 @@ class AdminController extends Controller
 		try {
 			$request->validate(User::$rules);
 			$req = $request->all();
-			$req['password'] = Hash::make($request->password);
-			$req['name'] = ucwords($request->name);
-			$req['email'] = Str::lower($request->email);
+			$req['password'] = Hash::make($req['password']);
+			$req['name'] = ucwords($req['name']);
+			$req['email'] = Str::lower($req['email']);
 			User::create($req);
 			return to_route('login')->withSuccess('Akun berhasil dibuat');
 		} catch (QueryException $e) {
@@ -156,10 +156,10 @@ class AdminController extends Controller
 			$request->validate(User::$updrules);
 			$req = $request->all();
 			if ($request->has('password'))
-				$req['password'] = Hash::make($request->password);
+				$req['password'] = Hash::make($req['password']);
 			else unset($req['password']);
-			$req['name'] = ucwords($request->name);
-			$req['email'] = Str::lower($request->email);
+			$req['name'] = ucwords($req['name']);
+			$req['email'] = Str::lower($req['email']);
 			User::findOrFail(Auth::id())->update($req);
 			return response()->json(['message' => 'Profil sudah diupdate']);
 		} catch (ModelNotFoundException) {

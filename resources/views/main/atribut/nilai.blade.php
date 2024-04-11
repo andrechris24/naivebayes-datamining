@@ -129,12 +129,11 @@
 				serverSide: true,
 				processing: true,
 				responsive: true,
-				searching: false,
 				ajax: "{{ route('atribut.nilai.create') }}",
 				columns: [
 					{ data: "id" },
 					{ data: "name" },
-					{ data: "atribut_id" },
+					{ data: "atribut.name" },
 					{ data: "id" }
 				],
 				columnDefs: [{

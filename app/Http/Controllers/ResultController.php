@@ -16,8 +16,8 @@ class ResultController extends Controller
 		$data['test'] = $this->cm('test');
 		$performa['train'] = $this->performa($data['train']);
 		$performa['test'] = $this->performa($data['test']);
-		$stat=Controller::$status;
-		return view('main.performa', compact('data', 'performa','stat'));
+		$stat = Controller::$status;
+		return view('main.performa', compact('data', 'performa', 'stat'));
 	}
 	private static function cm(string $type)
 	{

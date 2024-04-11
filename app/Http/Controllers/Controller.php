@@ -71,7 +71,7 @@ class Controller extends BaseController
 			if ($at->type === 'categorical') {
 				//Jika Kategorikal, nilai probabilitas yang dicari
 				$probabilitas = Probability::firstWhere(
-					'nilai_atribut_id',	$data[$at->slug]
+					'nilai_atribut_id', $data[$at->slug]
 				);
 				$likelihood['true'] *= $probabilitas['true'];
 				$likelihood['false'] *= $probabilitas['false'];
@@ -81,13 +81,13 @@ class Controller extends BaseController
 				$probabilitas = Probability::where('atribut_id', $at->id)
 					->whereNull('nilai_atribut_id')->first();
 				$likelihood['true'] *= $this->normalDistribution(
-					$data[$at->slug],$probabilitas->sd_true,$probabilitas->mean_true
+					$data[$at->slug], $probabilitas->sd_true, $probabilitas->mean_true
 				);
 				$likelihood['false'] *= $this->normalDistribution(
-					$data[$at->slug],$probabilitas->sd_false,	$probabilitas->mean_false
+					$data[$at->slug], $probabilitas->sd_false, $probabilitas->mean_false
 				);
 				$evidence *= $this->normalDistribution(
-					$data[$at->slug],$probabilitas->sd_total,	$probabilitas->mean_total
+					$data[$at->slug], $probabilitas->sd_total, $probabilitas->mean_total
 				);
 			}
 		}
@@ -112,7 +112,7 @@ class Controller extends BaseController
 	{
 		return (1 / ($sd * sqrt(2 * pi()))) * exp(-0.5 * pow(($x - $mean) / $sd, 2));
 	}
-	public static array $status=[false=>'Tidak Layak',true=>"Layak"];
+	public static array $status = [false => 'Tidak Layak', true => "Layak"];
 	/**
 	 * This user-land implementation follows the implementation quite strictly;
 	 * it does not attempt to improve the code or algorithm in any way.

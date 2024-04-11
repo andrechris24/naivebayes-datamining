@@ -53,9 +53,10 @@ class TestingDataController extends Controller
 				->withWarning('Tambahkan Nilai Atribut dulu sebelum menginput Dataset');
 		}
 		$calculated = Probability::count();
-		$hasil=Controller::$status;
+		$hasil = Controller::$status;
 		return view(
-			'main.dataset.testing', compact('atribut', 'nilai', 'calculated','hasil')
+			'main.dataset.testing',
+			compact('atribut', 'nilai', 'calculated', 'hasil')
 		);
 	}
 	/**
@@ -72,7 +73,7 @@ class TestingDataController extends Controller
 				});
 			}
 		}
-		$dt->editColumn('status',function(TestingData $test){
+		$dt->editColumn('status', function (TestingData $test) {
 			return Controller::$status[$test->status];
 		});
 		return $dt->make();

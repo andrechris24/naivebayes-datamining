@@ -11,8 +11,8 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class TestingExport 
-implements FromCollection, WithHeadings, WithMapping,WithStrictNullComparison
+class TestingExport
+implements FromCollection, WithHeadings, WithMapping, WithStrictNullComparison
 {
 	public function headings(): array
 	{

@@ -18,7 +18,7 @@ class ClassificationController extends Controller
 	public function export(Request $req)
 	{
 		return Excel::download(
-			new ClassificationExport($req->type),	"klasifikasi_{$req->type}.xlsx"
+			new ClassificationExport($req->type), "klasifikasi_{$req->type}.xlsx"
 		);
 	}
 	/**
@@ -26,7 +26,7 @@ class ClassificationController extends Controller
 	 */
 	public function index()
 	{
-		return view('main.naivebayes.classify',['hasil'=>Controller::$status]);
+		return view('main.naivebayes.classify', ['hasil' => Controller::$status]);
 	}
 
 	/**
@@ -75,9 +75,9 @@ class ClassificationController extends Controller
 		return DataTables::of(Classification::query())
 			->editColumn('type', function (Classification $class) {
 				return Classification::$tipedata[$class->type];
-			})->editColumn('predicted',function(Classification $class){
+			})->editColumn('predicted', function (Classification $class) {
 				return Controller::$status[$class->predicted];
-			})->editColumn('real',function(Classification $class){
+			})->editColumn('real', function (Classification $class) {
 				return Controller::$status[$class->real];
 			})->make();
 	}

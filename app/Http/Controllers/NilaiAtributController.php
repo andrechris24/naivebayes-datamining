@@ -47,10 +47,7 @@ class NilaiAtributController extends Controller
 	 */
 	public function create()
 	{
-		return DataTables::of(NilaiAtribut::query())
-			->editColumn('atribut_id', function (NilaiAtribut $attr) {
-				return $attr->atribut->name;
-			})->make();
+		return DataTables::of(NilaiAtribut::with('atribut')->select('nilai_atributs.*'))->make();
 	}
 
 	/**
@@ -61,7 +58,7 @@ class NilaiAtributController extends Controller
 		try {
 			$request->validate(NilaiAtribut::$rules);
 			if ($request->id) {
-				NilaiAtribut::updateOrCreate(['id' => $request->id],[
+				NilaiAtribut::updateOrCreate(['id' => $request->id], [
 					'name' => $request->name, 'atribut_id' => $request->atribut_id
 				]);
 				return response()->json(['message' => 'Berhasil diedit']);

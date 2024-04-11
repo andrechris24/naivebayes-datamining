@@ -31,10 +31,10 @@ class ProbabilityController extends Controller
 			'total' => TrainingData::count()
 		];
 		$attribs = ['atribut' => $atribut, 'nilai' => $nilaiattr];
-		$hasil=Controller::$status;
+		$hasil = Controller::$status;
 		return view(
-			'main.naivebayes.probab',	
-			compact('attribs', 'data', 'kelas', 'training','hasil')
+			'main.naivebayes.probab',
+			compact('attribs', 'data', 'kelas', 'training', 'hasil')
 		);
 	}
 
@@ -93,7 +93,7 @@ class ProbabilityController extends Controller
 						Controller::stats_standard_deviation($p['true'], true);
 				}
 				if (count($p['false'])) {
-					$avg[$nilainum->name]['false'] = 
+					$avg[$nilainum->name]['false'] =
 						array_sum($p['false']) / count($p['false']);
 					$sd[$nilainum->name]['false'] =
 						Controller::stats_standard_deviation($p['false'], true);
@@ -146,7 +146,7 @@ class ProbabilityController extends Controller
 	}
 	private static function getNumbers(string $col)
 	{
-		$data = ['true'=>0,'false'=>0,'all'=>0];
+		$data = ['true' => 0, 'false' => 0, 'all' => 0];
 		foreach (TrainingData::select($col, 'status')->get() as $train) {
 			if ($train->status == true) $data['true'][] = $train[$col];
 			else $data['false'][] = $train[$col];
