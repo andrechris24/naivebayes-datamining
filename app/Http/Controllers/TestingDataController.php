@@ -53,10 +53,9 @@ class TestingDataController extends Controller
 				->withWarning('Tambahkan Nilai Atribut dulu sebelum menginput Dataset');
 		}
 		$calculated = Probability::count();
-		$hasil = Controller::$status;
+		$hasil = ProbabLabel::$label;
 		return view(
-			'main.dataset.testing',
-			compact('atribut', 'nilai', 'calculated', 'hasil')
+			'main.dataset.testing',	compact('atribut', 'nilai', 'calculated', 'hasil')
 		);
 	}
 	/**
@@ -74,7 +73,7 @@ class TestingDataController extends Controller
 			}
 		}
 		$dt->editColumn('status', function (TestingData $test) {
-			return Controller::$status[$test->status];
+			return ProbabLabel::$label[$test->status];
 		});
 		return $dt->make();
 	}
@@ -88,7 +87,7 @@ class TestingDataController extends Controller
 			foreach ($request->q as $id => $q) $req[$id] = $q;
 			$req['nama'] = $request->nama;
 			if ($request->status === 'Otomatis') {
-				$hasil = Controller::hitungProbab($req);
+				$hasil = ProbabLabel::hitungProbab($req);
 				$req['status'] = $hasil['predict'];
 			} else $req['status'] = $request->status;
 			if ($request->id) {

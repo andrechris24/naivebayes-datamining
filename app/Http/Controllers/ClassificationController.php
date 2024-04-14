@@ -26,7 +26,7 @@ class ClassificationController extends Controller
 	 */
 	public function index()
 	{
-		return view('main.naivebayes.classify', ['hasil' => Controller::$status]);
+		return view('main.naivebayes.classify', ['hasil' => ProbabLabel::$label]);
 	}
 
 	/**
@@ -40,7 +40,7 @@ class ClassificationController extends Controller
 				return response()->json(['message' => 'Probabilitas belum dihitung'], 400);
 
 			//Preprocessor Start
-			if ($request->type === 'test') Controller::preprocess('test');
+			if ($request->type === 'test') ProbabLabel::preprocess('test');
 			//Preprocessor End
 
 			$semuadata = $this->getData($request->type); //Dataset
@@ -50,7 +50,7 @@ class ClassificationController extends Controller
 				], 400);
 			}
 			foreach ($semuadata as $dataset) {
-				$klasifikasi = Controller::hitungProbab($dataset);
+				$klasifikasi = ProbabLabel::hitungProbab($dataset);
 				Classification::updateOrCreate([
 					'name' => $dataset->nama, 'type' => $request->type
 				], [
@@ -76,9 +76,9 @@ class ClassificationController extends Controller
 			->editColumn('type', function (Classification $class) {
 				return Classification::$tipedata[$class->type];
 			})->editColumn('predicted', function (Classification $class) {
-				return Controller::$status[$class->predicted];
+				return ProbabLabel::$label[$class->predicted];
 			})->editColumn('real', function (Classification $class) {
-				return Controller::$status[$class->real];
+				return ProbabLabel::$label[$class->real];
 			})->make();
 	}
 

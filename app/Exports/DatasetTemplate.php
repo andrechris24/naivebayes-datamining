@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ProbabLabel;
 use App\Models\Atribut;
 use App\Models\NilaiAtribut;
 use Generator;
@@ -25,7 +25,7 @@ class DatasetTemplate implements FromGenerator
 			} else $val[] = rand(1, 5);
 		}
 		$col[] = 'Keterangan';
-		$val[] = json_encode(Controller::$status);
+		$val[] = json_encode(ProbabLabel::$status);
 		yield $col;
 		yield $val;
 	}

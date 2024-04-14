@@ -47,7 +47,9 @@ class NilaiAtributController extends Controller
 	 */
 	public function create()
 	{
-		return DataTables::of(NilaiAtribut::with('atribut')->select('nilai_atributs.*'))->make();
+		return DataTables::of(
+			NilaiAtribut::with('atribut')->select('nilai_atributs.*')
+		)->make();
 	}
 
 	/**

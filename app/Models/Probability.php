@@ -29,4 +29,14 @@ class Probability extends Model
 	{
 		return $this->belongsTo(NilaiAtribut::class, 'nilai_atribut_id');
 	}
+	public static function probabKelas()
+	{
+		$total = TrainingData::count();
+		if ($total === 0) $true = $false = 0;
+		else {
+			$true = TrainingData::where('status', true)->count() / $total;
+			$false = TrainingData::where('status', false)->count() / $total;
+		}
+		return ['true' => $true, 'false' => $false];
+	}
 }

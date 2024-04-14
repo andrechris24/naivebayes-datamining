@@ -5,17 +5,37 @@
 	<a href="{{route('probab.create')}}" class="btn btn-primary">
 		<i class="fas fa-calculator"></i> Hitung Probabilitas
 	</a>
-	<a href="{{route('probab.reset')}}" class="btn btn-danger delete-record">
+	<a href="#modalResetProbab" class="btn btn-danger" data-bs-toggle="modal">
 		<i class="fas fa-arrow-rotate-right"></i> Reset Probabilitas
 	</a>
 </div>
-<div class="spinner-grow text-danger d-none" role="status">
-	<span class="visually-hidden">Mereset...</span>
+<div class="modal fade" tabindex="-1" id="modalResetProbab" aria-labelledby="modalResetProbabLabel" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+		<div class="modal-content">
+			<div class="modal-header bg-danger">
+				<h5 id="modalResetProbabLabel" class="modal-title text-white">
+				Reset Probabilitas?
+				</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p>Anda akan mereset perhitungan probabilitas.
+				Hasil klasifikasi akan direset!</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-tertiary" data-bs-dismiss="modal">
+					<i class="fas fa-x"></i> Tidak
+				</button>
+				<button type="submit" class="btn btn-danger" form="reset-probab">
+					<i class="fas fa-check"></i> Reset
+				</button>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="card my-3">
 	<div class="card-header">Probabilitas Label Kelas</div>
 	<div class="card-body">
-		{{-- <div class="table-responsive"> --}}
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -34,17 +54,10 @@
 					</tr>
 					<tr class="table-secondary">
 						<td>Total</td>
-						<td>
-							@php
-							echo $kelas['false'] + $kelas['true'];
-							$total = $training['total'];
-							@endphp
-						</td>
+						<td>{{$kelas['false'] + $kelas['true']}}</td>
 					</tr>
 				</tbody>
 			</table>
-			{{--
-		</div> --}}
 	</div>
 </div>
 <div class="card">
@@ -53,9 +66,9 @@
 		@foreach ($attribs['atribut'] as $attr)
 		@php
 		$true = $false= $semua = 0.00000;
-		$tot['true'] = $tot['false'] = 0;
-		$str="";
-		$prob = $data->where('atribut_id', $attr->id)->first();
+		$tot = ['true'=>0,'false' => 0];
+		$list=['true'=>[],'false'=>[],'all'=>[]];
+		$probab = $data->where('atribut_id', $attr->id)->first();
 		@endphp
 		<div class="table-responsive">
 			<table class="table table-bordered caption-top">
@@ -99,29 +112,24 @@
 						<td>{{$semua}}</td>
 					</tr>
 					@else
+					@foreach($training as $tr)
+					@php
+					if(empty($tr[$attr->slug])) continue;
+					array_push($list['all'],$tr[$attr->slug]);
+					if($tr['status']){
+						array_push($list['true'],$tr[$attr->slug]);
+						$tot['true']+=$tr[$attr->slug];
+					}else{
+						array_push($list['false'],$tr[$attr->slug]);
+						$tot['false']+=$tr[$attr->slug];
+					}
+					@endphp
+					@endforeach
 					<tr>
 						<th>Data</th>
-						<td class="text-wrap">
-							@foreach($training['true'] as $t)
-							@php
-							if(empty($t[$attr->slug])) continue;
-							$tot['true'] += $t[$attr->slug];
-							$str.=$t[$attr->slug].', ';
-							echo $t[$attr->slug] . (!$loop->last ? ', ' : '');
-							@endphp
-							@endforeach
-						</td>
-						<td class="text-wrap">
-							@foreach($training['false'] as $f)
-							@php
-							if(empty($f[$attr->slug])) continue;
-							$tot['false'] += $f[$attr->slug];
-							$str.=$f[$attr->slug].', ';
-							echo $f[$attr->slug] . (!$loop->last ? ', ' : '');
-							@endphp
-							@endforeach
-						</td>
-						<td class="text-wrap">{{substr($str,0,strlen($str)-2)}}</td>
+						<td class="text-wrap">{{implode(', ',$list['true'])}}</td>
+						<td class="text-wrap">{{implode(', ',$list['false'])}}</td>
+						<td class="text-wrap">{{implode(', ',$list['all'])}}</td>
 					</tr>
 					<tr>
 						<th>Jumlah</th>
@@ -131,15 +139,15 @@
 					</tr>
 					<tr>
 						<th>Rata-rata</th>
-						<td>{{ $prob->mean_true ?? 0 }}</td>
-						<td>{{ $prob->mean_false ?? 0 }}</td>
-						<td>{{ $prob->mean_total ?? 0 }}</td>
+						<td>{{ $probab->mean_true ?? 0 }}</td>
+						<td>{{ $probab->mean_false ?? 0 }}</td>
+						<td>{{ $probab->mean_total ?? 0 }}</td>
 					</tr>
 					<tr>
 						<th>Simpangan Baku</th>
-						<td>{{ $prob->sd_true ?? 0 }}</td>
-						<td>{{ $prob->sd_false ?? 0 }}</td>
-						<td>{{ $prob->sd_total ?? 0 }}</td>
+						<td>{{ $probab->sd_true ?? 0 }}</td>
+						<td>{{ $probab->sd_false ?? 0 }}</td>
+						<td>{{ $probab->sd_total ?? 0 }}</td>
 					</tr>
 					@endif
 				</tbody>
@@ -149,23 +157,6 @@
 	</div>
 </div>
 <form action="{{ route('probab.reset') }}" method="POST" id="reset-probab">
-	@csrf
-	@method('DELETE')
+	@csrf @method('DELETE')
 </form>
-@endsection
-@section('js')
-<script type="text/javascript">
-	$(document).on("click", ".delete-record", function (e) {
-		e.preventDefault();
-		confirm.fire({
-			titleText: "Reset Probabilitas?",
-			text: 'Anda akan mereset hasil perhitungan probabilitas. Hasil klasifikasi akan ikut direset!'
-		}).then(function (result) {
-			if (result.isConfirmed){
-				$("#reset-probab").submit();
-				$('.spinner-grow').removeClass('d-none');
-			}
-		});
-	})
-</script>
 @endsection

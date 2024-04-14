@@ -24,14 +24,10 @@ class ProbabilityController extends Controller
 		}
 		$nilaiattr = NilaiAtribut::get();
 		$data = Probability::get();
-		$kelas = Controller::probabKelas();
-		$training = [
-			'true' => TrainingData::where('status', true)->get(),
-			'false' => TrainingData::where('status', false)->get(),
-			'total' => TrainingData::count()
-		];
+		$kelas = Probability::probabKelas();
+		$training = TrainingData::get();
 		$attribs = ['atribut' => $atribut, 'nilai' => $nilaiattr];
-		$hasil = Controller::$status;
+		$hasil = ProbabLabel::$label;
 		return view(
 			'main.naivebayes.probab',
 			compact('attribs', 'data', 'kelas', 'training', 'hasil')
@@ -51,7 +47,7 @@ class ProbabilityController extends Controller
 			$warning = false;
 
 			//Preprocessor Start
-			Controller::preprocess('train');
+			ProbabLabel::preprocess('train');
 			//Preprocessor End
 
 			//Prior start
@@ -90,17 +86,17 @@ class ProbabilityController extends Controller
 				if (count($p['true'])) {
 					$avg[$nilainum->name]['true'] = array_sum($p['true']) / count($p['true']);
 					$sd[$nilainum->name]['true'] =
-						Controller::stats_standard_deviation($p['true'], true);
+						ProbabLabel::stats_standard_deviation($p['true'], true);
 				}
 				if (count($p['false'])) {
 					$avg[$nilainum->name]['false'] =
 						array_sum($p['false']) / count($p['false']);
 					$sd[$nilainum->name]['false'] =
-						Controller::stats_standard_deviation($p['false'], true);
+						ProbabLabel::stats_standard_deviation($p['false'], true);
 				}
 				$avg[$nilainum->name]['all'] = array_sum($p['all']) / count($p['all']);
 				$sd[$nilainum->name]['all'] =
-					Controller::stats_standard_deviation($p['all'], true);
+					ProbabLabel::stats_standard_deviation($p['all'], true);
 				if (
 					!$sd[$nilainum->name]['true'] || !$sd[$nilainum->name]['false'] || !$sd[$nilainum->name]['all']
 				) {
@@ -146,9 +142,9 @@ class ProbabilityController extends Controller
 	}
 	private static function getNumbers(string $col)
 	{
-		$data = ['true' => 0, 'false' => 0, 'all' => 0];
+		$data = ['true' => array(), 'false' => array(), 'all' => array()];
 		foreach (TrainingData::select($col, 'status')->get() as $train) {
-			if ($train->status == true) $data['true'][] = $train[$col];
+			if ($train['status'] == true) $data['true'][] = $train[$col];
 			else $data['false'][] = $train[$col];
 			$data['all'][] = $train[$col];
 		}

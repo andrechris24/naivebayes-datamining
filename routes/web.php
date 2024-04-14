@@ -9,6 +9,14 @@ use App\Exports\DatasetTemplate,
 	App\Http\Controllers\ResultController,
 	App\Http\Controllers\TestingDataController,
 	App\Http\Controllers\TrainingDataController,
+	App\Livewire\Auth\Forgot,
+	App\Livewire\Auth\Login,
+	App\Livewire\Auth\Register,
+	App\Livewire\Auth\Reset,
+	// App\Livewire\Logout,
+	// App\Livewire\Performance,
+	// App\Livewire\Probab,
+	// App\Livewire\Profile,
 	Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -20,28 +28,18 @@ use App\Exports\DatasetTemplate,
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::controller(AdminController::class)->middleware(['guest'])->group(function () {
-	Route::prefix('register')->name('register')->group(function () {
-		Route::get('/', 'register');
-		Route::post('/', 'postRegister')->middleware(['throttle:user'])->name('.post');
-	});
-	Route::prefix('login')->name('login')->group(function () {
-		Route::get('/', 'login');
-		Route::post('/', 'postLogin')->middleware(['throttle:user'])->name('.post');
-	});
-	Route::prefix('password')->name('password.')->group(function () {
-		Route::get('/', 'forget')->name('forget');
-		Route::post('/', 'forgetLink')->name('send');
-		Route::prefix('reset')->group(function () {
-			Route::get('/', 'showReset')->name('change');
-			Route::patch('/', 'reset')->middleware(['throttle:user'])->name('reset');
-		});
+Route::middleware(['guest'])->group(function(){
+	Route::get('register',Register::class)->name('register');
+	Route::get('login', Login::class)->name('login');
+	Route::prefix('password')->name('password.')->group(function(){
+		Route::get('/',Forgot::class)->name('forget');
+		Route::get('reset', Reset::class)->name('reset');
 	});
 });
 Route::middleware(['auth'])->group(function () {
+	// Route::get('profile',Profile::class)->name('profil');
+	Route::get('/', [AdminController::class,'index'])->name('home');
 	Route::controller(AdminController::class)->group(function () {
-		Route::get('/', 'index')->name('home');
 		Route::prefix('profile')->name('profil.')->group(function () {
 			Route::get('/', 'edit')->name('edit');
 			Route::middleware(['throttle:user'])->group(function () {
@@ -49,7 +47,7 @@ Route::middleware(['auth'])->group(function () {
 				Route::delete('/', 'delete')->name('delete');
 			});
 		});
-		Route::post('/logout', 'logout')->name('logout');
+		Route::post('logout','logout')->name('logout');
 	});
 	Route::controller(TrainingDataController::class)->prefix('training')
 		->name('training.')->group(function () {
@@ -71,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
 			Route::get('calc', 'create')->name('create');
 			Route::delete('/', 'destroy')->name('reset');
 		});
+	// Route::get('probab',Probab::class)->name('probab');
 	Route::prefix('atribut')->name('atribut.')->group(function () {
 		Route::get('count', [AtributController::class, 'count'])->name('count');
 		Route::get('nilai/count', [NilaiAtributController::class, 'count'])
@@ -90,11 +89,10 @@ Route::middleware(['auth'])->group(function () {
 			Route::post('calc', 'create')->name('create')->block();
 			Route::delete('/', 'destroy')->name('reset')->block();
 		});
-	Route::get('result', [ResultController::class, 'index'])->name('result');
+	Route::get('result', ResultController::class)->name('result');
 	Route::get('template', function () {
 		return (new DatasetTemplate)->download('template.xlsx');
 	})->name('template-data');
-	Route::view('test', 'layout2');
 	Route::get('laravel', function () {
 		return view('welcome');
 	})->name('laravel');

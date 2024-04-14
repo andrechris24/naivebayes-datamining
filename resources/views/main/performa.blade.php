@@ -25,8 +25,7 @@
 		<div class="card mb-3">
 			<div class="card-header"><b>Performa Klasifikasi Data Testing</b></div>
 			<div class="card-body">
-				<div class="row mb-5">
-					<div class="col-md-8">
+				<div class="mb-5">
 						<table class="table table-bordered caption-top">
 							<caption>Hasil Prediksi</caption>
 							<thead class="thead-light">
@@ -62,37 +61,63 @@
 								</tr>
 							</tbody>
 						</table>
-					</div>
-					<div class="col-md-4">
-						<table class="table table-bordered caption-top">
-							<caption>Performa</caption>
-							<tbody>
-								<tr>
-									<th>Akurasi</th>
-									<td>{{round($performa['test']['accuracy'], 2)}}%</td>
-								</tr>
-								<tr>
-									<th>Presisi</th>
-									<td>{{round($performa['test']['precision'], 2)}}%</td>
-								</tr>
-								<tr>
-									<th>Recall</th>
-									<td>{{round($performa['test']['recall'], 2)}}%</td>
-								</tr>
-								<tr>
-									<th>Skor F1</th>
-									<td>{{round($performa['test']['f1'],2)}}%</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
 				</div>
 				<div class="row">
+					<div class="col-md-6"><div id="predict-actual-test"></div></div>
 					<div class="col-md-6">
-						<div id="predict-actual-test"></div>
-					</div>
-					<div class="col-md-6">
-						<div id="perform-radial-test"></div>
+						<p>Hasil Akhir</p>
+						<div class="progress-wrapper">
+							<div class="progress-info progress-xl">
+								<div class="progress-label">
+									<span class="text-secondary">Akurasi</span>
+								</div>
+								<div class="progress-percentage">
+									<span>{{round($performa['test']['accuracy'], 2)}}%</span>
+								</div>
+							</div>
+							<div class="progress progress-xl">
+								<div class="progress-bar bg-secondary" role="progressbar" style="width: {{round($performa['test']['accuracy'], 2)}}%;" aria-valuenow="{{round($performa['test']['accuracy'], 2)}}" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						</div>
+						<div class="progress-wrapper">
+							<div class="progress-info progress-xl">
+								<div class="progress-label">
+									<span class="text-tertiary">Presisi</span>
+								</div>
+								<div class="progress-percentage">
+									<span>{{round($performa['test']['precision'], 2)}}%</span>
+								</div>
+							</div>
+							<div class="progress progress-xl">
+								<div class="progress-bar bg-tertiary" role="progressbar" style="width: {{round($performa['test']['precision'], 2)}}%;" aria-valuenow="{{round($performa['test']['precision'], 2)}}" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						</div>
+						<div class="progress-wrapper">
+							<div class="progress-info progress-xl">
+								<div class="progress-label">
+									<span class="text-dark">Recall</span>
+								</div>
+								<div class="progress-percentage">
+									<span>{{round($performa['test']['recall'], 2)}}%</span>
+								</div>
+						</div>
+							<div class="progress progress-xl">
+								<div class="progress-bar bg-dark" role="progressbar" style="width: {{round($performa['test']['recall'], 2)}}%;" aria-valuenow="{{round($performa['test']['recall'], 2)}}" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						</div>
+						<div class="progress-wrapper">
+							<div class="progress-info progress-xl">
+								<div class="progress-label">
+									<span class="text-success">Skor F1</span>
+								</div>
+								<div class="progress-percentage">
+									<span>{{round($performa['test']['f1'],2)}}%</span>
+								</div>
+							</div>
+						<div class="progress progress-xl">
+							<div class="progress-bar bg-success" role="progressbar" style="width: {{round($performa['test']['f1'],2)}}%;" aria-valuenow="{{round($performa['test']['f1'],2)}}" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -103,8 +128,7 @@
 		<div class="card mb-3">
 			<div class="card-header"><b>Performa Klasifikasi Data Training</b></div>
 			<div class="card-body">
-				<div class="row mb-5">
-					<div class="col-md-8">
+				<div class="mb-5">
 						<table class="table table-bordered caption-top">
 							<caption>Hasil Prediksi</caption>
 							<thead class="thead-light">
@@ -140,37 +164,63 @@
 								</tr>
 							</tbody>
 						</table>
-					</div>
-					<div class="col-md-4">
-						<table class="table table-bordered caption-top">
-							<caption>Performa</caption>
-							<tbody>
-								<tr>
-									<th>Akurasi</th>
-									<td>{{round($performa['train']['accuracy'], 2)}}%</td>
-								</tr>
-								<tr>
-									<th>Presisi</th>
-									<td>{{round($performa['train']['precision'], 2)}}%</td>
-								</tr>
-								<tr>
-									<th>Recall</th>
-									<td>{{round($performa['train']['recall'], 2)}}%</td>
-								</tr>
-								<tr>
-									<th>Skor F1</th>
-									<td>{{round($performa['train']['f1'],2)}}%</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
 				</div>
 				<div class="row">
+					<div class="col-md-6"><div id="predict-actual-train"></div></div>
 					<div class="col-md-6">
-						<div id="predict-actual-train"></div>
-					</div>
-					<div class="col-md-6">
-						<div id="perform-radial-train"></div>
+						<p>Hasil Akhir</p>
+						<div class="progress-wrapper">
+							<div class="progress-info progress-xl">
+								<div class="progress-label">
+									<span class="text-secondary">Akurasi</span>
+								</div>
+								<div class="progress-percentage">
+									<span>{{round($performa['train']['accuracy'], 2)}}%</span>
+								</div>
+							</div>
+							<div class="progress progress-xl">
+								<div class="progress-bar bg-secondary" role="progressbar" style="width: {{round($performa['train']['accuracy'], 2)}}%;" aria-valuenow="{{round($performa['train']['accuracy'], 2)}}" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						</div>
+						<div class="progress-wrapper">
+							<div class="progress-info progress-xl">
+								<div class="progress-label">
+									<span class="text-tertiary">Presisi</span>
+								</div>
+								<div class="progress-percentage">
+									<span>{{round($performa['train']['precision'], 2)}}%</span>
+								</div>
+							</div>
+							<div class="progress progress-xl">
+								<div class="progress-bar bg-tertiary" role="progressbar" style="width: {{round($performa['train']['precision'], 2)}}%;" aria-valuenow="{{round($performa['train']['precision'], 2)}}" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						</div>
+						<div class="progress-wrapper">
+							<div class="progress-info progress-xl">
+								<div class="progress-label">
+									<span class="text-dark">Recall</span>
+								</div>
+								<div class="progress-percentage">
+									<span>{{round($performa['train']['recall'], 2)}}%</span>
+								</div>
+						</div>
+							<div class="progress progress-xl">
+								<div class="progress-bar bg-dark" role="progressbar" style="width: {{round($performa['train']['recall'], 2)}}%;" aria-valuenow="{{round($performa['train']['recall'], 2)}}" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						</div>
+						<div class="progress-wrapper">
+							<div class="progress-info progress-xl">
+								<div class="progress-label">
+									<span class="text-success">Skor F1</span>
+								</div>
+								<div class="progress-percentage">
+									<span>{{round($performa['train']['f1'],2)}}%</span>
+								</div>
+							</div>
+						<div class="progress progress-xl">
+							<div class="progress-bar bg-success" role="progressbar" style="width: {{round($performa['train']['f1'],2)}}%;" aria-valuenow="{{round($performa['train']['f1'],2)}}" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -228,76 +278,16 @@
 			text: 'Hasil Prediksi'
 		}
 	};
-	const testRadials = {
-		series: [
-			{{round($performa['test']['accuracy'], 2)}},
-			{{round($performa['test']['precision'], 2)}},
-			{{round($performa['test']['recall'], 2)}},
-			{{round($performa['test']['f1'],2)}}
-		],
-		chart: {type: 'radialBar'},
-		title: {
-			text: "Hasil Akhir"
-		},
-		plotOptions: {
-			radialBar: {
-				dataLabels: {
-					total: {
-						show: true,
-						label: "Total Data",
-						formatter: function(){
-							return {{$data['test']['total']}};
-						}
-					}
-				}
-			}
-		},
-		labels: ['Akurasi', 'Presisi', 'Recall', 'Skor F1']
-	};
-	const trainRadials = {
-		series: [
-			{{round($performa['train']['accuracy'], 2)}},
-			{{round($performa['train']['precision'], 2)}},
-			{{round($performa['train']['recall'], 2)}},
-			{{round($performa['train']['f1'],2)}}
-		],
-		chart: {
-			type: 'radialBar'
-		},
-		title: {
-			text: "Hasil Akhir"
-		},
-		plotOptions: {
-			radialBar: {
-				dataLabels: {
-					total: {
-						show: true,
-						label: "Total Data",
-						formatter: function(){
-							return {{$data['train']['total']}};
-						}
-					}
-				}
-			}
-		},
-		labels: ['Akurasi', 'Presisi', 'Recall', 'Skor F1']
-	};
 	const barTest = new ApexCharts(
 		document.getElementById("predict-actual-test"), testBarOptions
-	), radTest = new ApexCharts(
-		document.getElementById("perform-radial-test"), testRadials
 	), barTrain=new ApexCharts(
 		document.getElementById("predict-actual-train"), trainBarOptions
-	), radTrain = new ApexCharts(
-		document.getElementById("perform-radial-train"), trainRadials
 	);
 	@if($data['test']['total']>0)
 	barTest.render();
-	radTest.render();
 	@endif
 	@if($data['train']['total']>0)
 	barTrain.render();
-	radTrain.render();
 	@endif
 </script>
 @endsection

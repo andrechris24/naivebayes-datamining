@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ProbabLabel;
 use App\Models\Atribut;
 use App\Models\NilaiAtribut;
 use App\Models\TestingData;
@@ -33,7 +33,7 @@ class TestingImport implements ToModel, WithHeadingRow
 		}
 		$rows['status'] = array_search( //array_search dengan teknik case insensitive
 			strtolower(trim($row['keterangan'])),
-			array_map('strtolower', Controller::$status)
+			array_map('strtolower', ProbabLabel::$label)
 		);
 		return new TestingData($rows);
 	}

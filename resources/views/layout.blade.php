@@ -241,8 +241,11 @@
 			<div class="container-fluid px-0">
 				<div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
 					<div class="d-flex align-items-center">
-						<a href="{{route('phpinfo')}}" class="nav-item">
+						<a href="{{route('phpinfo')}}" class="nav-item me-3">
 							<i class="fa-brands fa-php fa-2x"></i>
+						</a>
+						<a href="{{route('laravel')}}" class="nav-item">
+							<i class="fa-brands fa-laravel fa-2x"></i>
 						</a>
 					</div>
 					<!-- Navbar links -->
@@ -253,7 +256,7 @@
 								<div class="media d-flex align-items-center">
 									{{-- <img class="avatar rounded-circle" alt="Image placeholder"
 										src="{{asset('assets/img/team/profile-picture-1.jpg')}}"> --}}
-									<div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
+									<div class="media-body ms-2 text-dark align-items-center">
 										<span class="mb-0 font-small fw-bold text-gray-900">
 											{{auth()->user()->name}}
 										</span>

@@ -6,7 +6,7 @@ use App\Models\Classification;
 
 class ResultController extends Controller
 {
-	public function index()
+	public function __invoke()
 	{
 		if (Classification::count() === 0) {
 			return to_route('class.index')
@@ -16,7 +16,7 @@ class ResultController extends Controller
 		$data['test'] = $this->cm('test');
 		$performa['train'] = $this->performa($data['train']);
 		$performa['test'] = $this->performa($data['test']);
-		$stat = Controller::$status;
+		$stat = ProbabLabel::$label;
 		return view('main.performa', compact('data', 'performa', 'stat'));
 	}
 	private static function cm(string $type)

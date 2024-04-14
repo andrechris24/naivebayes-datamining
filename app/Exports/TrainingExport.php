@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ProbabLabel;
 use App\Models\Atribut;
 use App\Models\NilaiAtribut;
 use App\Models\TrainingData;
@@ -39,7 +39,7 @@ implements FromCollection, WithHeadings, WithMapping, WithStrictNullComparison
 				$row[] = $foreign->name;
 			} else $row[] = $train[$val->slug];
 		}
-		$row[] = Controller::$status[$train->status];
+		$row[] = ProbabLabel::$label[$train->status];
 		return $row;
 	}
 }

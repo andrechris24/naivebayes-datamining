@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ProbabLabel;
 use App\Models\Classification;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
@@ -25,8 +25,8 @@ implements FromQuery, WithHeadings, WithMapping, WithStrictNullComparison
 		return array(
 			'#',
 			'Nama',
-			Controller::$status[true],
-			Controller::$status[false],
+			ProbabLabel::$label[true],
+			ProbabLabel::$label[false],
 			'Kelas Prediksi',
 			'Kelas Asli'
 		);
@@ -49,8 +49,8 @@ implements FromQuery, WithHeadings, WithMapping, WithStrictNullComparison
 			$class->name,
 			$class->true ?? 0.00,
 			$class->false ?? 0.00,
-			Controller::$status[$class->predicted],
-			Controller::$status[$class->real]
+			ProbabLabel::$label[$class->predicted],
+			ProbabLabel::$label[$class->real]
 		);
 	}
 }
