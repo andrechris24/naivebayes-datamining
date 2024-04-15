@@ -1,21 +1,25 @@
 const notif = new Notyf({
 	duration: 5000,
-	types: [
+	position: {
+    x: 'right',
+    y: 'top'
+  }, types: [
 		{
 			type: "warning",
 			background: "orange",
 			duration: 10000,
 			icon: {
-				className: "fa-solid fa-triangle-exclamation",
-				tagName: "i"
+				className: "fas fa-triangle-exclamation",
+				tagName: "span",
+				text: ""
 			}
-		},
-		{
+		}, {
 			type: "info",
 			background: "blue",
 			icon: {
-				className: "fa-solid fa-circle-info",
-				tagName: "i"
+				className: "fas fa-circle-info",
+				tagName: "span",
+				text: ""
 			}
 		}
 	]

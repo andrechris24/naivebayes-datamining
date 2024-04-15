@@ -152,7 +152,7 @@
 </div>
 <div class="card">
 	<div class="card-body">
-		<div class="btn-group mb-3" role="group" id="spare-button">
+		<div class="btn-group mb-2" role="group">
 			<div class="btn-group" role="group">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
 					aria-expanded="false">
@@ -252,37 +252,7 @@
 				}],
 				language: {
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
-				},
-				layout: {
-					topStart: {
-						buttons: [{
-							text: '<i class="fas fa-plus"></i> Tambah Data',
-							extend: "collection",
-							buttons: [{
-								text: '<i class="fas fa-pen"></i> Input Manual',
-								attr: {
-									"data-bs-toggle": "modal",
-									"data-bs-target": "#modalAddTesting"
-								}
-							}, {
-								text: '<i class="fas fa-upload"></i> Upload File',
-								attr: {
-									"data-bs-toggle": "modal",
-									"data-bs-target": "#modalImportTesting"
-								}
-							}]
-						}, {
-							text: '<i class="fas fa-trash"></i> Hapus Data',
-							className: "delete-all"
-						}, {
-							text: '<i class="fas fa-download"></i> Ekspor Data',
-							className: "download-data",
-							action: function () {
-								location.href = "{{route('testing.export')}}";
-							}
-						}]
-					}
-				}, drawCallback: function(){
+				},drawCallback: function(){
 					if(this.api().page.info().recordsTotal===0)
 						$('.download-data').prop('disabled',true);
 					else $('.download-data').prop('disabled',false);
@@ -295,16 +265,16 @@
 					$('#total-duplicate').text(data.duplicate);
 				}).fail(function (xhr, st) {
 					console.warn(xhr.responseJSON.message ?? st);
-					notif.error(`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`);
+					notif.error(`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
 				});
-			}).on('preInit.dt', removeBtn());
+			});
 		} catch (dterr) {
 			initError(dterr.message);
 		}
 	}).on("click", ".delete-all", function () {
 		confirm.fire({
 			titleText: "Hapus semua Data Testing?",
-			text: 'Anda akan menghapus semua Data Testing yang akan mempengaruhi klasifikasi terkait.',
+			text: 'Anda akan menghapus semua Data Testing yang akan mereset hasil klasifikasi terkait.',
 			preConfirm: async () => {
 				try {
 					await $.ajax({
@@ -318,7 +288,7 @@
 						error: function (xhr, st) {
 							console.warn(xhr.responseJSON.message ?? st);
 							return Swal.showValidationMessage(
-								`Gagal hapus: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`);
+								`Gagal hapus: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
 						}
 					});
 				} catch (error) {
@@ -326,12 +296,8 @@
 				}
 			}
 		}).then(function (result) {
-			if (result.isConfirmed) {
-				swal.fire({
-					icon: "success",
-					titleText: "Berhasil dihapus"
-				});
-			}
+			if (result.isConfirmed) 
+				notif.open({ type: "success", message:"Semua data berhasil dihapus" });
 		});
 	}).on("click", ".delete-record", function () {
 		let test_id = $(this).data("id"), test_name = $(this).data("name");
@@ -354,7 +320,7 @@
 								errmsg = `Data Testing ${test_name} tidak ditemukan`;
 							} else {
 								console.warn(xhr.responseJSON.message ?? st);
-								errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+								errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 							}
 							return Swal.showValidationMessage('Gagal hapus: ' + errmsg);
 						}
@@ -364,12 +330,8 @@
 				}
 			}
 		}).then(function (result) {
-			if (result.isConfirmed) {
-				swal.fire({
-					icon: "success",
-					titleText: "Berhasil dihapus"
-				});
-			}
+			if (result.isConfirmed) 
+				notif.open({ type: "success", message: "Berhasil dihapus" });
 		});
 	}).on("click", ".edit-record", function () {
 		let test_id = $(this).data("id");
@@ -390,13 +352,9 @@
 				errmsg = "Data Testing tidak ditemukan";
 			} else {
 				console.warn(xhr.responseJSON.message ?? st);
-				errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+				errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 			}
-			swal.fire({
-				icon: "error",
-				titleText: "Gagal memuat data",
-				text: errmsg
-			});
+			notif.open({ type: "error", message: "Gagal memuat data: "+errmsg });
 		}).always(function () {
 			formloading("#addNewTestingForm :input", false);
 			$('.btn-success').prop('disabled',false);
@@ -424,10 +382,7 @@
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
 				$('#modalImportTesting').modal("hide");
-				swal.fire({
-					icon: "success",
-					titleText: "Berhasil diupload"
-				});
+				notif.open({ type: "success", message:"Berhasil diupload" });
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
@@ -441,11 +396,7 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 				}
-				swal.fire({
-					titleText: "Gagal",
-					text: errmsg,
-					icon: "error"
-				});
+				notif.open({ type: "error", message: "Gagal upload: " +errmsg});
 			}
 		});
 	});
@@ -467,17 +418,14 @@
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
 				modalForm.modal("hide");
-				swal.fire({
-					icon: "success",
-					titleText: status.message
-				});
+				notif.open({ type: "success", message: status.message });
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
 					resetvalidation();
 					if (typeof xhr.responseJSON.errors.nama !== "undefined") {
 						$("#testName").addClass("is-invalid");
-						$("#name-error").text(xhr.responseJSON.errors.namaa);
+						$("#name-error").text(xhr.responseJSON.errors.nama);
 					}
 					@foreach($atribut as $attr)
 					if (typeof xhr.responseJSON.errors.{{$attr->slug}} !== "undefined") {
@@ -492,13 +440,9 @@
 					errmsg = xhr.responseJSON.message;
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+					errmsg = `Terjadi kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				swal.fire({
-					titleText: "Gagal",
-					text: errmsg,
-					icon: "error"
-				});
+				notif.open({ type: "error", message: errmsg });
 			}
 		});
 	};

@@ -1,16 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Atribut;
 use App\Models\Probability;
 use App\Models\TrainingData;
 use App\Models\TestingData;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProbabLabel extends Controller
 {
-	public static array $label=[0=>'Tidak Layak',1=>'Layak'];
+	public static array $label = [0 => 'Tidak Layak', 1 => 'Layak'];
 	public static function preprocess(string $type): void
 	{ //Impute missing values
 		try {
@@ -57,7 +58,8 @@ class ProbabLabel extends Controller
 			if ($at->type === 'categorical') {
 				//Jika Kategorikal, nilai probabilitas yang dicari
 				$probabilitas = Probability::firstWhere(
-					'nilai_atribut_id', $data[$at->slug]
+					'nilai_atribut_id',
+					$data[$at->slug]
 				);
 				$likelihood['true'] *= $probabilitas['true'];
 				$likelihood['false'] *= $probabilitas['false'];
@@ -67,13 +69,19 @@ class ProbabLabel extends Controller
 				$probabilitas = Probability::where('atribut_id', $at->id)
 					->whereNull('nilai_atribut_id')->first();
 				$likelihood['true'] *= self::normalDistribution(
-					$data[$at->slug], $probabilitas->sd_true, $probabilitas->mean_true
+					$data[$at->slug],
+					$probabilitas->sd_true,
+					$probabilitas->mean_true
 				);
 				$likelihood['false'] *= self::normalDistribution(
-					$data[$at->slug], $probabilitas->sd_false, $probabilitas->mean_false
+					$data[$at->slug],
+					$probabilitas->sd_false,
+					$probabilitas->mean_false
 				);
 				$evidence *= self::normalDistribution(
-					$data[$at->slug], $probabilitas->sd_total, $probabilitas->mean_total
+					$data[$at->slug],
+					$probabilitas->sd_total,
+					$probabilitas->mean_total
 				);
 			}
 		}

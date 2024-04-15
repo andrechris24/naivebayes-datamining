@@ -5,18 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\TestingData;
 use App\Models\TrainingData;
 use App\Models\User;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use Symfony\Component\Mailer\Exception\TransportException;
 
 class AdminController extends Controller
 {

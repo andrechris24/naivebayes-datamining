@@ -4,6 +4,7 @@ use App\Exports\DatasetTemplate,
 	App\Http\Controllers\AdminController,
 	App\Http\Controllers\AtributController,
 	App\Http\Controllers\ClassificationController,
+	// App\Http\Controllers\DataTableController,
 	App\Http\Controllers\NilaiAtributController,
 	App\Http\Controllers\ProbabilityController,
 	App\Http\Controllers\ResultController,
@@ -13,6 +14,7 @@ use App\Exports\DatasetTemplate,
 	App\Livewire\Auth\Login,
 	App\Livewire\Auth\Register,
 	App\Livewire\Auth\Reset,
+	// App\Livewire\Classify,
 	// App\Livewire\Logout,
 	// App\Livewire\Performance,
 	// App\Livewire\Probab,
@@ -37,13 +39,12 @@ Route::middleware(['guest'])->group(function(){
 	});
 });
 Route::middleware(['auth'])->group(function () {
-	// Route::get('profile',Profile::class)->name('profil');
-	Route::get('/', [AdminController::class,'index'])->name('home');
 	Route::controller(AdminController::class)->group(function () {
-		Route::prefix('profile')->name('profil.')->group(function () {
-			Route::get('/', 'edit')->name('edit');
+		Route::get('/', 'index')->name('home');
+		Route::prefix('profil')->name('profil.')->group(function () {
+			Route::get('/', 'edit')->name('index');
 			Route::middleware(['throttle:user'])->group(function () {
-				Route::patch('/', 'update')->name('update');
+				Route::post('/', 'update')->name('update');
 				Route::delete('/', 'delete')->name('delete');
 			});
 		});
@@ -71,9 +72,10 @@ Route::middleware(['auth'])->group(function () {
 		});
 	// Route::get('probab',Probab::class)->name('probab');
 	Route::prefix('atribut')->name('atribut.')->group(function () {
-		Route::get('count', [AtributController::class, 'count'])->name('count');
+		Route::get('count', [AtributController::class, 'count'])->name('count')
+		->block();
 		Route::get('nilai/count', [NilaiAtributController::class, 'count'])
-			->name('nilai.count');
+			->name('nilai.count')->block();
 		Route::resource('nilai', NilaiAtributController::class);
 	});
 	Route::resources([
@@ -89,6 +91,17 @@ Route::middleware(['auth'])->group(function () {
 			Route::post('calc', 'create')->name('create')->block();
 			Route::delete('/', 'destroy')->name('reset')->block();
 		});
+	// Route::get('class',Classify::class)->name('class');
+	// Route::prefix('datatable')->controller(DataTableController::class)->name('dt.')
+	// ->group(function(){
+	// 	Route::get('class', 'klasifikasi')->name('class')->block();
+	// 	Route::prefix('atribut')->name('atribut')->group(function(){
+	// 		Route::get('/','atribut')->block();
+	// 		Route::get('nilai','nilaiatribut')->name('.nilai')->block();
+	// 	});
+	// 	Route::get('train','trainingdata')->name('training')->block();
+	// 	Route::get('test','testingdata')->name('testing')->block();
+	// });
 	Route::get('result', ResultController::class)->name('result');
 	Route::get('template', function () {
 		return (new DatasetTemplate)->download('template.xlsx');

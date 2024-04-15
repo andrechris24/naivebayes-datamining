@@ -122,7 +122,7 @@ class AtributController extends Controller
 				} else {
 					$table->dropColumn($attr->slug);
 					$table->foreignId($req['slug'])->nullable()->constrained('nilai_atributs')
-						->nullOnDelete()->cascadeOnUpdate();
+						->nullOnDelete()->cascadeOnUpdate()->after('nama');
 				}
 			} else if ($attr->name !== $req['name']) {
 				if ($attr->type === 'categorical') $table->dropForeign([$attr->slug]);

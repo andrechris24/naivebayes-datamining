@@ -55,7 +55,8 @@ class TestingDataController extends Controller
 		$calculated = Probability::count();
 		$hasil = ProbabLabel::$label;
 		return view(
-			'main.dataset.testing',	compact('atribut', 'nilai', 'calculated', 'hasil')
+			'main.dataset.testing',
+			compact('atribut', 'nilai', 'calculated', 'hasil')
 		);
 	}
 	/**

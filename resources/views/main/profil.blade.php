@@ -6,8 +6,7 @@
 <div class="card card-body border-0 shadow mb-4">
 	<x-caps-lock />
 	<form class="needs-validation" enctype="multipart/form-data" id="form-edit-account">
-		@csrf
-		<input type="hidden" name="id" value="{{ auth()->id() }}">
+		<input type="hidden" name="id" value="{{ auth()->id() }}">@csrf
 		<div class="form-group position-relative mb-4">
 			<div class="row">
 				<div class="col-lg-3"><label for="name">Nama</label></div>
@@ -79,7 +78,7 @@
 			<button type="button" class="btn btn-danger" id="DelAccountBtn">
 				<i class="fas fa-trash"></i> Hapus Akun
 			</button>
-			<button type="submit" class="btn btn-primary animate-up-2">
+			<button type="submit" class="btn btn-primary">
 				<i class="fas fa-floppy-disk"></i> Simpan Perubahan
 			</button>
 		</div>
@@ -112,10 +111,7 @@
 			success: function () {
 				$("input[type=password]").val("");
 				resetvalidation();
-				swal.fire({
-					icon: "success",
-					titleText: "Tersimpan"
-				});
+				notif.open({ type: 'success', message: "Tersimpan" });
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
@@ -149,13 +145,9 @@
 						"Tunggu beberapa saat sebelum menyimpan perubahan.";
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+					errmsg = `Terjadi kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				swal.fire({
-					titleText: "Gagal simpan",
-					text: errmsg,
-					icon: "error"
-				});
+				notif.open({ type: 'error', message: errmsg });
 			}
 		});
 	};
@@ -163,7 +155,8 @@
 		confirm.fire({
 			titleText: "Hapus Akun?",
 			text: "Jika Anda sudah yakin ingin menghapus akun, " +
-				"masukkan password Anda untuk melanjutkan.",
+				"masukkan password Anda untuk melanjutkan. "+
+				"Anda akan logout secara otomatis setelah menghapus akun.",
 			input: "password",
 			inputLabel: "Password",
 			inputPlaceholder: "Password Anda",
@@ -190,8 +183,7 @@
 							return "{{ route('login') }}";
 						},
 						error: function (xhr, st) {
-							if (xhr.status === 422)
-								errmsg = xhr.responseJSON.message;
+							if (xhr.status === 422) errmsg = xhr.responseJSON.message;
 							else if (xhr.status === 429)
 								errmsg = "Terlalu banyak upaya. Cobalah beberapa saat lagi.";
 							else {
@@ -206,13 +198,8 @@
 				}
 			}
 		}).then((result) => {
-			if (result.isConfirmed) {
-				swal.fire({
-					titleText: "Akun sudah dihapus",
-					icon: "success"
-				});
-				location.replace = "{{ route('login') }}";
-			}
+			if (result.isConfirmed) 
+				notif.open({ type: 'success', message: "Akun sudah dihapus" });
 		});
 	});
 </script>

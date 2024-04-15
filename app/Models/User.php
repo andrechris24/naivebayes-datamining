@@ -50,6 +50,6 @@ class User extends Authenticatable
 			'email' => ['bail', 'required', 'email', 'exists:users'],
 			'password' => ['bail', 'required', 'confirmed', 'between:8,20'],
 			'password_confirmation' => 'required',
-			'token'=>'required'
+			'token' => 'required'
 		], $delrules = ['confirm_pass' => ['bail', 'required', 'current_password']];
 }

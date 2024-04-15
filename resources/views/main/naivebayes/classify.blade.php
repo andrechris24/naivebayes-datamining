@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
 	<div class="card-body">
-		<div class="btn-group mb-3" role="button" id="spare-button">
+		<div class="btn-group mb-2" role="button">
 			<button type="button" class="btn btn-primary calc-class">
 				<i class="fas fa-calculator"></i> Hitung
 			</button>
@@ -80,44 +80,14 @@
 				language: {
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
 				},
-				layout: {
-					topStart: {
-						buttons: [{
-							text: '<i class="fas fa-calculator"></i> Hitung',
-							className: 'calc-class'
-						}, {
-							text: '<i class="fas fa-arrow-rotate-right"></i> Reset',
-							className: 'reset-class'
-						},{
-							text: '<i class="fas fa-download"></i> Ekspor',
-							className: 'download-data',
-							extend: 'collection',
-							buttons: [{
-								text: 'Data Testing',
-								action: function(){
-									location.href="{{route('class.export')}}?type=test";
-								}
-							}, {
-								text: 'Data Training',
-								action: function(){
-									location.href="{{route('class.export')}}?type=train";
-								}
-							},{
-								text: 'Semua Data',
-								action: function(){
-									location.href="{{route('class.export')}}?type=all";
-								}
-							}]
-						}]
-					}
-				}, drawCallback: function(){
+				drawCallback: function(){
 					if(this.api().page.info().recordsTotal===0)
 						$('.download-data').prop('disabled',true);
 					else $('.download-data').prop('disabled',false);
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
-			}).on('preInit.dt', removeBtn());
+			});
 		} catch (dterr) {
 			initError(dterr.message);
 		}
@@ -165,12 +135,8 @@
 				}
 			}
 		}).then(function (result) {
-			if (result.isConfirmed) {
-				swal.fire({
-					icon: "success",
-					titleText: "Berhasil direset"
-				});
-			}
+			if (result.isConfirmed) 
+				notif.open({ type: "success", message: "Berhasil direset" });
 		});
 	}).on('click', '.calc-class', function(){
 		Swal.fire({
@@ -225,10 +191,7 @@
 		}).then((result) => {
 			if (result.isConfirmed) {
 				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
-				swal.fire({
-					titleText: "Berhasil dihitung",
-					icon: "success"
-				});
+				notif.open({ type: 'success', message: "Berhasil dihitung" });
 			}
 		});
 	});

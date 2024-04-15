@@ -3,24 +3,25 @@
 @section('content')
 <div class="btn-group" role="button">
 	<a href="{{route('probab.create')}}" class="btn btn-primary">
-		<i class="fas fa-calculator"></i> Hitung Probabilitas
+		<i class="fas fa-calculator"></i> Hitung
 	</a>
 	<a href="#modalResetProbab" class="btn btn-danger" data-bs-toggle="modal">
-		<i class="fas fa-arrow-rotate-right"></i> Reset Probabilitas
+		<i class="fas fa-arrow-rotate-right"></i> Reset
 	</a>
 </div>
-<div class="modal fade" tabindex="-1" id="modalResetProbab" aria-labelledby="modalResetProbabLabel" role="dialog" aria-hidden="true">
+<div class="modal fade" tabindex="-1" id="modalResetProbab" aria-labelledby="modalResetProbabLabel"
+	role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header bg-danger">
 				<h5 id="modalResetProbabLabel" class="modal-title text-white">
-				Reset Probabilitas?
+					Reset Probabilitas?
 				</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
 				<p>Anda akan mereset perhitungan probabilitas.
-				Hasil klasifikasi akan direset!</p>
+					Hasil klasifikasi akan direset!</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-tertiary" data-bs-dismiss="modal">
@@ -36,28 +37,28 @@
 <div class="card my-3">
 	<div class="card-header">Probabilitas Label Kelas</div>
 	<div class="card-body">
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>Atribut</th>
-						<th>Nilai Probabilitas</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{{$hasil[true]}}</td>
-						<td>{{$kelas['true']}}</td>
-					</tr>
-					<tr>
-						<td>{{$hasil[false]}}</td>
-						<td>{{$kelas['false']}}</td>
-					</tr>
-					<tr class="table-secondary">
-						<td>Total</td>
-						<td>{{$kelas['false'] + $kelas['true']}}</td>
-					</tr>
-				</tbody>
-			</table>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Atribut</th>
+					<th>Nilai Probabilitas</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{$hasil[true]}}</td>
+					<td>{{$kelas['true']}}</td>
+				</tr>
+				<tr>
+					<td>{{$hasil[false]}}</td>
+					<td>{{$kelas['false']}}</td>
+				</tr>
+				<tr class="table-secondary">
+					<td>Total</td>
+					<td>{{$kelas['false'] + $kelas['true']}}</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>
 <div class="card">
@@ -117,11 +118,11 @@
 					if(empty($tr[$attr->slug])) continue;
 					array_push($list['all'],$tr[$attr->slug]);
 					if($tr['status']){
-						array_push($list['true'],$tr[$attr->slug]);
-						$tot['true']+=$tr[$attr->slug];
+					array_push($list['true'],$tr[$attr->slug]);
+					$tot['true']+=$tr[$attr->slug];
 					}else{
-						array_push($list['false'],$tr[$attr->slug]);
-						$tot['false']+=$tr[$attr->slug];
+					array_push($list['false'],$tr[$attr->slug]);
+					$tot['false']+=$tr[$attr->slug];
 					}
 					@endphp
 					@endforeach

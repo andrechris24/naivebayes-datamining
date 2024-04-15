@@ -92,8 +92,7 @@
 </div>
 <div class="card">
 	<div class="card-body">
-		<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAddAtribut"
-			id="spare-button">
+		<button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#modalAddAtribut">
 			<i class="fas fa-plus"></i> Tambah Atribut
 		</button>
 		<table class="table table-bordered" id="table-atribut" width="100%">
@@ -161,17 +160,6 @@
 				}],
 				language: {
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
-				},
-				layout: {
-					topStart: {
-						buttons: [{
-							text: '<i class="fas fa-plus"></i> Tambah Atribut',
-							attr: {
-								"data-bs-toggle": "modal",
-								"data-bs-target": "#modalAddAtribut"
-							}
-						}]
-					}
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
@@ -181,9 +169,9 @@
 					$('#total-unused').text(data.unused);
 				}).fail(function (xhr, st) {
 					console.warn(xhr.responseJSON.message ?? st);
-					notif.error(`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`);
+					notif.error(`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
 				});
-			}).on('preInit.dt', removeBtn());
+			});
 		} catch (dterr) {
 			initError(dterr.message);
 		}
@@ -208,7 +196,7 @@
 								errmsg = `Atribut ${attr_name} tidak ditemukan`;
 							} else {
 								console.warn(xhr.responseJSON.message ?? st);
-								errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+								errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 							}
 							return Swal.showValidationMessage('Gagal hapus: ' + errmsg);
 						}
@@ -218,12 +206,8 @@
 				}
 			}
 		}).then(function (result) {
-			if (result.isConfirmed) {
-				swal.fire({
-					icon: "success",
-					titleText: "Berhasil dihapus"
-				});
-			}
+			if (result.isConfirmed) 
+				notif.open({ type: "success", message: "Berhasil dihapus" });
 		});
 	}).on("click", ".edit-record", function () {
 		let attr_id = $(this).data("id");
@@ -241,13 +225,9 @@
 				errmsg = "Atribut tidak ditemukan";
 			} else {
 				console.warn(xhr.responseJSON.message ?? st);
-				errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+				errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 			}
-			swal.fire({
-				icon: "error",
-				titleText: "Gagal memuat data",
-				text: errmsg
-			});
+			notif.open({ type: "error", message: "Gagal memuat data: "+errmsg });
 		}).always(function () {
 			formloading("#addNewAtributForm :input", false);
 		});
@@ -270,10 +250,7 @@
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-atribut")) dt_atribut.draw();
 				modalForm.modal("hide");
-				swal.fire({
-					icon: "success",
-					titleText: status.message
-				});
+				notif.open({ type: "success", message: status.message });
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
@@ -293,13 +270,9 @@
 					errmsg = xhr.responseJSON.message;
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+					errmsg = `Terjadi kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				swal.fire({
-					titleText: "Gagal",
-					text: errmsg,
-					icon: "error"
-				});
+				notif.open({ type: "error", message: errmsg });
 			}
 		});
 	};

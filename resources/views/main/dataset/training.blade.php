@@ -144,7 +144,7 @@
 <p>Data Training akan digunakan untuk melatih algoritma Naive Bayes sebagai algoritma klasifikasi.</p>
 <div class="card">
 	<div class="card-body">
-		<div class="btn-group mb-3" role="group" id="spare-button">
+		<div class="btn-group mb-2" role="group">
 			<div class="btn-group" role="group">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
 					aria-expanded="false">
@@ -244,36 +244,6 @@
 				}],
 				language: {
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
-				},
-				layout: {
-					topStart: {
-						buttons: [{
-							text: '<i class="fas fa-plus"></i> Tambah Data',
-							extend: "collection",
-							buttons: [{
-								text: '<i class="fas fa-pen"></i> Input Manual',
-								attr: {
-									"data-bs-toggle": "modal",
-									"data-bs-target": "#modalAddTraining"
-								}
-							}, {
-								text: '<i class="fas fa-upload"></i> Upload File',
-								attr: {
-									"data-bs-toggle": "modal",
-									"data-bs-target": "#modalImportTraining"
-								}
-							}]
-						}, {
-							text: '<i class="fas fa-trash"></i> Hapus Data',
-							className: "delete-all"
-						}, {
-							text: '<i class="fas fa-download"></i> Ekspor Data',
-							className: 'download-data',
-							action: function () {
-								location.href = "{{route('training.export')}}";
-							}
-						}]
-					}
 				}, drawCallback: function(){
 					if(this.api().page.info().recordsTotal===0)
 						$('.download-data').prop('disabled',true);
@@ -287,16 +257,16 @@
 					$('#total-duplicate').text(data.duplicate);
 				}).fail(function (xhr, st) {
 					console.warn(xhr.responseJSON.message ?? st);
-					notif.error(`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`);
+					notif.error(`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
 				});
-			}).on('preInit.dt', removeBtn());
+			});
 		} catch (dterr) {
 			initError(dterr.message);
 		}
 	}).on("click", ".delete-all", function () {
 		confirm.fire({
 			titleText: "Hapus semua Data Training?",
-			text: 'Anda akan menghapus semua Data Training yang akan mempengaruhi klasifikasi terkait. Probabilitas akan direset!',
+			text: 'Anda akan menghapus semua Data Training yang akan mereset hasil klasifikasi terkait. Probabilitas akan direset!',
 			preConfirm: async () => {
 				try {
 					await $.ajax({
@@ -311,7 +281,7 @@
 						error: function (xhr, st) {
 							console.warn(xhr.responseJSON.message ?? st);
 							return Swal.showValidationMessage(
-								`Gagal hapus: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`);
+								`Gagal hapus: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
 						}
 					});
 				} catch (error) {
@@ -319,12 +289,8 @@
 				}
 			}
 		}).then(function (result) {
-			if (result.isConfirmed) {
-				swal.fire({
-					icon: "success",
-					titleText: "Berhasil dihapus"
-				});
-			}
+			if (result.isConfirmed) 
+				notif.open({ type: "success", message: "Semua data berhasil dihapus" });
 		});
 	}).on("click", ".delete-record", function () {
 		let train_id = $(this).data("id"), train_name = $(this).data("name");
@@ -347,7 +313,7 @@
 								errmsg = `Data Training ${train_name} tidak ditemukan`;
 							} else {
 								console.warn(xhr.responseJSON.message ?? st);
-								errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+								errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 							}
 							return Swal.showValidationMessage('Gagal hapus: ' + errmsg);
 						}
@@ -357,12 +323,8 @@
 				}
 			}
 		}).then(function (result) {
-			if (result.isConfirmed) {
-				swal.fire({
-					icon: "success",
-					titleText: "Berhasil dihapus"
-				});
-			}
+			if (result.isConfirmed) 
+				notif.open({ type: "success", message: "Berhasil dihapus" });
 		});
 	}).on("click", ".edit-record", function () {
 		let train_id = $(this).data("id");
@@ -385,11 +347,7 @@
 				console.warn(xhr.responseJSON.message ?? st);
 				errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 			}
-			swal.fire({
-				icon: "error",
-				titleText: "Gagal memuat data",
-				text: errmsg
-			});
+			notif.open({ type: "error", message: "Gagal memuat data: "+errmsg });
 		}).always(function () {
 			$('.btn-success').prop('disabled',false);
 			formloading("#addNewTrainingForm :input", false);
@@ -417,10 +375,7 @@
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-training")) dt_training.draw();
 				$('#modalImportTraining').modal("hide");
-				swal.fire({
-					icon: "success",
-					titleText: "Berhasil diupload"
-				});
+				notif.open({ type: "success", message: "Berhasil diupload" });
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
@@ -432,13 +387,9 @@
 					errmsg = xhr.responseJSON.message;
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				swal.fire({
-					titleText: "Gagal upload",
-					text: errmsg,
-					icon: "error"
-				});
+				notif.open({ type: "error", message: "Gagal upload: "+errmsg });
 			}
 		});
 	});
@@ -460,10 +411,7 @@
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-training")) dt_training.draw();
 				modalForm.modal("hide");
-				swal.fire({
-					icon: "success",
-					titleText: status.message
-				});
+				notif.open({ type: "success", message: status.message });
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
@@ -485,13 +433,9 @@
 					errmsg = xhr.responseJSON.message;
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+					errmsg = `Terjadi kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				swal.fire({
-					titleText: "Gagal",
-					text: errmsg,
-					icon: "error"
-				});
+				notif.open({ type: "error", message: errmsg });
 			}
 		});
 	};
