@@ -12,7 +12,7 @@
 					<div class="content-left">
 						<span>Data Training</span>
 						<div class="d-flex align-items-end mt-2">
-							<h3 class="mb-0 me-2">{{ $datas['train'] }}</h3>
+							<h3 class="mb-0 me-2">{{ $train }}</h3>
 						</div>
 					</div>
 					<span class="badge bg-primary rounded p-2">
@@ -29,7 +29,7 @@
 					<div class="content-left">
 						<span>Data Testing</span>
 						<div class="d-flex align-items-end mt-2">
-							<h3 class="mb-0 me-2">{{ $datas['test'] }}</h3>
+							<h3 class="mb-0 me-2">{{ $test }}</h3>
 						</div>
 					</div>
 					<span class="badge bg-success rounded p-2">
@@ -46,7 +46,7 @@
 					<div class="content-left">
 						<span>Total Data</span>
 						<div class="d-flex align-items-end mt-2">
-							<h3 class="mb-0 me-2">{{$datas['total']}}</h3>
+							<h3 class="mb-0 me-2">{{$total}}</h3>
 						</div>
 					</div>
 					<span class="badge bg-secondary rounded p-2">

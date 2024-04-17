@@ -20,7 +20,7 @@
 								<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
 							</svg>
 						</span>
-						<input wire:model="name" id="name" type="text" class="form-control" placeholder="Nama Anda"
+						<input wire:model="name" id="name" type="text" class="form-control @error('name') is-invalid @enderror " placeholder="Nama Anda"
 							autofocus required>
 					</div>
 					@error('name')
@@ -39,7 +39,7 @@
 								<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
 							</svg>
 						</span>
-						<input wire:model="email" id="email" type="email" class="form-control"
+						<input wire:model="email" id="email" type="email" class="form-control @error('email') is-invalid @enderror "
 							placeholder="example@company.com" required>
 					</div>
 					@error('email')
@@ -60,7 +60,7 @@
 										clip-rule="evenodd"></path>
 								</svg>
 							</span>
-							<input wire:model.lazy="password" type="password" placeholder="Password" class="form-control"
+							<input wire:model.lazy="password" type="password" placeholder="Password" class="form-control @error('password') is-invalid @enderror "
 								id="password" minlength="8" maxlength="20" required>
 						</div>
 						@error('password')
@@ -81,7 +81,7 @@
 								</svg>
 							</span>
 							<input wire:model.lazy="password_confirmation" type="password" placeholder="Konfirmasi Password"
-								class="form-control" id="confirm_password" minlength="8" maxlength="20" required>
+								class="form-control @error('password_confirmation') is-invalid @enderror " id="confirm_password" minlength="8" maxlength="20" required>
 						</div>
 						@error('password_confirmation')
 						<div class="invalid-feedback">{{ $message }}</div>

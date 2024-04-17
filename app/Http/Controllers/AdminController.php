@@ -18,12 +18,12 @@ class AdminController extends Controller
 {
 	public function index()
 	{
-		$datas = [
+		$data = [
 			'test' => TestingData::count(),
 			'train' => TrainingData::count(),
 			'total' => TestingData::count() + TrainingData::count()
 		];
-		return view('main.index', compact('datas'));
+		return view('main.index', $data);
 	}
 	public function edit()
 	{

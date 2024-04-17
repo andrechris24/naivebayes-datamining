@@ -15,11 +15,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ClassificationController extends Controller
 {
-	public function export(Request $req)
+	public function export($type)
 	{
 		return Excel::download(
-			new ClassificationExport($req->type),
-			"klasifikasi_{$req->type}.xlsx"
+			new ClassificationExport($type),
+			"klasifikasi_{$type}.xlsx"
 		);
 	}
 	/**

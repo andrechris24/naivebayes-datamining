@@ -277,6 +277,8 @@
 		$("#modalAddNilaiAtributLabel").html("Tambah Nilai Atribut");
 		$("#addNewNilaiAtributForm")[0].reset();
 		$("#attr_id").val("");
+		$("#name-error").text("Masukkan Nama");
+		$("#type-error").text("Pilih Atribut");
 	});
 </script>
 @endsection

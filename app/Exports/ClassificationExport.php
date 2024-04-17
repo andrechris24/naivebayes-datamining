@@ -36,9 +36,8 @@ implements FromQuery, WithHeadings, WithMapping, WithStrictNullComparison
 	 */
 	public function query()
 	{
-		global $tipe;
-		if ($tipe === 'train' || $tipe === 'test')
-			return Classification::query()->where('type', $tipe);
+		if ($this->tipe === 'train' || $this->tipe === 'test')
+			return Classification::query()->where('type', $this->tipe);
 		return Classification::query();
 	}
 	public function map($class): array

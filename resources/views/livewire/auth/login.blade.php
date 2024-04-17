@@ -23,7 +23,7 @@
 								<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
 							</svg>
 						</span>
-						<input wire:model="email" type="email" class="form-control" placeholder="example@company.com"
+						<input wire:model="email" type="email" class="form-control @error('email') is-invalid @enderror " placeholder="example@company.com"
 							id="email" autofocus required>
 					</div>
 					@error('email')
@@ -44,7 +44,7 @@
 										clip-rule="evenodd"></path>
 								</svg>
 							</span>
-							<input wire:model.lazy="password" type="password" placeholder="Password" class="form-control"
+							<input wire:model.lazy="password" type="password" placeholder="Password" class="form-control @error('password') is-invalid @enderror "
 								id="password" required>
 						</div>
 						@error('password')

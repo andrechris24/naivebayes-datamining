@@ -1,7 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+	<meta charset="utf-8">
+	<meta name="msapplication-config" content="{{asset('assets/img/favicons/browserconfig.xml')}}">
+	<meta name="theme-color" content="#563d7c">
+	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
 	<title>
 		@yield('title') | Aplikasi Klasifikasi Kelayakan Calon Penerima Bansos
 	</title>
@@ -11,12 +15,9 @@
 	<link rel="icon" href="{{asset('assets/img/favicon/favicon-16x16.png')}}" sizes="16x16" type="image/png">
 	<link rel="mask-icon" href="{{asset('assets/img/favicon/safari-pinned-tab.svg')}}" color="#563d7c">
 	<link rel="icon" href="{{asset('assets/img/favicon/favicon.ico')}}">
-	<meta name="msapplication-config" content="{{asset('assets/img/favicons/browserconfig.xml')}}">
-	<meta name="theme-color" content="#563d7c">
-	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
+	@livewireStyles
+	{{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> --}}
 	<!-- DataTables -->
 	<link
 		href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.0.0/b-3.0.0/b-html5-3.0.0/r-3.0.0/datatables.min.css"
@@ -28,8 +29,8 @@
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 	<!-- Sweet Alert -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css"
-		integrity="sha256-h2Gkn+H33lnKlQTNntQyLXMWq7/9XI2rlPCsLsVcUBs=" crossorigin="anonymous">
+	{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css"
+		integrity="sha256-h2Gkn+H33lnKlQTNntQyLXMWq7/9XI2rlPCsLsVcUBs=" crossorigin="anonymous"> --}}
 
 	<!-- Notyf -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
@@ -56,10 +57,6 @@
 	<!-- Apex Charts -->
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-	<!-- Sweet Alerts 2 -->
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	<script src="https://cdn.jsdelivr.net/npm/notiflix@3.2.7/dist/notiflix-aio-3.2.7.min.js" integrity="sha256-G6sj3uSY1Rtnyomq54b5wiwwe2+A5Zym254DHutrXM4=" crossorigin="anonymous"></script>
-
 	<!-- Notyf -->
 	<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 
@@ -77,7 +74,7 @@
 	<script src="{{asset('assets/js/volt.js')}}"></script>
 </head>
 
-<body onload="switchvalidation()">
+<body>
 	<nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
 		<a class="navbar-brand me-lg-5" href="{{route('home')}}">
 			<img class="navbar-brand-dark" src="{{asset('assets/img/data-mining_8438890.png')}}"
@@ -126,7 +123,7 @@
 					</a>
 				</li>
 				<li @class(["nav-item",'active'=>Request::segment(1)=='atribut'&&empty(Request::segment(2))])>
-					<a href="{{route('atribut.index')}}" class="nav-link d-flex justify-content-between">
+					<a href="{{route('atribut')}}" class="nav-link d-flex justify-content-between">
 						<span>
 							<span class="sidebar-icon"><i class="fas fa-layer-group"></i></span>
 							<span class="sidebar-text">Atribut</span>
@@ -134,7 +131,7 @@
 					</a>
 				</li>
 				<li @class(["nav-item", 'active'=>Request::segment(2) == 'nilai'])>
-					<a href="{{route('atribut.nilai.index')}}" class="nav-link">
+					<a href="{{route('atribut.nilai')}}" class="nav-link">
 						<span>
 							<span class="sidebar-icon"><i class="fas fa-layer-group"></i></span>
 							<span class="sidebar-text">Nilai Atribut</span>
@@ -163,12 +160,12 @@
 						id="submenu-dataset" aria-expanded="false">
 						<ul class="flex-column nav">
 							<li @class(["nav-item", 'active'=> Request::segment(1) == 'training'])>
-								<a class="nav-link" href="{{route('training.index')}}">
+								<a class="nav-link" href="{{route('training')}}">
 									<span class="sidebar-text">Data Training</span>
 								</a>
 							</li>
 							<li @class(["nav-item", 'active'=> Request::segment(1) == 'testing'])>
-								<a class="nav-link" href="{{route('testing.index')}}">
+								<a class="nav-link" href="{{route('testing')}}">
 									<span class="sidebar-text">Data Testing</span>
 								</a>
 							</li>
@@ -197,12 +194,12 @@
 						role="list" id="submenu-naivebayes" aria-expanded="false">
 						<ul class="flex-column nav">
 							<li @class(["nav-item", 'active'=> Request::segment(1) == 'probab'])>
-								<a class="nav-link" href="{{ route('probab.index') }}">
+								<a class="nav-link" href="{{ route('probab') }}">
 									<span class="sidebar-text">Probabilitas</span>
 								</a>
 							</li>
 							<li @class(["nav-item", 'active'=> Request::segment(1) == 'class'])>
-								<a class="nav-link" href="{{route('class.index')}}">
+								<a class="nav-link" href="{{route('class')}}">
 									<span class="sidebar-text">Klasifikasi</span>
 								</a>
 							</li>
@@ -219,7 +216,7 @@
 				</li>
 				<li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
 				<li class="nav-item">
-					<a href="{{route('logout')}}" class="nav-link d-flex align-items-center" id="logout-btn">
+					<a wire:click.prevent="logout" class="nav-link d-flex align-items-center">
 						<span class="sidebar-icon">
 							<svg class="icon icon-xxs me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
 								xmlns="http://www.w3.org/2000/svg">
@@ -252,6 +249,7 @@
 							<a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown"
 								aria-expanded="false">
 								<div class="media d-flex align-items-center">
+									<span class="text-dark"><i class="fas fa-user-circle fa-2x"></i></span>
 									{{-- <img class="avatar rounded-circle" alt="Image placeholder"
 										src="{{asset('assets/img/team/profile-picture-1.jpg')}}"> --}}
 									<div class="media-body ms-2 text-dark align-items-center">
@@ -262,7 +260,7 @@
 								</div>
 							</a>
 							<div class="dropdown-menu dashboard-dropdown dropdown-menu-end mt-2 py-1">
-								<a class="dropdown-item d-flex align-items-center" href="{{route('profil.index')}}">
+								<a class="dropdown-item d-flex align-items-center" href="{{route('profil')}}">
 									<svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
 										xmlns="http://www.w3.org/2000/svg">
 										<path fill-rule="evenodd"
@@ -272,13 +270,8 @@
 									Profil
 								</a>
 								<div role="separator" class="dropdown-divider my-1"></div>
-								<a class="dropdown-item d-flex align-items-center" href="{{route('logout')}}" id="logout-btn">
-									<svg class="icon icon-xxs me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-										xmlns="http://www.w3.org/2000/svg">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-											d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-										</path>
-									</svg>Logout
+								<a class="dropdown-item d-flex align-items-center" href="{{route('logout')}}">
+									<livewire:logout />
 								</a>
 							</div>
 						</li>
@@ -289,7 +282,7 @@
 		<h2 class="h4">@yield('title')</h2>
 		<x-alert />
 		<x-no-script />
-		@yield('content')
+		{{$slot}}
 		<footer class="bg-white rounded shadow p-5 mb-4 mt-4">
 			<div class="row">
 				<div class="col-12 col-md-4 col-xl-6 mb-4 mb-md-0">
@@ -304,23 +297,10 @@
 			</div>
 		</footer>
 	</main>
-	<form method="POST" id="logout-form" action="{{ route('logout') }}">@csrf</form>
-	<script type="text/javascript" src="{{ asset('assets/js/swal.js') }}"></script>
 	<script type="text/javascript" src="{{asset('assets/js/notyf.js')}}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/datatables.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/validate.js') }}"></script>
-	<script type="text/javascript">
-		$(document).on('click', '#logout-btn', function (e) {
-			e.preventDefault();
-			document.getElementById('logout-form').submit();
-		});
-		function formloading(formEl, disable){
-			$(formEl).prop('disabled', disable);
-			if(disable) $('.spinner-grow').removeClass('d-none');
-			else $('.spinner-grow').addClass('d-none');
-		}
-	</script>
-	@yield('js')
+	@livewireScripts
+	@stack('js')
 </body>
 
 </html>

@@ -33,9 +33,7 @@
 					<div class="form-floating mb-4">
 						<input type="text" class="form-control" id="attrDesc" name="desc" placeholder="Keterangan" />
 						<label for="attrDesc">Keterangan</label>
-						<div class="invalid-tooltip" id="desc-error">
-							Masukkan Keterangan
-						</div>
+						<div class="invalid-tooltip" id="desc-error"></div>
 					</div>
 				</form>
 			</div>
@@ -281,7 +279,9 @@
 		$("#modalAddAtributLabel").html("Tambah Atribut");
 		$("#addNewAtributForm")[0].reset();
 		$("#attr_id").val("");
-		$("#attrType").prop('disabled',false);
+		$("#name-error").text("Masukkan Nama Atribut");
+		$("#type-error").text("Pilih tipe atribut");
+		$("#desc-error").text('');
 	});
 </script>
 @endsection

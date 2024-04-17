@@ -20,8 +20,7 @@
 				<div class="mb-4">
 					<label for="email">Email</label>
 					<div class="input-group">
-						<input wire:model='email' type="email" class="form-control" id="email"
-							placeholder="john@company.com" required autofocus>
+						<input wire:model="email" type="email" class="form-control @error('email') is-invalid @enderror " id="email" placeholder="john@company.com" required autofocus>
 					</div>
 					@error('email')
 					<div class="invalid-feedback">{{ $message }}</div>

@@ -34,7 +34,7 @@
 						@endif
 						<label for="train-{{$attr->slug}}">{{$attr->name}}</label>
 						<div class="invalid-tooltip" id="{{$attr->slug}}-error">
-							{{($attr->type==='numeric'?'Isikan ':'Pilih ').$attr->name}}
+							{{($attr->type==='numeric'?'Masukkan ':'Pilih ').$attr->name}}
 						</div>
 					</div>
 					@endforeach
@@ -78,7 +78,7 @@
 			<div class="modal-body">
 				<div class="alert alert-info" role="alert">
 					<i class="fas fa-info-circle"></i>
-					<a href="{{route('template-data')}}">Klik disini</a> untuk mendownload template Dataset
+					<a href="{{route('template-data')}}" class="alert-link">Klik disini</a> untuk mendownload template Dataset
 				</div>
 				<form id="importTrainingData">@csrf
 					<input type="file" class="form-control" id="trainData" name="data" data-bs-toggle="tooltip"
@@ -141,14 +141,20 @@
 		</div>
 	</div>
 </div>
-<p>Data Training akan digunakan untuk melatih algoritma Naive Bayes sebagai algoritma klasifikasi.</p>
+@once
+<div class="alert alert-info alert-dismissible" role="alert">
+	<p>Data Training akan digunakan untuk melatih algoritma klasifikasi Naive Bayes.</p>
+	<p>Melakukan perubahan pada Data Training akan mereset Probabilitas.</p>
+	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endonce
 <div class="card">
 	<div class="card-body">
 		<div class="btn-group mb-2" role="group">
 			<div class="btn-group" role="group">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
 					aria-expanded="false">
-					<i class="fas fa-plus"></i> Tambah Data
+					<i class="fas fa-plus"></i> Tambah Data <i class="fa-solid fa-caret-down"></i>
 				</button>
 				<ul class="dropdown-menu">
 					<li>
@@ -244,15 +250,13 @@
 				}],
 				language: {
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
-				}, drawCallback: function(){
-					if(this.api().page.info().recordsTotal===0)
-						$('.download-data').prop('disabled',true);
-					else $('.download-data').prop('disabled',false);
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
 			}).on('preXhr', function () {
 				$.get("{{ route('training.count') }}", function (data) {
+					if(data.total===0) $('.download-data').prop('disabled',true);
+					else $('.download-data').prop('disabled',false);
 					$("#total-counter").text(data.total);
 					$('#total-duplicate').text(data.duplicate);
 				}).fail(function (xhr, st) {
@@ -266,7 +270,7 @@
 	}).on("click", ".delete-all", function () {
 		confirm.fire({
 			titleText: "Hapus semua Data Training?",
-			text: 'Anda akan menghapus semua Data Training yang akan mereset hasil klasifikasi terkait. Probabilitas akan direset!',
+			text: 'Anda akan menghapus semua Data Training yang akan mereset hasil klasifikasi terkait.',
 			preConfirm: async () => {
 				try {
 					await $.ajax({
@@ -444,6 +448,15 @@
 		$("#modalAddTrainingLabel").html("Tambah Data Training");
 		$("#addNewTrainingForm")[0].reset();
 		$("#train_id").val("");
+		$("#name-error").text("Masukkan Nama");
+		@foreach($atribut as $attr)
+			@if($attr->type==='numeric')
+			$("#{{$attr->slug}}-error").text("Masukkan {{$attr->slug}}");
+			@else
+			$("#{{$attr->slug}}-error").text("Pilih {{$attr->slug}}");
+			@endif
+		@endforeach
+		$("#result-error").text("Pilih hasil");
 	});
 </script>
 @endsection

@@ -34,7 +34,7 @@
 						@endif
 						<label for="test-{{$attr->slug}}">{{$attr->name}}</label>
 						<div class="invalid-tooltip" id="{{$attr->slug}}-error">
-							{{($attr->type==='numeric'?'Isikan ':'Pilih ').$attr->name}}
+							{{($attr->type==='numeric'?'Masukkan ':'Pilih ').$attr->name}}
 						</div>
 					</div>
 					@endforeach
@@ -83,7 +83,7 @@
 			<div class="modal-body">
 				<div class="alert alert-info" role="alert">
 					<i class="fas fa-info-circle"></i>
-					<a href="{{route('template-data')}}">Klik disini</a> untuk mendownload template Dataset
+					<a href="{{route('template-data')}}" class="alert-link">Klik disini</a> untuk mendownload template Dataset
 				</div>
 				<form id="importTestingData">@csrf
 					<input type="file" class="form-control" id="testData" name="data" aria-describedby="importFormats"
@@ -156,7 +156,7 @@
 			<div class="btn-group" role="group">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
 					aria-expanded="false">
-					<i class="fas fa-plus"></i> Tambah Data
+					<i class="fas fa-plus"></i> Tambah Data <i class="fa-solid fa-caret-down"></i>
 				</button>
 				<ul class="dropdown-menu">
 					<li>
@@ -252,15 +252,13 @@
 				}],
 				language: {
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
-				},drawCallback: function(){
-					if(this.api().page.info().recordsTotal===0)
-						$('.download-data').prop('disabled',true);
-					else $('.download-data').prop('disabled',false);
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
 			}).on('preXhr', function () {
 				$.get("{{ route('testing.count') }}", function (data) {
+					if(data.total===0) $('.download-data').prop('disabled',true);
+					else $('.download-data').prop('disabled',false);
 					$("#total-counter").text(data.total);
 					$('#total-duplicate').text(data.duplicate);
 				}).fail(function (xhr, st) {
@@ -451,6 +449,15 @@
 		$("#modalAddTestingLabel").html("Tambah Data Testing");
 		$("#addNewTestingForm")[0].reset();
 		$("#test_id").val("");
+		$("#name-error").text("Masukkan Nama");
+		@foreach($atribut as $attr)
+			@if($attr->type==='numeric')
+			$("#{{$attr->slug}}-error").text("Masukkan {{$attr->slug}}");
+			@else
+			$("#{{$attr->slug}}-error").text("Pilih {{$attr->slug}}");
+			@endif
+		@endforeach
+		$("#result-error").text("Pilih hasil");
 	});
 </script>
 @endsection

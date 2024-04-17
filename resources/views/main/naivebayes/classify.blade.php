@@ -12,21 +12,21 @@
 			</button>
 			<button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"
 				aria-expanded="false">
-				<i class="fas fa-download"></i> Ekspor
+				<i class="fas fa-download"></i> Ekspor <i class="fa-solid fa-caret-down"></i>
 			</button>
 			<ul class="dropdown-menu">
 				<li>
-					<a class="dropdown-item" href="{{route('class.export')}}?type=test">
+					<a class="dropdown-item" href="{{route('class.export','test')}}">
 						Data Testing
 					</a>
 				</li>
 				<li>
-					<a class="dropdown-item" href="{{route('class.export')}}?type=test">
+					<a class="dropdown-item" href="{{route('class.export','train')}}">
 						Data Training
 					</a>
 				</li>
 				<li>
-					<a class="dropdown-item" href="{{route('class.export')}}?type=all">
+					<a class="dropdown-item" href="{{route('class.export','all')}}">
 						Semua Data
 					</a>
 				</li>

@@ -17,7 +17,7 @@
 				<div class="mb-4">
 					<label for="email">Email</label>
 					<div class="input-group">
-						<input wire:model="email" type="email" class="form-control" placeholder="example@company.com"
+						<input wire:model="email" type="email" class="form-control @error('email') is-invalid @enderror " placeholder="example@company.com"
 							id="email" readonly>
 					</div>
 					@error('email')
@@ -38,7 +38,7 @@
 							</svg>
 						</span>
 						<input wire:model.lazy="password" type="password" placeholder="Password" minlength="8"
-							maxlength="20" class="form-control" id="password" required>
+							maxlength="20" class="form-control @error('password') is-invalid @enderror " id="password" required>
 					</div>
 					@error('password')
 					<div class="invalid-feedback">{{ $message }}</div>
@@ -58,7 +58,7 @@
 							</svg>
 						</span>
 						<input wire:model.lazy="password_confirmation" type="password" placeholder="Konfirmasi Password"
-							class="form-control" id="passwordConfirmation" minlength="8" maxlength="20" required>
+							class="form-control @error('password_confirmation') is-invalid @enderror " id="passwordConfirmation" minlength="8" maxlength="20" required>
 					</div>
 					@error('password_confirmation')
 					<div class="invalid-feedback">{{ $message }}</div>

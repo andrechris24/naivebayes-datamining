@@ -1,103 +1,80 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Livewire;
 use App\Models\Atribut;
-use App\Models\NilaiAtribut;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Str;
-use Yajra\DataTables\Facades\DataTables;
+use Livewire\Component;
 
-class AtributController extends Controller
+class Attribute extends Component
 {
-	public function count()
-	{
-		$attr = Atribut::count();
-		$unused = 0;
-		foreach (Atribut::where('type', 'categorical')->get() as $at) {
-			if (NilaiAtribut::where('atribut_id', $at->id)->count() === 0)
-				$unused++;
-		}
-		return ['total' => $attr, 'unused' => $unused];
-	}
-	/**
-	 * Display a listing of the resource.
-	 */
-	public function index()
-	{
-		return view('main.atribut.index');
-	}
-
-	/**
-	 * Show the form for creating a new resource.
-	 */
-	public function create()
-	{
-		return DataTables::of(Atribut::query())
-			->editColumn('type', function (Atribut $attr) {
-				return Atribut::$tipe[$attr->type];
-			})->make();
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 */
-	public function store(Request $request)
+	public int $id;
+	public string $name;
+	public string $type;
+	public string $desc;
+	public function store()
 	{
 		try {
-			$request->validate(Atribut::$rules);
-			$req = $request->all();
-			$req['slug'] = Str::slug($request->name, '_');
-			if ($request->id) {
-				$atribut = Atribut::findOrFail($request->id);
+			$this->validate(Atribut::$rules);
+			$req = [
+				'name' => $this->name,
+				'slug' => Str::slug($this->name, '_'),
+				'type' => $this->type,
+				'desc' => $this->desc];
+			if ($this->id) {
+				$atribut = Atribut::findOrFail($this->id);
 				$this->editColumn('training_data', $atribut, $req);
 				$this->editColumn('testing_data', $atribut, $req);
-				$atribut->update([
-					'name' => $req['name'],
-					'slug' => $req['slug'],
-					'type' => $req['type'],
-					'desc' => $req['desc']
-				]);
-				return response()->json(['message' => 'Berhasil diedit']);
+				$atribut->update($req);
+				$this->dispatch('toast',type:'success',msg:'Berhasil diedit');
 			} else {
 				$this->addColumn('training_data', $req);
 				$this->addColumn('testing_data', $req);
 				Atribut::create($req);
-				return response()->json(['message' => 'Berhasil disimpan']);
+				$this->dispatch('toast',type:'success',msg:'Berhasil disimpan');
 			}
 		} catch (QueryException $e) {
-			Log::error($e);
 			if ($e->errorInfo[1] === 1062 || $e->errorInfo[1] === 1060) {
+				$this->addError('name','Nama Atribut sudah digunakan');
 				return response()->json([
-					'message' => "Nama Atribut \"$request->name\" sudah digunakan",
-					'errors' => ['name' => 'Nama Atribut sudah digunakan']
+					'message' => "Nama Atribut \"$request->name\" sudah digunakan"
 				], 422);
+			}else{
+				Log::error($e);
+				$this->dispatch(
+					'toast',type:'error',msg:"Terjadi kesalahan database #{$e->errorInfo[1]}"
+				);
 			}
-			return response()->json(['message' => $e->errorInfo[2]], 500);
+		}catch(ModelNotFoundException){
+			$this->dispatch(
+					'toast',type:'error',msg:"Gagal edit: Atribut tidak ditemukan"
+				);
 		}
 	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 */
 	public function edit(Atribut $atribut)
 	{
-		return response()->json($atribut);
+		$this->id=$atribut->id;
+		$this->name=$atribut->name;
+		$this->type=$atribut->type;
+		$this->desc=$atribut->desc;
+		$this->dispatch('edit');
 	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 */
 	public function destroy(Atribut $atribut)
 	{
-		$this->delColumn('training_data', $atribut);
-		$this->delColumn('testing_data', $atribut);
-		$atribut->delete();
-		return response()->json(['message' => "Berhasil dihapus"]);
+		try {
+			$this->delColumn('training_data', $atribut);
+			$this->delColumn('testing_data', $atribut);
+			$atribut->delete();
+			$this->dispatch('toast',type:'success',msg:'Atribut berhasil dihapus');
+		} catch (QueryException $e) {
+			Log::error($e);
+			$this->dispatch(
+				'toast',type:'error',msg:"Terjadi kesalahan database #{$e->errorInfo[1]}"
+			);
+		}
 	}
 	private function addColumn(string $tabel, array $req): void
 	{
@@ -142,5 +119,9 @@ class AtributController extends Controller
 				$table->dropColumn($attr->slug);
 			});
 		}
+	}
+	public function render()
+	{
+		return view('livewire.attribute');
 	}
 }
