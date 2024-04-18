@@ -13,26 +13,22 @@ use Symfony\Component\Mailer\Exception\TransportException;
 #[Layout('components.layouts.auth')]
 class Forgot extends Component
 {
-	public $mailSentAlert = false;
-	public $error = '';
-	public $email = '';
-	public $rules = ['email' => 'required|email|exists:users'];
-
+	public string $email;
 	public function recoverPassword()
 	{
 		try {
 			$cred = $this->validate(User::$forgetrules);
 			$status = Password::sendResetLink($cred);
 			if ($status === Password::RESET_LINK_SENT)
-				$this->mailSentAlert = true;
+				$this->dispatch('sent');
 			elseif ($status === Password::RESET_THROTTLED)
-				$this->error = __('passwords.throttled');
+				$this->dispatch('error', message: "Tunggu sebentar sebelum mencoba lagi.");
 		} catch (QueryException $e) {
 			Log::error($e);
-			$this->error = "Kesalahan Database #{$e->errorInfo[1]}";
+			$this->dispatch('error', message: "Terjadi kesalahan Database #{$e->errorInfo[1]}");
 		} catch (TransportException $e) {
 			Log::error($e);
-			$this->error = "Email gagal dikirim";
+			$this->dispatch('error', message: "Email gagal dikirim");
 		}
 	}
 	public function render()

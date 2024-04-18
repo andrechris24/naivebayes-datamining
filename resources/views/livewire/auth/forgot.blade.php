@@ -20,21 +20,14 @@
 				<div class="mb-4">
 					<label for="email">Email</label>
 					<div class="input-group">
-						<input wire:model="email" type="email" class="form-control @error('email') is-invalid @enderror " id="email" placeholder="john@company.com" required autofocus>
+						<input wire:model="email" type="email" class="form-control @error('email') is-invalid @enderror "
+							id="email" placeholder="email@example.com" required autofocus>
 					</div>
 					@error('email')
 					<div class="invalid-feedback">{{ $message }}</div>
 					@enderror
 				</div>
 				<!-- End of Form -->
-				@if($mailSentAlert)
-				<div class="alert alert-success" role="alert">
-					{{__('passwords.sent')}}
-				</div>
-				@endif
-				@if(!empty($error))
-				<div class="alert alert-danger" role="alert">{{$error}}</div>
-				@endif
 				<div class="d-grid">
 					<button type="submit" class="btn btn-gray-800">
 						<i class="fas fa-paper-plane"></i> Kirim link
@@ -44,3 +37,16 @@
 		</div>
 	</div>
 </div>
+@push('js')
+<script type="text/javascript">
+	Livewire.on('error',(e)=>{
+		Notiflix.Notify.failure(e.message);
+	});
+	Livewire.on('sent',()=>{
+		Notiflix.Report.success(
+			'Terkirim',
+			"Email Reset passsword sudah dikirim. Cek folder spam jika Anda belum menerimanya."
+		);
+	});
+</script>
+@endpush

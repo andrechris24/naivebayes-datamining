@@ -15,14 +15,10 @@ use Livewire\Component;
 #[Layout('components.layouts.auth')]
 class Reset extends Component
 {
-	public $email = '';
-	public $token = '';
-	public $password = '';
-	public $password_confirmation = '';
-	public $isPasswordChanged = false;
-	public $wrongEmail = false;
-	public $invalidToken = false;
-
+	public string $email;
+	public string $token;
+	public string $password;
+	public string $password_confirmation;
 	public function mount()
 	{
 		try {
@@ -40,7 +36,6 @@ class Reset extends Component
 			$this->redirectRoute('password.forget');
 		}
 	}
-
 	public function resetPassword()
 	{
 		$data = $this->validate(User::$resetrules);
@@ -53,17 +48,12 @@ class Reset extends Component
 			}
 		);
 		if ($status === Password::PASSWORD_RESET) {
-			$this->isPasswordChanged = true;
-			$this->invalidToken = $this->wrongEmail = false;
 			session()->flash('success', __('passwords.reset'));
 			$this->redirectRoute('login');
-		} elseif ($status === Password::INVALID_TOKEN) {
-			$this->invalidToken = true;
-			$this->wrongEmail = false;
-		} elseif ($status === Password::INVALID_USER) {
-			$this->wrongEmail = true;
-			$this->invalidToken = false;
-		}
+		} elseif ($status === Password::INVALID_TOKEN)
+			$this->dispatch('error', message: __('passwords.token'));
+		elseif ($status === Password::INVALID_USER)
+			$this->dispatch('error', message: __('passwords.user'));
 	}
 	public function render()
 	{

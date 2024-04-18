@@ -9,7 +9,7 @@
 			</div>
 			<x-alert />
 			<x-no-script />
-			<x-caps-lock />
+			<x-caps-lock wire:ignore />
 			<form wire:submit.prevent="login" action="#" class="mt-4" method="POST">
 				<!-- Form -->
 				<div class="form-group mb-4">
@@ -23,8 +23,8 @@
 								<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
 							</svg>
 						</span>
-						<input wire:model="email" type="email" class="form-control @error('email') is-invalid @enderror " placeholder="example@company.com"
-							id="email" autofocus required>
+						<input wire:model="email" type="email" class="form-control @error('email') is-invalid @enderror "
+							placeholder="email@example.com" id="email" autofocus required>
 					</div>
 					@error('email')
 					<div wire:key="form" class="invalid-feedback">{{$message}}</div>
@@ -44,8 +44,8 @@
 										clip-rule="evenodd"></path>
 								</svg>
 							</span>
-							<input wire:model.lazy="password" type="password" placeholder="Password" class="form-control @error('password') is-invalid @enderror "
-								id="password" required>
+							<input wire:model.lazy="password" type="password" placeholder="Password"
+								class="form-control @error('password') is-invalid @enderror " minlength="8" maxlength="20" id="password" required>
 						</div>
 						@error('password')
 						<div class="invalid-feedback"> {{ $message }} </div>
@@ -80,3 +80,10 @@
 		</div>
 	</div>
 </div>
+@push('js')
+<script type="text/javascript">
+	Livewire.on('error',(e)=>{
+		Notiflix.Notify.failure(e.message);
+	});
+</script>
+@endpush

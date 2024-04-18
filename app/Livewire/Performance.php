@@ -19,13 +19,13 @@ class Performance extends Component
 	{
 		if ($this->tipe) {
 			try {
-				if (Classification::where('type', $this->tipe)->count() === 0){
-					$this->dispatch('error',message:'Klasifikasi belum dilakukan');
+				if (Classification::where('type', $this->tipe)->count() === 0) {
+					$this->dispatch('error', message: 'Klasifikasi belum dilakukan');
 					$this->data = ['tp' => 0, 'fp' => 0, 'tn' => 0, 'fn' => 0, 'total' => 0];
 					$this->performa = [
 						'accuracy' => 0, 'precision' => 0, 'recall' => 0, 'f1' => 0
 					];
-				}	else {
+				} else {
 					$this->data = $this->cm($this->tipe);
 					$this->performa = $this->performa($this->data);
 					$true = [$this->data['tp'], $this->data['fp']];
@@ -39,7 +39,10 @@ class Performance extends Component
 				}
 			} catch (QueryException $e) {
 				Log::error($e);
-				$this->dispatch('error',message:"Terjadi kesalahan database #{$e->errorInfo[1]}");
+				$this->dispatch(
+					'error',
+					message: "Terjadi kesalahan database #{$e->errorInfo[1]}"
+				);
 			}
 		}
 	}
@@ -71,6 +74,6 @@ class Performance extends Component
 	}
 	public function render()
 	{
-		return view('livewire.performance', ['stat'=>ProbabLabel::$label]);
+		return view('livewire.performance', ['stat' => ProbabLabel::$label]);
 	}
 }

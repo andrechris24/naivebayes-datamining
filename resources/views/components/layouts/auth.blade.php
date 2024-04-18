@@ -37,9 +37,15 @@
 
 	<!-- Vendor JS -->
 	<script src="{{asset('assets/js/on-screen.umd.min.js')}}"></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+		integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 	<!-- Slider -->
 	<script src="{{asset('assets/js/nouislider.min.js')}}"></script>
+
+	<!--Notiflix-->
+	<script src="https://cdn.jsdelivr.net/npm/notiflix@3.2.7/dist/notiflix-aio-3.2.7.min.js"
+		integrity="sha256-G6sj3uSY1Rtnyomq54b5wiwwe2+A5Zym254DHutrXM4=" crossorigin="anonymous"></script>
 
 	<!-- Smooth scroll -->
 	<script src="{{asset('assets/js/smooth-scroll.polyfills.min.js')}}"></script>
@@ -67,7 +73,7 @@
 	<script type="text/javascript" src="{{ asset('assets/js/capslock.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/validate.js') }}"></script>
 	@livewireScripts
-	@yield('js')
+	@stack('js')
 </body>
 
 </html>

@@ -9,17 +9,11 @@ function removeBtn() {
 	$("#spare-button").addClass("d-none");
 }
 function initError(message) {
-	notif.error("Data gagal dimuat");
+	Notiflix.Notify.failure("Data gagal dimuat");
 	console.error(message);
 }
 function errorDT(message, note) {
-	const err = notif.open({ type: "warning", message: message });
-	if (note) {
-		err.on("click", () => {
-			// target: the notification being clicked
-			// event: the mouseevent
-			window.open("https://datatables.net/tn/" + note, "_blank");
-		});
-	}
+	Notiflix.Notify.warning(message);
 	console.warn(message);
+	if(note) console.info("%chttps://datatables.net/tn/" + note);
 }

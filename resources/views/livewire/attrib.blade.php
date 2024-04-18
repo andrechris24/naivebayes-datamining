@@ -1,7 +1,7 @@
-@section('title','Nilai Atribut')
+@section('title','Atribut')
 <div>
 	<div class="row" wire:ignore>
-		<div class="col-md-4 mb-3">
+		<div class="col-sm-6 mb-3">
 			<div class="card">
 				<div class="card-body">
 					<div class="d-flex align-items-start justify-content-between">
@@ -18,36 +18,19 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 mb-3">
+		<div class="col-sm-6 mb-3">
 			<div class="card">
 				<div class="card-body">
 					<div class="d-flex align-items-start justify-content-between" data-bs-toggle="tooltip"
-						title="Terbanyak per Atribut">
+						title="Atribut Kategorikal yang tidak digunakan">
 						<div class="content-left">
-							<span>Terbanyak</span>
+							<span>Tidak digunakan</span>
 							<div class="d-flex align-items-end mt-2">
-								<h3 class="mb-0 me-2"><span id="total-max">-</span></h3>
+								<h3 class="mb-0 me-2"><span id="total-unused">-</span></h3>
 							</div>
 						</div>
-						<span class="badge bg-success rounded p-2">
-							<i class="fas fa-list"></i>
-						</span>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4 mb-3">
-			<div class="card">
-				<div class="card-body">
-					<div class="d-flex align-items-start justify-content-between">
-						<div class="content-left">
-							<span>Duplikat</span>
-							<div class="d-flex align-items-end mt-2">
-								<h3 class="mb-0 me-2"><span id="total-duplicate">-</span></h3>
-							</div>
-						</div>
-						<span class="badge bg-warning rounded p-2">
-							<i class="fas fa-copy"></i>
+						<span class="badge bg-danger rounded p-2">
+							<i class="fas fa-circle-exclamation"></i>
 						</span>
 					</div>
 				</div>
@@ -56,50 +39,57 @@
 	</div>
 	<div class="card">
 		<div class="card-body">
-			<div wire:ignore.self class="modal fade" tabindex="-1" id="modalAddNilaiAtribut"
-				aria-labelledby="modalAddNilaiAtributLabel" role="dialog" aria-hidden="true" data-bs-backdrop="static"
+			<div wire:ignore.self class="modal fade" tabindex="-1" id="modalAddAtribut"
+				aria-labelledby="modalAddAtributLabel" role="dialog" aria-hidden="true" data-bs-backdrop="static"
 				data-bs-keyboard="false">
 				<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 					<div class="modal-content">
 						<div class="modal-header" wire:ignore>
-							<h5 id="modalAddNilaiAtributLabel" class="modal-title">Tambah Nilai Atribut</h5>
+							<h5 id="modalAddAtributLabel" class="modal-title">Tambah Atribut</h5>
 							<button type="button" class="btn-close text-reset" data-bs-dismiss="modal"
 								aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
-							<form wire:submit="store" id="addNewNilaiAtributForm">
+							<form id="addNewAtributForm" wire:submit="store">
 								<input type="hidden" name="id" id="attr_id">
-								<div class="form-floating mb-3">
+								<div class="form-floating mb-4">
 									<input type="text" class="form-control @error('name') is-invalid @enderror " id="attrName"
-										wire:model="name" placeholder="Nama" required />
+										name="name" placeholder="Nama" required />
 									<label for="attrName">Nama</label>
 									@error('name')
 									<div class="invalid-feedback">{{$message}}</div>
 									@enderror
 								</div>
-								<div class="form-floating mb-3">
-									<select wire:model="atribut_id" class="form-select @error('atribut_id') is-invalid @enderror "
+								<div class="form-floating mb-4">
+									<select wire:model="type" class="form-select @error('type') is-invalid @enderror "
 										id="attrType" required>
 										<option value="">Pilih</option>
-										@foreach($atribut as $attr)
-										<option value="{{$attr->id}}">{{$attr->name}}</option>
-										@endforeach
+										<option value="numeric">Numerik</option>
+										<option value="categorical">Kategorikal</option>
 									</select>
-									<label for="attrType">Atribut</label>
-									@error('atribut_id')
+									<label for="attrType">Tipe Atribut</label>
+									@error('type')
+									<div class="invalid-feedback">{{$message}}</div>
+									@enderror
+								</div>
+								<div class="form-floating mb-4">
+									<input type="text" class="form-control @error('desc') is-invalid @enderror " id="attrDesc"
+										wire:model="desc" placeholder="Keterangan" />
+									<label for="attrDesc">Keterangan</label>
+									@error('desc')
 									<div class="invalid-feedback">{{$message}}</div>
 									@enderror
 								</div>
 							</form>
 						</div>
 						<div class="modal-footer">
-							<div wire:loading wire:target="store" class="spinner-grow text-primary me-3" role="status">
+							<div wire:loading wire:target="store" class="spinner-grow text-primary me-3 d-none" role="status">
 								<span class="visually-hidden">Menyimpan...</span>
 							</div>
 							<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
 								<i class="fas fa-x"></i> Batal
 							</button>
-							<button type="submit" class="btn btn-primary data-submit" form="addNewNilaiAtributForm">
+							<button type="submit" class="btn btn-primary data-submit" form="addNewAtributForm">
 								<i class="fas fa-floppy-disk"></i> Simpan
 							</button>
 						</div>
@@ -107,15 +97,16 @@
 				</div>
 			</div>
 			<button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal"
-				data-bs-target="#modalAddNilaiAtribut">
-				<i class="fas fa-plus"></i> Tambah Nilai Atribut
+				data-bs-target="#modalAddAtribut">
+				<i class="fas fa-plus"></i> Tambah Atribut
 			</button>
 			<table class="table table-bordered" id="table-atribut" width="100%" wire:ignore>
 				<thead>
 					<tr>
 						<th>#</th>
 						<th>Nama</th>
-						<th>Atribut</th>
+						<th>Tipe Atribut</th>
+						<th>Keterangan</th>
 						<th>Aksi</th>
 					</tr>
 				</thead>
@@ -126,7 +117,7 @@
 @push('js')
 <script type="text/javascript">
 	let dt_atribut = $("#table-atribut");
-	const modalForm = $("#modalAddNilaiAtribut");
+	const modalForm = $("#modalAddAtribut");
 	$(document).ready(function () {
 		try {
 			$.fn.dataTable.ext.errMode = "none";
@@ -137,9 +128,13 @@
 				processing: true,
 				responsive: true,
 				searching: false,
-				ajax: "{{ route('atribut.nilai.dt') }}",
+				ajax: "{{ route('atribut.dt') }}",
 				columns: [
-					{ data: "id" },{ data: "name" },{ data: "atribut.name" },{ data: "id" }
+					{ data: "id" },
+					{ data: "name" },
+					{ data: "type" },
+					{ data: "desc" },
+					{ data: "id" }
 				],
 				columnDefs: [{
 					targets: 0,
@@ -147,16 +142,21 @@
 					render: function (data, type, full, meta) {
 						return meta.settings._iDisplayStart + meta.row + 1;
 					}
+				}, {
+					targets: 3,
+					render: function(data){
+						return data??'-';
+					}
 				}, { //Aksi
 					orderable: false,
 					searchable: false,
 					targets: -1,
 					render: function (data, type, full) {
 						return ('<div class="btn-group btn-group-sm" role="group">' +
-							`<button class="btn btn-primary" wire:click="edit(${data})" data-bs-toggle="modal" data-bs-target="#modalAddNilaiAtribut">` +
+							`<button class="btn btn-primary" wire:click="edit(${data})" data-bs-toggle="modal" data-bs-target="#modalAddAtribut">` +
 							'<i class="fas fa-pen-to-square"></i>' +
 							'</button>' +
-							`<button class="btn btn-danger delete-record" wire:click="destroy(${data})" wire:confirm="Hapus nilai atribut ${full['name']}?">` +
+							`<button class="btn btn-danger delete-record" wire:click="destroy(${data})" wire:confirm="Hapus atribut ${full['name']}?">` +
 							'<i class="fas fa-trash"></i>' +
 							'</button>' +
 							"</div>");
@@ -168,10 +168,9 @@
 			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
 			}).on('preXhr', function () {
-				$.get("{{ route('atribut.nilai.count') }}", function (data) {
-					$('#total-max').text(data.max);
+				$.get("{{ route('atribut.count') }}", function (data) {
 					$("#total-counter").text(data.total);
-					$('#total-duplicate').text(data.duplicate);
+					$('#total-unused').text(data.unused);
 				}).fail(function (xhr, st) {
 					console.warn(xhr.responseJSON.message ?? st);
 					Notiflix.Notify.failure(
@@ -183,8 +182,8 @@
 		}
 	});
 	modalForm.on("hidden.bs.modal", function () {
-		$("#modalAddNilaiAtributLabel").html("Tambah Nilai Atribut");
-		$("#addNewNilaiAtributForm")[0].reset();
+		$("#modalAddAtributLabel").html("Tambah Atribut");
+		$("#addNewAtributForm")[0].reset();
 		$("#attr_id").val("");
 	});
 	Livewire.on('toast', (r) => {
@@ -195,7 +194,7 @@
 		notif.open({ type: r.type, message: r.msg });
 	});
 	Livewire.on('edit',()=>{
-		$("#modalAddNilaiAtributLabel").html("Edit Nilai Atribut");
+		$("#modalAddAtributLabel").html("Edit Atribut");
 	});
 </script>
 @endpush

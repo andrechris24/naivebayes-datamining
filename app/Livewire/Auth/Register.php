@@ -13,12 +13,10 @@ use Livewire\Component;
 #[Layout('components.layouts.auth')]
 class Register extends Component
 {
-	public $name = '';
-	public $email = '';
-	public $password = '';
-	public $password_confirmation = '';
-	public $error = '';
-	public $created = false;
+	public string $name;
+	public string $email;
+	public string $password;
+	public string $password_confirmation;
 	public function register()
 	{
 		try {
@@ -28,12 +26,11 @@ class Register extends Component
 				'email' => Str::lower($this->email),
 				'password' => Hash::make($this->password)
 			]);
-			$this->created = true;
 			session()->flash('success', 'Akun sudah dibuat.');
 			$this->redirectRoute('login');
 		} catch (QueryException $e) {
 			Log::error($e);
-			$this->error = "Kesalahan Database {$e->errorInfo[1]}";
+			$this->dispatch('error', message: "Kesalahan Database {$e->errorInfo[1]}");
 		}
 	}
 	public function render()

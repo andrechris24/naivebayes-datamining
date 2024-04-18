@@ -7,7 +7,7 @@
 			</div>
 			<x-alert />
 			<x-no-script />
-			<x-caps-lock />
+			<x-caps-lock wire:ignore />
 			<form wire:submit.prevent="register" action="#" method="POST">
 				<!-- Form -->
 				<div class="form-group mt-4 mb-4">
@@ -20,8 +20,9 @@
 								<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
 							</svg>
 						</span>
-						<input wire:model="name" id="name" type="text" class="form-control @error('name') is-invalid @enderror " placeholder="Nama Anda"
-							autofocus required>
+						<input wire:model="name" id="name" type="text"
+							class="form-control @error('name') is-invalid @enderror " placeholder="Nama Anda" autofocus
+							required>
 					</div>
 					@error('name')
 					<div class="invalid-feedback">{{ $message }}</div>
@@ -39,8 +40,9 @@
 								<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
 							</svg>
 						</span>
-						<input wire:model="email" id="email" type="email" class="form-control @error('email') is-invalid @enderror "
-							placeholder="example@company.com" required>
+						<input wire:model="email" id="email" type="email"
+							class="form-control @error('email') is-invalid @enderror " placeholder="email@example.com"
+							required>
 					</div>
 					@error('email')
 					<div class="invalid-feedback">{{ $message }}</div>
@@ -60,8 +62,9 @@
 										clip-rule="evenodd"></path>
 								</svg>
 							</span>
-							<input wire:model.lazy="password" type="password" placeholder="Password" class="form-control @error('password') is-invalid @enderror "
-								id="password" minlength="8" maxlength="20" required>
+							<input wire:model.lazy="password" type="password" placeholder="Password"
+								class="form-control @error('password') is-invalid @enderror " id="password" minlength="8"
+								maxlength="20" required>
 						</div>
 						@error('password')
 						<div class="invalid-feedback">{{ $message }}</div>
@@ -81,7 +84,8 @@
 								</svg>
 							</span>
 							<input wire:model.lazy="password_confirmation" type="password" placeholder="Konfirmasi Password"
-								class="form-control @error('password_confirmation') is-invalid @enderror " id="confirm_password" minlength="8" maxlength="20" required>
+								class="form-control @error('password_confirmation') is-invalid @enderror " id="confirm_password"
+								minlength="8" maxlength="20" required>
 						</div>
 						@error('password_confirmation')
 						<div class="invalid-feedback">{{ $message }}</div>
@@ -89,9 +93,6 @@
 					</div>
 					<!-- End of Form -->
 				</div>
-				@if(!empty($error))
-				<div class="alert alert-danger" role="alert">{{$error}}</div>
-				@endif
 				<div class="d-grid">
 					<button type="submit" class="btn btn-gray-800">
 						<i class="fas fa-arrow-right-to-bracket"></i> Buat Akun
@@ -106,3 +107,10 @@
 		</div>
 	</div>
 </div>
+@push('js')
+<script type="text/javascript">
+	Livewire.on('error',(e)=>{
+		Notiflix.Notify.failure(e.message);
+	});
+</script>
+@endpush

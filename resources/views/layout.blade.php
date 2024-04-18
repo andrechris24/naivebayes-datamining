@@ -27,13 +27,6 @@
 		integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-	<!-- Sweet Alert -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css"
-		integrity="sha256-h2Gkn+H33lnKlQTNntQyLXMWq7/9XI2rlPCsLsVcUBs=" crossorigin="anonymous">
-
-	<!-- Notyf -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
-
 	<!-- Volt CSS -->
 	<link type="text/css" href="{{asset('css/volt.css')}}" rel="stylesheet">
 
@@ -56,12 +49,9 @@
 	<!-- Apex Charts -->
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-	<!-- Sweet Alerts 2 -->
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	<script src="https://cdn.jsdelivr.net/npm/notiflix@3.2.7/dist/notiflix-aio-3.2.7.min.js" integrity="sha256-G6sj3uSY1Rtnyomq54b5wiwwe2+A5Zym254DHutrXM4=" crossorigin="anonymous"></script>
-
-	<!-- Notyf -->
-	<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+	<!-- Notiflix -->
+	<script src="https://cdn.jsdelivr.net/npm/notiflix@3.2.7/dist/notiflix-aio-3.2.7.min.js"
+		integrity="sha256-G6sj3uSY1Rtnyomq54b5wiwwe2+A5Zym254DHutrXM4=" crossorigin="anonymous"></script>
 
 	<!-- Data Tables -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
@@ -77,7 +67,7 @@
 	<script src="{{asset('assets/js/volt.js')}}"></script>
 </head>
 
-<body onload="switchvalidation()">
+<body>
 	<nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
 		<a class="navbar-brand me-lg-5" href="{{route('home')}}">
 			<img class="navbar-brand-dark" src="{{asset('assets/img/data-mining_8438890.png')}}"
@@ -100,9 +90,7 @@
 					<div class="avatar-lg me-4">
 						<img src="{{asset('assets/img/data-mining_8438890.png')}}" height="20" width="20" alt="Volt Logo">
 					</div>
-					<div class="d-block">
-						<h2 class="h5 mb-3">Data Mining</h2>
-					</div>
+					<div class="d-block"><h2 class="h5 mb-3">Data Mining</h2></div>
 				</div>
 				<div class="collapse-close d-md-none">
 					<a href="#sidebarMenu" data-bs-toggle="collapse" data-bs-target="#sidebarMenu"
@@ -268,8 +256,7 @@
 										<path fill-rule="evenodd"
 											d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
 											clip-rule="evenodd"></path>
-									</svg>
-									Profil
+									</svg>Profil
 								</a>
 								<div role="separator" class="dropdown-divider my-1"></div>
 								<a class="dropdown-item d-flex align-items-center" href="{{route('logout')}}" id="logout-btn">
@@ -305,19 +292,20 @@
 		</footer>
 	</main>
 	<form method="POST" id="logout-form" action="{{ route('logout') }}">@csrf</form>
-	<script type="text/javascript" src="{{ asset('assets/js/swal.js') }}"></script>
-	<script type="text/javascript" src="{{asset('assets/js/notyf.js')}}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/datatables.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/validate.js') }}"></script>
 	<script type="text/javascript">
 		$(document).on('click', '#logout-btn', function (e) {
 			e.preventDefault();
 			document.getElementById('logout-form').submit();
 		});
-		function formloading(formEl, disable){
-			$(formEl).prop('disabled', disable);
-			if(disable) $('.spinner-grow').removeClass('d-none');
-			else $('.spinner-grow').addClass('d-none');
+		function resetvalidation() {
+			const forms = document.querySelectorAll(".needs-validation"),
+				forminput = document.getElementsByTagName("input");
+			Array.from(forms).forEach((containedform) => {
+				containedform.classList.remove("was-validated");
+			}, false);
+			for (let a = 0; a < forminput.length; a++)
+				forminput[a].classList.remove("is-invalid");
 		}
 	</script>
 	@yield('js')

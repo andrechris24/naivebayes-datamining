@@ -12,12 +12,12 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form class="needs-validation" id="addNewTestingForm">@csrf
+				<form id="addNewTestingForm">@csrf
 					<input type="hidden" name="id" id="test_id">
 					<div class="form-floating mb-4">
 						<input type="text" class="form-control" id="testName" name="nama" placeholder="Nama" required />
 						<label for="testName">Nama</label>
-						<div class="invalid-tooltip" id="name-error">Masukkan Nama</div>
+						<div class="invalid-tooltip" id="name-error"></div>
 					</div>
 					@foreach ($atribut as $attr)
 					<div class="form-floating mb-4" data-bs-toggle="tooltip" title="{{$attr->desc}}">
@@ -33,9 +33,7 @@
 						</select>
 						@endif
 						<label for="test-{{$attr->slug}}">{{$attr->name}}</label>
-						<div class="invalid-tooltip" id="{{$attr->slug}}-error">
-							{{($attr->type==='numeric'?'Masukkan ':'Pilih ').$attr->name}}
-						</div>
+						<div class="invalid-tooltip" id="{{$attr->slug}}-error"></div>
 					</div>
 					@endforeach
 					<div class="form-floating mb-4">
@@ -48,14 +46,11 @@
 							</option>
 						</select>
 						<label for="testResult">Hasil</label>
-						<div class="invalid-tooltip" id="result-error">Pilih hasil</div>
+						<div class="invalid-tooltip" id="result-error"></div>
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
-				<div class="spinner-grow text-primary me-3 d-none" role="status">
-					<span class="visually-hidden">Menyimpan...</span>
-				</div>
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
 					<i class="fas fa-x"></i> Batal
 				</button>
@@ -83,7 +78,8 @@
 			<div class="modal-body">
 				<div class="alert alert-info" role="alert">
 					<i class="fas fa-info-circle"></i>
-					<a href="{{route('template-data')}}" class="alert-link">Klik disini</a> untuk mendownload template Dataset
+					<a href="{{route('template-data')}}" class="alert-link">Klik disini</a>
+					untuk mendownload template Dataset
 				</div>
 				<form id="importTestingData">@csrf
 					<input type="file" class="form-control" id="testData" name="data" aria-describedby="importFormats"
@@ -94,9 +90,6 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<div class="spinner-grow text-success me-3 d-none" role="status">
-					<span class="visually-hidden">Mengupload..</span>
-				</div>
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
 					<i class="fas fa-x"></i> Batal
 				</button>
@@ -263,79 +256,76 @@
 					$('#total-duplicate').text(data.duplicate);
 				}).fail(function (xhr, st) {
 					console.warn(xhr.responseJSON.message ?? st);
-					notif.error(`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
+					Notiflix.Notify.failure(
+						`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+						);
 				});
 			});
 		} catch (dterr) {
 			initError(dterr.message);
 		}
 	}).on("click", ".delete-all", function () {
-		confirm.fire({
-			titleText: "Hapus semua Data Testing?",
-			text: 'Anda akan menghapus semua Data Testing yang akan mereset hasil klasifikasi terkait.',
-			preConfirm: async () => {
-				try {
-					await $.ajax({
-						type: "DELETE",
-						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
-						url: "{{route('testing.clear')}}",
-						success: function () {
-							if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
-							return "Dihapus";
-						},
-						error: function (xhr, st) {
-							console.warn(xhr.responseJSON.message ?? st);
-							return Swal.showValidationMessage(
-								`Gagal hapus: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
-						}
-					});
-				} catch (error) {
-					console.error(error.responseJSON);
-				}
+		Notiflix.Confirm.show(
+			"Hapus semua Data Testing?",
+			'Anda akan menghapus semua Data Testing yang akan mereset hasil klasifikasi terkait.',
+			'Ya',
+			'Tidak',
+			function okCb() {
+				$.ajax({
+					type: "DELETE",
+					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
+					url: "{{route('testing.clear')}}",
+					beforeSend: function(){
+						Notiflix.Loading.standard('Menghapus');
+					},complete:function(){
+						Notiflix.Loading.remove();
+					},
+					success: function () {
+						if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
+						Notiflix.Notify.success("Semua data berhasil dihapus");
+					},
+					error: function (xhr, st) {
+						console.warn(xhr.responseJSON.message ?? st);
+						Notiflix.Notify.failure(
+							`Gagal hapus: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
+					}
+				});
 			}
-		}).then(function (result) {
-			if (result.isConfirmed) 
-				notif.open({ type: "success", message:"Semua data berhasil dihapus" });
-		});
+		);
 	}).on("click", ".delete-record", function () {
 		let test_id = $(this).data("id"), test_name = $(this).data("name");
-		confirm.fire({
-			titleText: "Hapus Data Testing?",
-			text: `Anda akan menghapus Data Testing ${test_name}.`,
-			preConfirm: async () => {
-				try {
-					await $.ajax({
-						type: "DELETE",
-						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
-						url: 'testing/' + test_id,
-						success: function () {
+		Notiflix.Confirm.show(
+			"Hapus Data Testing?",
+			`Anda akan menghapus Data Testing ${test_name}.`,
+			'Ya',
+			'Tidak',
+			function okCb() {
+				$.ajax({
+					type: "DELETE",
+					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
+					url: 'testing/' + test_id,
+					success: function () {
+						dt_testing.draw();
+						Notiflix.Notify.success("Berhasil dihapus");
+						return "Dihapus";
+					},
+					error: function (xhr, st) {
+						if (xhr.status === 404) {
 							dt_testing.draw();
-							return "Dihapus";
-						},
-						error: function (xhr, st) {
-							if (xhr.status === 404) {
-								dt_testing.draw();
-								errmsg = `Data Testing ${test_name} tidak ditemukan`;
-							} else {
-								console.warn(xhr.responseJSON.message ?? st);
-								errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
-							}
-							return Swal.showValidationMessage('Gagal hapus: ' + errmsg);
+							errmsg = `Data Testing ${test_name} tidak ditemukan`;
+						} else {
+							console.warn(xhr.responseJSON.message ?? st);
+							errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 						}
-					});
-				} catch (error) {
-					console.error(error.responseJSON);
-				}
+						Notiflix.Notify.failure('Gagal hapus: ' + errmsg);
+					}
+				});
 			}
-		}).then(function (result) {
-			if (result.isConfirmed) 
-				notif.open({ type: "success", message: "Berhasil dihapus" });
-		});
+		);
 	}).on("click", ".edit-record", function () {
 		let test_id = $(this).data("id");
 		$("#modalAddTestingLabel").html("Edit Data Testing");
-		$('.btn-success').prop('disabled',true);
-		formloading("#addNewTestingForm :input", true);
+		Notiflix.Block.standard('.modal');
 		$.get(`testing/${test_id}/edit`, function (data) {
 			$("#test_id").val(data.id);
 			$("#testName").val(data.nama);
@@ -352,10 +342,9 @@
 				console.warn(xhr.responseJSON.message ?? st);
 				errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 			}
-			notif.open({ type: "error", message: "Gagal memuat data: "+errmsg });
+			Notiflix.Notify.failure("Gagal memuat data: "+errmsg);
 		}).always(function () {
-			formloading("#addNewTestingForm :input", false);
-			$('.btn-success').prop('disabled',false);
+			Notiflix.Block.remove('.modal');
 		});
 	});
 	$('#importTestingData').submit(function(e) {//form Upload Data
@@ -369,18 +358,16 @@
 			cache: false,
 			processData: false,
 			beforeSend: function () {
-				formloading("#importTestingData :input", true);
-				$('#modalImportTesting :button').prop('disabled',true);
+				Notiflix.Block.standard('.modal');
 				$("#importTestingData :input").removeClass("is-invalid");
 			},
 			complete: function () {
-				$('#modalImportTesting :button').prop('disabled',false);
-				formloading("#importTestingData :input", false);
+				Notiflix.Block.remove('.modal');
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
 				$('#modalImportTesting').modal("hide");
-				notif.open({ type: "success", message:"Berhasil diupload" });
+				Notiflix.Notify.success("Berhasil diupload");
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
@@ -392,31 +379,29 @@
 					errmsg = xhr.responseJSON.message;
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				notif.open({ type: "error", message: "Gagal upload: " +errmsg});
+				Notiflix.Notify.failure("Gagal upload: " +errmsg);
 			}
 		});
 	});
-	function submitform(ev) {//form Input Manual
+	$("#addNewTestingForm").submit(function (ev) {//form Input Manual
 		ev.preventDefault();
 		$.ajax({
 			data: $("#addNewTestingForm").serialize(),
 			url: "{{ route('testing.store') }}",
 			type: "POST",
 			beforeSend: function () {
+				Notiflix.Block.standard('.modal');
 				$("#addNewTestingForm :input").removeClass("is-invalid");
-				$('#modalAddTesting :button').prop('disabled',true);
-				formloading("#addNewTestingForm :input", true);
 			},
 			complete: function () {
-				$('#modalAddTesting :button').prop('disabled',false);
-				formloading("#addNewTestingForm :input", false);
+				Notiflix.Block.remove('.modal');
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
 				modalForm.modal("hide");
-				notif.open({ type: "success", message: status.message });
+				Notiflix.Notify.success(status.message);
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
@@ -440,24 +425,15 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Terjadi kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				notif.open({ type: "error", message: errmsg });
+				Notiflix.Notify.failure(errmsg);
 			}
 		});
-	};
+	});
 	modalForm.on("hidden.bs.modal", function () {
 		resetvalidation();
 		$("#modalAddTestingLabel").html("Tambah Data Testing");
 		$("#addNewTestingForm")[0].reset();
 		$("#test_id").val("");
-		$("#name-error").text("Masukkan Nama");
-		@foreach($atribut as $attr)
-			@if($attr->type==='numeric')
-			$("#{{$attr->slug}}-error").text("Masukkan {{$attr->slug}}");
-			@else
-			$("#{{$attr->slug}}-error").text("Pilih {{$attr->slug}}");
-			@endif
-		@endforeach
-		$("#result-error").text("Pilih hasil");
 	});
 </script>
 @endsection

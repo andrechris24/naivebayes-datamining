@@ -3,7 +3,7 @@
 <div class="card">
 	<div class="card-body">
 		<div class="modal fade" tabindex="-1" id="modalCalcClass" aria-labelledby="modalCalcClassLabel"
-		role="dialog" aria-hidden="true" wire:ignore.self>
+			role="dialog" aria-hidden="true" wire:ignore.self>
 			<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -37,7 +37,7 @@
 			</div>
 		</div>
 		<div class="modal fade" tabindex="-1" id="modalResetClass" aria-labelledby="modalResetClassLabel"
-		role="dialog" aria-hidden="true" wire:ignore.self>
+			role="dialog" aria-hidden="true" wire:ignore.self>
 			<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 				<div class="modal-content">
 					<div class="modal-header bg-danger">

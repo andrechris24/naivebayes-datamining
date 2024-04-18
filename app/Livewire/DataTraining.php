@@ -11,7 +11,8 @@ use App\Models\NilaiAtribut;
 use App\Models\Probability;
 use App\Models\TrainingData;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
@@ -24,13 +25,15 @@ class DataTraining extends Component
 	public $dataset;
 	public int $id;
 	public string $nama;
-	public array $q=[];
+	public array $q = [];
 	public bool $status;
 	public function export()
 	{
-		if (TrainingData::count() === 0){
+		if (TrainingData::count() === 0) {
 			return $this->dispatch(
-				'toast',type:'error',msg:'Gagal download: Data Testing kosong'
+				'toast',
+				type: 'error',
+				msg: 'Gagal download: Data Testing kosong'
 			);
 		}
 		return Excel::download(new TrainingExport, 'training.xlsx');
@@ -38,7 +41,7 @@ class DataTraining extends Component
 	public function import()
 	{
 		Excel::import(new TrainingImport, $this->dataset);
-			$this->dispatch('toast',type:'success',msg:'Berhasil diupload');
+		$this->dispatch('toast', type: 'success', msg: 'Berhasil diupload');
 	}
 	public function store()
 	{
@@ -50,25 +53,27 @@ class DataTraining extends Component
 			Probability::truncate();
 			if ($this->id) {
 				TrainingData::updateOrCreate(['id' => $this->id], $req);
-				$this->dispatch('toast',type:'success',msg:'Berhasil diedit');
+				$this->dispatch('toast', type: 'success', msg: 'Berhasil diedit');
 			} else {
 				TrainingData::create($req);
-				$this->dispatch('toast',type:'success',msg:'Berhasil disimpan');
+				$this->dispatch('toast', type: 'success', msg: 'Berhasil disimpan');
 			}
 		} catch (QueryException $e) {
 			Log::error($e);
 			$this->dispatch(
-				'toast',type:'error',msg:"Terjadi kesalahan database #{$e->errorInfo[1]}"
+				'toast',
+				type: 'error',
+				msg: "Terjadi kesalahan database #{$e->errorInfo[1]}"
 			);
 		}
 	}
 	public function edit(TrainingData $training)
 	{
-		$this->id=$training->id;
-		$this->nama=$training->nama;
-		$this->status=$training->status;
+		$this->id = $training->id;
+		$this->nama = $training->nama;
+		$this->status = $training->status;
 		foreach (Atribut::get() as $attr) {
-			$this->q[$attr->slug]=$training[$attr->slug];
+			$this->q[$attr->slug] = $training[$attr->slug];
 		}
 		$this->dispatch('edit');
 	}
@@ -79,12 +84,13 @@ class DataTraining extends Component
 				->delete();
 			$training->delete();
 			Probability::truncate();
-			$this->dispatch('toast',type:'success',msg:'Berhasil dihapus');
+			$this->dispatch('toast', type: 'success', msg: 'Berhasil dihapus');
 		} catch (QueryException $e) {
 			Log::error($e);
 			$this->dispatch(
 				'toast',
-				type:'error',msg:"Gagal hapus: Kesalahan database #{$e->errorInfo[1]}"
+				type: 'error',
+				msg: "Gagal hapus: Kesalahan database #{$e->errorInfo[1]}"
 			);
 		}
 	}
@@ -94,12 +100,13 @@ class DataTraining extends Component
 			Classification::where('type', 'train')->delete();
 			Probability::truncate();
 			TrainingData::truncate();
-			$this->dispatch('toast',type:'success',msg:'Berhasil dihapus');
+			$this->dispatch('toast', type: 'success', msg: 'Berhasil dihapus');
 		} catch (QueryException $e) {
 			Log::error($e);
 			$this->dispatch(
 				'toast',
-				type:'error',msg:"Gagal hapus: Kesalahan database #{$e->errorInfo[1]}"
+				type: 'error',
+				msg: "Gagal hapus: Kesalahan database #{$e->errorInfo[1]}"
 			);
 		}
 	}
@@ -116,6 +123,6 @@ class DataTraining extends Component
 				->withWarning('Tambahkan Nilai Atribut dulu sebelum menginput Dataset');
 		}
 		$hasil = ProbabLabel::$label;
-		return view('livewire.data-training',compact('atribut','nilai','hasil'));
+		return view('livewire.data-training', compact('atribut', 'nilai', 'hasil'));
 	}
 }

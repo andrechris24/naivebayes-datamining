@@ -162,7 +162,7 @@ class Probab extends Component
 					}
 				} else {
 					$this->probab[$attr->slug] = Probability::where('atribut_id', $attr->id)
-					->first();
+						->first();
 					foreach (TrainingData::get() as $tr) {
 						if (empty($tr[$attr->slug])) continue;
 						array_push($this->list[$attr->slug]['all'], $tr[$attr->slug]);

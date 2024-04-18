@@ -11,7 +11,6 @@ use App\Models\NilaiAtribut;
 use App\Models\Probability;
 use App\Models\TestingData;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -26,13 +25,15 @@ class DataTesting extends Component
 	public $dataset;
 	public int $id;
 	public string $nama;
-	public array $q=[];
+	public array $q = [];
 	public bool $status;
 	public function export()
 	{
-		if (TestingData::count() === 0){
+		if (TestingData::count() === 0) {
 			return $this->dispatch(
-				'toast',type:'error',msg:'Gagal download: Data Testing kosong'
+				'toast',
+				type: 'error',
+				msg: 'Gagal download: Data Testing kosong'
 			);
 		}
 		return Excel::download(new TestingExport, 'testing.xlsx');
@@ -40,7 +41,7 @@ class DataTesting extends Component
 	public function import()
 	{
 		Excel::import(new TestingImport, $this->dataset);
-		$this->dispatch('toast',type:'success',msg:'Berhasil diupload');
+		$this->dispatch('toast', type: 'success', msg: 'Berhasil diupload');
 	}
 	public function store()
 	{
@@ -54,25 +55,27 @@ class DataTesting extends Component
 			} else $req['status'] = $this->status;
 			if ($this->id) {
 				TestingData::updateOrCreate(['id' => $this->id], $req);
-				$this->dispatch('toast',type:'success',msg:'Berhasil diedit');
+				$this->dispatch('toast', type: 'success', msg: 'Berhasil diedit');
 			} else {
 				TestingData::create($req);
-				$this->dispatch('toast',type:'success',msg:'Berhasil disimpan');
+				$this->dispatch('toast', type: 'success', msg: 'Berhasil disimpan');
 			}
 		} catch (QueryException $e) {
 			Log::error($e);
 			$this->dispatch(
-				'toast',type:'error',msg:"Terjadi kesalahan database #{$e->errorInfo[1]}"
+				'toast',
+				type: 'error',
+				msg: "Terjadi kesalahan database #{$e->errorInfo[1]}"
 			);
 		}
 	}
 	public function edit(TestingData $testing)
 	{
-		$this->id=$testing->id;
-		$this->nama=$testing->nama;
-		$this->status=$testing->status;
+		$this->id = $testing->id;
+		$this->nama = $testing->nama;
+		$this->status = $testing->status;
 		foreach (Atribut::get() as $attr) {
-			$this->q[$attr->slug]=$testing[$attr->slug];
+			$this->q[$attr->slug] = $testing[$attr->slug];
 		}
 		$this->dispatch('edit');
 	}
@@ -82,12 +85,13 @@ class DataTesting extends Component
 			Classification::where('name', $testing->nama)->where('type', 'test')
 				->delete();
 			$testing->delete();
-			$this->dispatch('toast',type:'success',msg:'Berhasil dihapus');
+			$this->dispatch('toast', type: 'success', msg: 'Berhasil dihapus');
 		} catch (QueryException $e) {
 			Log::error($e);
 			$this->dispatch(
 				'toast',
-				type:'error',msg:"Gagal hapus: Kesalahan database #{$e->errorInfo[1]}"
+				type: 'error',
+				msg: "Gagal hapus: Kesalahan database #{$e->errorInfo[1]}"
 			);
 		}
 	}
@@ -96,12 +100,13 @@ class DataTesting extends Component
 		try {
 			Classification::where('type', 'test')->delete();
 			TestingData::truncate();
-			$this->dispatch('toast',type:'success',msg:'Berhasil dihapus');
+			$this->dispatch('toast', type: 'success', msg: 'Berhasil dihapus');
 		} catch (QueryException $e) {
 			Log::error($e);
 			$this->dispatch(
 				'toast',
-				type:'error',msg:"Gagal hapus: Kesalahan database #{$e->errorInfo[1]}"
+				type: 'error',
+				msg: "Gagal hapus: Kesalahan database #{$e->errorInfo[1]}"
 			);
 		}
 	}
@@ -120,7 +125,8 @@ class DataTesting extends Component
 		$calculated = Probability::count();
 		$hasil = ProbabLabel::$label;
 		return view(
-			'livewire.data-testing',compact('atribut','nilai','calculated','hasil')
+			'livewire.data-testing',
+			compact('atribut', 'nilai', 'calculated', 'hasil')
 		);
 	}
 }

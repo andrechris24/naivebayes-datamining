@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use App\Models\TestingData;
 use App\Models\TrainingData;
 use Livewire\Component;
@@ -14,6 +15,6 @@ class Dashboard extends Component
 			'train' => TrainingData::count(),
 			'all' => TestingData::count() + TrainingData::count()
 		];
-		return view('livewire.dashboard',$data);
+		return view('livewire.dashboard', $data);
 	}
 }

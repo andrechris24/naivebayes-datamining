@@ -11,6 +11,6 @@ class Classification extends Model
 	protected $fillable = [
 		'name', 'type', 'true', 'false', 'predicted', 'real'
 	];
-	public static array $rule = ['type' => ['bail', 'required', 'in:train,test,all']],
+	public static array $rule = ['tipe' => ['bail', 'required', 'in:train,test,all']],
 		$tipedata = ['train' => 'Training', 'test' => 'Testing'];
 }

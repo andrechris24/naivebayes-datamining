@@ -13,9 +13,9 @@ use Livewire\Component;
 #[Layout('components.layouts.auth')]
 class Login extends Component
 {
-	public $email = '';
-	public $password = '';
-	public $remember = false;
+	public string $email;
+	public string $password;
+	public bool $remember = false;
 	public function login()
 	{
 		try {
@@ -25,11 +25,16 @@ class Login extends Component
 				Auth::login($user, $this->remember);
 				Session::regenerate();
 				$this->redirectRoute('home');
+			}else{
+				$this->addError('email', trans('auth.failed'));
+				$this->dispatch('error', message: "Email atau Password salah");
 			}
-			$this->addError('email', trans('auth.failed'));
 		} catch (QueryException $th) {
 			Log::error($th);
-			$this->dispatch('toast', type: 'error', message: "Gagal login: Kesalahan database #{$th->errorInfo[1]}");
+			$this->dispatch(
+				'error',
+				message: "Gagal login: Kesalahan database #{$th->errorInfo[1]}"
+			);
 		}
 	}
 	public function render()

@@ -10,12 +10,12 @@
 				<button type="button" class="btn-close text-reset" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form class="needs-validation" id="addNewNilaiAtributForm">@csrf
+				<form id="addNewNilaiAtributForm">@csrf
 					<input type="hidden" name="id" id="attr_id">
 					<div class="form-floating mb-4">
 						<input type="text" class="form-control" id="attrName" name="name" placeholder="Nama" required />
 						<label for="attrName">Nama</label>
-						<div class="invalid-tooltip" id="name-error">Masukkan Nama</div>
+						<div class="invalid-tooltip" id="name-error"></div>
 					</div>
 					<div class="form-floating mb-4">
 						<select name="atribut_id" class="form-select" id="attrType" required>
@@ -25,14 +25,11 @@
 							@endforeach
 						</select>
 						<label for="attrType">Atribut</label>
-						<div class="invalid-tooltip" id="type-error">Pilih Atribut</div>
+						<div class="invalid-tooltip" id="type-error"></div>
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
-				<div class="spinner-grow text-primary me-3 d-none" role="status">
-					<span class="visually-hidden">Menyimpan...</span>
-				</div>
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
 					<i class="fas fa-x"></i> Batal
 				</button>
@@ -170,7 +167,8 @@
 					$('#total-duplicate').text(data.duplicate);
 				}).fail(function (xhr, st) {
 					console.warn(xhr.responseJSON.message ?? st);
-					notif.error(`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
+					Notiflix.Notify.failure(
+						`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
 				});
 			});
 		} catch (dterr) {
@@ -178,42 +176,37 @@
 		}
 	}).on("click", ".delete-record", function () {
 		let attr_id = $(this).data("id"), attr_name = $(this).data("name");
-		confirm.fire({
-			titleText: "Hapus Atribut?",
-			text: `Anda akan menghapus Nilai Atribut ${attr_name}.`,
-			preConfirm: async () => {
-				try {
-					await $.ajax({
-						type: "DELETE",
-						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
-						url: '/atribut/nilai/' + attr_id,
-						success: function () {
+		Notiflix.Confirm.show(
+			"Hapus Nilai Atribut?",
+			`Anda akan menghapus Nilai Atribut ${attr_name}.`,
+			'Ya',
+			'Tidak',
+			function okCb() {
+				$.ajax({
+					type: "DELETE",
+					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
+					url: '/atribut/nilai/' + attr_id,
+					success: function () {
+						dt_atribut.draw();
+						Notiflix.Notify.success("Berhasil dihapus");
+					},
+					error: function (xhr, st) {
+						if (xhr.status === 404) {
 							dt_atribut.draw();
-							return "Dihapus";
-						},
-						error: function (xhr, st) {
-							if (xhr.status === 404) {
-								dt_atribut.draw();
-								errmsg = `Nilai Atribut ${attr_name} tidak ditemukan`;
-							} else {
-								console.warn(xhr.responseJSON.message ?? st);
-								errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
-							}
-							return Swal.showValidationMessage('Gagal hapus: ' + errmsg);
+							errmsg = `Nilai Atribut ${attr_name} tidak ditemukan`;
+						} else {
+							console.warn(xhr.responseJSON.message ?? st);
+							errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 						}
-					});
-				} catch (error) {
-					console.error(error.responseJSON);
-				}
+						Notiflix.Notify.failure('Gagal hapus: ' + errmsg);
+					}
+				});
 			}
-		}).then(function (result) {
-			if (result.isConfirmed) 
-				notif.open({ type: "success", message: "Berhasil dihapus" });
-		});
+		);
 	}).on("click", ".edit-record", function () {
 		let attr_id = $(this).data("id");
 		$("#modalAddNilaiAtributLabel").html("Edit Nilai Atribut");
-		formloading("#addNewNilaiAtributForm :input",true);
+		Notiflix.Block.standard('.modal');
 		$.get(`/atribut/nilai/${attr_id}/edit`, function (data) {
 			$("#attr_id").val(data.id);
 			$("#attrName").val(data.name);
@@ -227,12 +220,12 @@
 				console.warn(xhr.responseJSON.message ?? st);
 				errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 			}
-			notif.open({ type: "error", message: "Gagal memuat data: "+errmsg });
+			Notiflix.Notify.failure("Gagal memuat data: "+errmsg);
 		}).always(function () {
-			formloading("#addNewNilaiAtributForm :input", false);
+			Notiflix.Block.remove('.modal');
 		});
 	});
-	function submitform(ev) {
+	$("#addNewNilaiAtributForm").submit(function (ev) {
 		ev.preventDefault();
 		$.ajax({
 			data: $("#addNewNilaiAtributForm").serialize(),
@@ -240,17 +233,15 @@
 			type: "POST",
 			beforeSend: function () {
 				$("#addNewNilaiAtributForm :input").removeClass("is-invalid");
-				$('#modalAddNilaiAtribut :button').prop('disabled',true);
-				formloading("#addNewNilaiAtributForm :input", true);
+				Notiflix.Block.standard('.modal');
 			},
 			complete: function () {
-				formloading("#addNewNilaiAtributForm :input", false);
-				$('#modalAddNilaiAtribut :button').prop('disabled',false);
+				Notiflix.Block.remove('.modal');
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-atribut")) dt_atribut.draw();
 				modalForm.modal("hide");
-				notif.open({ type: "success", message: status.message });
+				Notiflix.Notify.success(status.message);
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
@@ -268,17 +259,15 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Terjadi kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				notif.open({ type: "error", message: errmsg });
+				Notiflix.Notify.failure(errmsg);
 			}
 		});
-	};
+	});
 	modalForm.on("hidden.bs.modal", function () {
 		resetvalidation();
 		$("#modalAddNilaiAtributLabel").html("Tambah Nilai Atribut");
 		$("#addNewNilaiAtributForm")[0].reset();
 		$("#attr_id").val("");
-		$("#name-error").text("Masukkan Nama");
-		$("#type-error").text("Pilih Atribut");
 	});
 </script>
 @endsection

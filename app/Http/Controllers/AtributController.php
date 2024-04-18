@@ -70,13 +70,13 @@ class AtributController extends Controller
 				return response()->json(['message' => 'Berhasil disimpan']);
 			}
 		} catch (QueryException $e) {
-			Log::error($e);
 			if ($e->errorInfo[1] === 1062 || $e->errorInfo[1] === 1060) {
 				return response()->json([
 					'message' => "Nama Atribut \"$request->name\" sudah digunakan",
 					'errors' => ['name' => 'Nama Atribut sudah digunakan']
 				], 422);
 			}
+			Log::error($e);
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
 	}

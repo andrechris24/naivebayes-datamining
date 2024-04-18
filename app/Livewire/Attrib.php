@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Livewire;
+
 use App\Models\Atribut;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -9,7 +11,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
-class Attribute extends Component
+class Attrib extends Component
 {
 	public int $id;
 	public string $name;
@@ -23,43 +25,48 @@ class Attribute extends Component
 				'name' => $this->name,
 				'slug' => Str::slug($this->name, '_'),
 				'type' => $this->type,
-				'desc' => $this->desc];
+				'desc' => $this->desc
+			];
 			if ($this->id) {
 				$atribut = Atribut::findOrFail($this->id);
 				$this->editColumn('training_data', $atribut, $req);
 				$this->editColumn('testing_data', $atribut, $req);
 				$atribut->update($req);
-				$this->dispatch('toast',type:'success',msg:'Berhasil diedit');
+				$this->dispatch('toast', type: 'success', msg: 'Berhasil diedit');
 			} else {
 				$this->addColumn('training_data', $req);
 				$this->addColumn('testing_data', $req);
 				Atribut::create($req);
-				$this->dispatch('toast',type:'success',msg:'Berhasil disimpan');
+				$this->dispatch('toast', type: 'success', msg: 'Berhasil disimpan');
 			}
 		} catch (QueryException $e) {
 			if ($e->errorInfo[1] === 1062 || $e->errorInfo[1] === 1060) {
-				$this->addError('name','Nama Atribut sudah digunakan');
+				$this->addError('name', 'Nama Atribut sudah digunakan');
 				return response()->json([
-					'message' => "Nama Atribut \"$request->name\" sudah digunakan"
+					'message' => "Nama Atribut \"$this->name\" sudah digunakan"
 				], 422);
-			}else{
+			} else {
 				Log::error($e);
 				$this->dispatch(
-					'toast',type:'error',msg:"Terjadi kesalahan database #{$e->errorInfo[1]}"
+					'toast',
+					type: 'error',
+					msg: "Terjadi kesalahan database #{$e->errorInfo[1]}"
 				);
 			}
-		}catch(ModelNotFoundException){
+		} catch (ModelNotFoundException) {
 			$this->dispatch(
-					'toast',type:'error',msg:"Gagal edit: Atribut tidak ditemukan"
-				);
+				'toast',
+				type: 'error',
+				msg: "Gagal edit: Atribut tidak ditemukan"
+			);
 		}
 	}
 	public function edit(Atribut $atribut)
 	{
-		$this->id=$atribut->id;
-		$this->name=$atribut->name;
-		$this->type=$atribut->type;
-		$this->desc=$atribut->desc;
+		$this->id = $atribut->id;
+		$this->name = $atribut->name;
+		$this->type = $atribut->type;
+		$this->desc = $atribut->desc;
 		$this->dispatch('edit');
 	}
 	public function destroy(Atribut $atribut)
@@ -68,11 +75,13 @@ class Attribute extends Component
 			$this->delColumn('training_data', $atribut);
 			$this->delColumn('testing_data', $atribut);
 			$atribut->delete();
-			$this->dispatch('toast',type:'success',msg:'Atribut berhasil dihapus');
+			$this->dispatch('toast', type: 'success', msg: 'Atribut berhasil dihapus');
 		} catch (QueryException $e) {
 			Log::error($e);
 			$this->dispatch(
-				'toast',type:'error',msg:"Terjadi kesalahan database #{$e->errorInfo[1]}"
+				'toast',
+				type: 'error',
+				msg: "Terjadi kesalahan database #{$e->errorInfo[1]}"
 			);
 		}
 	}
@@ -122,6 +131,6 @@ class Attribute extends Component
 	}
 	public function render()
 	{
-		return view('livewire.attribute');
+		return view('livewire.attrib');
 	}
 }

@@ -10,15 +10,15 @@
 			<h1 class="h3 mb-4">Reset password</h1>
 			<x-alert />
 			<x-no-script />
-			<x-caps-lock />
+			<x-caps-lock wire:ignore />
 			<form wire:submit.prevent="resetPassword" action="#" method="POST">
 				<input wire:model="token" type="hidden">
 				<!-- Form -->
 				<div class="mb-4">
 					<label for="email">Email</label>
 					<div class="input-group">
-						<input wire:model="email" type="email" class="form-control @error('email') is-invalid @enderror " placeholder="example@company.com"
-							id="email" readonly>
+						<input wire:model="email" type="email" class="form-control @error('email') is-invalid @enderror "
+							placeholder="email@example.com" id="email" readonly>
 					</div>
 					@error('email')
 					<div class="invalid-feedback">{{ $message }}</div>
@@ -38,7 +38,8 @@
 							</svg>
 						</span>
 						<input wire:model.lazy="password" type="password" placeholder="Password" minlength="8"
-							maxlength="20" class="form-control @error('password') is-invalid @enderror " id="password" required>
+							maxlength="20" class="form-control @error('password') is-invalid @enderror " id="password"
+							required>
 					</div>
 					@error('password')
 					<div class="invalid-feedback">{{ $message }}</div>
@@ -58,26 +59,14 @@
 							</svg>
 						</span>
 						<input wire:model.lazy="password_confirmation" type="password" placeholder="Konfirmasi Password"
-							class="form-control @error('password_confirmation') is-invalid @enderror " id="passwordConfirmation" minlength="8" maxlength="20" required>
+							class="form-control @error('password_confirmation') is-invalid @enderror "
+							id="passwordConfirmation" minlength="8" maxlength="20" required>
 					</div>
 					@error('password_confirmation')
 					<div class="invalid-feedback">{{ $message }}</div>
 					@enderror
 				</div>
 				<!-- End of Form -->
-				@if($isPasswordChanged)
-				<div class="alert alert-success" role="alert">
-					{{__('passwords.reset')}}
-				</div>
-				@endif
-				@if($wrongEmail||$invalidToken||!empty($error))
-				<div class="alert alert-danger" role="alert">
-					@if($wrongEmail) {{__('passwords.user')}}
-					@elseif($invalidToken) {{__('passwords.token')}}
-					@else {{$error}}
-					@endif
-				</div>
-				@endif
 				<div class="d-grid">
 					<button type="submit" class="btn btn-gray-800">
 						Reset Password
@@ -87,3 +76,10 @@
 		</div>
 	</div>
 </div>
+@push('js')
+<script type="text/javascript">
+	Livewire.on('error',(e)=>{
+		Notiflix.Notify.failure(e.message);
+	});
+</script>
+@endpush

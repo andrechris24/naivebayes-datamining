@@ -1,8 +1,8 @@
 @section('title', 'Dashboard')
 <div>
 	<p>Selamat datang di Aplikasi Klasifikasi Kelayakan Calon Penerima Bantuan Sosial,
-	{{ auth()->user()->name }}. Aplikasi ini menggunakan Naive Bayes sebagai
-	algoritma klasifikasi.</p>
+		{{ auth()->user()->name }}. Aplikasi ini menggunakan Naive Bayes sebagai
+		algoritma klasifikasi.</p>
 	<div class="row">
 		<div class="col-md-4 mb-3 mb-md-0">
 			<div class="card">

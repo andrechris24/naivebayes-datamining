@@ -1,13 +1,82 @@
 @extends('layout')
 @section('title','Hasil Klasifikasi')
 @section('content')
+<div class="modal fade" tabindex="-1" id="modalCalcClass" aria-labelledby="modalCalcClassLabel" role="dialog"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 id="modalCalcClassLabel" class="modal-title">
+					Hitung Klasifikasi
+				</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p>Pilih tipe data yang akan dihitung hasil klasifikasinya.</p>
+				<form id="formCalcClass">@csrf
+					<div class="position-relative">
+						<select class="form-select" name="tipe" id="calc-select" required>
+							<option value="train">Data Training (Data Latih)</option>
+							<option value="test">Data Testing (Data Uji)</option>
+						</select>
+						<div class="invalid-tooltip" id="calc-error">Pilih Tipe Data</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-tertiary" data-bs-dismiss="modal">
+					<i class="fas fa-x"></i> Tidak
+				</button>
+				<button type="submit" class="btn btn-primary" form="formCalcClass">
+					<i class="fas fa-check"></i> Hitung
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" tabindex="-1" id="modalResetClass" aria-labelledby="modalResetClassLabel" role="dialog"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+		<div class="modal-content">
+			<div class="modal-header bg-danger">
+				<h5 id="modalResetClassLabel" class="modal-title text-white">
+					Reset Klasifikasi?
+				</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p>Anda akan mereset hasil klasifikasi.
+					Pilih tipe data yang akan direset hasil klasifikasinya.</p>
+				<form id="formResetClass">@csrf
+					<div class="position-relative">
+						<select class="form-select" name="tipe" id="reset-select" required>
+							<option value="" selected>Pilih</option>
+							<option value="train">Data Training (Data Latih)</option>
+							<option value="test">Data Testing (Data Uji)</option>
+							<option value="all">Semua</option>
+						</select>
+						<div class="invalid-tooltip" id="reset-error">Pilih tipe data</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-tertiary" data-bs-dismiss="modal">
+					<i class="fas fa-x"></i> Batal
+				</button>
+				<button type="submit" class="btn btn-danger" form="formResetClass">
+					<i class="fas fa-check"></i> Reset
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="card">
 	<div class="card-body">
 		<div class="btn-group mb-2" role="button">
-			<button type="button" class="btn btn-primary calc-class">
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCalcClass">
 				<i class="fas fa-calculator"></i> Hitung
 			</button>
-			<button type="button" class="btn btn-danger reset-class">
+			<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalResetClass">
 				<i class="fa-solid fa-arrow-rotate-right"></i> Reset
 			</button>
 			<button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -91,107 +160,68 @@
 		} catch (dterr) {
 			initError(dterr.message);
 		}
-	}).on("click", ".reset-class", function () {
-		confirm.fire({
-			titleText: "Reset Klasifikasi?",
-			text: 'Anda akan mereset hasil klasifikasi. Pilih tipe data yang akan direset hasilnya.',
-			input: "select",
-			inputOptions: {
-				train: "Data Training (Data Latih)",
-				test: "Data Testing (Data Uji)",
-				all: "Semua Data"
+	});
+	$("#formResetClass").submit(function(e){
+		e.preventDefault();
+		$.ajax({
+			type: "DELETE",
+			data: $("#formResetClass").serialize(),
+			dataType: 'JSON',
+			url: "{{route('class.reset')}}",
+			beforeSend: function(){
+				Notiflix.Block.standard('.modal');
+				$('#reset-select').removeClass('is-invalid');
 			},
-			inputPlaceholder: "Pilih Tipe Data",
-			inputValidator: (value) => {
-				if (!value) return "Anda harus memilih tipe data";
+			complete: function(){
+				Notiflix.Block.remove('.modal');
 			},
-			preConfirm: async (tipe) => {
-				try {
-					await $.ajax({
-						type: "DELETE",
-						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
-						data: {
-							type: tipe
-						},
-						dataType: 'JSON',
-						url: "{{route('class.reset')}}",
-						success: function () {
-							if ($.fn.DataTable.isDataTable("#table-classify"))
-								dt_classify.draw();
-							return "Dihapus";
-						},
-						error: function (xhr, st) {
-							if (xhr.status === 422 || xhr.status === 400)
-								errmsg = xhr.responseJSON.message;
-							else {
-								console.warn(xhr.responseJSON.message ?? st);
-								errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
-							}
-							return Swal.showValidationMessage('Gagal reset: ' + errmsg);
-						}
-					});
-				} catch (error) {
-					console.error(error.responseJSON);
-				}
-			}
-		}).then(function (result) {
-			if (result.isConfirmed) 
-				notif.open({ type: "success", message: "Berhasil direset" });
-		});
-	}).on('click', '.calc-class', function(){
-		Swal.fire({
-			titleText: "Pilih tipe data yang akan dihitung",
-			input: "select",
-			inputOptions: {
-				train: "Data Training (Data Latih)",
-				test: "Data Testing (Data Uji)"
-			},
-			inputValue: "test",
-			inputPlaceholder: "Pilih Tipe Data",
-			showCancelButton: true,
-			confirmButtonText: `<i class="bi bi-calculator"></i> Hitung`,
-			cancelButtonText: `<i class="bi bi-x-lg"></i> Batal`,
-			showLoaderOnConfirm: true,
-			customClass: {
-					confirmButton: 'btn btn-primary me-2',
-					cancelButton: 'btn btn-tertiary'
-			},
-			buttonsStyling: false,
-			allowOutsideClick: () => !Swal.isLoading(),
-			inputValidator: (value) => {
-				if (!value) return "Anda harus memilih tipe data";
-			},
-			preConfirm: async (tipe) => {
-				try {
-					await $.ajax({
-						url: "{{ route('class.create') }}",
-						type: "POST",
-						data: {
-							type: tipe
-						},
-						dataType: 'JSON',
-						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
-						success: function () {
-							return "Berhasil dihitung";
-						},
-						error: function (xhr, st) {
-							if (xhr.status === 422 || xhr.status === 400)
-								errmsg = xhr.responseJSON.message;
-							else {
-								console.warn(xhr.responseJSON.message ?? st);
-								errmsg = `Gagal hitung: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
-							}
-							return Swal.showValidationMessage(errmsg);
-						}
-					});
-				} catch (error) {
-					console.error(error.responseJSON);
-				}
-			}
-		}).then((result) => {
-			if (result.isConfirmed) {
+			success: function () {
 				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
-				notif.open({ type: 'success', message: "Berhasil dihitung" });
+				$("#modalResetClass").modal('hide');
+				Notiflix.Notify.success("Berhasil direset");
+			},
+			error: function (xhr, st) {
+				if (xhr.status === 422 || xhr.status === 400){
+					errmsg = xhr.responseJSON.message;
+					$('#reset-select').addClass('is-invalid');
+					$("#reset-error").text(xhr.responseJSON.message);
+				} else {
+					console.warn(xhr.responseJSON.message ?? st);
+					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+				}
+				Notiflix.Notify.failure('Gagal reset: ' + errmsg);
+			}
+		});
+	});
+	$("#formCalcClass").submit(function(e){
+		e.preventDefault();
+		$.ajax({
+			url: "{{ route('class.create') }}",
+			type: "POST",
+			data: $("#formCalcClass").serialize(),
+			dataType: 'JSON',
+			beforeSend: function(){
+				$("#calc-select").removeClass('is-invalid');
+				Notiflix.Block.standard('.modal');
+			},
+			complete: function(){
+				Notiflix.Block.remove('.modal');
+			},
+			success: function () {
+				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
+				$("#modalCalcClass").modal('hide');
+				Notiflix.Notify.success("Berhasil dihitung");
+			},
+			error: function (xhr, st) {
+				if (xhr.status === 422 || xhr.status === 400){
+					errmsg = xhr.responseJSON.message;
+					$('#calc-select').addClass('is-invalid');
+					$("#calc-error").text(xhr.responseJSON.message);
+				} else {
+					console.warn(xhr.responseJSON.message ?? st);
+					errmsg = `Gagal hitung: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+				}
+				Notiflix.Notify.failure('Gagal reset: ' + errmsg);
 			}
 		});
 	});

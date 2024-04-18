@@ -3,9 +3,40 @@
 @section('content')
 <p>Untuk melakukan perubahan, masukkan password Anda.
 	Kosongkan password baru jika tidak ganti password.</p>
+	<div class="modal fade" tabindex="-1" id="modalDelAkun" aria-labelledby="modalDelAkunLabel"
+		data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+			<div class="modal-content">
+				<div class="modal-header bg-danger">
+					<h5 id="modalDelAkunLabel" class="modal-title text-white">Hapus Akun</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<x-caps-lock />
+					<p>Apakah Anda yakin ingin menghapus akun?
+						Jika sudah yakin, masukkan password Anda untuk melanjutkan.</p>
+					<form id="DelAkunForm">@csrf
+						<div class="position-relative">
+							<input type="password" class="form-control" id="password-conf" minlength="8" maxlength="20" 
+							name="confirm_pass" placeholder="Password Anda" required>
+							<div class="invalid-tooltip" id="del-error"></div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
+						<i class="fas fa-x"></i> Batal
+					</button>
+					<button type="submit" class="btn btn-danger" form="DelAkunForm">
+						<i class="fas fa-check"></i> Hapus
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 <div class="card card-body border-0 shadow mb-4">
 	<x-caps-lock />
-	<form class="needs-validation" enctype="multipart/form-data" id="form-edit-account">
+	<form enctype="multipart/form-data" id="form-edit-account">
 		<input type="hidden" name="id" value="{{ auth()->id() }}">@csrf
 		<div class="form-group position-relative mb-4">
 			<div class="row">
@@ -13,7 +44,7 @@
 				<div class="col-lg-9">
 					<input class="form-control" id="name" type="text" name="name" placeholder="Masukkan Nama Anda"
 						value="{{ auth()->user()->name }}" required>
-					<div class="invalid-tooltip" id="name-error">Masukkan Nama</div>
+					<div class="invalid-tooltip" id="name-error"></div>
 				</div>
 			</div>
 		</div>
@@ -23,9 +54,7 @@
 				<div class="col-lg-9">
 					<input class="form-control" id="email" type="email" name="email" placeholder="email@example.com"
 						value="{{ auth()->user()->email }}" required>
-					<div class="invalid-tooltip" id="email-error">
-						Masukkan Email (email@example.com)
-					</div>
+					<div class="invalid-tooltip" id="email-error"></div>
 				</div>
 			</div>
 		</div>
@@ -37,9 +66,7 @@
 				<div class="col-lg-9">
 					<input class="form-control" id="password-current" type="password" minlength="8" maxlength="20"
 						placeholder="Password Anda" name="current_password" required>
-					<div class="invalid-tooltip" id="current-password-error">
-						Masukkan Password Anda
-					</div>
+					<div class="invalid-tooltip" id="current-password-error"></div>
 				</div>
 			</div>
 		</div>
@@ -51,9 +78,7 @@
 				<div class="col-lg-9">
 					<input class="form-control" id="newpassword" type="password" oninput="checkpassword()" minlength="8"
 						maxlength="20" placeholder="Kosongkan jika tidak ganti password" name="password">
-					<div class="invalid-tooltip" id="newpassword-error">
-						Password baru harus di antara 8-20 karakter
-					</div>
+					<div class="invalid-tooltip" id="newpassword-error"></div>
 				</div>
 			</div>
 		</div>
@@ -65,9 +90,7 @@
 				<div class="col-lg-9">
 					<input class="form-control" id="conf-password" type="password" minlength="8" maxlength="20"
 						placeholder="Konfirmasi password baru" name="password_confirmation" oninput="checkpassword()">
-					<div class="invalid-tooltip" id="confirm-password-error">
-						Password Konfirmasi salah
-					</div>
+					<div class="invalid-tooltip" id="confirm-password-error"></div>
 				</div>
 			</div>
 		</div>
@@ -75,15 +98,12 @@
 			<a href="{{ route('home') }}" class="btn btn-warning">
 				<i class="fas fa-arrow-left"></i> Kembali
 			</a>
-			<button type="button" class="btn btn-danger" id="DelAccountBtn">
+			<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelAkun">
 				<i class="fas fa-trash"></i> Hapus Akun
 			</button>
 			<button type="submit" class="btn btn-primary">
 				<i class="fas fa-floppy-disk"></i> Simpan Perubahan
 			</button>
-		</div>
-		<div class="spinner-grow text-primary d-none" role="status">
-			<span class="visually-hidden">Menyimpan...</span>
 		</div>
 	</form>
 </div>
@@ -93,7 +113,7 @@
 <script type="text/javascript" src="{{ asset('assets/js/password.js') }}"></script>
 <script type="text/javascript">
 	let errmsg;
-	function submitform(e) {
+	$("#form-edit-account").submit(function(e) {
 		e.preventDefault();
 		$.ajax({
 			data: $("#form-edit-account").serialize(),
@@ -101,17 +121,15 @@
 			type: "PATCH",
 			beforeSend: function () {
 				$("#form-edit-account :input").removeClass("is-invalid");
-				$("#form-edit-account :button").prop("disabled", true);
-				formloading("#form-edit-account :input",true);
+				Notiflix.Loading.standard('Menyimpan');
 			},
 			complete: function () {
-				$("#form-edit-account :button").prop("disabled", false);
-				formloading("#form-edit-account :input",false);
+				Notiflix.Loading.remove();
 			},
 			success: function () {
 				$("input[type=password]").val("");
 				resetvalidation();
-				notif.open({ type: 'success', message: "Tersimpan" });
+				Notiflix.Notify.success("Tersimpan");
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
@@ -147,59 +165,39 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Terjadi kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				notif.open({ type: 'error', message: errmsg });
+				Notiflix.Notify.failure(errmsg);
 			}
 		});
-	};
-	$(document).on("click", "#DelAccountBtn", function () {
-		confirm.fire({
-			titleText: "Hapus Akun?",
-			text: "Jika Anda sudah yakin ingin menghapus akun, " +
-				"masukkan password Anda untuk melanjutkan. "+
-				"Anda akan logout secara otomatis setelah menghapus akun.",
-			input: "password",
-			inputLabel: "Password",
-			inputPlaceholder: "Password Anda",
-			inputAttributes: {
-				maxlength: 20,
-				autocapitalize: "off",
-				autocorrect: "off"
+	});
+	$("#DelAkunForm").submit(function (e) {
+		e.preventDefault();
+		$.ajax({
+			url: "{{ route('profil.delete') }}",
+			type: "DELETE",
+			data: $("#DelAkunForm").serialize(),
+			beforeSend: function(){
+				$("#password-conf").removeClass('is-invalid');
+				Notiflix.Loading.standard("Menghapus");
 			},
-			inputValidator: (value) => {
-				if (!value) return "Masukkan Password Anda";
-				else if (value.length < 8 || value.length > 20)
-					return "Panjang Password harus 8-20 karakter";
+			success: function () {
+				Notiflix.Loading.change('Mengalihkan ke Halaman Login');
+				Notiflix.Loading.remove(5000);
+				location.replace("{{route('login')}}");
 			},
-			preConfirm: async (password) => {
-				try {
-					await $.ajax({
-						url: "{{ route('profil.delete') }}",
-						type: "DELETE",
-						data: {
-							current_password: password
-						},
-						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
-						success: function () {
-							return "{{ route('login') }}";
-						},
-						error: function (xhr, st) {
-							if (xhr.status === 422) errmsg = xhr.responseJSON.message;
-							else if (xhr.status === 429)
-								errmsg = "Terlalu banyak upaya. Cobalah beberapa saat lagi.";
-							else {
-								console.warn(xhr.responseJSON.message ?? st);
-								errmsg = `Gagal hapus: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
-							}
-							return Swal.showValidationMessage(errmsg);
-						}
-					});
-				} catch (error) {
-					console.error(error.responseJSON);
+			error: function (xhr, st) {
+				Notiflix.Loading.remove();
+				if (xhr.status === 422) {
+					errmsg = xhr.responseJSON.message;
+					$("#password-conf").addClass('is-invalid');
+					$("#del-error").text(xhr.responseJSON.message);
+				}else if (xhr.status === 429)
+					errmsg = "Terlalu banyak upaya. Cobalah beberapa saat lagi.";
+				else {
+					console.warn(xhr.responseJSON.message ?? st);
+					errmsg = `Gagal hapus: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 				}
+				Notiflix.Notify.failure(errmsg);
 			}
-		}).then((result) => {
-			if (result.isConfirmed) 
-				notif.open({ type: 'success', message: "Akun sudah dihapus" });
 		});
 	});
 </script>

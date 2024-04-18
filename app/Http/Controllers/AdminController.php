@@ -25,6 +25,15 @@ class AdminController extends Controller
 		];
 		return view('main.index', $data);
 	}
+	public function logout()
+	{
+		User::find(Auth::id())->update(['remember_token' => null]);
+		Auth::logout();
+		Session::invalidate();
+		Session::regenerateToken();
+		Session::flash('success', 'Anda sudah logout');
+		return to_route('login');
+	}
 	public function edit()
 	{
 		return view('main.profil');
@@ -62,6 +71,7 @@ class AdminController extends Controller
 			Auth::logout();
 			Session::invalidate();
 			Session::regenerateToken();
+			Session::flash('success', "Akun sudah dihapus");
 			return response()->json(['message' => 'Akun sudah dihapus']);
 		} catch (ModelNotFoundException) {
 			return response()->json(['message' => 'Akun tidak ditemukan'], 404);

@@ -49,9 +49,7 @@
 
 <body>
 	<section class="vh-100 d-flex align-items-center justify-content-center">
-		<div class="container">
-			@yield('content')
-		</div>
+		<div class="container">@yield('content')</div>
 	</section>
 </body>
 

@@ -12,12 +12,12 @@
 				<button type="button" class="btn-close text-reset" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form class="needs-validation" id="addNewTrainingForm">@csrf
+				<form id="addNewTrainingForm">@csrf
 					<input type="hidden" name="id" id="train_id">
 					<div class="form-floating mb-4">
 						<input type="text" class="form-control" id="trainName" name="nama" placeholder="Nama" required />
 						<label for="trainName">Nama</label>
-						<div class="invalid-tooltip" id="name-error">Masukkan Nama</div>
+						<div class="invalid-tooltip" id="name-error"></div>
 					</div>
 					@foreach ($atribut as $attr)
 					<div class="form-floating mb-4" data-bs-toggle="tooltip" title="{{$attr->desc}}">
@@ -33,9 +33,7 @@
 						</select>
 						@endif
 						<label for="train-{{$attr->slug}}">{{$attr->name}}</label>
-						<div class="invalid-tooltip" id="{{$attr->slug}}-error">
-							{{($attr->type==='numeric'?'Masukkan ':'Pilih ').$attr->name}}
-						</div>
+						<div class="invalid-tooltip" id="{{$attr->slug}}-error"></div>
 					</div>
 					@endforeach
 					<div class="form-floating mb-4">
@@ -45,14 +43,11 @@
 							<option value="0">{{$hasil[false]}}</option>
 						</select>
 						<label for="trainResult">Hasil</label>
-						<div class="invalid-tooltip" id="result-error">Pilih hasil</div>
+						<div class="invalid-tooltip" id="result-error"></div>
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
-				<div class="spinner-grow text-primary me-3 d-none" role="status">
-					<span class="visually-hidden">Menyimpan...</span>
-				</div>
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
 					<i class="fas fa-x"></i> Batal
 				</button>
@@ -78,7 +73,8 @@
 			<div class="modal-body">
 				<div class="alert alert-info" role="alert">
 					<i class="fas fa-info-circle"></i>
-					<a href="{{route('template-data')}}" class="alert-link">Klik disini</a> untuk mendownload template Dataset
+					<a href="{{route('template-data')}}" class="alert-link">Klik disini</a>
+					untuk mendownload template Dataset
 				</div>
 				<form id="importTrainingData">@csrf
 					<input type="file" class="form-control" id="trainData" name="data" data-bs-toggle="tooltip"
@@ -89,9 +85,6 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<div class="spinner-grow text-success me-3 d-none" role="status">
-					<span class="visually-hidden">Mengupload..</span>
-				</div>
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
 					<i class="fas fa-x"></i> Batal
 				</button>
@@ -143,8 +136,8 @@
 </div>
 @once
 <div class="alert alert-info alert-dismissible" role="alert">
-	<p>Data Training akan digunakan untuk melatih algoritma klasifikasi Naive Bayes.</p>
-	<p>Melakukan perubahan pada Data Training akan mereset Probabilitas.</p>
+	<p>Data Training digunakan untuk melatih algoritma klasifikasi Naive Bayes.
+	Jika Anda melakukan perubahan pada Data Training, Probabilitas akan direset secara otomatis.</p>
 	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endonce
@@ -261,80 +254,81 @@
 					$('#total-duplicate').text(data.duplicate);
 				}).fail(function (xhr, st) {
 					console.warn(xhr.responseJSON.message ?? st);
-					notif.error(`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
+					Notiflix.Notify.failure(
+						`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+						);
 				});
 			});
 		} catch (dterr) {
 			initError(dterr.message);
 		}
 	}).on("click", ".delete-all", function () {
-		confirm.fire({
-			titleText: "Hapus semua Data Training?",
-			text: 'Anda akan menghapus semua Data Training yang akan mereset hasil klasifikasi terkait.',
-			preConfirm: async () => {
-				try {
-					await $.ajax({
-						type: "DELETE",
-						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
-						url: "{{route('training.clear')}}",
-						success: function () {
-							if ($.fn.DataTable.isDataTable("#table-training")) 
-								dt_training.draw();
-							return "Dihapus";
-						},
-						error: function (xhr, st) {
-							console.warn(xhr.responseJSON.message ?? st);
-							return Swal.showValidationMessage(
-								`Gagal hapus: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
-						}
-					});
-				} catch (error) {
-					console.error(error.responseJSON);
-				}
+		Notiflix.Confirm.show(
+			"Hapus semua Data Training?",
+			'Anda akan menghapus semua Data Training yang akan mereset hasil klasifikasi terkait.',
+			'Ya',
+			'Tidak',
+			function okCb() {
+				$.ajax({
+					type: "DELETE",
+					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
+					url: "{{route('training.clear')}}",
+					beforeSend: function(){
+						Notiflix.Loading.standard('Menghapus');
+					},complete:function(){
+						Notiflix.Loading.remove();
+					},
+					success: function () {
+						if ($.fn.DataTable.isDataTable("#table-training"))
+							dt_training.draw();
+						Notiflix.Notify.success("Semua data berhasil dihapus");
+					},
+					error: function (xhr, st) {
+						console.warn(xhr.responseJSON.message ?? st);
+						Notiflix.Notify.failure(
+							`Gagal hapus: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
+					}
+				});
 			}
-		}).then(function (result) {
-			if (result.isConfirmed) 
-				notif.open({ type: "success", message: "Semua data berhasil dihapus" });
-		});
+		);
 	}).on("click", ".delete-record", function () {
 		let train_id = $(this).data("id"), train_name = $(this).data("name");
-		confirm.fire({
-			titleText: "Hapus Data Training?",
-			text: `Anda akan menghapus Data Training ${train_name}.`,
-			preConfirm: async () => {
-				try {
-					await $.ajax({
-						type: "DELETE",
-						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
-						url: 'training/' + train_id,
-						success: function () {
+		Notiflix.Confirm.show(
+			"Hapus Data Training?",
+			`Anda akan menghapus Data Training ${train_name}.`,
+			'Ya',
+			'Tidak',
+			function okCb() {
+				$.ajax({
+					type: "DELETE",
+					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
+					url: 'training/' + train_id,
+					beforeSend: function(){
+						Notiflix.Loading.standard('Menghapus');
+					},complete:function(){
+						Notiflix.Loading.remove();
+					},
+					success: function () {
+						dt_training.draw();
+						Notiflix.Notify.success("Berhasil dihapus");
+					},
+					error: function (xhr, st) {
+						if (xhr.status === 404) {
 							dt_training.draw();
-							return "Dihapus";
-						},
-						error: function (xhr, st) {
-							if (xhr.status === 404) {
-								dt_training.draw();
-								errmsg = `Data Training ${train_name} tidak ditemukan`;
-							} else {
-								console.warn(xhr.responseJSON.message ?? st);
-								errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
-							}
-							return Swal.showValidationMessage('Gagal hapus: ' + errmsg);
+							errmsg = `Data Training ${train_name} tidak ditemukan`;
+						} else {
+							console.warn(xhr.responseJSON.message ?? st);
+							errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 						}
-					});
-				} catch (error) {
-					console.error(error.responseJSON);
-				}
+						Notiflix.Notify.failure('Gagal hapus: ' + errmsg);
+					}
+				});
 			}
-		}).then(function (result) {
-			if (result.isConfirmed) 
-				notif.open({ type: "success", message: "Berhasil dihapus" });
-		});
+		);
 	}).on("click", ".edit-record", function () {
 		let train_id = $(this).data("id");
 		$("#modalAddTrainingLabel").html("Edit Data Training");
-		formloading("#addNewTrainingForm :input",true);
-		$('.btn-success').prop('disabled',true);
+		Notiflix.Block.standard('.modal');
 		$.get(`training/${train_id}/edit`, function (data) {
 			$("#train_id").val(data.id);
 			$("#trainName").val(data.nama);
@@ -349,12 +343,11 @@
 				errmsg = "Data yang Anda cari tidak ditemukan";
 			} else {
 				console.warn(xhr.responseJSON.message ?? st);
-				errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+				errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 			}
-			notif.open({ type: "error", message: "Gagal memuat data: "+errmsg });
+			Notiflix.Notify.failure("Gagal memuat data: "+errmsg);
 		}).always(function () {
-			$('.btn-success').prop('disabled',false);
-			formloading("#addNewTrainingForm :input", false);
+			Notiflix.Block.remove('.modal');
 		});
 	});
 	$('#importTrainingData').submit(function(e){//form Upload Data
@@ -369,17 +362,15 @@
 			processData: false,
 			beforeSend: function () {
 				$("#importTrainingData :input").removeClass("is-invalid");
-				$('#modalImportTraining :button').prop('disabled',true);
-				formloading("#importTrainingData :input",true);
+				Notiflix.Block.standard('.modal');
 			},
 			complete: function () {
-				$('#modalImportTraining :button').prop('disabled',false);
-				formloading("#importTrainingData :input",false);
+				Notiflix.Block.remove('.modal');
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-training")) dt_training.draw();
 				$('#modalImportTraining').modal("hide");
-				notif.open({ type: "success", message: "Berhasil diupload" });
+				Notiflix.Notify.success("Berhasil diupload");
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
@@ -393,11 +384,11 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				notif.open({ type: "error", message: "Gagal upload: "+errmsg });
+				Notiflix.Notify.failure("Gagal upload: "+errmsg);
 			}
 		});
 	});
-	function submitform(ev) {//form Input Manual
+	$("#addNewTrainingForm").submit(function (ev) {//form Input Manual
 		ev.preventDefault();
 		$.ajax({
 			data: $("#addNewTrainingForm").serialize(),
@@ -405,17 +396,15 @@
 			type: "POST",
 			beforeSend: function () {
 				$("#addNewTrainingForm :input").removeClass("is-invalid");
-				$('#modalAddTraining :button').prop('disabled',true);
-				formloading("#addNewTrainingForm :input",true);
+				Notiflix.Block.standard('.modal');
 			},
 			complete: function () {
-				$('#modalAddTraining :button').prop('disabled',false);
-				formloading("#addNewTrainingForm :input",false);
+				Notiflix.Block.remove('.modal');
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-training")) dt_training.draw();
 				modalForm.modal("hide");
-				notif.open({ type: "success", message: status.message });
+				Notiflix.Notify.success(status.message);
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
@@ -439,24 +428,15 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Terjadi kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				notif.open({ type: "error", message: errmsg });
+				Notiflix.Notify.failure(errmsg);
 			}
 		});
-	};
+	});
 	modalForm.on("hidden.bs.modal", function () {
 		resetvalidation();
 		$("#modalAddTrainingLabel").html("Tambah Data Training");
 		$("#addNewTrainingForm")[0].reset();
 		$("#train_id").val("");
-		$("#name-error").text("Masukkan Nama");
-		@foreach($atribut as $attr)
-			@if($attr->type==='numeric')
-			$("#{{$attr->slug}}-error").text("Masukkan {{$attr->slug}}");
-			@else
-			$("#{{$attr->slug}}-error").text("Pilih {{$attr->slug}}");
-			@endif
-		@endforeach
-		$("#result-error").text("Pilih hasil");
 	});
 </script>
 @endsection

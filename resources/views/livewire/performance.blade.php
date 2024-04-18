@@ -156,7 +156,7 @@
 		}]);
 	});
 	Livewire.on('error', (err) => {
-		notif.open({type:'error',message:err.message});
+		Notiflix.Notify.failure(err.message);
 		bar.updateSeries([{
 			name: "{{$stat[1]}} (Prediksi)",
 			data: []

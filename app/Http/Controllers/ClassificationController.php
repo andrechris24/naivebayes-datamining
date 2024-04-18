@@ -90,8 +90,8 @@ class ClassificationController extends Controller
 	{
 		$request->validate(Classification::$rule);
 		try {
-			if ($request->type === 'all') Classification::truncate();
-			else Classification::where('type', $request->type)->delete();
+			if ($request->tipe === 'all') Classification::truncate();
+			else Classification::where('type', $request->tipe)->delete();
 			return response()->json(['message' => 'Berhasil direset']);
 		} catch (QueryException $e) {
 			Log::error($e);

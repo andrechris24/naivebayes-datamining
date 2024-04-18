@@ -13,7 +13,7 @@ use App\Exports\DatasetTemplate,
 	App\Livewire\Auth\Login,
 	App\Livewire\Auth\Register,
 	App\Livewire\Auth\Reset,
-	// App\Livewire\Attribute,
+	// App\Livewire\Attrib,
 	// App\Livewire\Classify,
 	// App\Livewire\Dashboard,
 	// App\Livewire\DataTemplate,
@@ -36,11 +36,12 @@ use App\Exports\DatasetTemplate,
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::middleware(['guest'])->group(function(){
-	Route::get('register',Register::class)->name('register');
+
+Route::middleware(['guest'])->group(function () {
+	Route::get('register', Register::class)->name('register');
 	Route::get('login', Login::class)->name('login');
-	Route::prefix('password')->name('password.')->group(function(){
-		Route::get('/',Forgot::class)->name('forget');
+	Route::prefix('password')->name('password.')->group(function () {
+		Route::get('/', Forgot::class)->name('forget');
 		Route::get('reset', Reset::class)->name('reset');
 	});
 });
@@ -55,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
 				Route::delete('/', 'delete')->name('delete');
 			});
 		});
-		Route::post('logout','logout')->name('logout');
+		Route::post('logout', 'logout')->name('logout');
 	});
 	Route::controller(TrainingDataController::class)->prefix('training')
 		->name('training.')->group(function () {
@@ -79,7 +80,7 @@ Route::middleware(['auth'])->group(function () {
 		});
 	Route::prefix('atribut')->name('atribut.')->group(function () {
 		Route::get('count', [AtributController::class, 'count'])->name('count')
-		->block();
+			->block();
 		Route::get('nilai/count', [NilaiAtributController::class, 'count'])
 			->name('nilai.count')->block();
 		Route::resource('nilai', NilaiAtributController::class);
@@ -109,7 +110,7 @@ Route::middleware(['auth'])->group(function () {
 	// Route::get('/', Dashboard::class)->name('home');
 	// Route::get('profil', Profile::class)->name('profil');
 	// Route::prefix('atribut')->name('atribut')->group(function(){
-	// 	Route::get('/', Attribute::class)->block();
+	// 	Route::get('/', Attrib::class)->block();
 	// 	Route::get('count', [DataTableController::class,'countattr'])
 	// 	->name('.count')->block();
 	// 	Route::get('dt',[DataTableController::class,'atribut'])->name('.dt')

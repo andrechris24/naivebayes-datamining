@@ -61,12 +61,10 @@ class ProbabilityController extends Controller
 			//Likelihood Start
 			foreach (NilaiAtribut::get() as $nilai) { //Categorical
 				if ($nilai->atribut->type === 'categorical') {
-					$ll[$nilai->name]['true'] =
-						($total['true'] === 0 ? 0 :
+					$ll[$nilai->name]['true'] = ($total['true'] === 0 ? 0 :
 							TrainingData::where($nilai->atribut->slug, $nilai->id)
 							->where('status', true)->count() / $total['true']);
-					$ll[$nilai->name]['false'] =
-						($total['false'] === 0 ? 0 :
+					$ll[$nilai->name]['false'] = ($total['false'] === 0 ? 0 :
 							TrainingData::where($nilai->atribut->slug, $nilai->id)
 							->where('status', false)->count() / $total['false']);
 					$ll[$nilai->name]['Total'] =
