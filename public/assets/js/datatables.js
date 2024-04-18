@@ -15,5 +15,5 @@ function initError(message) {
 function errorDT(message, note) {
 	Notiflix.Notify.warning(message);
 	console.warn(message);
-	if(note) console.info("%chttps://datatables.net/tn/" + note);
+	if(note) console.info("https://datatables.net/tn/" + note);
 }

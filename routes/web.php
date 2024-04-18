@@ -1,5 +1,4 @@
 <?php
-
 use App\Exports\DatasetTemplate,
 	App\Http\Controllers\AdminController,
 	App\Http\Controllers\AtributController,
@@ -13,18 +12,6 @@ use App\Exports\DatasetTemplate,
 	App\Livewire\Auth\Login,
 	App\Livewire\Auth\Register,
 	App\Livewire\Auth\Reset,
-	// App\Livewire\Attrib,
-	// App\Livewire\Classify,
-	// App\Livewire\Dashboard,
-	// App\Livewire\DataTemplate,
-	// App\Livewire\DataTesting,
-	// App\Livewire\DataTraining,
-	// App\Livewire\Logout,
-	// App\Livewire\Performance,
-	// App\Livewire\Probab,
-	// App\Livewire\Profile,
-	// App\Livewire\SubAttribute,
-	// App\Http\Controllers\DataTableController,
 	Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +23,6 @@ use App\Exports\DatasetTemplate,
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
 Route::middleware(['guest'])->group(function () {
 	Route::get('register', Register::class)->name('register');
 	Route::get('login', Login::class)->name('login');
@@ -46,7 +32,6 @@ Route::middleware(['guest'])->group(function () {
 	});
 });
 Route::middleware(['auth'])->group(function () {
-	// ========================== Non-Livewire Routing ==========================
 	Route::controller(AdminController::class)->group(function () {
 		Route::get('/', 'index')->name('home');
 		Route::prefix('profil')->name('profil.')->group(function () {
@@ -102,50 +87,6 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('template', function () {
 		return (new DatasetTemplate)->download('template.xlsx');
 	})->name('template-data');
-
-	// ============================ Livewire Routing ============================
-	// Livewire hanya digunakan pada Guest Middleware saja
-	// karena banyak bug yang sulit untuk diperbaiki
-
-	// Route::get('/', Dashboard::class)->name('home');
-	// Route::get('profil', Profile::class)->name('profil');
-	// Route::prefix('atribut')->name('atribut')->group(function(){
-	// 	Route::get('/', Attrib::class)->block();
-	// 	Route::get('count', [DataTableController::class,'countattr'])
-	// 	->name('.count')->block();
-	// 	Route::get('dt',[DataTableController::class,'atribut'])->name('.dt')
-	// 	->block();
-	// 	Route::prefix('nilai')->name('.nilai')->group(function(){
-	// 		Route::get('/',SubAttribute::class)->block();
-	// 		Route::get('count',[DataTableController::class,'countsubattr'])
-	// 		->name('.count')->block();
-	// 		Route::get('dt',[DataTableController::class,'nilaiatribut'])->name('.dt')
-	// 		->block();
-	// 	});
-	// });
-	// Route::prefix('training')->name('training')->group(function(){
-	// 	Route::get('/',DataTraining::class)->block();
-	// 	Route::get('count',[DataTableController::class,'counttrain'])
-	// 	->name('.count')->block();
-	// 	Route::get('dt',[DataTableController::class,'trainingdata'])->name('.dt')
-	// 	->block();
-	// });
-	// Route::prefix('testing')->name('testing')->group(function(){
-	// 	Route::get('/',DataTesting::class)->block();
-	// 	Route::get('count',[DataTableController::class,'counttest'])
-	// 	->name('.count')->block();
-	// 	Route::get('dt',[DataTableController::class,'testingdata'])->name('.dt')
-	// 	->block();
-	// });
-	// Route::get('probab', Probab::class)->name('probab');
-	// Route::prefix('class')->name('class')->group(function(){
-	// 	Route::get('/',Classify::class)->block();
-	// 	Route::get('dt', [DataTableController::class,'klasifikasi'])->name('.dt')
-	// 	->block();
-	// });
-	// Route::get('result', Performance::class)->name('result');
-	// Route::post('logout',Logout::class)->name('logout');
-
 	Route::get('laravel', function () {
 		return view('welcome');
 	})->name('laravel');
