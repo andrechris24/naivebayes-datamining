@@ -55,7 +55,7 @@
 					data-bs-target="#modalImportTraining">
 					<i class="fas fa-upload"></i> Upload File
 				</button>
-				<button type="submit" class="btn btn-primary data-submit" form="addNewTrainingForm">
+				<button type="submit" class="btn btn-primary" form="addNewTrainingForm">
 					<i class="fas fa-floppy-disk"></i> Simpan
 				</button>
 			</div>
@@ -76,7 +76,7 @@
 					<a href="{{route('template-data')}}" class="alert-link">Klik disini</a>
 					untuk mendownload template Dataset
 				</div>
-				<form id="importTrainingData">@csrf
+				<form id="importTrainingData" enctype="multipart/form-data">@csrf
 					<input type="file" class="form-control" id="trainData" name="data" data-bs-toggle="tooltip"
 						title="Format: xls, xlsx, csv, dan tsv" aria-describedby="importFormats"
 						accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.oasis.opendocument.spreadsheet,text/csv,.tsv"
@@ -91,7 +91,7 @@
 				<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddTraining">
 					<i class="fas fa-pen"></i> Input Manual
 				</button>
-				<button type="submit" class="btn btn-primary data-submit" form="importTrainingData">
+				<button type="submit" class="btn btn-primary" form="importTrainingData">
 					<i class="fas fa-upload"></i> Upload
 				</button>
 			</div>
@@ -134,13 +134,11 @@
 		</div>
 	</div>
 </div>
-@once
 <div class="alert alert-info alert-dismissible" role="alert">
 	<p>Data Training digunakan untuk melatih algoritma klasifikasi Naive Bayes.
-	Jika Anda melakukan perubahan pada Data Training, Probabilitas akan direset secara otomatis.</p>
+		Jika Anda melakukan perubahan pada Data Training, Probabilitas akan direset secara otomatis.</p>
 	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
-@endonce
 <div class="card">
 	<div class="card-body">
 		<div class="btn-group mb-2" role="group">
@@ -162,10 +160,10 @@
 					</li>
 				</ul>
 			</div>
-			<button type="button" class="btn btn-danger delete-all">
+			<button type="button" class="btn btn-danger" id="delete-all">
 				<i class="fas fa-trash"></i> Hapus Data
 			</button>
-			<a href="{{route('training.export')}}" class="btn btn-success">
+			<a href="{{route('training.export')}}" class="btn btn-success disabled" id="dlBtn">
 				<i class="fas fa-download"></i> Ekspor Data
 			</a>
 		</div>
@@ -246,10 +244,10 @@
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
-			}).on('preXhr', function () {
+			}).on('xhr', function () {
 				$.get("{{ route('training.count') }}", function (data) {
-					if(data.total===0) $('.download-data').prop('disabled',true);
-					else $('.download-data').prop('disabled',false);
+					if(data.total==0) $('#dlBtn').addClass('disabled');
+					else $('#dlBtn').removeClass('disabled');
 					$("#total-counter").text(data.total);
 					$('#total-duplicate').text(data.duplicate);
 				}).fail(function (xhr, st) {
@@ -262,13 +260,13 @@
 		} catch (dterr) {
 			initError(dterr.message);
 		}
-	}).on("click", ".delete-all", function () {
+	}).on("click", "#delete-all", function () {
 		Notiflix.Confirm.show(
 			"Hapus semua Data Training?",
 			'Anda akan menghapus semua Data Training yang akan mereset hasil klasifikasi terkait.',
 			'Ya',
 			'Tidak',
-			function okCb() {
+			function () {
 				$.ajax({
 					type: "DELETE",
 					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
@@ -298,7 +296,7 @@
 			`Anda akan menghapus Data Training ${train_name}.`,
 			'Ya',
 			'Tidak',
-			function okCb() {
+			function () {
 				$.ajax({
 					type: "DELETE",
 					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
@@ -328,7 +326,7 @@
 	}).on("click", ".edit-record", function () {
 		let train_id = $(this).data("id");
 		$("#modalAddTrainingLabel").html("Edit Data Training");
-		Notiflix.Block.standard('.modal');
+		Notiflix.Block.standard('.modal-content','Memuat');
 		$.get(`training/${train_id}/edit`, function (data) {
 			$("#train_id").val(data.id);
 			$("#trainName").val(data.nama);
@@ -347,7 +345,7 @@
 			}
 			Notiflix.Notify.failure("Gagal memuat data: "+errmsg);
 		}).always(function () {
-			Notiflix.Block.remove('.modal');
+			Notiflix.Block.remove('.modal-content');
 		});
 	});
 	$('#importTrainingData').submit(function(e){//form Upload Data
@@ -362,10 +360,10 @@
 			processData: false,
 			beforeSend: function () {
 				$("#importTrainingData :input").removeClass("is-invalid");
-				Notiflix.Block.standard('.modal');
+				Notiflix.Block.standard('.modal-content','Mengupload');
 			},
 			complete: function () {
-				Notiflix.Block.remove('.modal');
+				Notiflix.Block.remove('.modal-content');
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-training")) dt_training.draw();
@@ -396,10 +394,10 @@
 			type: "POST",
 			beforeSend: function () {
 				$("#addNewTrainingForm :input").removeClass("is-invalid");
-				Notiflix.Block.standard('.modal');
+				Notiflix.Block.standard('.modal-content','Menyimpan');
 			},
 			complete: function () {
-				Notiflix.Block.remove('.modal');
+				Notiflix.Block.remove('.modal-content');
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-training")) dt_training.draw();

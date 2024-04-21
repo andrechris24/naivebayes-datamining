@@ -1,4 +1,5 @@
 <?php
+
 use App\Exports\DatasetTemplate,
 	App\Http\Controllers\AdminController,
 	App\Http\Controllers\AtributController,
@@ -23,6 +24,7 @@ use App\Exports\DatasetTemplate,
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 Route::middleware(['guest'])->group(function () {
 	Route::get('register', Register::class)->name('register');
 	Route::get('login', Login::class)->name('login');

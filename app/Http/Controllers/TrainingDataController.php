@@ -87,7 +87,7 @@ class TrainingDataController extends Controller
 			$req['nama'] = $request->nama;
 			$req['status'] = $request->status;
 			Probability::truncate();
-			if ($request->id) {
+			if (empty($request->id)) {
 				TrainingData::updateOrCreate(['id' => $request->id], $req);
 				return response()->json(['message' => 'Berhasil diedit']);
 			} else {

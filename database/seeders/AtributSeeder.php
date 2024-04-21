@@ -14,8 +14,8 @@ class AtributSeeder extends Seeder
 	{
 		Atribut::insert([
 			[
-				'name' => 'Kepemilikan Rumah',
-				'slug' => 'kepemilikan_rumah',
+				'name' => 'Rumah',
+				'slug' => 'rumah',
 				'type' => 'categorical'
 			], [
 				'name' => 'Pekerjaan',

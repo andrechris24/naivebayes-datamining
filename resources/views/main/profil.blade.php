@@ -3,37 +3,37 @@
 @section('content')
 <p>Untuk melakukan perubahan, masukkan password Anda.
 	Kosongkan password baru jika tidak ganti password.</p>
-	<div class="modal fade" tabindex="-1" id="modalDelAkun" aria-labelledby="modalDelAkunLabel"
-		data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-			<div class="modal-content">
-				<div class="modal-header bg-danger">
-					<h5 id="modalDelAkunLabel" class="modal-title text-white">Hapus Akun</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<x-caps-lock />
-					<p>Apakah Anda yakin ingin menghapus akun?
-						Jika sudah yakin, masukkan password Anda untuk melanjutkan.</p>
-					<form id="DelAkunForm">@csrf
-						<div class="position-relative">
-							<input type="password" class="form-control" id="password-conf" minlength="8" maxlength="20" 
+<div class="modal fade" tabindex="-1" id="modalDelAkun" aria-labelledby="modalDelAkunLabel"
+	data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+		<div class="modal-content">
+			<div class="modal-header bg-danger">
+				<h5 id="modalDelAkunLabel" class="modal-title text-white">Hapus Akun</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<x-caps-lock />
+				<p>Apakah Anda yakin ingin menghapus akun?
+					Jika sudah yakin, masukkan password Anda untuk melanjutkan.</p>
+				<form id="DelAkunForm">@csrf
+					<div class="position-relative">
+						<input type="password" class="form-control" id="password-conf" minlength="8" maxlength="20"
 							name="confirm_pass" placeholder="Password Anda" required>
-							<div class="invalid-tooltip" id="del-error"></div>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
-						<i class="fas fa-x"></i> Batal
-					</button>
-					<button type="submit" class="btn btn-danger" form="DelAkunForm">
-						<i class="fas fa-check"></i> Hapus
-					</button>
-				</div>
+						<div class="invalid-tooltip" id="del-error"></div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
+					<i class="fas fa-x"></i> Batal
+				</button>
+				<button type="submit" class="btn btn-danger" form="DelAkunForm">
+					<i class="fas fa-check"></i> Hapus
+				</button>
 			</div>
 		</div>
 	</div>
+</div>
 <div class="card card-body border-0 shadow mb-4">
 	<x-caps-lock />
 	<form enctype="multipart/form-data" id="form-edit-account">

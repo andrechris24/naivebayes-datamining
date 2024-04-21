@@ -25,7 +25,7 @@ class Login extends Component
 				Auth::login($user, $this->remember);
 				Session::regenerate();
 				$this->redirectRoute('home');
-			}else{
+			} else {
 				$this->addError('email', trans('auth.failed'));
 				$this->dispatch('error', message: "Email atau Password salah");
 			}

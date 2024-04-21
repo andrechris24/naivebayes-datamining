@@ -90,7 +90,9 @@
 					<div class="avatar-lg me-4">
 						<img src="{{asset('assets/img/data-mining_8438890.png')}}" height="20" width="20" alt="Volt Logo">
 					</div>
-					<div class="d-block"><h2 class="h5 mb-3">Data Mining</h2></div>
+					<div class="d-block">
+						<h2 class="h5 mb-3">Data Mining</h2>
+					</div>
 				</div>
 				<div class="collapse-close d-md-none">
 					<a href="#sidebarMenu" data-bs-toggle="collapse" data-bs-target="#sidebarMenu"
@@ -294,15 +296,16 @@
 	<form method="POST" id="logout-form" action="{{ route('logout') }}">@csrf</form>
 	<script type="text/javascript" src="{{ asset('assets/js/datatables.js') }}"></script>
 	<script type="text/javascript">
+		Notiflix.Notify.init({timeout:5000});
 		$(document).on('click', '#logout-btn', function (e) {
 			e.preventDefault();
 			document.getElementById('logout-form').submit();
 		});
 		function resetvalidation() {
-			const forms = document.querySelectorAll(".needs-validation"),
+			const formselect = document.getElementsByTagName("select"),
 				forminput = document.getElementsByTagName("input");
-			Array.from(forms).forEach((containedform) => {
-				containedform.classList.remove("was-validated");
+			Array.from(formselect).forEach((selform) => {
+				selform.classList.remove("is-invalid");
 			}, false);
 			for (let a = 0; a < forminput.length; a++)
 				forminput[a].classList.remove("is-invalid");

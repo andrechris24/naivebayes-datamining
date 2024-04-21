@@ -44,8 +44,9 @@
 										clip-rule="evenodd"></path>
 								</svg>
 							</span>
-							<input wire:model.lazy="password" type="password" placeholder="Password"
-								class="form-control @error('password') is-invalid @enderror " minlength="8" maxlength="20" id="password" required>
+							<input wire:model="password" type="password" placeholder="Password"
+								class="form-control @error('password') is-invalid @enderror " minlength="8" maxlength="20"
+								id="password" required>
 						</div>
 						@error('password')
 						<div class="invalid-feedback"> {{ $message }} </div>
@@ -83,7 +84,7 @@
 @push('js')
 <script type="text/javascript">
 	Livewire.on('error',(e)=>{
-		Notiflix.Notify.failure(e.message);
+		Notiflix.Notify.failure(e.message,{timeout:5000});
 	});
 </script>
 @endpush

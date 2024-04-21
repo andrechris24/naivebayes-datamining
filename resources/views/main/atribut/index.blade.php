@@ -37,7 +37,7 @@
 				<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
 					<i class="fas fa-x"></i> Batal
 				</button>
-				<button type="submit" class="btn btn-primary data-submit" form="addNewAtributForm">
+				<button type="submit" class="btn btn-primary" form="addNewAtributForm">
 					<i class="fas fa-floppy-disk"></i> Simpan
 				</button>
 			</div>
@@ -154,14 +154,15 @@
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
-			}).on('preXhr', function () {
+			}).on('xhr', function () {
 				$.get("{{ route('atribut.count') }}", function (data) {
 					$("#total-counter").text(data.total);
 					$('#total-unused').text(data.unused);
 				}).fail(function (xhr, st) {
 					console.warn(xhr.responseJSON.message ?? st);
 					Notiflix.Notify.failure(
-						`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
+						`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+					);
 				});
 			});
 		} catch (dterr) {
@@ -174,7 +175,7 @@
 			`Anda akan menghapus Atribut ${attr_name}.`,
 			'Ya',
 			'Tidak',
-			function okCb() {
+			function () {
 				$.ajax({
 					type: "DELETE",
 					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
@@ -205,7 +206,7 @@
 	}).on("click", ".edit-record", function () {
 		let attr_id = $(this).data("id");
 		$("#modalAddAtributLabel").html("Edit Atribut");
-		Notiflix.Block.standard('.modal');
+		Notiflix.Block.standard('.modal-content','Memuat');
 		$.get(`atribut/${attr_id}/edit`, function (data) {
 			$("#attr_id").val(data.id);
 			$("#attrName").val(data.name);
@@ -222,7 +223,7 @@
 			}
 			Notiflix.Notify.failure("Gagal memuat data: "+errmsg);
 		}).always(function () {
-			Notiflix.Block.remove('.modal');
+			Notiflix.Block.remove('.modal-content');
 		});
 	});
 	$("#addNewAtributForm").submit(function (ev) {
@@ -233,10 +234,10 @@
 			type: "POST",
 			beforeSend: function () {
 				$("#addNewAtributForm :input").removeClass("is-invalid");
-				Notiflix.Block.standard('.modal');
+				Notiflix.Block.standard('.modal-content','Menyimpan');
 			},
 			complete: function () {
-				Notiflix.Block.remove('.modal');
+				Notiflix.Block.remove('.modal-content');
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-atribut")) dt_atribut.draw();

@@ -14,8 +14,8 @@ return new class extends Migration
 		Schema::create('training_data', function (Blueprint $table) {
 			$table->id();
 			$table->string('nama', 99);
-			$table->foreignId('kepemilikan_rumah')->nullable()
-				->constrained('nilai_atributs')->nullOnDelete()->cascadeOnUpdate();
+			$table->foreignId('rumah')->nullable()->constrained('nilai_atributs')
+			->nullOnDelete()->cascadeOnUpdate();
 			$table->foreignId('pekerjaan')->nullable()->constrained('nilai_atributs')
 				->nullOnDelete()->cascadeOnUpdate();
 			$table->integer('penghasilan')->nullable();

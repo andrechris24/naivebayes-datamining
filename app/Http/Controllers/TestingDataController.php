@@ -87,11 +87,11 @@ class TestingDataController extends Controller
 			$request->validate(TestingData::$rules);
 			foreach ($request->q as $id => $q) $req[$id] = $q;
 			$req['nama'] = $request->nama;
-			if ($request->status === 'Otomatis') {
+			if ($request->status === 'auto') {
 				$hasil = ProbabLabel::hitungProbab($req);
 				$req['status'] = $hasil['predict'];
 			} else $req['status'] = $request->status;
-			if ($request->id) {
+			if (!empty($request->id)) {
 				TestingData::updateOrCreate(['id' => $request->id], $req);
 				return response()->json(['message' => 'Berhasil diedit']);
 			} else {

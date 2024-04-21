@@ -41,19 +41,20 @@ class ClassificationController extends Controller
 				return response()->json(['message' => 'Probabilitas belum dihitung'], 400);
 
 			//Preprocessor Start
-			if ($request->type === 'test') ProbabLabel::preprocess('test');
+			if ($request->tipe === 'test') ProbabLabel::preprocess('test');
 			//Preprocessor End
 
-			$semuadata = $this->getData($request->type); //Dataset
+			$semuadata = $this->getData($request->tipe); //Dataset
 			if (!$semuadata) {
 				return response()->json([
-					'message' => 'Tipe Data yang dipilih kosong'
+					'message' => 'Tipe Data yang dipilih kosong',
+					'errors'=>['tipe'=>'Tipe Data yang dipilih kosong']
 				], 400);
 			}
 			foreach ($semuadata as $dataset) {
 				$klasifikasi = ProbabLabel::hitungProbab($dataset);
 				Classification::updateOrCreate([
-					'name' => $dataset->nama, 'type' => $request->type
+					'name' => $dataset->nama, 'type' => $request->tipe
 				], [
 					'true' => $klasifikasi['true'],
 					'false' => $klasifikasi['false'],

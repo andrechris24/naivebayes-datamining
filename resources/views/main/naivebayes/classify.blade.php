@@ -17,18 +17,18 @@
 					<div class="position-relative">
 						<select class="form-select" name="tipe" id="calc-select" required>
 							<option value="train">Data Training (Data Latih)</option>
-							<option value="test">Data Testing (Data Uji)</option>
+							<option value="test" selected>Data Testing (Data Uji)</option>
 						</select>
-						<div class="invalid-tooltip" id="calc-error">Pilih Tipe Data</div>
+						<div class="invalid-tooltip" id="calc-error"></div>
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-tertiary" data-bs-dismiss="modal">
-					<i class="fas fa-x"></i> Tidak
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+					<i class="fas fa-x"></i> Batal
 				</button>
 				<button type="submit" class="btn btn-primary" form="formCalcClass">
-					<i class="fas fa-check"></i> Hitung
+					<i class="fas fa-calculator"></i> Hitung
 				</button>
 			</div>
 		</div>
@@ -55,12 +55,12 @@
 							<option value="test">Data Testing (Data Uji)</option>
 							<option value="all">Semua</option>
 						</select>
-						<div class="invalid-tooltip" id="reset-error">Pilih tipe data</div>
+						<div class="invalid-tooltip" id="reset-error"></div>
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-tertiary" data-bs-dismiss="modal">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
 					<i class="fas fa-x"></i> Batal
 				</button>
 				<button type="submit" class="btn btn-danger" form="formResetClass">
@@ -79,8 +79,8 @@
 			<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalResetClass">
 				<i class="fa-solid fa-arrow-rotate-right"></i> Reset
 			</button>
-			<button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"
-				aria-expanded="false">
+			<button class="btn btn-success dropdown-toggle" id="expBtn" type="button" data-bs-toggle="dropdown"
+				aria-expanded="false" disabled>
 				<i class="fas fa-download"></i> Ekspor <i class="fa-solid fa-caret-down"></i>
 			</button>
 			<ul class="dropdown-menu">
@@ -151,8 +151,8 @@
 				},
 				drawCallback: function(){
 					if(this.api().page.info().recordsTotal===0)
-						$('.download-data').prop('disabled',true);
-					else $('.download-data').prop('disabled',false);
+						$('#expBtn').prop('disabled',true);
+					else $('#expBtn').prop('disabled',false);
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
@@ -169,11 +169,11 @@
 			dataType: 'JSON',
 			url: "{{route('class.reset')}}",
 			beforeSend: function(){
-				Notiflix.Block.standard('.modal');
+				Notiflix.Loading.standard('Mereset');
 				$('#reset-select').removeClass('is-invalid');
 			},
 			complete: function(){
-				Notiflix.Block.remove('.modal');
+				Notiflix.Loading.remove();
 			},
 			success: function () {
 				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
@@ -202,10 +202,10 @@
 			dataType: 'JSON',
 			beforeSend: function(){
 				$("#calc-select").removeClass('is-invalid');
-				Notiflix.Block.standard('.modal');
+				Notiflix.Loading.standard('Menghitung');
 			},
 			complete: function(){
-				Notiflix.Block.remove('.modal');
+				Notiflix.Loading.remove();
 			},
 			success: function () {
 				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
@@ -221,7 +221,7 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Gagal hitung: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 				}
-				Notiflix.Notify.failure('Gagal reset: ' + errmsg);
+				Notiflix.Notify.failure(errmsg);
 			}
 		});
 	});

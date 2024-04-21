@@ -41,7 +41,7 @@
 							<option value="">Pilih</option>
 							<option value="1">{{$hasil[true]}}</option>
 							<option value="0">{{$hasil[false]}}</option>
-							<option value="Otomatis" @if($calculated===0) disabled @endif>
+							<option value="auto" @if($calculated===0) disabled @endif>
 								Pilih otomatis
 							</option>
 						</select>
@@ -58,7 +58,7 @@
 					data-bs-target="#modalImportTesting">
 					<i class="fas fa-upload"></i> Upload File
 				</button>
-				<button type="submit" class="btn btn-primary data-submit" form="addNewTestingForm">
+				<button type="submit" class="btn btn-primary" form="addNewTestingForm">
 					<i class="fas fa-floppy-disk"></i> Simpan
 				</button>
 			</div>
@@ -81,7 +81,7 @@
 					<a href="{{route('template-data')}}" class="alert-link">Klik disini</a>
 					untuk mendownload template Dataset
 				</div>
-				<form id="importTestingData">@csrf
+				<form id="importTestingData" enctype="multipart/form-data">@csrf
 					<input type="file" class="form-control" id="testData" name="data" aria-describedby="importFormats"
 						data-bs-toggle="tooltip" title="Format: xls, xlsx, csv, dan tsv"
 						accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.oasis.opendocument.spreadsheet,text/csv,.tsv"
@@ -96,7 +96,7 @@
 				<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAddTesting">
 					<i class="fas fa-pen"></i> Input Manual
 				</button>
-				<button type="submit" class="btn btn-primary data-submit" form="importTestingData">
+				<button type="submit" class="btn btn-primary" form="importTestingData">
 					<i class="fas fa-upload"></i> Upload
 				</button>
 			</div>
@@ -164,10 +164,10 @@
 					</li>
 				</ul>
 			</div>
-			<button type="button" class="btn btn-danger delete-all">
+			<button type="button" class="btn btn-danger" id="delete-all">
 				<i class="fas fa-trash"></i> Hapus Data
 			</button>
-			<a href="{{route('testing.export')}}" class="btn btn-success">
+			<a href="{{route('testing.export')}}" class="btn btn-success disabled" id="dlBtn">
 				<i class="fas fa-download"></i> Ekspor Data
 			</a>
 		</div>
@@ -248,10 +248,10 @@
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);
-			}).on('preXhr', function () {
+			}).on('xhr', function () {
 				$.get("{{ route('testing.count') }}", function (data) {
-					if(data.total===0) $('.download-data').prop('disabled',true);
-					else $('.download-data').prop('disabled',false);
+					if(data.total===0) $('#dlBtn').addClass('disabled');
+					else $('#dlBtn').removeClass('disabled');
 					$("#total-counter").text(data.total);
 					$('#total-duplicate').text(data.duplicate);
 				}).fail(function (xhr, st) {
@@ -264,13 +264,13 @@
 		} catch (dterr) {
 			initError(dterr.message);
 		}
-	}).on("click", ".delete-all", function () {
+	}).on("click", "#delete-all", function () {
 		Notiflix.Confirm.show(
 			"Hapus semua Data Testing?",
 			'Anda akan menghapus semua Data Testing yang akan mereset hasil klasifikasi terkait.',
 			'Ya',
 			'Tidak',
-			function okCb() {
+			function () {
 				$.ajax({
 					type: "DELETE",
 					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
@@ -299,7 +299,7 @@
 			`Anda akan menghapus Data Testing ${test_name}.`,
 			'Ya',
 			'Tidak',
-			function okCb() {
+			function () {
 				$.ajax({
 					type: "DELETE",
 					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
@@ -325,7 +325,7 @@
 	}).on("click", ".edit-record", function () {
 		let test_id = $(this).data("id");
 		$("#modalAddTestingLabel").html("Edit Data Testing");
-		Notiflix.Block.standard('.modal');
+		Notiflix.Block.standard('.modal-content','Memuat');
 		$.get(`testing/${test_id}/edit`, function (data) {
 			$("#test_id").val(data.id);
 			$("#testName").val(data.nama);
@@ -344,7 +344,7 @@
 			}
 			Notiflix.Notify.failure("Gagal memuat data: "+errmsg);
 		}).always(function () {
-			Notiflix.Block.remove('.modal');
+			Notiflix.Block.remove('.modal-content');
 		});
 	});
 	$('#importTestingData').submit(function(e) {//form Upload Data
@@ -358,11 +358,11 @@
 			cache: false,
 			processData: false,
 			beforeSend: function () {
-				Notiflix.Block.standard('.modal');
+				Notiflix.Block.standard('.modal-content','Mengupload');
 				$("#importTestingData :input").removeClass("is-invalid");
 			},
 			complete: function () {
-				Notiflix.Block.remove('.modal');
+				Notiflix.Block.remove('.modal-content');
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
@@ -392,11 +392,11 @@
 			url: "{{ route('testing.store') }}",
 			type: "POST",
 			beforeSend: function () {
-				Notiflix.Block.standard('.modal');
+				Notiflix.Block.standard('.modal-content','Menyimpan');
 				$("#addNewTestingForm :input").removeClass("is-invalid");
 			},
 			complete: function () {
-				Notiflix.Block.remove('.modal');
+				Notiflix.Block.remove('.modal-content');
 			},
 			success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();

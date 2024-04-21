@@ -1,16 +1,18 @@
 # Deskripsi
 
+> [!WARNING]
+> Karena kolom pada tabel dataset menggunakan foreign key dinamis, mohon untuk tidak menggunakan SQLite.
+
 <p>Aplikasi ini adalah aplikasi Klasifikasi Kelayakan Calon Penerima Bantuan Sosial menggunakan algoritma Naive Bayes. Komponen yang digunakan:</p>
 
 -   [Laravel 10](https://laravel.com/)
--		[Livewire 3](https://livewire.laravel.com/)
+-   [Livewire 3](https://livewire.laravel.com/)
 -   [PHP 8.2.9](https://www.php.net/)
--		[Volt Bootstrap 5 Dashboard](https://github.com/themesberg/volt-bootstrap-5-dashboard)
+-   [Volt Bootstrap 5 Dashboard](https://github.com/themesberg/volt-bootstrap-5-dashboard)
 -   [FontAwesome](https://fontawesome.com)
 -   [ApexCharts](https://apexcharts.com/)
 -   [DataTables](https://datatables.net/)
--   [sweetalert2](https://sweetalert2.github.io)
--   [notyf](https://carlosroso.com/notyf/)
+-   [Notiflix](https://notiflix.github.io)
 
 ## Cara Menggunakan
 

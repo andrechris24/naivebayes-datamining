@@ -62,7 +62,7 @@
 										clip-rule="evenodd"></path>
 								</svg>
 							</span>
-							<input wire:model.lazy="password" type="password" placeholder="Password"
+							<input wire:model="password" type="password" placeholder="Password"
 								class="form-control @error('password') is-invalid @enderror " id="password" minlength="8"
 								maxlength="20" required>
 						</div>
@@ -83,7 +83,7 @@
 										clip-rule="evenodd"></path>
 								</svg>
 							</span>
-							<input wire:model.lazy="password_confirmation" type="password" placeholder="Konfirmasi Password"
+							<input wire:model="password_confirmation" type="password" placeholder="Konfirmasi Password"
 								class="form-control @error('password_confirmation') is-invalid @enderror " id="confirm_password"
 								minlength="8" maxlength="20" required>
 						</div>
@@ -110,7 +110,7 @@
 @push('js')
 <script type="text/javascript">
 	Livewire.on('error',(e)=>{
-		Notiflix.Notify.failure(e.message);
+		Notiflix.Notify.failure(e.message,{timeout:5000});
 	});
 </script>
 @endpush

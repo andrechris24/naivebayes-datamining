@@ -40,7 +40,7 @@
 @push('js')
 <script type="text/javascript">
 	Livewire.on('error',(e)=>{
-		Notiflix.Notify.failure(e.message);
+		Notiflix.Notify.failure(e.message,{timeout:5000});
 	});
 	Livewire.on('sent',()=>{
 		Notiflix.Report.success(

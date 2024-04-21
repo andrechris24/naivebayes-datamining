@@ -59,7 +59,7 @@ class NilaiAtributController extends Controller
 	{
 		try {
 			$request->validate(NilaiAtribut::$rules);
-			if ($request->id) {
+			if (!empty($request->id)) {
 				NilaiAtribut::updateOrCreate(['id' => $request->id], [
 					'name' => $request->name, 'atribut_id' => $request->atribut_id
 				]);

@@ -44,16 +44,15 @@ class User extends Authenticatable
 			'password' => ['nullable', 'bail', 'confirmed', 'between:8,20'],
 			'password_confirmation' => 'required_with:password'
 		], $loginrules = [
-			'email' => ['bail', 'required', 'email'], 
-			'password' => ['bail','required','between:8,20']
+			'email' => ['bail', 'required', 'email'],
+			'password' => ['bail', 'required', 'between:8,20']
 		], $forgetrules = ['email' => ['bail', 'required', 'email', 'exists:users']],
 		$resetrules = [
 			'email' => ['bail', 'required', 'email', 'exists:users'],
 			'password' => ['bail', 'required', 'confirmed', 'between:8,20'],
 			'password_confirmation' => 'required',
 			'token' => 'required'
-		], 
-		$delrules = [
-			'confirm_pass' => ['bail', 'required', 'current_password','between:8,20']
+		], $delrules = [
+			'confirm_pass' => ['bail', 'required', 'current_password', 'between:8,20']
 		];
 }

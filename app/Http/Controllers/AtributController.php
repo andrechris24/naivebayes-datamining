@@ -52,7 +52,7 @@ class AtributController extends Controller
 			$request->validate(Atribut::$rules);
 			$req = $request->all();
 			$req['slug'] = Str::slug($request->name, '_');
-			if ($request->id) {
+			if (empty($request->id)) {
 				$atribut = Atribut::findOrFail($request->id);
 				$this->editColumn('training_data', $atribut, $req);
 				$this->editColumn('testing_data', $atribut, $req);
@@ -71,9 +71,12 @@ class AtributController extends Controller
 			}
 		} catch (QueryException $e) {
 			if ($e->errorInfo[1] === 1062 || $e->errorInfo[1] === 1060) {
+				$err="Nama Atribut sudah digunakan";
+				if(!empty($request->id)) 
+					$err.='. Gunakan nama yang lain jika Anda ingin mengganti tipe atribut.';
 				return response()->json([
 					'message' => "Nama Atribut \"$request->name\" sudah digunakan",
-					'errors' => ['name' => 'Nama Atribut sudah digunakan']
+					'errors' => ['name' => $err]
 				], 422);
 			}
 			Log::error($e);
