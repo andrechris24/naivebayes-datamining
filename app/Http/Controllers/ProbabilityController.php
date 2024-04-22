@@ -67,16 +67,16 @@ class ProbabilityController extends Controller
 					$ll[$nilai->name]['false'] = ($total['false'] === 0 ? 0 :
 						TrainingData::where($nilai->atribut->slug, $nilai->id)
 						->where('status', false)->count() / $total['false']);
-					$ll[$nilai->name]['Total'] =
+					$ll[$nilai->name]['total'] =
 						TrainingData::where($nilai->atribut->slug, $nilai->id)->count() /
 						$total['all'];
 				}
 				Probability::updateOrCreate([
 					'atribut_id' => $nilai->atribut_id, 'nilai_atribut_id' => $nilai->id
 				], [
-					'true' => $ll[$nilai->name]['true'] ?? 0,
-					'false' => $ll[$nilai->name]['false'] ?? 0,
-					'total' => $ll[$nilai->name]['Total'] ?? 0
+					'true' => json_encode([0 => $ll[$nilai->name]['true']]),
+					'false' => json_encode([0 => $ll[$nilai->name]['false']]),
+					'total' => json_encode([0 => $ll[$nilai->name]['total']])
 				]);
 			}
 			foreach (Atribut::where('type', 'numeric')->get() as $nilainum) { //Numeric
@@ -104,12 +104,18 @@ class ProbabilityController extends Controller
 				Probability::updateOrCreate([
 					'atribut_id' => $nilainum->id, 'nilai_atribut_id' => null
 				], [
-					'mean_true' => $avg[$nilainum->name]['true'] ?? 0,
-					'mean_false' => $avg[$nilainum->name]['false'] ?? 0,
-					'mean_total' => $avg[$nilainum->name]['all'] ?? 0,
-					'sd_true' => $sd[$nilainum->name]['true'] ?? 0,
-					'sd_false' => $sd[$nilainum->name]['false'] ?? 0,
-					'sd_total' => $sd[$nilainum->name]['all'] ?? 0
+					'true' =>  json_encode([
+						'mean' => $avg[$nilainum->name]['true'], 
+						'sd' => $sd[$nilainum->name]['true']
+					]),
+					'false' => json_encode([
+						'mean' => $avg[$nilainum->name]['false'], 
+						'sd' => $sd[$nilainum->name]['false']
+					]),
+					'total' => json_encode([
+						'mean' => $avg[$nilainum->name]['all'], 
+						'sd' => $sd[$nilainum->name]['all']
+					])
 				]);
 			}
 			//Likelihood End

@@ -12,12 +12,8 @@ class DatabaseSeeder extends Seeder
 	public function run(): void
 	{
 		\App\Models\User::factory()->create([
-			'name' => 'Test User',
-			'email' => 'test@example.com',
+			'name' => 'Test User', 'email' => 'test@example.com'
 		]);
-		$this->call([
-			AtributSeeder::class,
-			NilaiAtributSeeder::class
-		]);
+		$this->call([AtributSeeder::class, NilaiAtributSeeder::class]);
 	}
 }

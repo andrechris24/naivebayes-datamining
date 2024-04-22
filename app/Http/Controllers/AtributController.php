@@ -71,9 +71,9 @@ class AtributController extends Controller
 			}
 		} catch (QueryException $e) {
 			if ($e->errorInfo[1] === 1062 || $e->errorInfo[1] === 1060) {
-				$err="Nama Atribut sudah digunakan";
-				if(!empty($request->id)) 
-					$err.='. Gunakan nama yang lain jika Anda ingin mengganti tipe atribut.';
+				$err = "Nama Atribut sudah digunakan";
+				if (!empty($request->id))
+					$err .= '. Gunakan nama yang lain jika Anda ingin mengganti tipe atribut.';
 				return response()->json([
 					'message' => "Nama Atribut \"$request->name\" sudah digunakan",
 					'errors' => ['name' => $err]

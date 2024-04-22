@@ -48,7 +48,7 @@ class ClassificationController extends Controller
 			if (!$semuadata) {
 				return response()->json([
 					'message' => 'Tipe Data yang dipilih kosong',
-					'errors'=>['tipe'=>'Tipe Data yang dipilih kosong']
+					'errors' => ['tipe' => 'Tipe Data yang dipilih kosong']
 				], 400);
 			}
 			foreach ($semuadata as $dataset) {

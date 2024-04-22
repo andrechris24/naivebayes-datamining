@@ -13,27 +13,11 @@ class AtributSeeder extends Seeder
 	public function run(): void
 	{
 		Atribut::insert([
-			[
-				'name' => 'Rumah',
-				'slug' => 'rumah',
-				'type' => 'categorical'
-			], [
-				'name' => 'Pekerjaan',
-				'slug' => 'pekerjaan',
-				'type' => 'categorical'
-			], [
-				'name' => 'Penghasilan',
-				'slug' => 'penghasilan',
-				'type' => 'numeric'
-			], [
-				'name' => 'Listrik',
-				'slug' => 'listrik',
-				'type' => 'categorical'
-			], [
-				'name' => 'Tanggungan',
-				'slug' => 'tanggungan',
-				'type' => 'numeric'
-			]
+			['name' => 'Rumah', 'slug' => 'rumah', 'type' => 'categorical'],
+			['name' => 'Pekerjaan', 'slug' => 'pekerjaan', 'type' => 'categorical'],
+			['name' => 'Penghasilan', 'slug' => 'penghasilan', 'type' => 'numeric'],
+			['name' => 'Listrik', 'slug' => 'listrik', 'type' => 'categorical'],
+			['name' => 'Tanggungan', 'slug' => 'tanggungan', 'type' => 'numeric']
 		]);
 	}
 }

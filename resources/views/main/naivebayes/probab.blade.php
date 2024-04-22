@@ -70,6 +70,13 @@
 		$tot = ['true'=>0,'false' => 0];
 		$list=['true'=>[],'false'=>[],'all'=>[]];
 		$probab = $data->where('atribut_id', $attr->id)->first();
+		if($probab){
+			$probabs=[
+			'true'=>json_decode($probab->true),
+			'false'=>json_decode($probab->false),
+			'total'=>json_decode($probab->total)
+			];
+		}
 		@endphp
 		<div class="table-responsive">
 			<table class="table table-bordered caption-top">
@@ -86,15 +93,20 @@
 					@if($attr->type==='categorical')
 					@forelse($data->where('atribut_id', $attr->id) as $prob)
 					@php
-					$true += $prob->true;
-					$false += $prob->false;
-					$semua += $prob->total;
+					$probs=[
+						'true'=>json_decode($prob->true),
+						'false'=>json_decode($prob->false),
+						'total'=>json_decode($prob->total)
+					];
+					$true+=$probs['true'][0];
+					$false+=$probs['false'][0];
+					$semua+=$probs['total'][0];
 					@endphp
 					<tr>
 						<td>{{ $prob->nilai_atribut->name }}</td>
-						<td>{{ $prob->true }}</td>
-						<td>{{ $prob->false }}</td>
-						<td>{{ $prob->total }}</td>
+						<td>{{ $probs['true'][0] }}</td>
+						<td>{{ $probs['false'][0] }}</td>
+						<td>{{ $probs['total'][0] }}</td>
 					</tr>
 					@empty
 					@foreach($attribs['nilai']->where('atribut_id', $attr->id) as $nilai)
@@ -140,15 +152,15 @@
 					</tr>
 					<tr>
 						<th>Rata-rata</th>
-						<td>{{ $probab->mean_true ?? 0 }}</td>
-						<td>{{ $probab->mean_false ?? 0 }}</td>
-						<td>{{ $probab->mean_total ?? 0 }}</td>
+						<td>{{ $probabs['true']->mean ?? 0 }}</td>
+						<td>{{ $probabs['false']->mean ?? 0 }}</td>
+						<td>{{ $probabs['total']->mean ?? 0 }}</td>
 					</tr>
 					<tr>
 						<th>Simpangan Baku</th>
-						<td>{{ $probab->sd_true ?? 0 }}</td>
-						<td>{{ $probab->sd_false ?? 0 }}</td>
-						<td>{{ $probab->sd_total ?? 0 }}</td>
+						<td>{{ $probabs['true']->sd ?? 0 }}</td>
+						<td>{{ $probabs['false']->sd ?? 0 }}</td>
+						<td>{{ $probabs['total']->sd ?? 0 }}</td>
 					</tr>
 					@endif
 				</tbody>

@@ -61,27 +61,34 @@ class ProbabLabel extends Controller
 					'nilai_atribut_id',
 					$data[$at->slug]
 				);
-				$likelihood['true'] *= $probabilitas['true'];
-				$likelihood['false'] *= $probabilitas['false'];
+				$probabs=[
+					'true'=>json_decode($probabilitas->true),
+					'false'=>json_decode($probabilitas->false)
+				];
+				$likelihood['true'] *= $probabs['true'][0];
+				$likelihood['false'] *= $probabs['false'][0];
 				$evidence *= TrainingData::where($at->slug, $data[$at->slug])->count() /
 					$semuadata;
 			} else { //Jika Numerik, Normal Distribution yang dicari
 				$probabilitas = Probability::where('atribut_id', $at->id)
 					->whereNull('nilai_atribut_id')->first();
+				$trues = json_decode($probabilitas->true);
+				$falses = json_decode($probabilitas->false);
+				$total = json_decode($probabilitas->total);
 				$likelihood['true'] *= self::normalDistribution(
 					$data[$at->slug],
-					$probabilitas->sd_true,
-					$probabilitas->mean_true
+					$trues->sd,
+					$trues->mean
 				);
 				$likelihood['false'] *= self::normalDistribution(
 					$data[$at->slug],
-					$probabilitas->sd_false,
-					$probabilitas->mean_false
+					$falses->sd,
+					$falses->mean
 				);
 				$evidence *= self::normalDistribution(
 					$data[$at->slug],
-					$probabilitas->sd_total,
-					$probabilitas->mean_total
+					$total->sd,
+					$total->mean
 				);
 			}
 		}

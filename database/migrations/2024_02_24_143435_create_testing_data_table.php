@@ -15,7 +15,7 @@ return new class extends Migration
 			$table->id();
 			$table->string('nama', 99);
 			$table->foreignId('rumah')->nullable()->constrained('nilai_atributs')
-			->nullOnDelete()->cascadeOnUpdate();
+				->nullOnDelete()->cascadeOnUpdate();
 			$table->foreignId('pekerjaan')->nullable()->constrained('nilai_atributs')
 				->nullOnDelete()->cascadeOnUpdate();
 			$table->integer('penghasilan')->nullable();
