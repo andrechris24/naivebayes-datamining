@@ -105,15 +105,15 @@ class ProbabilityController extends Controller
 					'atribut_id' => $nilainum->id, 'nilai_atribut_id' => null
 				], [
 					'true' =>  json_encode([
-						'mean' => $avg[$nilainum->name]['true'], 
+						'mean' => $avg[$nilainum->name]['true'],
 						'sd' => $sd[$nilainum->name]['true']
 					]),
 					'false' => json_encode([
-						'mean' => $avg[$nilainum->name]['false'], 
+						'mean' => $avg[$nilainum->name]['false'],
 						'sd' => $sd[$nilainum->name]['false']
 					]),
 					'total' => json_encode([
-						'mean' => $avg[$nilainum->name]['all'], 
+						'mean' => $avg[$nilainum->name]['all'],
 						'sd' => $sd[$nilainum->name]['all']
 					])
 				]);

@@ -45,13 +45,9 @@ class TestingDataController extends Controller
 		$atribut = Atribut::get();
 		if (count($atribut) === 0) {
 			return to_route('atribut.index')
-				->withWarning('Tambahkan Atribut dan Nilai Atribut dulu sebelum menginput Dataset');
+				->withWarning('Tambahkan Atribut dulu sebelum menginput Dataset');
 		}
 		$nilai = NilaiAtribut::get();
-		if (count($nilai) === 0) {
-			return to_route('atribut.nilai.index')
-				->withWarning('Tambahkan Nilai Atribut dulu sebelum menginput Dataset');
-		}
 		$calculated = Probability::count();
 		$hasil = ProbabLabel::$label;
 		return view(

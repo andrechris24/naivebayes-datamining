@@ -61,9 +61,9 @@ class ProbabLabel extends Controller
 					'nilai_atribut_id',
 					$data[$at->slug]
 				);
-				$probabs=[
-					'true'=>json_decode($probabilitas->true),
-					'false'=>json_decode($probabilitas->false)
+				$probabs = [
+					'true' => json_decode($probabilitas->true),
+					'false' => json_decode($probabilitas->false)
 				];
 				$likelihood['true'] *= $probabs['true'][0];
 				$likelihood['false'] *= $probabs['false'][0];

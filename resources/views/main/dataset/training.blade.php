@@ -177,7 +177,7 @@
 						{{$attr->name}}
 					</th>
 					@endforeach
-					<th>Status</th>
+					<th>Hasil</th>
 					<th>Aksi</th>
 				</tr>
 			</thead>

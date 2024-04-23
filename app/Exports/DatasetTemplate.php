@@ -24,7 +24,7 @@ class DatasetTemplate implements FromGenerator
 					->get();
 			} else $val[] = rand(1, 5);
 		}
-		$col[] = 'Keterangan';
+		$col[] = 'Hasil';
 		$val[] = json_encode(ProbabLabel::$label);
 		yield $col;
 		yield $val;

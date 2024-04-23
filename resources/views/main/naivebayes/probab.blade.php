@@ -71,11 +71,11 @@
 		$list=['true'=>[],'false'=>[],'all'=>[]];
 		$probab = $data->where('atribut_id', $attr->id)->first();
 		if($probab){
-			$probabs=[
-			'true'=>json_decode($probab->true),
-			'false'=>json_decode($probab->false),
-			'total'=>json_decode($probab->total)
-			];
+		$probabs=[
+		'true'=>json_decode($probab->true),
+		'false'=>json_decode($probab->false),
+		'total'=>json_decode($probab->total)
+		];
 		}
 		@endphp
 		<div class="table-responsive">
@@ -94,9 +94,9 @@
 					@forelse($data->where('atribut_id', $attr->id) as $prob)
 					@php
 					$probs=[
-						'true'=>json_decode($prob->true),
-						'false'=>json_decode($prob->false),
-						'total'=>json_decode($prob->total)
+					'true'=>json_decode($prob->true),
+					'false'=>json_decode($prob->false),
+					'total'=>json_decode($prob->total)
 					];
 					$true+=$probs['true'][0];
 					$false+=$probs['false'][0];

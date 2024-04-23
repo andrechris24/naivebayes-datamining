@@ -25,14 +25,16 @@ class TrainingImport implements ToModel, WithHeadingRow
 			if ($attr->type === 'categorical') {
 				if (empty($row[$attr->slug])) $row[$attr->slug] = null;
 				else {
-					$foreign = NilaiAtribut::firstWhere('name', 'like', "%{$row[$attr->slug]}%");
+					$foreign = NilaiAtribut::firstWhere(
+						'name', 'like', "%{$row[$attr->slug]}%"
+					);
 					$row[$attr->slug] = $foreign->id;
 				}
 			}
 			$rows[$attr->slug] = $row[$attr->slug];
 		}
 		$rows['status'] = array_search( //array_search dengan teknik case insensitive
-			strtolower(trim($row['keterangan'])),
+			strtolower(trim($row['hasil'])),
 			array_map('strtolower', ProbabLabel::$label)
 		);
 		return new TrainingData($rows);

@@ -19,7 +19,7 @@ implements FromCollection, WithHeadings, WithMapping, WithStrictNullComparison
 		$col[] = '#';
 		$col[] = "Nama";
 		foreach (Atribut::get() as $value) $col[] = $value->name;
-		$col[] = "Keterangan";
+		$col[] = "Hasil";
 		return $col;
 	}
 	/**
