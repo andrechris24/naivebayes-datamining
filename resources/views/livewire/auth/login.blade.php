@@ -49,7 +49,7 @@
 								id="password" required>
 						</div>
 						@error('password')
-						<div class="invalid-feedback"> {{ $message }} </div>
+						<div class="invalid-feedback">{{ $message }}</div>
 						@enderror
 					</div>
 					<!-- End of Form -->

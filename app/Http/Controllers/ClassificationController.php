@@ -17,6 +17,8 @@ class ClassificationController extends Controller
 {
 	public function export($type)
 	{
+		if (Classification::count() === 0)
+			return back()->withError('Gagal download: Tidak ada data hasil klasifikasi');
 		return Excel::download(
 			new ClassificationExport($type),
 			"klasifikasi_{$type}.xlsx"

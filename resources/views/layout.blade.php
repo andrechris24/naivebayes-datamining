@@ -88,7 +88,8 @@
 			<div class="user-card d-flex align-items-center justify-content-between justify-content-lg-center pb-4">
 				<div class="d-flex align-items-center">
 					<div class="avatar-lg me-4">
-						<img src="{{asset('assets/img/data-mining_8438890.png')}}" height="20" width="20" alt="Volt Logo">
+						<img src="{{asset('assets/img/data-mining_8438890.png')}}" height="20" width="20"
+							alt="Logo Data Mining">
 					</div>
 					<div class="d-block">
 						<h2 class="h5 mb-3">Data Mining</h2>
@@ -242,8 +243,6 @@
 							<a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown"
 								aria-expanded="false">
 								<div class="media d-flex align-items-center">
-									{{-- <img class="avatar rounded-circle" alt="Image placeholder"
-										src="{{asset('assets/img/team/profile-picture-1.jpg')}}"> --}}
 									<div class="media-body ms-2 text-dark align-items-center">
 										<span class="mb-0 font-small fw-bold text-gray-900">
 											{{auth()->user()->name}}

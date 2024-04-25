@@ -71,14 +71,14 @@
 						<div class="progress-wrapper">
 							<div class="progress-info progress-xl">
 								<div class="progress-label">
-									<span class="text-secondary">Akurasi</span>
+									<span class="text-info">Akurasi</span>
 								</div>
 								<div class="progress-percentage">
 									<span>{{round($performa['test']['accuracy'], 2)}}%</span>
 								</div>
 							</div>
 							<div class="progress progress-xl">
-								<div class="progress-bar bg-secondary" role="progressbar"
+								<div class="progress-bar bg-info" role="progressbar"
 									style="width: {{round($performa['test']['accuracy'], 2)}}%;"
 									aria-valuenow="{{round($performa['test']['accuracy'], 2)}}" aria-valuemin="0"
 									aria-valuemax="100"></div>
@@ -87,14 +87,14 @@
 						<div class="progress-wrapper">
 							<div class="progress-info progress-xl">
 								<div class="progress-label">
-									<span class="text-tertiary">Presisi</span>
+									<span class="text-warning">Presisi</span>
 								</div>
 								<div class="progress-percentage">
 									<span>{{round($performa['test']['precision'], 2)}}%</span>
 								</div>
 							</div>
 							<div class="progress progress-xl">
-								<div class="progress-bar bg-tertiary" role="progressbar"
+								<div class="progress-bar bg-warning" role="progressbar"
 									style="width: {{round($performa['test']['precision'], 2)}}%;"
 									aria-valuenow="{{round($performa['test']['precision'], 2)}}" aria-valuemin="0"
 									aria-valuemax="100"></div>
@@ -103,14 +103,14 @@
 						<div class="progress-wrapper">
 							<div class="progress-info progress-xl">
 								<div class="progress-label">
-									<span class="text-dark">Recall</span>
+									<span class="text-danger">Recall</span>
 								</div>
 								<div class="progress-percentage">
 									<span>{{round($performa['test']['recall'], 2)}}%</span>
 								</div>
 							</div>
 							<div class="progress progress-xl">
-								<div class="progress-bar bg-dark" role="progressbar"
+								<div class="progress-bar bg-danger" role="progressbar"
 									style="width: {{round($performa['test']['recall'], 2)}}%;"
 									aria-valuenow="{{round($performa['test']['recall'], 2)}}" aria-valuemin="0"
 									aria-valuemax="100"></div>
@@ -188,14 +188,14 @@
 						<div class="progress-wrapper">
 							<div class="progress-info progress-xl">
 								<div class="progress-label">
-									<span class="text-secondary">Akurasi</span>
+									<span class="text-info">Akurasi</span>
 								</div>
 								<div class="progress-percentage">
 									<span>{{round($performa['train']['accuracy'], 2)}}%</span>
 								</div>
 							</div>
 							<div class="progress progress-xl">
-								<div class="progress-bar bg-secondary" role="progressbar"
+								<div class="progress-bar bg-info" role="progressbar"
 									style="width: {{round($performa['train']['accuracy'], 2)}}%;"
 									aria-valuenow="{{round($performa['train']['accuracy'], 2)}}" aria-valuemin="0"
 									aria-valuemax="100"></div>
@@ -204,14 +204,14 @@
 						<div class="progress-wrapper">
 							<div class="progress-info progress-xl">
 								<div class="progress-label">
-									<span class="text-tertiary">Presisi</span>
+									<span class="text-warning">Presisi</span>
 								</div>
 								<div class="progress-percentage">
 									<span>{{round($performa['train']['precision'], 2)}}%</span>
 								</div>
 							</div>
 							<div class="progress progress-xl">
-								<div class="progress-bar bg-tertiary" role="progressbar"
+								<div class="progress-bar bg-warning" role="progressbar"
 									style="width: {{round($performa['train']['precision'], 2)}}%;"
 									aria-valuenow="{{round($performa['train']['precision'], 2)}}" aria-valuemin="0"
 									aria-valuemax="100"></div>
@@ -220,14 +220,14 @@
 						<div class="progress-wrapper">
 							<div class="progress-info progress-xl">
 								<div class="progress-label">
-									<span class="text-dark">Recall</span>
+									<span class="text-danger">Recall</span>
 								</div>
 								<div class="progress-percentage">
 									<span>{{round($performa['train']['recall'], 2)}}%</span>
 								</div>
 							</div>
 							<div class="progress progress-xl">
-								<div class="progress-bar bg-dark" role="progressbar"
+								<div class="progress-bar bg-danger" role="progressbar"
 									style="width: {{round($performa['train']['recall'], 2)}}%;"
 									aria-valuenow="{{round($performa['train']['recall'], 2)}}" aria-valuemin="0"
 									aria-valuemax="100"></div>

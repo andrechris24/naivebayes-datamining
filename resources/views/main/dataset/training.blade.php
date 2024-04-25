@@ -135,7 +135,7 @@
 	</div>
 </div>
 <div class="alert alert-info alert-dismissible" role="alert">
-	<p>Data Training digunakan untuk melatih algoritma klasifikasi Naive Bayes.
+	<p>Data Training (Data Latih) digunakan untuk melatih algoritma klasifikasi Naive Bayes.
 		Jika Anda melakukan perubahan pada Data Training, Probabilitas akan direset secara otomatis.</p>
 	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
