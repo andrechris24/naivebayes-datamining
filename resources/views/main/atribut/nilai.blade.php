@@ -12,12 +12,12 @@
 			<div class="modal-body">
 				<form id="addNewNilaiAtributForm">@csrf
 					<input type="hidden" name="id" id="attr_id">
-					<div class="form-floating mb-4">
+					<div class="form-floating mb-3">
 						<input type="text" class="form-control" id="attrName" name="name" placeholder="Nama" required />
 						<label for="attrName">Nama</label>
-						<div class="invalid-tooltip" id="name-error"></div>
+						<div class="invalid-feedback" id="name-error"></div>
 					</div>
-					<div class="form-floating mb-4">
+					<div class="form-floating mb-3">
 						<select name="atribut_id" class="form-select" id="attrType" required>
 							<option value="">Pilih</option>
 							@foreach($atribut as $attr)
@@ -25,7 +25,7 @@
 							@endforeach
 						</select>
 						<label for="attrType">Atribut</label>
-						<div class="invalid-tooltip" id="type-error"></div>
+						<div class="invalid-feedback" id="type-error"></div>
 					</div>
 				</form>
 			</div>
@@ -233,7 +233,7 @@
 			url: "{{ route('atribut.nilai.store') }}",
 			type: "POST",
 			beforeSend: function () {
-				$("#addNewNilaiAtributForm :input").removeClass("is-invalid");
+				resetvalidation();
 				Notiflix.Block.standard('.modal-content','Menyimpan');
 			},
 			complete: function () {
@@ -246,7 +246,6 @@
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
-					resetvalidation();
 					if (typeof xhr.responseJSON.errors.name !== "undefined") {
 						$("#attrName").addClass("is-invalid");
 						$("#name-error").text(xhr.responseJSON.errors.name);

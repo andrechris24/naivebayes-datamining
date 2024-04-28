@@ -8,8 +8,9 @@ use App\Models\NilaiAtribut;
 use App\Models\TrainingData;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class TrainingImport implements ToModel, WithHeadingRow
+class TrainingImport implements ToModel, WithHeadingRow,WithValidation
 {
 	/**
 	 * @param array $row
@@ -40,5 +41,15 @@ class TrainingImport implements ToModel, WithHeadingRow
 			array_map('strtolower', ProbabLabel::$label)
 		);
 		return new TrainingData($rows);
+	}
+	public function rules(): array
+	{
+		$rules['nama']=['bail','required','string'];
+		foreach (Atribut::get() as $attr) {
+			if($attr->type==='categorical') $rules[$attr->slug] = 'string';
+			else $rules[$attr->slug]='numeric';
+		}
+		$rules['hasil']='required';
+		return $rules;
 	}
 }

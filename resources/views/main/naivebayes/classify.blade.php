@@ -19,7 +19,7 @@
 							<option value="train">Data Training (Data Latih)</option>
 							<option value="test" selected>Data Testing (Data Uji)</option>
 						</select>
-						<div class="invalid-tooltip" id="calc-error"></div>
+						<div class="invalid-feedback" id="calc-error"></div>
 					</div>
 				</form>
 			</div>
@@ -201,7 +201,7 @@
 			data: $("#formCalcClass").serialize(),
 			dataType: 'JSON',
 			beforeSend: function(){
-				$("#calc-select").removeClass('is-invalid');
+				resetvalidation();
 				Notiflix.Loading.standard('Menghitung');
 			},
 			complete: function(){

@@ -23,10 +23,10 @@ class ResultController extends Controller
 	{
 		$tp = Classification::where('type', $type)->where('predicted', true)
 			->where('real', true)->count(); //True Positive
-		$fp = Classification::where('type', $type)->where('predicted', false)
-			->where('real', true)->count(); //False Positive
-		$fn = Classification::where('type', $type)->where('predicted', true)
-			->where('real', false)->count(); //False Negative
+		$fp = Classification::where('type', $type)->where('predicted', true)
+			->where('real', false)->count(); //False Positive
+		$fn = Classification::where('type', $type)->where('predicted', false)
+			->where('real', true)->count(); //False Negative
 		$tn = Classification::where('type', $type)->where('predicted', false)
 			->where('real', false)->count(); //True Negative
 		$total = $tp + $fp + $fn + $tn;
@@ -43,8 +43,8 @@ class ResultController extends Controller
 		if ($data['total'] === 0) $accu = $prec = $rec = $f1 = 0;
 		else {
 			$accu = (($data['tp'] + $data['tn']) / $data['total']) * 100;
-			$prec = ($data['tp'] / ($data['tp'] + $data['fn'])) * 100;
-			$rec = ($data['tp'] / ($data['tp'] + $data['fp'])) * 100;
+			$prec = ($data['tp'] / ($data['tp'] + $data['fp'])) * 100;
+			$rec = ($data['tp'] / ($data['tp'] + $data['fn'])) * 100;
 			$f1 = 2 * ($prec * $rec) / ($prec + $rec);
 		}
 		return [

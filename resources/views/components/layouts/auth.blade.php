@@ -71,7 +71,6 @@
 		</div>
 	</footer>
 	<script type="text/javascript" src="{{ asset('assets/js/capslock.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/validate.js') }}"></script>
 	@livewireScripts
 	@stack('js')
 </body>

@@ -98,15 +98,15 @@
 					'false'=>json_decode($prob->false),
 					'total'=>json_decode($prob->total)
 					];
-					$true+=$probs['true'][0];
-					$false+=$probs['false'][0];
-					$semua+=$probs['total'][0];
+					$true+=$probs['true'];
+					$false+=$probs['false'];
+					$semua+=$probs['total'];
 					@endphp
 					<tr>
 						<td>{{ $prob->nilai_atribut->name }}</td>
-						<td>{{ $probs['true'][0] }}</td>
-						<td>{{ $probs['false'][0] }}</td>
-						<td>{{ $probs['total'][0] }}</td>
+						<td>{{ $probs['true'] }}</td>
+						<td>{{ $probs['false'] }}</td>
+						<td>{{ $probs['total'] }}</td>
 					</tr>
 					@empty
 					@foreach($attribs['nilai']->where('atribut_id', $attr->id) as $nilai)

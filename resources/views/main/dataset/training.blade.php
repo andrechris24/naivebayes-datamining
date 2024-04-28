@@ -359,7 +359,7 @@
 			cache: false,
 			processData: false,
 			beforeSend: function () {
-				$("#importTrainingData :input").removeClass("is-invalid");
+				resetvalidation();
 				Notiflix.Block.standard('.modal-content','Mengupload');
 			},
 			complete: function () {
@@ -371,14 +371,10 @@
 				Notiflix.Notify.success("Berhasil diupload");
 			},
 			error: function (xhr, st) {
-				if (xhr.status === 422) {
-					resetvalidation();
-					if (typeof xhr.responseJSON.errors.data !== "undefined") {
-						$("#trainData").addClass("is-invalid");
-						$("#data-error").text(xhr.responseJSON.errors.data);
-					}
-					errmsg = xhr.responseJSON.message;
-				} else {
+				$("#trainData").addClass("is-invalid");
+				$("#data-error").text(xhr.responseJSON.message);
+				if (xhr.status === 422) errmsg = xhr.responseJSON.message;
+				else {
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
@@ -393,7 +389,7 @@
 			url: "{{ route('training.store') }}",
 			type: "POST",
 			beforeSend: function () {
-				$("#addNewTrainingForm :input").removeClass("is-invalid");
+				resetvalidation();
 				Notiflix.Block.standard('.modal-content','Menyimpan');
 			},
 			complete: function () {
@@ -406,7 +402,6 @@
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
-					resetvalidation();
 					if (typeof xhr.responseJSON.errors.nama !== "undefined") {
 						$("#trainName").addClass("is-invalid");
 						$("#name-error").text(xhr.responseJSON.errors.nama);
@@ -435,6 +430,10 @@
 		$("#modalAddTrainingLabel").html("Tambah Data Training");
 		$("#addNewTrainingForm")[0].reset();
 		$("#train_id").val("");
+	});
+	$('#modalImportTraining').on('hidden.bs.modal',function(){
+		resetvalidation();
+		$("#importTrainingData")[0].reset();
 	});
 </script>
 @endsection

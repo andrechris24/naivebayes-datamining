@@ -52,7 +52,7 @@ class AtributController extends Controller
 			$request->validate(Atribut::$rules);
 			$req = $request->all();
 			$req['slug'] = Str::slug($request->name, '_');
-			if (empty($request->id)) {
+			if (!empty($request->id)) {
 				$atribut = Atribut::findOrFail($request->id);
 				$this->editColumn('training_data', $atribut, $req);
 				$this->editColumn('testing_data', $atribut, $req);
@@ -70,6 +70,7 @@ class AtributController extends Controller
 				return response()->json(['message' => 'Berhasil disimpan']);
 			}
 		} catch (QueryException $e) {
+			Log::error($e);
 			if ($e->errorInfo[1] === 1062 || $e->errorInfo[1] === 1060) {
 				$err = "Nama Atribut sudah digunakan";
 				if (!empty($request->id))
@@ -79,7 +80,6 @@ class AtributController extends Controller
 					'errors' => ['name' => $err]
 				], 422);
 			}
-			Log::error($e);
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
 	}

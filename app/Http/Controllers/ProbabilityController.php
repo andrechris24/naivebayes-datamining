@@ -44,10 +44,9 @@ class ProbabilityController extends Controller
 				return to_route("training.index")
 					->withWarning('Masukkan Data Training dulu sebelum menghitung Probabilitas');
 			}
-			$warning = false;
 
 			//Preprocessor Start
-			ProbabLabel::preprocess('train');
+			$pre=ProbabLabel::preprocess('train');
 			//Preprocessor End
 
 			//Prior start
@@ -74,9 +73,9 @@ class ProbabilityController extends Controller
 				Probability::updateOrCreate([
 					'atribut_id' => $nilai->atribut_id, 'nilai_atribut_id' => $nilai->id
 				], [
-					'true' => json_encode([0 => $ll[$nilai->name]['true']]),
-					'false' => json_encode([0 => $ll[$nilai->name]['false']]),
-					'total' => json_encode([0 => $ll[$nilai->name]['total']])
+					'true' => json_encode($ll[$nilai->name]['true']),
+					'false' => json_encode($ll[$nilai->name]['false']),
+					'total' => json_encode($ll[$nilai->name]['total'])
 				]);
 			}
 			foreach (Atribut::where('type', 'numeric')->get() as $nilainum) { //Numeric
@@ -95,12 +94,6 @@ class ProbabilityController extends Controller
 				$avg[$nilainum->name]['all'] = array_sum($p['all']) / count($p['all']);
 				$sd[$nilainum->name]['all'] =
 					ProbabLabel::stats_standard_deviation($p['all'], true);
-				if (
-					!$sd[$nilainum->name]['true'] || !$sd[$nilainum->name]['false'] || !$sd[$nilainum->name]['all']
-				) {
-					$warning = true;
-					continue;
-				}
 				Probability::updateOrCreate([
 					'atribut_id' => $nilainum->id, 'nilai_atribut_id' => null
 				], [
@@ -120,9 +113,13 @@ class ProbabilityController extends Controller
 			}
 			//Likelihood End
 
-			if ($warning) {
-				return back()
-					->withWarning('Satu atau lebih atribut probabilitas Gagal dihitung');
+			if ($pre===false) {
+				return back()->withWarning(
+					'Probabilitas berhasil dihitung, tetapi preprocessing gagal dilakukan'
+				);
+			}else if($pre>0){
+				return back()->withSuccess(
+					'Probabilitaas berhasil dihitung dan preprocessing sudah dilakukan');
 			}
 			return back()->withSuccess('Probabilitas berhasil dihitung');
 		} catch (QueryException $e) {

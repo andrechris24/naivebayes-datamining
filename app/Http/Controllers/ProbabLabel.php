@@ -11,14 +11,19 @@ use Illuminate\Support\Facades\Log;
 
 class ProbabLabel extends Controller
 {
-	public static array $label = [0 => 'Tidak Layak', 1 => 'Layak'];
-	public static function preprocess(string $type): void
+	public static array $label = [
+		0 => 'Tidak Layak',	//false: Mampu/Tidak Layak
+		1 => 'Layak'				//true : Tidak Mampu/Layak
+	];
+	public static function preprocess(string $type)
 	{ //Impute missing values
 		try {
+			$novals=0;
 			if ($type === 'test') $data = new TestingData();
 			else $data = new TrainingData();
 			foreach (Atribut::get() as $attr) {
 				$missing = $data->whereNull($attr->slug)->get();
+				$novals+=count($missing);
 				if (count($missing) > 0) {
 					if ($attr->type === 'numeric') //Jika Numerik, rata-rata yang dicari
 						$avg = $data->avg($attr->slug);
@@ -30,8 +35,10 @@ class ProbabLabel extends Controller
 						->update([$attr->slug => $most[$attr->slug] ?? $avg]);
 				}
 			}
+			return $novals;
 		} catch (QueryException $e) {
 			Log::error($e);
+			return false;
 		}
 	}
 	public static function hitungProbab($data)
@@ -42,8 +49,7 @@ class ProbabLabel extends Controller
 		 * PRIOR
 		 * ==================================================
 		 * Jumlah Probabilitas berlabel Layak dan Tidak Layak
-		 */
-		$prior = Probability::probabKelas();
+		 */ $prior = Probability::probabKelas();
 
 		/**=====================================================================
 		 * LIKELIHOOD & EVIDENCE
@@ -65,8 +71,8 @@ class ProbabLabel extends Controller
 					'true' => json_decode($probabilitas->true),
 					'false' => json_decode($probabilitas->false)
 				];
-				$likelihood['true'] *= $probabs['true'][0];
-				$likelihood['false'] *= $probabs['false'][0];
+				$likelihood['true'] *= $probabs['true'];
+				$likelihood['false'] *= $probabs['false'];
 				$evidence *= TrainingData::where($at->slug, $data[$at->slug])->count() /
 					$semuadata;
 			} else { //Jika Numerik, Normal Distribution yang dicari

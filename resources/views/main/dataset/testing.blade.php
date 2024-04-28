@@ -14,13 +14,13 @@
 			<div class="modal-body">
 				<form id="addNewTestingForm">@csrf
 					<input type="hidden" name="id" id="test_id">
-					<div class="form-floating mb-4">
+					<div class="form-floating mb-3">
 						<input type="text" class="form-control" id="testName" name="nama" placeholder="Nama" required />
 						<label for="testName">Nama</label>
-						<div class="invalid-tooltip" id="name-error"></div>
+						<div class="invalid-feedback" id="name-error"></div>
 					</div>
 					@foreach ($atribut as $attr)
-					<div class="form-floating mb-4" data-bs-toggle="tooltip" title="{{$attr->desc}}">
+					<div class="form-floating mb-3" data-bs-toggle="tooltip" title="{{$attr->desc}}">
 						@if ($attr->type === 'numeric')
 						<input type="number" class="form-control" min="0" name="q[{{$attr->slug}}]"
 							id="test-{{$attr->slug}}" placeholder="123" required>
@@ -33,10 +33,10 @@
 						</select>
 						@endif
 						<label for="test-{{$attr->slug}}">{{$attr->name}}</label>
-						<div class="invalid-tooltip" id="{{$attr->slug}}-error"></div>
+						<div class="invalid-feedback" id="{{$attr->slug}}-error"></div>
 					</div>
 					@endforeach
-					<div class="form-floating mb-4">
+					<div class="form-floating mb-3">
 						<select name="status" class="form-select" id="testResult" required>
 							<option value="">Pilih</option>
 							<option value="1">{{$hasil[true]}}</option>
@@ -46,7 +46,7 @@
 							</option>
 						</select>
 						<label for="testResult">Hasil</label>
-						<div class="invalid-tooltip" id="result-error"></div>
+						<div class="invalid-feedback" id="result-error"></div>
 					</div>
 				</form>
 			</div>
@@ -86,7 +86,7 @@
 						data-bs-toggle="tooltip" title="Format: xls, xlsx, csv, dan tsv"
 						accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.oasis.opendocument.spreadsheet,text/csv,.tsv"
 						required>
-					<div class="invalid-tooltip" id="data-error"></div>
+					<div class="invalid-feedback" id="data-error"></div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -359,7 +359,7 @@
 			processData: false,
 			beforeSend: function () {
 				Notiflix.Block.standard('.modal-content','Mengupload');
-				$("#importTestingData :input").removeClass("is-invalid");
+				resetvalidation();
 			},
 			complete: function () {
 				Notiflix.Block.remove('.modal-content');
@@ -370,14 +370,10 @@
 				Notiflix.Notify.success("Berhasil diupload");
 			},
 			error: function (xhr, st) {
-				if (xhr.status === 422) {
-					resetvalidation();
-					if (typeof xhr.responseJSON.errors.data !== "undefined") {
-						$("#testData").addClass("is-invalid");
-						$("#data-error").text(xhr.responseJSON.errors.data);
-					}
-					errmsg = xhr.responseJSON.message;
-				} else {
+				$("#testData").addClass("is-invalid");
+				$("#data-error").text(xhr.responseJSON.message);
+				if (xhr.status === 422) errmsg = xhr.responseJSON.message;
+				else {
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
@@ -393,7 +389,7 @@
 			type: "POST",
 			beforeSend: function () {
 				Notiflix.Block.standard('.modal-content','Menyimpan');
-				$("#addNewTestingForm :input").removeClass("is-invalid");
+				resetvalidation();
 			},
 			complete: function () {
 				Notiflix.Block.remove('.modal-content');
@@ -405,7 +401,6 @@
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
-					resetvalidation();
 					if (typeof xhr.responseJSON.errors.nama !== "undefined") {
 						$("#testName").addClass("is-invalid");
 						$("#name-error").text(xhr.responseJSON.errors.nama);
@@ -434,6 +429,10 @@
 		$("#modalAddTestingLabel").html("Tambah Data Testing");
 		$("#addNewTestingForm")[0].reset();
 		$("#test_id").val("");
+	});
+	$('#modalImportTesting').on('hidden.bs.modal',function(){
+		resetvalidation();
+		$("#importTestingData")[0].reset();
 	});
 </script>
 @endsection

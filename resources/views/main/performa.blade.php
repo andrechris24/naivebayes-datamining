@@ -35,20 +35,20 @@
 							</tr>
 							<tr>
 								<th>Prediksi</th>
-								<th>Layak</th>
-								<th>Tidak Layak</th>
+								<th>{{$stat[1]}}</th>
+								<th>{{$stat[0]}}</th>
 								<th>Total</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<th>Layak</th>
+								<th>{{$stat[1]}}</th>
 								<td class="table-success">{{$data['test']['tp']}}</td>
 								<td class="table-danger">{{$data['test']['fp']}}</td>
 								<td>{{$data['test']['tp'] + $data['test']['fp']}}</td>
 							</tr>
 							<tr>
-								<th>Tidak Layak</th>
+								<th>{{$stat[0]}}</th>
 								<td class="table-danger">{{$data['test']['fn']}}</td>
 								<td class="table-success">{{$data['test']['tn']}}</td>
 								<td>{{$data['test']['fn'] + $data['test']['tn']}}</td>
@@ -152,20 +152,20 @@
 							</tr>
 							<tr>
 								<th>Prediksi</th>
-								<th>Layak</th>
-								<th>Tidak Layak</th>
+								<th>{{$stat[1]}}</th>
+								<th>{{$stat[0]}}</th>
 								<th>Total</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<th>Layak</th>
+								<th>{{$stat[1]}}</th>
 								<td class="table-success">{{$data['train']['tp']}}</td>
 								<td class="table-danger">{{$data['train']['fp']}}</td>
 								<td>{{$data['train']['tp'] + $data['train']['fp']}}</td>
 							</tr>
 							<tr>
-								<th>Tidak Layak</th>
+								<th>{{$stat[0]}}</th>
 								<td class="table-danger">{{$data['train']['fn']}}</td>
 								<td class="table-success">{{$data['train']['tn']}}</td>
 								<td>{{$data['train']['fn'] + $data['train']['tn']}}</td>

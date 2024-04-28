@@ -12,24 +12,24 @@
 			<div class="modal-body">
 				<form id="addNewAtributForm">@csrf
 					<input type="hidden" name="id" id="attr_id">
-					<div class="form-floating mb-4">
+					<div class="form-floating mb-3">
 						<input type="text" class="form-control" id="attrName" name="name" placeholder="Nama" required />
 						<label for="attrName">Nama</label>
-						<div class="invalid-tooltip" id="name-error"></div>
+						<div class="invalid-feedback" id="name-error"></div>
 					</div>
-					<div class="form-floating mb-4">
+					<div class="form-floating mb-3">
 						<select name="type" class="form-select" id="attrType" required>
 							<option value="">Pilih</option>
 							<option value="numeric">Numerik</option>
 							<option value="categorical">Kategorikal</option>
 						</select>
 						<label for="attrType">Tipe Atribut</label>
-						<div class="invalid-tooltip" id="type-error"></div>
+						<div class="invalid-feedback" id="type-error"></div>
 					</div>
-					<div class="form-floating mb-4">
+					<div class="form-floating mb-3">
 						<input type="text" class="form-control" id="attrDesc" name="desc" placeholder="Keterangan" />
 						<label for="attrDesc">Keterangan</label>
-						<div class="invalid-tooltip" id="desc-error"></div>
+						<div class="invalid-feedback" id="desc-error"></div>
 					</div>
 				</form>
 			</div>
@@ -233,7 +233,7 @@
 			url: "{{ route('atribut.store') }}",
 			type: "POST",
 			beforeSend: function () {
-				$("#addNewAtributForm :input").removeClass("is-invalid");
+				resetvalidation();
 				Notiflix.Block.standard('.modal-content','Menyimpan');
 			},
 			complete: function () {
@@ -246,7 +246,6 @@
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
-					resetvalidation();
 					if (typeof xhr.responseJSON.errors.name !== "undefined") {
 						$("#attrName").addClass("is-invalid");
 						$("#name-error").text(xhr.responseJSON.errors.name);

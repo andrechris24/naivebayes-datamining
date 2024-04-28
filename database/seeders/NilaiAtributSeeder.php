@@ -15,7 +15,7 @@ class NilaiAtributSeeder extends Seeder
 		NilaiAtribut::insert([
 			['atribut_id' => 1, 'name' => 'Milik sendiri'],
 			['atribut_id' => 1, 'name' => 'Menumpang'],
-			['atribut_id' => 1, 'name' => 'Kontrak/sewa'],
+			['atribut_id' => 1, 'name' => 'Sewa'],
 			['atribut_id' => 2, 'name' => 'Wiraswasta'],
 			['atribut_id' => 2, 'name' => 'Wirausaha'],
 			['atribut_id' => 2, 'name' => 'Buruh'],

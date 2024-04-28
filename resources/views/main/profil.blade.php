@@ -19,7 +19,7 @@
 					<div class="position-relative">
 						<input type="password" class="form-control" id="password-conf" minlength="8" maxlength="20"
 							name="confirm_pass" placeholder="Password Anda" required>
-						<div class="invalid-tooltip" id="del-error"></div>
+						<div class="invalid-feedback" id="del-error"></div>
 					</div>
 				</form>
 			</div>
@@ -34,31 +34,31 @@
 		</div>
 	</div>
 </div>
-<div class="card card-body border-0 shadow mb-4">
+<div class="card card-body border-0 shadow mb-3">
 	<x-caps-lock />
 	<form enctype="multipart/form-data" id="form-edit-account">
 		<input type="hidden" name="id" value="{{ auth()->id() }}">@csrf
-		<div class="form-group position-relative mb-4">
+		<div class="form-group position-relative mb-3">
 			<div class="row">
 				<div class="col-lg-3"><label for="name">Nama</label></div>
 				<div class="col-lg-9">
 					<input class="form-control" id="name" type="text" name="name" placeholder="Masukkan Nama Anda"
 						value="{{ auth()->user()->name }}" required>
-					<div class="invalid-tooltip" id="name-error"></div>
+					<div class="invalid-feedback" id="name-error"></div>
 				</div>
 			</div>
 		</div>
-		<div class="form-group position-relative mb-4">
+		<div class="form-group position-relative mb-3">
 			<div class="row">
 				<div class="col-lg-3"><label for="email">Email</label></div>
 				<div class="col-lg-9">
 					<input class="form-control" id="email" type="email" name="email" placeholder="email@example.com"
 						value="{{ auth()->user()->email }}" required>
-					<div class="invalid-tooltip" id="email-error"></div>
+					<div class="invalid-feedback" id="email-error"></div>
 				</div>
 			</div>
 		</div>
-		<div class="form-group position-relative mb-4">
+		<div class="form-group position-relative mb-3">
 			<div class="row">
 				<div class="col-lg-3">
 					<label for="password-current">Password Anda</label>
@@ -66,11 +66,11 @@
 				<div class="col-lg-9">
 					<input class="form-control" id="password-current" type="password" minlength="8" maxlength="20"
 						placeholder="Password Anda" name="current_password" required>
-					<div class="invalid-tooltip" id="current-password-error"></div>
+					<div class="invalid-feedback" id="current-password-error"></div>
 				</div>
 			</div>
 		</div>
-		<div class="form-group position-relative mb-4">
+		<div class="form-group position-relative mb-3">
 			<div class="row">
 				<div class="col-lg-3">
 					<label for="newpassword">Password Baru</label>
@@ -78,11 +78,11 @@
 				<div class="col-lg-9">
 					<input class="form-control" id="newpassword" type="password" oninput="checkpassword()" minlength="8"
 						maxlength="20" placeholder="Kosongkan jika tidak ganti password" name="password">
-					<div class="invalid-tooltip" id="newpassword-error"></div>
+					<div class="invalid-feedback" id="newpassword-error"></div>
 				</div>
 			</div>
 		</div>
-		<div class="form-group position-relative mb-4">
+		<div class="form-group position-relative mb-3">
 			<div class="row">
 				<div class="col-lg-3">
 					<label for="conf-password">Konfirmasi Password Baru</label>
@@ -90,7 +90,7 @@
 				<div class="col-lg-9">
 					<input class="form-control" id="conf-password" type="password" minlength="8" maxlength="20"
 						placeholder="Konfirmasi password baru" name="password_confirmation" oninput="checkpassword()">
-					<div class="invalid-tooltip" id="confirm-password-error"></div>
+					<div class="invalid-feedback" id="confirm-password-error"></div>
 				</div>
 			</div>
 		</div>
@@ -120,7 +120,7 @@
 			url: "{{ route('profil.update') }}",
 			type: "PATCH",
 			beforeSend: function () {
-				$("#form-edit-account :input").removeClass("is-invalid");
+				resetvalidation();
 				Notiflix.Loading.standard('Menyimpan');
 			},
 			complete: function () {
@@ -128,12 +128,10 @@
 			},
 			success: function () {
 				$("input[type=password]").val("");
-				resetvalidation();
 				Notiflix.Notify.success("Tersimpan");
 			},
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
-					resetvalidation();
 					if (typeof xhr.responseJSON.errors.name !== "undefined") {
 						$("#nama-user").addClass("is-invalid");
 						$("#name-error").text(xhr.responseJSON.errors.name);

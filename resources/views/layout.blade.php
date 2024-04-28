@@ -303,6 +303,7 @@
 		function resetvalidation() {
 			const formselect = document.getElementsByTagName("select"),
 				forminput = document.getElementsByTagName("input");
+			$('.invalid-feedback').text('');
 			Array.from(formselect).forEach((selform) => {
 				selform.classList.remove("is-invalid");
 			}, false);
