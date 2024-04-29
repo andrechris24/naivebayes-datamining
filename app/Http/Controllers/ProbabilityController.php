@@ -46,7 +46,7 @@ class ProbabilityController extends Controller
 			}
 
 			//Preprocessor Start
-			$pre=ProbabLabel::preprocess('train');
+			$pre = ProbabLabel::preprocess('train');
 			//Preprocessor End
 
 			//Prior start
@@ -113,13 +113,10 @@ class ProbabilityController extends Controller
 			}
 			//Likelihood End
 
-			if ($pre===false) {
+			if ($pre === false) {
 				return back()->withWarning(
 					'Probabilitas berhasil dihitung, tetapi preprocessing gagal dilakukan'
 				);
-			}else if($pre>0){
-				return back()->withSuccess(
-					'Probabilitaas berhasil dihitung dan preprocessing sudah dilakukan');
 			}
 			return back()->withSuccess('Probabilitas berhasil dihitung');
 		} catch (QueryException $e) {

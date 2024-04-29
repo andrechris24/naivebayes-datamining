@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
@@ -41,7 +42,14 @@ class AdminController extends Controller
 	public function update(Request $request)
 	{
 		try {
-			$request->validate(User::$updrules);
+			$request->validate([
+				'name' => ['bail','required','string'],
+				'email' => [
+					'bail', 'required', 'email',Rule::unique('users')->ignore(Auth::id())
+				], 'current_password' => ['bail', 'required', 'current_password'],
+				'password' => ['nullable', 'bail', 'confirmed', 'between:8,20'],
+				'password_confirmation' => 'required_with:password'
+			]);
 			$req = $request->all();
 			if ($request->has('password'))
 				$req['password'] = Hash::make($req['password']);

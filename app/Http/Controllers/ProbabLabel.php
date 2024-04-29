@@ -18,16 +18,16 @@ class ProbabLabel extends Controller
 	public static function preprocess(string $type)
 	{ //Impute missing values
 		try {
-			$novals=0;
+			$novals = 0;
 			if ($type === 'test') $data = new TestingData();
 			else $data = new TrainingData();
 			foreach (Atribut::get() as $attr) {
 				$missing = $data->whereNull($attr->slug)->get();
-				$novals+=count($missing);
+				$novals += count($missing);
 				if (count($missing) > 0) {
 					if ($attr->type === 'numeric') //Jika Numerik, rata-rata yang dicari
 						$avg = $data->avg($attr->slug);
-					else { //Jika Kategorikal, terbanyak yang dicari
+					else { //Jika Kategorikal, paling sering muncul yang dicari
 						$most = $data->select($attr->slug)->groupBy($attr->slug)
 							->orderByRaw("COUNT(*) desc")->first();
 					}

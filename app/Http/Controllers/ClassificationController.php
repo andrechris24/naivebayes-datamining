@@ -39,12 +39,12 @@ class ClassificationController extends Controller
 	{
 		$request->validate(Classification::$rule);
 		try {
-			$pre=0;
+			$pre = 0;
 			if (Probability::count() === 0)
 				return response()->json(['message' => 'Probabilitas belum dihitung'], 400);
 
 			//Preprocessor Start
-			if ($request->tipe === 'test') $pre=ProbabLabel::preprocess('test');
+			if ($request->tipe === 'test') $pre = ProbabLabel::preprocess('test');
 			//Preprocessor End
 
 			$semuadata = $this->getData($request->tipe); //Dataset
@@ -66,7 +66,7 @@ class ClassificationController extends Controller
 				]);
 			}
 			return response()->json([
-				'message' => 'Berhasil dihitung','preprocess'=>$pre
+				'message' => 'Berhasil dihitung', 'preprocess' => $pre
 			]);
 		} catch (QueryException $e) {
 			Log::error($e);

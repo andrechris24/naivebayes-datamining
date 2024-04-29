@@ -33,13 +33,13 @@ class User extends Authenticatable
 	 */
 	protected $casts = ['email_verified_at' => 'datetime', 'password' => 'hashed'];
 	public static array $rules = [
-			'name' => 'required',
+			'name' => ['bail','required','string'],
 			'email' => ['bail', 'required', 'email', 'unique:users'],
 			'password' => ['bail', 'required', 'confirmed', 'between:8,20'],
 			'password_confirmation' => 'required'
 		], $updrules = [
-			'name' => 'required',
-			'email' => ['bail', 'required', 'email'],
+			'name' => ['bail','required','string'],
+			'email' => ['bail', 'required', 'email','unique:users'],
 			'current_password' => ['bail', 'required', 'current_password'],
 			'password' => ['nullable', 'bail', 'confirmed', 'between:8,20'],
 			'password_confirmation' => 'required_with:password'
@@ -54,5 +54,11 @@ class User extends Authenticatable
 			'token' => 'required'
 		], $delrules = [
 			'confirm_pass' => ['bail', 'required', 'current_password', 'between:8,20']
+		],$userrules=[
+			'name'=> ['bail','required','string'],
+			'email'=>['bail','required','email','unique:users'],
+			'current_password'=>['bail','required','current_password','between:8,20'],
+			'password'=>['bail', 'required', 'confirmed', 'between:8,20'],
+			'password_confirmation' => 'required',
 		];
 }

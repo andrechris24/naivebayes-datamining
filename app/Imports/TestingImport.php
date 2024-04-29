@@ -6,12 +6,11 @@ use App\Http\Controllers\ProbabLabel;
 use App\Models\Atribut;
 use App\Models\NilaiAtribut;
 use App\Models\TestingData;
-use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class TestingImport implements ToModel, WithHeadingRow,WithValidation
+class TestingImport implements ToModel, WithHeadingRow, WithValidation
 {
 	/**
 	 * @param array $row
@@ -44,12 +43,12 @@ class TestingImport implements ToModel, WithHeadingRow,WithValidation
 	}
 	public function rules(): array
 	{
-		$rules['nama']=['bail','required','string'];
+		$rules['nama'] = ['bail', 'required', 'string'];
 		foreach (Atribut::get() as $attr) {
-			if($attr->type==='categorical') $rules[$attr->slug] = 'string';
-			else $rules[$attr->slug]='numeric';
+			if ($attr->type === 'categorical') $rules[$attr->slug] = 'string';
+			else $rules[$attr->slug] = 'numeric';
 		}
-		$rules['hasil']='required';
+		$rules['hasil'] = 'required';
 		return $rules;
 	}
 }

@@ -118,7 +118,7 @@
 		$.ajax({
 			data: $("#form-edit-account").serialize(),
 			url: "{{ route('profil.update') }}",
-			type: "PATCH",
+			type: "POST",
 			beforeSend: function () {
 				resetvalidation();
 				Notiflix.Loading.standard('Menyimpan');
@@ -133,11 +133,11 @@
 			error: function (xhr, st) {
 				if (xhr.status === 422) {
 					if (typeof xhr.responseJSON.errors.name !== "undefined") {
-						$("#nama-user").addClass("is-invalid");
+						$("#name").addClass("is-invalid");
 						$("#name-error").text(xhr.responseJSON.errors.name);
 					}
 					if (typeof xhr.responseJSON.errors.email !== "undefined") {
-						$("#email-user").addClass("is-invalid");
+						$("#email").addClass("is-invalid");
 						$("#email-error").text(xhr.responseJSON.errors.email);
 					}
 					if (typeof xhr.responseJSON.errors.current_password !== "undefined") {
