@@ -92,6 +92,8 @@ class UserController extends Controller
 	 */
 	public function edit(User $user)
 	{
+		if($user===Auth::user())
+			return response()->json(['message'=>"Ini akun Anda"],302);
 		return response()->json($user);
 	}
 
