@@ -205,7 +205,7 @@
 		);
 	}).on("click", ".edit-record", function () {
 		let attr_id = $(this).data("id");
-		$("#modalAddAtributLabel").html("Edit Atribut");
+		$("#modalAddAtributLabel").text("Edit Atribut");
 		Notiflix.Block.standard('.modal-content','Memuat');
 		$.get(`atribut/${attr_id}/edit`, function (data) {
 			$("#attr_id").val(data.id);
@@ -269,7 +269,7 @@
 	});
 	modalForm.on("hidden.bs.modal", function () {
 		resetvalidation();
-		$("#modalAddAtributLabel").html("Tambah Atribut");
+		$("#modalAddAtributLabel").text("Tambah Atribut");
 		$("#addNewAtributForm")[0].reset();
 		$("#attr_id").val("");
 	});

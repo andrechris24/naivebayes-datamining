@@ -39,7 +39,6 @@ class ClassificationController extends Controller
 	{
 		$request->validate(Classification::$rule);
 		try {
-			$pre = 0;
 			if (Probability::count() === 0)
 				return response()->json(['message' => 'Probabilitas belum dihitung'], 400);
 
@@ -66,7 +65,7 @@ class ClassificationController extends Controller
 				]);
 			}
 			return response()->json([
-				'message' => 'Berhasil dihitung', 'preprocess' => $pre
+				'message' => 'Berhasil dihitung', 'preprocess' => $pre??0
 			]);
 		} catch (QueryException $e) {
 			Log::error($e);

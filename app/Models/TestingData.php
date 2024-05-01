@@ -10,7 +10,7 @@ class TestingData extends Model
 	use HasFactory;
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 	public static array $rules = [
-		'nama' => ['bail','required','string'],
+		'nama' => ['bail', 'required', 'string'],
 		'q' => 'required',
 		'q.*' => ['bail', 'required', 'numeric'],
 		'status' => ['bail', 'required', 'in:1,0,true,false,auto']

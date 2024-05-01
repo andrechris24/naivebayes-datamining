@@ -70,7 +70,7 @@ class AtributController extends Controller
 				return response()->json(['message' => 'Berhasil disimpan']);
 			}
 		} catch (QueryException $e) {
-			if ($e->errorInfo[1] === 1062 || $e->errorInfo[1] === 1060) {
+			if (in_array($e->errorInfo[1], [1060,1062])) {
 				$err = "Nama Atribut sudah digunakan";
 				if (!empty($request->id))
 					$err .= '. Gunakan nama yang lain jika Anda ingin mengganti tipe atribut.';

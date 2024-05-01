@@ -43,21 +43,21 @@ class AdminController extends Controller
 	{
 		try {
 			$request->validate([
-				'name' => ['bail','required','string'],
+				'name' => ['bail', 'required', 'string'],
 				'email' => [
-					'bail', 'required', 'email',Rule::unique('users')->ignore(Auth::id())
+					'bail', 'required', 'email', Rule::unique('users')->ignore(Auth::id())
 				], 'current_password' => ['bail', 'required', 'current_password'],
 				'password' => ['nullable', 'bail', 'confirmed', 'between:8,20'],
 				'password_confirmation' => 'required_with:password'
 			]);
 			$req = $request->all();
-			if ($request->has('password'))
+			if (!empty($req['password']))
 				$req['password'] = Hash::make($req['password']);
 			else unset($req['password']);
 			$req['name'] = ucwords($req['name']);
 			$req['email'] = Str::lower($req['email']);
 			User::findOrFail(Auth::id())->update($req);
-			return response()->json(['message' => 'Profil sudah diupdate']);
+			return response()->json(['message' => 'Tersimpan','nama'=>$req['name']]);
 		} catch (ModelNotFoundException) {
 			return response()->json(['message' => 'Akun tidak ditemukan'], 404);
 		} catch (QueryException $e) {

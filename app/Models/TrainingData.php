@@ -10,7 +10,7 @@ class TrainingData extends Model
 	use HasFactory;
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 	public static array $rules = [
-		'nama' => ['bail','required','string'],
+		'nama' => ['bail', 'required', 'string'],
 		'status' => ['bail', 'required', 'boolean'],
 		'q' => 'required',
 		'q.*' => ['bail', 'required', 'numeric']

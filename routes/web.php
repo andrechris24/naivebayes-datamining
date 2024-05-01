@@ -9,10 +9,11 @@ use App\Exports\DatasetTemplate,
 	App\Http\Controllers\ResultController,
 	App\Http\Controllers\TestingDataController,
 	App\Http\Controllers\TrainingDataController,
-	App\Livewire\Auth\Forgot,
-	App\Livewire\Auth\Login,
-	App\Livewire\Auth\Register,
-	App\Livewire\Auth\Reset,
+	App\Http\Controllers\UserController,
+	App\Livewire\Forgot,
+	App\Livewire\Login,
+	App\Livewire\Register,
+	App\Livewire\Reset,
 	Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -75,7 +76,8 @@ Route::middleware(['auth'])->group(function () {
 	Route::resources([
 		'training' => TrainingDataController::class,
 		'testing' => TestingDataController::class,
-		'atribut' => AtributController::class
+		'atribut' => AtributController::class,
+		'user'=>UserController::class
 	]);
 	Route::prefix('class')->controller(ClassificationController::class)
 		->name('class.')->group(function () {

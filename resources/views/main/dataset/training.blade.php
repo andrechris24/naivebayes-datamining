@@ -14,13 +14,13 @@
 			<div class="modal-body">
 				<form id="addNewTrainingForm">@csrf
 					<input type="hidden" name="id" id="train_id">
-					<div class="form-floating mb-4">
+					<div class="form-floating mb-3">
 						<input type="text" class="form-control" id="trainName" name="nama" placeholder="Nama" required />
 						<label for="trainName">Nama</label>
-						<div class="invalid-tooltip" id="name-error"></div>
+						<div class="invalid-feedback" id="name-error"></div>
 					</div>
 					@foreach ($atribut as $attr)
-					<div class="form-floating mb-4" data-bs-toggle="tooltip" title="{{$attr->desc}}">
+					<div class="form-floating mb-3" data-bs-toggle="tooltip" title="{{$attr->desc}}">
 						@if ($attr->type==='numeric')
 						<input type="number" class="form-control" min="0" name="q[{{$attr->slug}}]" placeholder="123"
 							id="train-{{$attr->slug}}" required>
@@ -33,17 +33,17 @@
 						</select>
 						@endif
 						<label for="train-{{$attr->slug}}">{{$attr->name}}</label>
-						<div class="invalid-tooltip" id="{{$attr->slug}}-error"></div>
+						<div class="invalid-feedback" id="{{$attr->slug}}-error"></div>
 					</div>
 					@endforeach
-					<div class="form-floating mb-4">
+					<div class="form-floating mb-3">
 						<select name="status" class="form-select" id="trainResult" required>
 							<option value="">Pilih</option>
 							<option value="1">{{$hasil[true]}}</option>
 							<option value="0">{{$hasil[false]}}</option>
 						</select>
 						<label for="trainResult">Hasil</label>
-						<div class="invalid-tooltip" id="result-error"></div>
+						<div class="invalid-feedback" id="result-error"></div>
 					</div>
 				</form>
 			</div>
@@ -325,7 +325,7 @@
 		);
 	}).on("click", ".edit-record", function () {
 		let train_id = $(this).data("id");
-		$("#modalAddTrainingLabel").html("Edit Data Training");
+		$("#modalAddTrainingLabel").text("Edit Data Training");
 		Notiflix.Block.standard('.modal-content','Memuat');
 		$.get(`training/${train_id}/edit`, function (data) {
 			$("#train_id").val(data.id);
@@ -427,7 +427,7 @@
 	});
 	modalForm.on("hidden.bs.modal", function () {
 		resetvalidation();
-		$("#modalAddTrainingLabel").html("Tambah Data Training");
+		$("#modalAddTrainingLabel").text("Tambah Data Training");
 		$("#addNewTrainingForm")[0].reset();
 		$("#train_id").val("");
 	});

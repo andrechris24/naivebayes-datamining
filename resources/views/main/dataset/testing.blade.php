@@ -324,7 +324,7 @@
 		);
 	}).on("click", ".edit-record", function () {
 		let test_id = $(this).data("id");
-		$("#modalAddTestingLabel").html("Edit Data Testing");
+		$("#modalAddTestingLabel").text("Edit Data Testing");
 		Notiflix.Block.standard('.modal-content','Memuat');
 		$.get(`testing/${test_id}/edit`, function (data) {
 			$("#test_id").val(data.id);
@@ -426,7 +426,7 @@
 	});
 	modalForm.on("hidden.bs.modal", function () {
 		resetvalidation();
-		$("#modalAddTestingLabel").html("Tambah Data Testing");
+		$("#modalAddTestingLabel").text("Tambah Data Testing");
 		$("#addNewTestingForm")[0].reset();
 		$("#test_id").val("");
 	});

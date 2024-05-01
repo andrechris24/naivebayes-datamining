@@ -244,7 +244,7 @@
 								aria-expanded="false">
 								<div class="media d-flex align-items-center">
 									<div class="media-body ms-2 text-dark align-items-center">
-										<span class="mb-0 font-small fw-bold text-gray-900">
+										<span class="mb-0 font-small fw-bold text-gray-900" id="nama-pengguna">
 											{{auth()->user()->name}}
 										</span>
 									</div>

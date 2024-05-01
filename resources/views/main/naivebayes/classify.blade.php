@@ -207,7 +207,7 @@
 			complete: function(){
 				Notiflix.Loading.remove();
 			},
-			success: function () {
+			success: function (data) {
 				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
 				$("#modalCalcClass").modal('hide');
 				Notiflix.Notify.success("Berhasil dihitung");

@@ -206,7 +206,7 @@
 		);
 	}).on("click", ".edit-record", function () {
 		let attr_id = $(this).data("id");
-		$("#modalAddNilaiAtributLabel").html("Edit Nilai Atribut");
+		$("#modalAddNilaiAtributLabel").text("Edit Nilai Atribut");
 		Notiflix.Block.standard('.modal-content','Memuat');
 		$.get(`/atribut/nilai/${attr_id}/edit`, function (data) {
 			$("#attr_id").val(data.id);
@@ -265,7 +265,7 @@
 	});
 	modalForm.on("hidden.bs.modal", function () {
 		resetvalidation();
-		$("#modalAddNilaiAtributLabel").html("Tambah Nilai Atribut");
+		$("#modalAddNilaiAtributLabel").text("Tambah Nilai Atribut");
 		$("#addNewNilaiAtributForm")[0].reset();
 		$("#attr_id").val("");
 	});

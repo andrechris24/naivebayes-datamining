@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Auth;
+namespace App\Livewire;
 
 use App\Models\User;
 use Illuminate\Database\QueryException;
@@ -27,7 +27,7 @@ class Login extends Component
 				$this->redirectRoute('home');
 			} else {
 				$this->addError('email', trans('auth.failed'));
-				$this->dispatch('error', message: "Email atau Password salah");
+				$this->dispatch('error', message: trans('auth.failed'));
 			}
 		} catch (QueryException $th) {
 			Log::error($th);
@@ -39,6 +39,6 @@ class Login extends Component
 	}
 	public function render()
 	{
-		return view('livewire.auth.login');
+		return view('livewire.login');
 	}
 }

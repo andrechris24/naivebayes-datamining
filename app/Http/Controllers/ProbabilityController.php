@@ -115,10 +115,14 @@ class ProbabilityController extends Controller
 
 			if ($pre === false) {
 				return back()->withWarning(
-					'Probabilitas berhasil dihitung, tetapi preprocessing gagal dilakukan'
+					'Probabilitas berhasil dihitung, tetapi terjadi kesalahan pada preprocessing.'
 				);
+			}else{
+				if($pre>0) 
+					$msg="Probabilitas berhasil dihitung. Preprocessing sudah dilakukan.";
+				else $msg="Probabilitas berhasil dihitung";
 			}
-			return back()->withSuccess('Probabilitas berhasil dihitung');
+			return back()->withSuccess($msg);
 		} catch (QueryException $e) {
 			Log::error($e);
 			return back()->withError('Gagal hitung:')->withErrors($e->errorInfo);
@@ -141,7 +145,7 @@ class ProbabilityController extends Controller
 	private static function getNumbers(string $col)
 	{
 		$data = ['true' => array(), 'false' => array(), 'all' => array()];
-		foreach (TrainingData::select($col, 'status')->get() as $train) {
+		foreach (TrainingData::select($col, 'status')->whereNotNull($col)->get() as $train) {
 			if ($train['status'] == true) $data['true'][] = $train[$col];
 			else $data['false'][] = $train[$col];
 			$data['all'][] = $train[$col];

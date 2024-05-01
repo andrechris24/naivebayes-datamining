@@ -126,8 +126,9 @@
 			complete: function () {
 				Notiflix.Loading.remove();
 			},
-			success: function () {
+			success: function (data) {
 				$("input[type=password]").val("");
+				$("#nama-pengguna").text(data.nama);
 				Notiflix.Notify.success("Tersimpan");
 			},
 			error: function (xhr, st) {
@@ -184,16 +185,15 @@
 			},
 			error: function (xhr, st) {
 				Notiflix.Loading.remove();
-				if (xhr.status === 422) {
-					errmsg = xhr.responseJSON.message;
-					$("#password-conf").addClass('is-invalid');
-					$("#del-error").text(xhr.responseJSON.message);
-				}else if (xhr.status === 429)
+				if (xhr.status === 422) errmsg = xhr.responseJSON.message;
+				else if (xhr.status === 429)
 					errmsg = "Terlalu banyak upaya. Cobalah beberapa saat lagi.";
 				else {
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Gagal hapus: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
 				}
+					$("#password-conf").addClass('is-invalid');
+					$("#del-error").text(xhr.responseJSON.message);
 				Notiflix.Notify.failure(errmsg);
 			}
 		});

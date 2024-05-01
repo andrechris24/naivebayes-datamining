@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Auth;
+namespace App\Livewire;
 
 use App\Models\User;
 use Illuminate\Database\QueryException;
@@ -35,6 +35,6 @@ class Register extends Component
 	}
 	public function render()
 	{
-		return view('livewire.auth.register');
+		return view('livewire.register');
 	}
 }
