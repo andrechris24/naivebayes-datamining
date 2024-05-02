@@ -57,7 +57,7 @@ class AdminController extends Controller
 			$req['name'] = ucwords($req['name']);
 			$req['email'] = Str::lower($req['email']);
 			User::findOrFail(Auth::id())->update($req);
-			return response()->json(['message' => 'Tersimpan','nama'=>$req['name']]);
+			return response()->json(['message' => 'Tersimpan', 'nama' => $req['name']]);
 		} catch (ModelNotFoundException) {
 			return response()->json(['message' => 'Akun tidak ditemukan'], 404);
 		} catch (QueryException $e) {

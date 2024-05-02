@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Atribut;
+use App\Models\Classification;
 use App\Models\Probability;
 use App\Models\TrainingData;
 use App\Models\TestingData;
@@ -58,8 +59,7 @@ class ProbabLabel extends Controller
 		 * Evidence: Jumlah probabilitas total
 		 *
 		 * Likelihood dan Evidence diinisialisasi dengan angka 1 untuk perkalian
-		 */
-		$likelihood['true'] = $likelihood['false'] = $evidence = 1;
+		 */ $likelihood['true'] = $likelihood['false'] = $evidence = 1;
 		foreach (Atribut::get() as $at) {
 			if ($at->type === 'categorical') {
 				//Jika Kategorikal, nilai probabilitas yang dicari
@@ -114,6 +114,11 @@ class ProbabLabel extends Controller
 			'false' => $posterior['false'],
 			'predict' => $predict
 		];
+	}
+	public static function resetProbab(): void
+	{
+		if (Probability::get()->isNotEmpty()) Probability::truncate();
+		if (Classification::get()->isNotEmpty()) Classification::truncate();
 	}
 	private static function normalDistribution(int $x, float $sd, float $mean)
 	{

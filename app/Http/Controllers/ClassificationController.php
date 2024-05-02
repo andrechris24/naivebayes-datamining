@@ -65,7 +65,7 @@ class ClassificationController extends Controller
 				]);
 			}
 			return response()->json([
-				'message' => 'Berhasil dihitung', 'preprocess' => $pre??0
+				'message' => 'Berhasil dihitung', 'preprocess' => $pre ?? 0
 			]);
 		} catch (QueryException $e) {
 			Log::error($e);

@@ -117,10 +117,10 @@ class ProbabilityController extends Controller
 				return back()->withWarning(
 					'Probabilitas berhasil dihitung, tetapi terjadi kesalahan pada preprocessing.'
 				);
-			}else{
-				if($pre>0) 
-					$msg="Probabilitas berhasil dihitung. Preprocessing sudah dilakukan.";
-				else $msg="Probabilitas berhasil dihitung";
+			} else {
+				if ($pre > 0)
+					$msg = "Probabilitas berhasil dihitung. Preprocessing sudah dilakukan.";
+				else $msg = "Probabilitas berhasil dihitung";
 			}
 			return back()->withSuccess($msg);
 		} catch (QueryException $e) {

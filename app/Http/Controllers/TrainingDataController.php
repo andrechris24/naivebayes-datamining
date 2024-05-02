@@ -82,8 +82,8 @@ class TrainingDataController extends Controller
 			foreach ($request->q as $id => $q) $req[$id] = $q;
 			$req['nama'] = $request->nama;
 			$req['status'] = $request->status;
-			Probability::truncate();
-			if (empty($request->id)) {
+			ProbabLabel::resetProbab();
+			if (!empty($request->id)) {
 				TrainingData::updateOrCreate(['id' => $request->id], $req);
 				return response()->json(['message' => 'Berhasil diedit']);
 			} else {
@@ -111,14 +111,14 @@ class TrainingDataController extends Controller
 		Classification::where('name', $training->nama)->where('type', 'train')
 			->delete();
 		$training->delete();
-		Probability::truncate();
+		ProbabLabel::resetProbab();
 		return response()->json(['message' => 'Berhasil dihapus']);
 	}
 	public function clear()
 	{
 		try {
 			Classification::where('type', 'train')->delete();
-			Probability::truncate();
+			ProbabLabel::resetProbab();
 			TrainingData::truncate();
 			return response()->json(['message' => 'Berhasil dihapus']);
 		} catch (QueryException $e) {

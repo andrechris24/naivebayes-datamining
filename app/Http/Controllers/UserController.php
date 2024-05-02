@@ -92,15 +92,15 @@ class UserController extends Controller
 	 */
 	public function edit(User $user)
 	{
-		if($user===Auth::user())
-			return response()->json(['message'=>"Ini akun Anda"],302);
+		if ($user === Auth::user())
+			return response()->json(['message' => "Ini akun Anda"], 302);
 		return response()->json($user);
 	}
 
 	/**
 	 * Remove the specified resource from storage.
 	 */
-	public function destroy(Request $req,User $user)
+	public function destroy(Request $req, User $user)
 	{
 		$req->validate(User::$delrules);
 		if (Auth::user() === $user) {
