@@ -12,10 +12,11 @@ class ResultController extends Controller
 			return to_route('class.index')
 				->withWarning('Lakukan klasifikasi dulu sebelum melihat performa klasifikasi');
 		}
-		$data['train'] = $this->cm('train');
-		$data['test'] = $this->cm('test');
-		$performa['train'] = $this->performa($data['train']);
-		$performa['test'] = $this->performa($data['test']);
+		$data = ['train' => $this->cm('train'), 'test' => $this->cm('test')];
+		$performa = [
+			'train' => $this->performa($data['train']),
+			'test' => $this->performa($data['test'])
+		];
 		$stat = ProbabLabel::$label;
 		return view('main.performa', compact('data', 'performa', 'stat'));
 	}
@@ -31,11 +32,7 @@ class ResultController extends Controller
 			->where('real', false)->count(); //True Negative
 		$total = $tp + $fp + $fn + $tn;
 		return [
-			'tp' => $tp,
-			'fp' => $fp,
-			'fn' => $fn,
-			'tn' => $tn,
-			'total' => $total
+			'tp' => $tp, 'fp' => $fp, 'fn' => $fn, 'tn' => $tn, 'total' => $total
 		];
 	}
 	private static function performa(array $data)

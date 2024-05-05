@@ -26,7 +26,7 @@ class DatasetTemplate implements FromGenerator, WithStrictNullComparison
 					$subval[] = $sub->name;
 				}
 				$val[$attr->slug] = $subval;
-			} else $val[$attr->slug] = rand(0, 1);
+			} else $val[$attr->slug] = 0;
 		}
 		$col[] = 'Hasil';
 		$val['hasil'] = ProbabLabel::$label;

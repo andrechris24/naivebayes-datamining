@@ -20,9 +20,8 @@ class TrainingImport implements ToModel, WithHeadingRow, WithValidation
 	public function model(array $row)
 	{
 		$rows = [];
-		$atrib = Atribut::get();
-		$rows['nama'] = $row['nama'];
-		foreach ($atrib as $attr) {
+		$rows['nama'] = ucfirst($row['nama']);
+		foreach (Atribut::get() as $attr) {
 			if ($attr->type === 'categorical') {
 				if (empty($row[$attr->slug])) $row[$attr->slug] = null;
 				else {

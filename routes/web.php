@@ -3,6 +3,7 @@
 use App\Exports\DatasetTemplate,
 	App\Http\Controllers\AdminController,
 	App\Http\Controllers\AtributController,
+	App\Http\Controllers\AuthController,
 	App\Http\Controllers\ClassificationController,
 	App\Http\Controllers\NilaiAtributController,
 	App\Http\Controllers\ProbabilityController,
@@ -10,10 +11,6 @@ use App\Exports\DatasetTemplate,
 	App\Http\Controllers\TestingDataController,
 	App\Http\Controllers\TrainingDataController,
 	// App\Http\Controllers\UserController,
-	App\Livewire\Forgot,
-	App\Livewire\Login,
-	App\Livewire\Register,
-	App\Livewire\Reset,
 	Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -25,13 +22,22 @@ use App\Exports\DatasetTemplate,
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::middleware(['guest'])->group(function () {
-	Route::get('register', Register::class)->name('register');
-	Route::get('login', Login::class)->name('login');
+Route::middleware(['guest'])->controller(AuthController::class)->group(function () {
+	Route::prefix('register')->name('register')->group(function(){
+		Route::get('/','register');
+		Route::post('/','postRegister')->name('.submit');
+	});
+	Route::prefix('login')->name('login')->group(function (){
+		Route::get('/','login');
+		Route::post('/','postLogin')->name('.submit');
+	});
 	Route::prefix('password')->name('password.')->group(function () {
-		Route::get('/', Forgot::class)->name('forget');
-		Route::get('reset', Reset::class)->name('reset');
+		Route::get('/', 'forget')->name('forget');
+		Route::post('/','forgetLink')->name('send');
+		Route::prefix('reset')->group(function(){
+			Route::get('/','showReset')->name('change');
+			Route::patch('/','reset')->name('reset');
+		});
 	});
 });
 Route::middleware(['auth'])->group(function () {
@@ -39,10 +45,8 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('/', 'index')->name('home');
 		Route::prefix('profil')->name('profil.')->group(function () {
 			Route::get('/', 'edit')->name('index');
-			Route::middleware(['throttle:user'])->group(function () {
-				Route::post('/', 'update')->name('update');
-				Route::delete('/', 'delete')->name('delete');
-			});
+			Route::post('/', 'update')->name('update');
+			Route::delete('/', 'delete')->name('delete');
 		});
 		Route::post('logout', 'logout')->name('logout');
 	});

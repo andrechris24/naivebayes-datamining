@@ -16,7 +16,6 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
 
 	<!-- Vendor CSS -->
-	@livewireStyles
 	{{--
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -40,13 +39,6 @@
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"
 		integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-	<!-- Slider -->
-	<script src="{{asset('assets/js/nouislider.min.js')}}"></script>
-
-	<!--Notiflix-->
-	<script src="https://cdn.jsdelivr.net/npm/notiflix@3.2.7/dist/notiflix-aio-3.2.7.min.js"
-		integrity="sha256-G6sj3uSY1Rtnyomq54b5wiwwe2+A5Zym254DHutrXM4=" crossorigin="anonymous"></script>
-
 	<!-- Smooth scroll -->
 	<script src="{{asset('assets/js/smooth-scroll.polyfills.min.js')}}"></script>
 
@@ -58,7 +50,27 @@
 	<main>
 		<!-- Section -->
 		<section class="vh-lg-100 mt-5 mt-lg-0 bg-soft d-flex align-items-center">
-			<div class="container">{{$slot}}</div>
+			<div class="container">
+				<div class="row justify-content-center form-bg-image">
+					@yield('back')
+					<div class="col-12 d-flex align-items-center justify-content-center">
+						<div class="bg-white shadow border-0 rounded border-light p-4 p-lg-5 w-100 fmxw-500">
+							@hasSection('desc')
+							<h1 class="h3">@yield('header')</h1>
+							<p class="mb-4">@yield('desc')</p>
+							@else
+							<div class="text-center text-md-center mb-4 mt-md-0">
+								<h1 class="mb-0 h3">@yield('header')</h1>
+							</div>
+							@endif
+							<x-alert />
+							<x-no-script />
+							<x-caps-lock />
+							@yield('form')
+						</div>
+					</div>
+				</div>
+			</div>
 		</section>
 	</main>
 	<footer class="p-5 mb-4">
@@ -71,8 +83,7 @@
 		</div>
 	</footer>
 	<script type="text/javascript" src="{{ asset('assets/js/capslock.js') }}"></script>
-	@livewireScripts
-	@stack('js')
+	@yield('js')
 </body>
 
 </html>

@@ -24,7 +24,7 @@
 					Hasil klasifikasi akan direset!</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-tertiary" data-bs-dismiss="modal">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
 					<i class="fas fa-x"></i> Tidak
 				</button>
 				<button type="submit" class="btn btn-danger" form="reset-probab">
@@ -66,16 +66,16 @@
 	<div class="card-body">
 		@foreach ($attribs['atribut'] as $attr)
 		@php
-		$true = $false= $semua = 0.00000;
-		$tot = ['true'=>0,'false' => 0];
-		$list=['true'=>[],'false'=>[],'all'=>[]];
+		$true = $false = $semua = 0.00000;
+		$tot = ['true' => 0, 'false' => 0];
+		$list = ['true' => [],'false' => [],'all' => []];
 		$probab = $data->where('atribut_id', $attr->id)->first();
 		if($probab){
-		$probabs=[
-		'true'=>json_decode($probab->true),
-		'false'=>json_decode($probab->false),
-		'total'=>json_decode($probab->total)
-		];
+			$probabs = [
+			'true' => json_decode($probab->true),
+			'false' => json_decode($probab->false),
+			'total' => json_decode($probab->total)
+			];
 		}
 		@endphp
 		<div class="table-responsive">

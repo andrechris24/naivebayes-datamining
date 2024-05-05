@@ -60,6 +60,6 @@ class User extends Authenticatable
 			'email' => ['bail', 'required', 'email', 'unique:users'],
 			'current_password' => ['bail', 'required', 'current_password', 'between:8,20'],
 			'password' => ['bail', 'required', 'confirmed', 'between:8,20'],
-			'password_confirmation' => 'required',
+			'password_confirmation' => 'required'
 		];
 }

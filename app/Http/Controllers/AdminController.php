@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
@@ -54,8 +53,8 @@ class AdminController extends Controller
 			if (!empty($req['password']))
 				$req['password'] = Hash::make($req['password']);
 			else unset($req['password']);
-			$req['name'] = ucwords($req['name']);
-			$req['email'] = Str::lower($req['email']);
+			$req['name'] = ucfirst($req['name']);
+			$req['email'] = strtolower($req['email']);
 			User::findOrFail(Auth::id())->update($req);
 			return response()->json(['message' => 'Tersimpan', 'nama' => $req['name']]);
 		} catch (ModelNotFoundException) {
@@ -80,7 +79,7 @@ class AdminController extends Controller
 			Session::invalidate();
 			Session::regenerateToken();
 			Session::flash('success', "Akun sudah dihapus");
-			return response()->json(['message' => 'Akun sudah dihapus']);
+			return response()->json(['message' => 'Dihapus']);
 		} catch (ModelNotFoundException) {
 			return response()->json(['message' => 'Akun tidak ditemukan'], 404);
 		} catch (QueryException $db) {

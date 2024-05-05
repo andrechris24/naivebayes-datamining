@@ -55,7 +55,7 @@
 							<option value="test">Data Testing (Data Uji)</option>
 							<option value="all">Semua</option>
 						</select>
-						<div class="invalid-tooltip" id="reset-error"></div>
+						<div class="invalid-feedback" id="reset-error"></div>
 					</div>
 				</form>
 			</div>
@@ -81,7 +81,8 @@
 			</button>
 			<button class="btn btn-success dropdown-toggle" id="expBtn" type="button" data-bs-toggle="dropdown"
 				aria-expanded="false" disabled>
-				<i class="fas fa-download"></i> Ekspor <i class="fa-solid fa-caret-down"></i>
+				<i class="fas fa-download"></i> Ekspor 
+				<i class="fa-solid fa-caret-down"></i>
 			</button>
 			<ul class="dropdown-menu">
 				<li>
@@ -169,11 +170,11 @@
 			dataType: 'JSON',
 			url: "{{route('class.reset')}}",
 			beforeSend: function(){
-				Notiflix.Loading.standard('Mereset');
+				Notiflix.Block.standard('.modal-content','Mereset');
 				$('#reset-select').removeClass('is-invalid');
 			},
 			complete: function(){
-				Notiflix.Loading.remove();
+				Notiflix.Block.remove('.modal-content');
 			},
 			success: function () {
 				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
@@ -181,14 +182,15 @@
 				Notiflix.Notify.success("Berhasil direset");
 			},
 			error: function (xhr, st) {
-				if (xhr.status === 422 || xhr.status === 400){
+				if (xhr.status === 422 || xhr.status === 400)
 					errmsg = xhr.responseJSON.message;
-					$('#reset-select').addClass('is-invalid');
-					$("#reset-error").text(xhr.responseJSON.message);
-				} else {
+				else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
+				$('#reset-select').addClass('is-invalid');
+				$("#reset-error").text(xhr.responseJSON.message);
+				$("#modalResetClass").modal("handleUpdate"); 
 				Notiflix.Notify.failure('Gagal reset: ' + errmsg);
 			}
 		});
@@ -202,10 +204,10 @@
 			dataType: 'JSON',
 			beforeSend: function(){
 				resetvalidation();
-				Notiflix.Loading.standard('Menghitung');
+				Notiflix.Block.standard('.modal-content','Menghitung');
 			},
 			complete: function(){
-				Notiflix.Loading.remove();
+				Notiflix.Block.remove('.modal-content');
 			},
 			success: function (data) {
 				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
@@ -213,15 +215,16 @@
 				Notiflix.Notify.success("Berhasil dihitung");
 			},
 			error: function (xhr, st) {
-				if (xhr.status === 422 || xhr.status === 400){
+				if (xhr.status === 422 || xhr.status === 400)
 					errmsg = xhr.responseJSON.message;
-					$('#calc-select').addClass('is-invalid');
-					$("#calc-error").text(xhr.responseJSON.message);
-				} else {
+				else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Gagal hitung: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				Notiflix.Notify.failure(errmsg);
+				$('#calc-select').addClass('is-invalid');
+				$("#calc-error").text(xhr.responseJSON.message);
+				$("#modalCalcClass").modal("handleUpdate"); 
+				Notiflix.Notify.failure(`Gagal hitung: ${errmsg}`);
 			}
 		});
 	});

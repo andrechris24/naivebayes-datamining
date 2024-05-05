@@ -59,17 +59,15 @@ class ProbabilityController extends Controller
 
 			//Likelihood Start
 			foreach (NilaiAtribut::get() as $nilai) { //Categorical
-				if ($nilai->atribut->type === 'categorical') {
-					$ll[$nilai->name]['true'] = ($total['true'] === 0 ? 0 :
-						TrainingData::where($nilai->atribut->slug, $nilai->id)
-						->where('status', true)->count() / $total['true']);
-					$ll[$nilai->name]['false'] = ($total['false'] === 0 ? 0 :
-						TrainingData::where($nilai->atribut->slug, $nilai->id)
-						->where('status', false)->count() / $total['false']);
-					$ll[$nilai->name]['total'] =
-						TrainingData::where($nilai->atribut->slug, $nilai->id)->count() /
-						$total['all'];
-				}
+				$ll[$nilai->name]['true'] = ($total['true'] === 0 ? 0 :
+					TrainingData::where($nilai->atribut->slug, $nilai->id)
+					->where('status', true)->count() / $total['true']);
+				$ll[$nilai->name]['false'] = ($total['false'] === 0 ? 0 :
+					TrainingData::where($nilai->atribut->slug, $nilai->id)
+					->where('status', false)->count() / $total['false']);
+				$ll[$nilai->name]['total'] =
+					TrainingData::where($nilai->atribut->slug, $nilai->id)->count() /
+					$total['all'];
 				Probability::updateOrCreate([
 					'atribut_id' => $nilai->atribut_id, 'nilai_atribut_id' => $nilai->id
 				], [
@@ -80,6 +78,7 @@ class ProbabilityController extends Controller
 			}
 			foreach (Atribut::where('type', 'numeric')->get() as $nilainum) { //Numeric
 				$p = array_filter($this->getNumbers($nilainum->slug));
+				// if(empty($p)) continue;
 				if (count($p['true'])) {
 					$avg[$nilainum->name]['true'] = array_sum($p['true']) / count($p['true']);
 					$sd[$nilainum->name]['true'] =
@@ -117,11 +116,9 @@ class ProbabilityController extends Controller
 				return back()->withWarning(
 					'Probabilitas berhasil dihitung, tetapi terjadi kesalahan pada preprocessing.'
 				);
-			} else {
-				if ($pre > 0)
-					$msg = "Probabilitas berhasil dihitung. Preprocessing sudah dilakukan.";
-				else $msg = "Probabilitas berhasil dihitung";
-			}
+			} else if ($pre > 0)
+				$msg = "Probabilitas berhasil dihitung. Preprocessing sudah dilakukan.";
+			else $msg = "Probabilitas berhasil dihitung";
 			return back()->withSuccess($msg);
 		} catch (QueryException $e) {
 			Log::error($e);

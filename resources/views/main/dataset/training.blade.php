@@ -9,7 +9,7 @@
 				<h5 id="modalAddTrainingLabel" class="modal-title">
 					Tambah Data Training
 				</h5>
-				<button type="button" class="btn-close text-reset" data-bs-dismiss="modal" aria-label="Close"></button>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
 				<form id="addNewTrainingForm">@csrf
@@ -67,7 +67,9 @@
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="modalImportTrainingLabel" class="modal-title">Upload Data Training</h5>
+				<h5 id="modalImportTrainingLabel" class="modal-title">
+					Upload Data Training
+				</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
@@ -145,16 +147,17 @@
 			<div class="btn-group" role="group">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
 					aria-expanded="false">
-					<i class="fas fa-plus"></i> Tambah Data <i class="fa-solid fa-caret-down"></i>
+					<i class="fas fa-plus"></i> Tambah Data 
+					<i class="fa-solid fa-caret-down"></i>
 				</button>
 				<ul class="dropdown-menu">
 					<li>
-						<a class="dropdown-item" href="#modalAddTraining" data-bs-toggle="modal">
+						<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalAddTraining">
 							<i class="fas fa-pen"></i> Input Manual
 						</a>
 					</li>
 					<li>
-						<a class="dropdown-item" href="#modalImportTraining" data-bs-toggle="modal">
+						<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalImportTraining">
 							<i class="fas fa-upload"></i> Upload File
 						</a>
 					</li>
@@ -378,6 +381,7 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
+				$("#modalImportTraining").modal("handleUpdate");
 				Notiflix.Notify.failure("Gagal upload: "+errmsg);
 			}
 		});
@@ -417,9 +421,10 @@
 						$("#status-error").text(xhr.responseJSON.errors.status);
 					}
 					errmsg = xhr.responseJSON.message;
+					modalForm.modal("handleUpdate");
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Terjadi kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
+					errmsg = `Gagal: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
 				Notiflix.Notify.failure(errmsg);
 			}

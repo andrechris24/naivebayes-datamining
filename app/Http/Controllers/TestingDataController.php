@@ -82,7 +82,7 @@ class TestingDataController extends Controller
 		try {
 			$request->validate(TestingData::$rules);
 			foreach ($request->q as $id => $q) $req[$id] = $q;
-			$req['nama'] = $request->nama;
+			$req['nama'] = ucfirst($request->nama);
 			if ($request->status === 'auto') {
 				$hasil = ProbabLabel::hitungProbab($req);
 				$req['status'] = $hasil['predict'];

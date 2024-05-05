@@ -6,7 +6,9 @@
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="modalAddNilaiAtributLabel" class="modal-title">Tambah Nilai Atribut</h5>
+				<h5 id="modalAddNilaiAtributLabel" class="modal-title">
+					Tambah Nilai Atribut
+				</h5>
 				<button type="button" class="btn-close text-reset" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
@@ -255,9 +257,10 @@
 						$("#type-error").text(xhr.responseJSON.errors.atribut_id);
 					}
 					errmsg = xhr.responseJSON.message;
+					modalForm.modal("handleUpdate");
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Terjadi kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
+					errmsg = `Gagal: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
 				Notiflix.Notify.failure(errmsg);
 			}

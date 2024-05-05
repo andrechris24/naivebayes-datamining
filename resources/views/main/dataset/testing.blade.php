@@ -6,9 +6,7 @@
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="modalAddTestingLabel" class="modal-title">
-					Tambah Data Testing
-				</h5>
+				<h5 id="modalAddTestingLabel" class="modal-title">Tambah Data Testing</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
@@ -149,7 +147,8 @@
 			<div class="btn-group" role="group">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
 					aria-expanded="false">
-					<i class="fas fa-plus"></i> Tambah Data <i class="fa-solid fa-caret-down"></i>
+					<i class="fas fa-plus"></i> Tambah Data 
+					<i class="fa-solid fa-caret-down"></i>
 				</button>
 				<ul class="dropdown-menu">
 					<li>
@@ -287,7 +286,8 @@
 					error: function (xhr, st) {
 						console.warn(xhr.responseJSON.message ?? st);
 						Notiflix.Notify.failure(
-							`Gagal hapus: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
+							`Gagal hapus: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+						);
 					}
 				});
 			}
@@ -304,6 +304,12 @@
 					type: "DELETE",
 					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
 					url: 'testing/' + test_id,
+					beforeSend: function () {
+						Notiflix.Loading.standard('Menghapus');
+					},
+					complete: function () {
+						Notiflix.Loading.remove();
+					},
 					success: function () {
 						dt_testing.draw();
 						Notiflix.Notify.success("Berhasil dihapus");
@@ -377,6 +383,7 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
+				$('#modalImportTesting').modal("handleUpdate"); 
 				Notiflix.Notify.failure("Gagal upload: " +errmsg);
 			}
 		});
@@ -416,9 +423,10 @@
 						$("#result-error").text(xhr.responseJSON.errors.status);
 					}
 					errmsg = xhr.responseJSON.message;
+					modalForm.modal("handleUpdate"); 
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Terjadi kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
+					errmsg = `Gagal: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
 				Notiflix.Notify.failure(errmsg);
 			}

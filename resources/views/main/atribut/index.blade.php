@@ -259,9 +259,10 @@
 						$("#desc-error").text(xhr.responseJSON.errors.desc);
 					}
 					errmsg = xhr.responseJSON.message;
+					modalForm.modal("handleUpdate"); 
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Terjadi kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
+					errmsg = `Gagal: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
 				Notiflix.Notify.failure(errmsg);
 			}

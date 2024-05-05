@@ -20,7 +20,7 @@ class TestingImport implements ToModel, WithHeadingRow, WithValidation
 	public function model(array $row)
 	{
 		$rows = [];
-		$rows['nama'] = $row['nama'];
+		$rows['nama'] = ucfirst($row['nama']);
 		foreach (Atribut::get() as $attr) {
 			if ($attr->type === 'categorical') {
 				if (empty($row[$attr->slug])) $row[$attr->slug] = null;

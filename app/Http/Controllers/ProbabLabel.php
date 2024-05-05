@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Log;
 class ProbabLabel extends Controller
 {
 	public static array $label = [
-		0 => 'Tidak Layak',	//false: Mampu/Tidak Layak
-		1 => 'Layak'				//true : Tidak Mampu/Layak
+		0 => 'Tidak Layak',	//false: Tidak berhak mendapatkan bantuan sosial
+		1 => 'Layak'				//true : Berhak mendapatkan bantuan sosial
 	];
 	public static function preprocess(string $type)
 	{ //Impute missing values
@@ -31,6 +31,7 @@ class ProbabLabel extends Controller
 					else { //Jika Kategorikal, paling sering muncul yang dicari
 						$most = $data->select($attr->slug)->groupBy($attr->slug)
 							->orderByRaw("COUNT(*) desc")->first();
+						// if(empty($most[$attr->slug])) continue;
 					}
 					$data->whereNull($attr->slug)
 						->update([$attr->slug => $most[$attr->slug] ?? $avg]);
@@ -105,8 +106,10 @@ class ProbabLabel extends Controller
 		 * Rumus: Prior dikali Likelihood, lalu dibagi Evidence
 		 * Jika Evidence 0, maka nilai posteriornya 0
 		 */
-		$posterior['true'] = ($prior['true'] * $likelihood['true']) / $evidence;
-		$posterior['false'] = ($prior['false'] * $likelihood['false']) / $evidence;
+		$posterior = [
+			'true' => ($prior['true'] * $likelihood['true']) / $evidence,
+			'false' => ($prior['false'] * $likelihood['false']) / $evidence
+		];
 
 		$predict = $posterior['true'] >= $posterior['false'];
 		return [

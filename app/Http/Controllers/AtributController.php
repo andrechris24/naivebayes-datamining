@@ -71,12 +71,9 @@ class AtributController extends Controller
 			}
 		} catch (QueryException $e) {
 			if (in_array($e->errorInfo[1], [1060, 1062])) {
-				$err = "Nama Atribut sudah digunakan";
-				if (!empty($request->id))
-					$err .= '. Gunakan nama yang lain jika Anda ingin mengganti tipe atribut.';
 				return response()->json([
 					'message' => "Nama Atribut \"$request->name\" sudah digunakan",
-					'errors' => ['name' => $err]
+					'errors' => ['name' => "Nama Atribut sudah digunakan"]
 				], 422);
 			}
 			Log::error($e);
@@ -117,25 +114,30 @@ class AtributController extends Controller
 	}
 	private function editColumn(string $tabel, $attr, array $req): void
 	{
-		Schema::table($tabel, function (Blueprint $table) use ($attr, $req) {
-			if ($attr->type !== $req['type']) {
-				if ($req['type'] === 'numeric') {
+		if ($attr->type !== $req['type']) {
+			Schema::table($tabel, function (Blueprint $table) use ($attr, $req) {
+				if ($req['type'] === 'numeric')
 					$table->dropConstrainedForeignId($attr->slug);
+				else $table->dropColumn($attr->slug);
+			});
+			Schema::table($tabel, function (Blueprint $table) use ($attr, $req) {
+				if ($req['type'] === 'numeric')
 					$table->integer($req['slug'])->nullable()->after('nama');
-				} else {
-					$table->dropColumn($attr->slug);
+				else {
 					$table->foreignId($req['slug'])->nullable()->constrained('nilai_atributs')
 						->nullOnDelete()->cascadeOnUpdate()->after('nama');
 				}
-			} else if ($attr->name !== $req['name']) {
-				if ($attr->type === 'categorical') $table->dropForeign([$attr->slug]);
+			});
+		} else if ($attr->name !== $req['name']) {
+			Schema::table($tabel, function (Blueprint $table) use ($attr, $req) {
 				$table->renameColumn($attr->slug, $req['slug']);
-				if ($req['type'] === 'categorical') {
+				if ($attr->type === 'categorical' && $req['type'] === 'categorical') {
+					$table->dropForeign([$attr->slug]);
 					$table->foreign($req['slug'])->references('id')->on('nilai_atributs')
 						->nullOnDelete()->cascadeOnUpdate();
 				}
-			}
-		});
+			});
+		}
 	}
 	private function delColumn(string $tabel, $attr): void
 	{

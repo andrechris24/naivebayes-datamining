@@ -6,7 +6,9 @@
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header bg-danger">
-				<h5 id="modalDelAkunLabel" class="modal-title text-white">Hapus Pengguna?</h5>
+				<h5 id="modalDelAkunLabel" class="modal-title text-white">
+					Hapus Pengguna?
+				</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
@@ -241,7 +243,7 @@
 					errmsg = "Pengguna yang Anda edit tidak ditemukan";
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Terjadi kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
+					errmsg = `Gagal: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
 				Notiflix.Notify.failure(errmsg);
 			}
@@ -277,6 +279,7 @@
 				}
 				$("#password-conf").addClass('is-invalid');
 				$("#del-error").text(errmsg);
+				$("#modalDelAkun").modal("handleUpdate"); 
 				Notiflix.Notify.failure(errmsg);
 			}
 		});

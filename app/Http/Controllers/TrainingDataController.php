@@ -11,6 +11,7 @@ use App\Models\Probability;
 use App\Models\TrainingData;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -80,7 +81,7 @@ class TrainingDataController extends Controller
 		try {
 			$request->validate(TrainingData::$rules);
 			foreach ($request->q as $id => $q) $req[$id] = $q;
-			$req['nama'] = $request->nama;
+			$req['nama'] = ucfirst($request->nama);
 			$req['status'] = $request->status;
 			ProbabLabel::resetProbab();
 			if (!empty($request->id)) {
@@ -91,6 +92,7 @@ class TrainingDataController extends Controller
 				return response()->json(['message' => 'Berhasil disimpan']);
 			}
 		} catch (QueryException $e) {
+			Log::error($e);
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
 	}

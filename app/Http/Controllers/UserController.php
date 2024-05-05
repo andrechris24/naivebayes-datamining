@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -38,8 +37,8 @@ class UserController extends Controller
 	{
 		try {
 			$req = $request->all();
-			$req['name'] = ucwords($req['name']);
-			$req['email'] = Str::lower($req['email']);
+			$req['name'] = ucfirst($req['name']);
+			$req['email'] = strtolower($req['email']);
 			if (!empty($request->id)) { // update the value
 				if (Auth::id() === $request->id) {
 					return response()->json([
