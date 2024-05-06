@@ -64,9 +64,11 @@ class AuthController extends Controller
 			$request->validate(User::$forgetrules);
 			$status = Password::sendResetLink($request->only('email'));
 			if ($status === Password::RESET_LINK_SENT)
-				return back()->withSuccess(__('passwords.sent'));
-			elseif ($status === Password::RESET_THROTTLED)
-				return back()->withInput()->withError(__('passwords.throttled'));
+				return back()->withSuccess("Link reset password sudah dikirim");
+			elseif ($status === Password::RESET_THROTTLED){
+				return back()->withInput()
+					->withError("Tunggu beberapa saat sebeelum mencoba lagi.");
+			}
 		} catch (TransportException $err) {
 			Log::error($err);
 			return back()->withInput()->withError("Gagal mengirim link reset password:")
@@ -86,9 +88,7 @@ class AuthController extends Controller
 			$enctoken = DB::table('password_reset_tokens')
 				->where('email', $_GET['email'])->first();
 			if ($enctoken === null)
-				return to_route('password.request')->withError(__('passwords.user'));
-			if (!Hash::check($_GET['token'], $enctoken->token))
-				return to_route('password.request')->withError(__('passwords.token'));
+				return to_route('password.request')->withError("Pengguna tidak ditemukan");
 			return view(
 				'auth.reset',
 				['token' => $_GET['token'], 'email' => $_GET['email']]
@@ -96,7 +96,8 @@ class AuthController extends Controller
 		} catch (QueryException $e) {
 			Log::error($e);
 			return to_route('password.request')
-			->withError("Gagal memuat halaman reset password:")->withErrors($e->errorInfo);
+			->withError("Gagal memuat halaman reset password:")
+			->withErrors($e->errorInfo);
 		}
 	}
 	public function reset(Request $request)
@@ -112,11 +113,11 @@ class AuthController extends Controller
 				}
 			);
 			if ($status === Password::PASSWORD_RESET)
-				return to_route('login')->withSuccess(__('passwords.reset'));
+				return to_route('login')->withSuccess("Password Anda sudah direset");
 			elseif ($status === Password::INVALID_TOKEN)
-				return back()->withError(__('passwords.token'));
+				return back()->withError("Token reset password tidak valid");
 			elseif ($status === Password::INVALID_USER)
-				return back()->withError(__('passwords.user'));
+				return back()->withError("Pengguna tidak ditemukan");
 			return back()->withError('Reset password gagal: Kesalahan tidak diketahui');
 		} catch (QueryException $e) {
 			Log::error($e);

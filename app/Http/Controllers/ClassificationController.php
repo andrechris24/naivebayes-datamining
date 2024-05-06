@@ -108,10 +108,10 @@ class ClassificationController extends Controller
 		if ($type === 'train') {
 			if (TrainingData::count() === 0) return false;
 			$data = TrainingData::get();
-		} else {
+		} elseif ($type === 'test') {
 			if (TestingData::count() === 0) return false;
 			$data = TestingData::get();
-		}
+		}else return false;
 		return $data;
 	}
 }

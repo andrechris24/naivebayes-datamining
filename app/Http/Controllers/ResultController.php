@@ -9,8 +9,8 @@ class ResultController extends Controller
 	public function __invoke()
 	{
 		if (Classification::count() === 0) {
-			return to_route('class.index')
-				->withWarning('Lakukan klasifikasi dulu sebelum melihat performa klasifikasi');
+			return to_route('class.index')->withWarning(
+				'Lakukan klasifikasi dulu sebelum melihat performa klasifikasi');
 		}
 		$data = ['train' => $this->cm('train'), 'test' => $this->cm('test')];
 		$performa = [

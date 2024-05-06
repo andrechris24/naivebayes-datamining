@@ -5,9 +5,9 @@
 	<a href="{{route('probab.create')}}" class="btn btn-primary">
 		<i class="fas fa-calculator"></i> Hitung
 	</a>
-	<a href="#modalResetProbab" class="btn btn-danger" data-bs-toggle="modal">
+	<button type="button" data-bs-toggle="modal" data-bs-target="#modalResetProbab" @class(['btn','btn-danger','disabled'=>count($data)===0])>
 		<i class="fas fa-arrow-rotate-right"></i> Reset
-	</a>
+	</button>
 </div>
 <div class="modal fade" tabindex="-1" id="modalResetProbab" aria-labelledby="modalResetProbabLabel"
 	role="dialog" aria-hidden="true">
@@ -55,7 +55,7 @@
 				</tr>
 				<tr class="table-secondary">
 					<td>Total</td>
-					<td>{{$kelas['false'] + $kelas['true']}}</td>
+					<td>{{array_sum($kelas)}}</td>
 				</tr>
 			</tbody>
 		</table>

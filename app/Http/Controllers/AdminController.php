@@ -62,7 +62,7 @@ class AdminController extends Controller
 		} catch (QueryException $e) {
 			if ($e->errorInfo[1] === 1062) {
 				return response()->json([
-					'message' => "Email $request->email sudah digunakan",
+					'message' => "Email \"$request->email\" sudah digunakan",
 					'errors' => ['email' => "Email sudah digunakan"]
 				], 422);
 			}

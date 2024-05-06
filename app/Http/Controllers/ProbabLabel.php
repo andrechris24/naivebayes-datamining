@@ -110,12 +110,10 @@ class ProbabLabel extends Controller
 			'true' => ($prior['true'] * $likelihood['true']) / $evidence,
 			'false' => ($prior['false'] * $likelihood['false']) / $evidence
 		];
-
-		$predict = $posterior['true'] >= $posterior['false'];
 		return [
 			'true' => $posterior['true'],
 			'false' => $posterior['false'],
-			'predict' => $predict
+			'predict' => $posterior['true'] >= $posterior['false']
 		];
 	}
 	public static function resetProbab(): void

@@ -76,7 +76,7 @@
 			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCalcClass">
 				<i class="fas fa-calculator"></i> Hitung
 			</button>
-			<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalResetClass">
+			<button type="button" class="btn btn-danger" id="resetBtn" data-bs-toggle="modal" data-bs-target="#modalResetClass">
 				<i class="fa-solid fa-arrow-rotate-right"></i> Reset
 			</button>
 			<button class="btn btn-success dropdown-toggle" id="expBtn" type="button" data-bs-toggle="dropdown"
@@ -151,9 +151,13 @@
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
 				},
 				drawCallback: function(){
-					if(this.api().page.info().recordsTotal===0)
+					if(this.api().page.info().recordsTotal===0){
 						$('#expBtn').prop('disabled',true);
-					else $('#expBtn').prop('disabled',false);
+						$("#resetBtn").prop('disabled',true);
+					}	else {
+						$('#expBtn').prop('disabled',false);
+						$("#resetBtn").prop('disabled',false);
+					}
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message, techNote);

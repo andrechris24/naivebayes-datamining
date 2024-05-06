@@ -249,8 +249,13 @@
 				errorDT(message, techNote);
 			}).on('xhr', function () {
 				$.get("{{ route('testing.count') }}", function (data) {
-					if(data.total===0) $('#dlBtn').addClass('disabled');
-					else $('#dlBtn').removeClass('disabled');
+					if(data.total===0) {
+						$('#dlBtn').addClass('disabled');
+						$("#delete-all").prop('disabled',true);
+					}	else {
+						$('#dlBtn').removeClass('disabled');
+						$("#delete-all").prop('disabled',false);
+					}
 					$("#total-counter").text(data.total);
 					$('#total-duplicate').text(data.duplicate);
 				}).fail(function (xhr, st) {

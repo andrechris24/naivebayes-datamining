@@ -66,7 +66,6 @@ class UserController extends Controller
 			} else {
 				$request->validate(User::$userrules);
 				$req['password'] = Hash::make($req['password']);
-				// $req['email_verified_at'] = Carbon::now()->timestamp;
 				$users = User::create($req);
 				return response()->json(["message" => 'Berhasil dibuat']);
 			}

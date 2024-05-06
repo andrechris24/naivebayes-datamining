@@ -41,8 +41,8 @@ class ProbabilityController extends Controller
 	{
 		try {
 			if (TrainingData::count() === 0) {
-				return to_route("training.index")
-					->withWarning('Masukkan Data Training dulu sebelum menghitung Probabilitas');
+				return to_route("training.index")->withWarning(
+					'Masukkan Data Training dulu sebelum menghitung Probabilitas');
 			}
 
 			//Preprocessor Start
@@ -142,7 +142,8 @@ class ProbabilityController extends Controller
 	private static function getNumbers(string $col)
 	{
 		$data = ['true' => array(), 'false' => array(), 'all' => array()];
-		foreach (TrainingData::select($col, 'status')->whereNotNull($col)->get() as $train) {
+		$trainData=TrainingData::select($col, 'status')->whereNotNull($col)->get();
+		foreach ($trainData as $train) {
 			if ($train['status'] == true) $data['true'][] = $train[$col];
 			else $data['false'][] = $train[$col];
 			$data['all'][] = $train[$col];
