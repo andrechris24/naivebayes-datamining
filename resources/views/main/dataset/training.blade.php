@@ -42,7 +42,7 @@
 							<option value="1">{{$hasil[true]}}</option>
 							<option value="0">{{$hasil[false]}}</option>
 						</select>
-						<label for="trainResult">Hasil</label>
+						<label for="trainResult">Status</label>
 						<div class="invalid-feedback" id="result-error"></div>
 					</div>
 				</form>
@@ -180,7 +180,7 @@
 						{{$attr->name}}
 					</th>
 					@endforeach
-					<th>Hasil</th>
+					<th>Status</th>
 					<th>Aksi</th>
 				</tr>
 			</thead>

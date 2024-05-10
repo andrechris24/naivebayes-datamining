@@ -36,7 +36,7 @@ class TestingImport implements ToModel, WithHeadingRow, WithValidation
 			$rows[$attr->slug] = $row[$attr->slug];
 		}
 		$rows['status'] = array_search( //array_search dengan teknik case insensitive
-			strtolower(trim($row['hasil'])),
+			strtolower(trim($row['status'])),
 			array_map('strtolower', ProbabLabel::$label)
 		);
 		return new TestingData($rows);
@@ -48,7 +48,7 @@ class TestingImport implements ToModel, WithHeadingRow, WithValidation
 			if ($attr->type === 'categorical') $rules[$attr->slug] = 'string';
 			else $rules[$attr->slug] = 'numeric';
 		}
-		$rules['hasil'] = 'required';
+		$rules['status'] = 'required';
 		return $rules;
 	}
 }

@@ -84,6 +84,11 @@ class TestingDataController extends Controller
 			foreach ($request->q as $id => $q) $req[$id] = $q;
 			$req['nama'] = ucfirst($request->nama);
 			if ($request->status === 'auto') {
+				if(Probability::count()===0) {
+					return response()->json([
+						'message' => "Probabilitas belum dihitung"
+					], 400);
+				}
 				$hasil = ProbabLabel::hitungProbab($req);
 				$req['status'] = $hasil['predict'];
 			} else $req['status'] = $request->status;

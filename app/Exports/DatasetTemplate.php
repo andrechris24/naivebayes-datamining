@@ -28,8 +28,8 @@ class DatasetTemplate implements FromGenerator, WithStrictNullComparison
 				$val[$attr->slug] = $subval;
 			} else $val[$attr->slug] = 0;
 		}
-		$col[] = 'Hasil';
-		$val['hasil'] = ProbabLabel::$label;
+		$col[] = 'Status';
+		$val['status'] = ProbabLabel::$label;
 		yield $col;
 		yield $val;
 	}

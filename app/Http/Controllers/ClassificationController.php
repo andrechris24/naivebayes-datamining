@@ -42,9 +42,8 @@ class ClassificationController extends Controller
 			if (Probability::count() === 0)
 				return response()->json(['message' => 'Probabilitas belum dihitung'], 400);
 
-			//Preprocessor Start
+			//Preprocessor
 			if ($request->tipe === 'test') $pre = ProbabLabel::preprocess('test');
-			//Preprocessor End
 
 			$semuadata = $this->getData($request->tipe); //Dataset
 			if (!$semuadata) {
@@ -108,10 +107,10 @@ class ClassificationController extends Controller
 		if ($type === 'train') {
 			if (TrainingData::count() === 0) return false;
 			$data = TrainingData::get();
-		} elseif ($type === 'test') {
+		} else {
 			if (TestingData::count() === 0) return false;
 			$data = TestingData::get();
-		}else return false;
+		}
 		return $data;
 	}
 }

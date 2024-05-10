@@ -43,7 +43,7 @@
 								Pilih otomatis
 							</option>
 						</select>
-						<label for="testResult">Hasil</label>
+						<label for="testResult">Status</label>
 						<div class="invalid-feedback" id="result-error"></div>
 					</div>
 				</form>
@@ -180,7 +180,7 @@
 						{{$attr->name}}
 					</th>
 					@endforeach
-					<th>Hasil</th>
+					<th>Status</th>
 					<th>Aksi</th>
 				</tr>
 			</thead>
@@ -429,7 +429,11 @@
 					}
 					errmsg = xhr.responseJSON.message;
 					modalForm.modal("handleUpdate"); 
-				} else {
+				} else if(xhr.status === 400) {
+					$("#testResult").addClass("is-invalid");
+					$("#result-error").text("Probabilitas belum dihitung");
+					errmsg=xhr.responseJSON.message;
+				}	else {
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Gagal: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}

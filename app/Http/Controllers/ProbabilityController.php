@@ -44,10 +44,7 @@ class ProbabilityController extends Controller
 				return to_route("training.index")->withWarning(
 					'Masukkan Data Training dulu sebelum menghitung Probabilitas');
 			}
-
-			//Preprocessor Start
-			$pre = ProbabLabel::preprocess('train');
-			//Preprocessor End
+			$pre = ProbabLabel::preprocess('train');//Preprocessor
 
 			//Prior start
 			$total = [
@@ -78,7 +75,7 @@ class ProbabilityController extends Controller
 			}
 			foreach (Atribut::where('type', 'numeric')->get() as $nilainum) { //Numeric
 				$p = array_filter($this->getNumbers($nilainum->slug));
-				// if(empty($p)) continue;
+				if(empty($p)) continue;
 				if (count($p['true'])) {
 					$avg[$nilainum->name]['true'] = array_sum($p['true']) / count($p['true']);
 					$sd[$nilainum->name]['true'] =

@@ -2,7 +2,7 @@
 @section('title','Hasil Klasifikasi')
 @section('content')
 <div class="modal fade" tabindex="-1" id="modalCalcClass" aria-labelledby="modalCalcClassLabel" role="dialog"
-	aria-hidden="true">
+	data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -35,7 +35,7 @@
 	</div>
 </div>
 <div class="modal fade" tabindex="-1" id="modalResetClass" aria-labelledby="modalResetClassLabel" role="dialog"
-	aria-hidden="true">
+	data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 		<div class="modal-content">
 			<div class="modal-header bg-danger">

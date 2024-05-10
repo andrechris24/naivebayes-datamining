@@ -20,7 +20,7 @@ implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping, WithStrict
 		$col[] = '#';
 		$col[] = "Nama";
 		foreach (Atribut::get() as $value) $col[] = $value->name;
-		$col[] = "Hasil";
+		$col[] = "Status";
 		return $col;
 	}
 	/**

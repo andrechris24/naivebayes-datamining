@@ -15,9 +15,9 @@ return new class extends Migration
 	{
 		Schema::create('probabilities', function (Blueprint $table) {
 			$table->id();
-			$table->foreignIdFor(Atribut::class)->cascadeOnDelete();
+			$table->foreignIdFor(Atribut::class)->constrained()->cascadeOnDelete();
 			$table->foreignIdFor(NilaiAtribut::class)->nullable()
-				->cascadeOnDelete()->comment('Kategorikal saja');
+				->constrained()->cascadeOnDelete()->comment('Kategorikal saja');
 			$table->jsonb('true');
 			$table->jsonb('false');
 			$table->jsonb('total');

@@ -14,7 +14,7 @@ return new class extends Migration
 	{
 		Schema::create('nilai_atributs', function (Blueprint $table) {
 			$table->id();
-			$table->foreignIdFor(Atribut::class)->cascadeOnDelete();
+			$table->foreignIdFor(Atribut::class)->constrained()->cascadeOnDelete();
 			$table->string('name', 99);
 			$table->timestamps();
 		});
