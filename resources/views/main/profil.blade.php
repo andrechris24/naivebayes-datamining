@@ -17,8 +17,8 @@
 					Jika sudah yakin, masukkan password Anda untuk melanjutkan.</p>
 				<form id="DelAkunForm">@csrf
 					<div class="position-relative">
-						<input type="password" class="form-control" id="password-conf" minlength="8"
-						maxlength="20" name="confirm_pass" placeholder="Password Anda" required>
+						<input type="password" class="form-control" id="password-conf" minlength="8" maxlength="20"
+							name="confirm_pass" placeholder="Password Anda" required>
 						<div class="invalid-feedback" id="del-error"></div>
 					</div>
 				</form>
@@ -42,8 +42,8 @@
 			<div class="row">
 				<div class="col-lg-3"><label for="name">Nama</label></div>
 				<div class="col-lg-9">
-					<input class="form-control" id="name" type="text" name="name" 
-					placeholder="Masukkan Nama Anda" value="{{ auth()->user()->name }}" required>
+					<input class="form-control" id="name" type="text" name="name" placeholder="Masukkan Nama Anda"
+						value="{{ auth()->user()->name }}" required>
 					<div class="invalid-feedback" id="name-error"></div>
 				</div>
 			</div>
@@ -52,8 +52,8 @@
 			<div class="row">
 				<div class="col-lg-3"><label for="email">Email</label></div>
 				<div class="col-lg-9">
-					<input class="form-control" id="email" type="email" name="email" 
-					placeholder="email@example.com" value="{{ auth()->user()->email }}" required>
+					<input class="form-control" id="email" type="email" name="email" placeholder="email@example.com"
+						value="{{ auth()->user()->email }}" required>
 					<div class="invalid-feedback" id="email-error"></div>
 				</div>
 			</div>
@@ -64,8 +64,8 @@
 					<label for="password-current">Password Anda</label>
 				</div>
 				<div class="col-lg-9">
-					<input class="form-control" id="password-current" type="password" 
-					minlength="8" maxlength="20" placeholder="Password Anda" name="current_password" required>
+					<input class="form-control" id="password-current" type="password" minlength="8" maxlength="20"
+						placeholder="Password Anda" name="current_password" required>
 					<div class="invalid-feedback" id="current-password-error"></div>
 				</div>
 			</div>
@@ -194,7 +194,7 @@
 				}
 				$("#password-conf").addClass('is-invalid');
 				$("#del-error").text(xhr.responseJSON.message);
-				$("#DelAkunForm").modal("handleUpdate"); 
+				$("#DelAkunForm").modal("handleUpdate");
 				Notiflix.Notify.failure(errmsg);
 			}
 		});

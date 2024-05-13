@@ -14,11 +14,10 @@ class AtributSeeder extends Seeder
 	{
 		Atribut::insert([
 			[
-				'name' => 'Kepemilikan Rumah', 
-				'slug' => 'kepemilikan_rumah', 
+				'name' => 'Kepemilikan Rumah',
+				'slug' => 'kepemilikan_rumah',
 				'type' => 'categorical'
-			],
-			['name' => 'Pekerjaan', 'slug' => 'pekerjaan', 'type' => 'categorical'],
+			], ['name' => 'Pekerjaan', 'slug' => 'pekerjaan', 'type' => 'categorical'],
 			['name' => 'Penghasilan', 'slug' => 'penghasilan', 'type' => 'numeric'],
 			['name' => 'Listrik', 'slug' => 'listrik', 'type' => 'categorical'],
 			['name' => 'Tanggungan', 'slug' => 'tanggungan', 'type' => 'numeric']

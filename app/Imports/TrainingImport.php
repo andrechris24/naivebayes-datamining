@@ -49,7 +49,7 @@ class TrainingImport implements ToModel, WithHeadingRow, WithValidation
 			if ($attr->type === 'categorical') $rules[$attr->slug] = 'string';
 			else $rules[$attr->slug] = 'numeric';
 		}
-		$rules['status'] = ['bail','required',Rule::in(ProbabLabel::$label)];
+		$rules['status'] = ['bail', 'required', Rule::in(ProbabLabel::$label)];
 		return $rules;
 	}
 }

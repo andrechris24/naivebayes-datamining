@@ -65,7 +65,7 @@ class AuthController extends Controller
 			$status = Password::sendResetLink($request->only('email'));
 			if ($status === Password::RESET_LINK_SENT)
 				return back()->withSuccess("Link reset password sudah dikirim");
-			elseif ($status === Password::RESET_THROTTLED){
+			elseif ($status === Password::RESET_THROTTLED) {
 				return back()->withInput()
 					->withError("Tunggu beberapa saat sebeelum mencoba lagi.");
 			}
@@ -96,8 +96,8 @@ class AuthController extends Controller
 		} catch (QueryException $e) {
 			Log::error($e);
 			return to_route('password.request')
-			->withError("Gagal memuat halaman reset password:")
-			->withErrors($e->errorInfo);
+				->withError("Gagal memuat halaman reset password:")
+				->withErrors($e->errorInfo);
 		}
 	}
 	public function reset(Request $request)

@@ -4,7 +4,8 @@
 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 	<li class="nav-item" role="presentation">
 		<button @class(['nav-link','active'=>$data['test']['total']>0]) id="pills-testing-tab"
-			data-bs-toggle="pill" data-bs-target="#pills-testing" type="button" role="tab" aria-controls="pills-testing" @if($data['test']['total']>0) aria-selected="true" 
+			data-bs-toggle="pill" data-bs-target="#pills-testing" type="button" role="tab"
+			aria-controls="pills-testing" @if($data['test']['total']>0) aria-selected="true"
 			@else aria-selected="false" disabled @endif >
 			Data Testing
 		</button>
@@ -79,8 +80,8 @@
 							<div class="progress progress-xl">
 								<div class="progress-bar bg-info" role="progressbar"
 									style="width: {{round($performa['test']['accuracy'], 2)}}%;"
-									aria-valuenow="{{round($performa['test']['accuracy'], 2)}}" 
-									aria-valuemin="0" aria-valuemax="100"></div>
+									aria-valuenow="{{round($performa['test']['accuracy'], 2)}}" aria-valuemin="0"
+									aria-valuemax="100"></div>
 							</div>
 						</div>
 						<div class="progress-wrapper">
@@ -95,8 +96,8 @@
 							<div class="progress progress-xl">
 								<div class="progress-bar bg-warning" role="progressbar"
 									style="width: {{round($performa['test']['precision'], 2)}}%;"
-									aria-valuenow="{{round($performa['test']['precision'], 2)}}" 
-									aria-valuemin="0" aria-valuemax="100"></div>
+									aria-valuenow="{{round($performa['test']['precision'], 2)}}" aria-valuemin="0"
+									aria-valuemax="100"></div>
 							</div>
 						</div>
 						<div class="progress-wrapper">
@@ -111,8 +112,8 @@
 							<div class="progress progress-xl">
 								<div class="progress-bar bg-danger" role="progressbar"
 									style="width: {{round($performa['test']['recall'], 2)}}%;"
-									aria-valuenow="{{round($performa['test']['recall'], 2)}}" 
-									aria-valuemin="0" aria-valuemax="100"></div>
+									aria-valuenow="{{round($performa['test']['recall'], 2)}}" aria-valuemin="0"
+									aria-valuemax="100"></div>
 							</div>
 						</div>
 						<div class="progress-wrapper">
@@ -127,8 +128,8 @@
 							<div class="progress progress-xl">
 								<div class="progress-bar bg-success" role="progressbar"
 									style="width: {{round($performa['test']['f1'],2)}}%;"
-									aria-valuenow="{{round($performa['test']['f1'],2)}}" 
-									aria-valuemin="0" aria-valuemax="100"></div>
+									aria-valuenow="{{round($performa['test']['f1'],2)}}" aria-valuemin="0" aria-valuemax="100">
+								</div>
 							</div>
 						</div>
 					</div>
@@ -196,8 +197,8 @@
 							<div class="progress progress-xl">
 								<div class="progress-bar bg-info" role="progressbar"
 									style="width: {{round($performa['train']['accuracy'], 2)}}%;"
-									aria-valuenow="{{round($performa['train']['accuracy'], 2)}}"
-									aria-valuemin="0" aria-valuemax="100"></div>
+									aria-valuenow="{{round($performa['train']['accuracy'], 2)}}" aria-valuemin="0"
+									aria-valuemax="100"></div>
 							</div>
 						</div>
 						<div class="progress-wrapper">
@@ -212,8 +213,8 @@
 							<div class="progress progress-xl">
 								<div class="progress-bar bg-warning" role="progressbar"
 									style="width: {{round($performa['train']['precision'], 2)}}%;"
-									aria-valuenow="{{round($performa['train']['precision'], 2)}}" 
-									aria-valuemin="0" aria-valuemax="100"></div>
+									aria-valuenow="{{round($performa['train']['precision'], 2)}}" aria-valuemin="0"
+									aria-valuemax="100"></div>
 							</div>
 						</div>
 						<div class="progress-wrapper">
@@ -228,8 +229,8 @@
 							<div class="progress progress-xl">
 								<div class="progress-bar bg-danger" role="progressbar"
 									style="width: {{round($performa['train']['recall'], 2)}}%;"
-									aria-valuenow="{{round($performa['train']['recall'], 2)}}" 
-									aria-valuemin="0" aria-valuemax="100"></div>
+									aria-valuenow="{{round($performa['train']['recall'], 2)}}" aria-valuemin="0"
+									aria-valuemax="100"></div>
 							</div>
 						</div>
 						<div class="progress-wrapper">
@@ -244,8 +245,8 @@
 							<div class="progress progress-xl">
 								<div class="progress-bar bg-success" role="progressbar"
 									style="width: {{round($performa['train']['f1'],2)}}%;"
-									aria-valuenow="{{round($performa['train']['f1'],2)}}" 
-									aria-valuemin="0" aria-valuemax="100"></div>
+									aria-valuenow="{{round($performa['train']['f1'],2)}}" aria-valuemin="0" aria-valuemax="100">
+								</div>
 							</div>
 						</div>
 					</div>

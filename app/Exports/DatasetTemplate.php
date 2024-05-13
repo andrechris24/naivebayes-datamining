@@ -17,20 +17,24 @@ class DatasetTemplate implements FromGenerator, WithStrictNullComparison
 	public function generator(): Generator
 	{
 		$col[] = 'Nama';
-		$val['nama'] = Auth::user()->name;
+		$totalattr = array();
 		foreach (Atribut::get() as $attr) {
-			$subval = [];
+			$totalattr[] = NilaiAtribut::where('atribut_id', $attr->id)->count();
 			$col[] = $attr->name;
-			if ($attr->type === 'categorical') {
-				foreach (NilaiAtribut::where('atribut_id', $attr->id)->get() as $sub) {
-					$subval[] = $sub->name;
-				}
-				$val[$attr->slug] = $subval;
-			} else $val[$attr->slug] = 0;
 		}
 		$col[] = 'Status';
-		$val['status'] = ProbabLabel::$label;
 		yield $col;
-		yield $val;
+		for ($a = 0; $a < collect($totalattr)->max(); $a++) {
+			$val['nama'] = Auth::user()->name;
+			foreach (Atribut::get() as $attr) {
+				if ($attr->type === 'categorical') {
+					$subval = NilaiAtribut::where('atribut_id', $attr->id)->get();
+					$count = count($subval);
+					$val[$attr->slug] = $subval[$a % $count]->name;
+				} else $val[$attr->slug] = rand(0, 1);
+			}
+			$val['status'] = ProbabLabel::$label[$a % 2];
+			yield $val;
+		}
 	}
 }

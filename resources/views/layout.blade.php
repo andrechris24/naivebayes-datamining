@@ -116,8 +116,7 @@
 						</span>
 					</a>
 				</li>
-				<li @class(["nav-item",
-				'active'=>Request::segment(1)=='atribut'&&empty(Request::segment(2))])>
+				<li @class(["nav-item", 'active'=>Request::segment(1)=='atribut'&&empty(Request::segment(2))])>
 					<a href="{{route('atribut.index')}}" class="nav-link d-flex justify-content-between">
 						<span>
 							<span class="sidebar-icon"><i class="fas fa-layer-group"></i></span>
@@ -151,7 +150,7 @@
 							</svg>
 						</span>
 					</span>
-					<div @class(["multi-level", "collapse", 'show'=>
+					<div @class(["multi-level", "collapse" , 'show'=>
 						in_array(request()->segment(1),['training','testing'])]) role="list"
 						id="submenu-dataset" aria-expanded="false">
 						<ul class="flex-column nav">
@@ -170,8 +169,8 @@
 				</li>
 				<li class="nav-item">
 					<span @class(['nav-link','collapsed'=>
-					in_array(request()->segment(1),['probab','class']),'d-flex',
-					'justify-content-between','align-items-center']) data-bs-toggle="collapse"
+						in_array(request()->segment(1),['probab','class']),'d-flex',
+						'justify-content-between','align-items-center']) data-bs-toggle="collapse"
 						data-bs-target="#submenu-naivebayes">
 						<span>
 							<span class="sidebar-icon"><i class="fas fa-calculator"></i></span>
@@ -186,7 +185,7 @@
 							</svg>
 						</span>
 					</span>
-					<div @class(["multi-level", "collapse", 'show'=>
+					<div @class(["multi-level", "collapse" , 'show'=>
 						in_array(request()->segment(1),['probab','class'])])
 						role="list" id="submenu-naivebayes" aria-expanded="false">
 						<ul class="flex-column nav">
@@ -306,7 +305,7 @@
 		function resetvalidation() {
 			$('.invalid-feedback').text('');
 			$(":input").removeClass('is-invalid');
-			$("select").removeClass("is-invalid"); 
+			$("select").removeClass("is-invalid");
 		}
 	</script>
 	@yield('js')

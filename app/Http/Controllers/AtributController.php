@@ -120,7 +120,7 @@ class AtributController extends Controller
 					$table->dropConstrainedForeignId($attr->slug);
 				else $table->dropColumn($attr->slug);
 			});
-			Schema::table($tabel, function (Blueprint $table) use ($attr, $req) {
+			Schema::table($tabel, function (Blueprint $table) use ($req) {
 				if ($req['type'] === 'numeric')
 					$table->integer($req['slug'])->nullable()->after('nama');
 				else {

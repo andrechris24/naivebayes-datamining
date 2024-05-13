@@ -22,21 +22,22 @@ use App\Exports\DatasetTemplate,
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 Route::middleware(['guest'])->controller(AuthController::class)->group(function () {
-	Route::prefix('register')->name('register')->group(function(){
-		Route::get('/','register');
-		Route::post('/','postRegister')->name('.submit');
+	Route::prefix('register')->name('register')->group(function () {
+		Route::get('/', 'register');
+		Route::post('/', 'postRegister')->name('.submit');
 	});
-	Route::prefix('login')->name('login')->group(function (){
-		Route::get('/','login');
-		Route::post('/','postLogin')->name('.submit');
+	Route::prefix('login')->name('login')->group(function () {
+		Route::get('/', 'login');
+		Route::post('/', 'postLogin')->name('.submit');
 	});
 	Route::prefix('password')->name('password.')->group(function () {
 		Route::get('/', 'forget')->name('forget');
-		Route::post('/','forgetLink')->name('send');
-		Route::prefix('reset')->group(function(){
-			Route::get('/','showReset')->name('change');
-			Route::patch('/','reset')->name('reset');
+		Route::post('/', 'forgetLink')->name('send');
+		Route::prefix('reset')->group(function () {
+			Route::get('/', 'showReset')->name('change');
+			Route::patch('/', 'reset')->name('reset');
 		});
 	});
 });

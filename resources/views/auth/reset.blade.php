@@ -38,7 +38,7 @@
 				oninput="checkpassword()" required>
 		</div>
 		@error('password')
-		<div class="invalid-feedback">{{ $message }}</div> 
+		<div class="invalid-feedback">{{ $message }}</div>
 		@enderror
 	</div>
 	<div class="form-group mb-4">

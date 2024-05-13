@@ -42,9 +42,10 @@ class ProbabilityController extends Controller
 		try {
 			if (TrainingData::count() === 0) {
 				return to_route("training.index")->withWarning(
-					'Masukkan Data Training dulu sebelum menghitung Probabilitas');
+					'Masukkan Data Training dulu sebelum menghitung Probabilitas'
+				);
 			}
-			$pre = ProbabLabel::preprocess('train');//Preprocessor
+			$pre = ProbabLabel::preprocess('train'); //Preprocessor
 
 			//Prior start
 			$total = [
@@ -56,15 +57,16 @@ class ProbabilityController extends Controller
 
 			//Likelihood Start
 			foreach (NilaiAtribut::get() as $nilai) { //Categorical
-				$ll[$nilai->name]['true'] = ($total['true'] === 0 ? 0 :
-					TrainingData::where($nilai->atribut->slug, $nilai->id)
-					->where('status', true)->count() / $total['true']);
-				$ll[$nilai->name]['false'] = ($total['false'] === 0 ? 0 :
-					TrainingData::where($nilai->atribut->slug, $nilai->id)
-					->where('status', false)->count() / $total['false']);
-				$ll[$nilai->name]['total'] =
-					TrainingData::where($nilai->atribut->slug, $nilai->id)->count() /
-					$total['all'];
+				$ll[$nilai->name] = [
+					'true' => ($total['true'] === 0 ? 0 :
+						TrainingData::where($nilai->atribut->slug, $nilai->id)
+						->where('status', true)->count() / $total['true']),
+					'false' => ($total['false'] === 0 ? 0 :
+						TrainingData::where($nilai->atribut->slug, $nilai->id)
+						->where('status', false)->count() / $total['false']),
+					'total' => TrainingData::where($nilai->atribut->slug, $nilai->id)->count() /
+						$total['all']
+				];
 				Probability::updateOrCreate([
 					'atribut_id' => $nilai->atribut_id, 'nilai_atribut_id' => $nilai->id
 				], [
@@ -75,7 +77,7 @@ class ProbabilityController extends Controller
 			}
 			foreach (Atribut::where('type', 'numeric')->get() as $nilainum) { //Numeric
 				$p = array_filter($this->getNumbers($nilainum->slug));
-				if(empty($p)) continue;
+				if (empty($p)) continue;
 				if (count($p['true'])) {
 					$avg[$nilainum->name]['true'] = array_sum($p['true']) / count($p['true']);
 					$sd[$nilainum->name]['true'] =
@@ -139,7 +141,7 @@ class ProbabilityController extends Controller
 	private static function getNumbers(string $col)
 	{
 		$data = ['true' => array(), 'false' => array(), 'all' => array()];
-		$trainData=TrainingData::select($col, 'status')->whereNotNull($col)->get();
+		$trainData = TrainingData::select($col, 'status')->whereNotNull($col)->get();
 		foreach ($trainData as $train) {
 			if ($train['status'] == true) $data['true'][] = $train[$col];
 			else $data['false'][] = $train[$col];

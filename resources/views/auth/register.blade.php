@@ -90,7 +90,7 @@
 </form>
 <div class="d-flex justify-content-center align-items-center mt-4">
 	<span class="fw-normal">
-		Sudah punya akun?	<a href="{{ route('login') }}" class="fw-bold">Login</a>
+		Sudah punya akun? <a href="{{ route('login') }}" class="fw-bold">Login</a>
 	</span>
 </div>
 @endsection

@@ -147,7 +147,7 @@
 			<div class="btn-group" role="group">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
 					aria-expanded="false">
-					<i class="fas fa-plus"></i> Tambah Data 
+					<i class="fas fa-plus"></i> Tambah Data
 					<i class="fa-solid fa-caret-down"></i>
 				</button>
 				<ul class="dropdown-menu">
@@ -388,7 +388,7 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				$('#modalImportTesting').modal("handleUpdate"); 
+				$('#modalImportTesting').modal("handleUpdate");
 				Notiflix.Notify.failure("Gagal upload: " +errmsg);
 			}
 		});
@@ -428,7 +428,7 @@
 						$("#result-error").text(xhr.responseJSON.errors.status);
 					}
 					errmsg = xhr.responseJSON.message;
-					modalForm.modal("handleUpdate"); 
+					modalForm.modal("handleUpdate");
 				} else if(xhr.status === 400) {
 					$("#testResult").addClass("is-invalid");
 					$("#result-error").text("Probabilitas belum dihitung");

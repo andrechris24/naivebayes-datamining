@@ -147,7 +147,7 @@
 			<div class="btn-group" role="group">
 				<button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
 					aria-expanded="false">
-					<i class="fas fa-plus"></i> Tambah Data 
+					<i class="fas fa-plus"></i> Tambah Data
 					<i class="fa-solid fa-caret-down"></i>
 				</button>
 				<ul class="dropdown-menu">

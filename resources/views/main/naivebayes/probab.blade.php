@@ -5,7 +5,8 @@
 	<a href="{{route('probab.create')}}" class="btn btn-primary">
 		<i class="fas fa-calculator"></i> Hitung
 	</a>
-	<button type="button" data-bs-toggle="modal" data-bs-target="#modalResetProbab" @class(['btn','btn-danger','disabled'=>count($data)===0])>
+	<button type="button" data-bs-toggle="modal" data-bs-target="#modalResetProbab"
+		@class(['btn','btn-danger','disabled'=>count($data)===0])>
 		<i class="fas fa-arrow-rotate-right"></i> Reset
 	</button>
 </div>
@@ -71,11 +72,11 @@
 		$list = ['true' => [],'false' => [],'all' => []];
 		$probab = $data->where('atribut_id', $attr->id)->first();
 		if($probab){
-			$probabs = [
-			'true' => json_decode($probab->true),
-			'false' => json_decode($probab->false),
-			'total' => json_decode($probab->total)
-			];
+		$probabs = [
+		'true' => json_decode($probab->true),
+		'false' => json_decode($probab->false),
+		'total' => json_decode($probab->total)
+		];
 		}
 		@endphp
 		<div class="table-responsive">

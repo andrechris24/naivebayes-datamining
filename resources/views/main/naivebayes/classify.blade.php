@@ -76,12 +76,13 @@
 			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCalcClass">
 				<i class="fas fa-calculator"></i> Hitung
 			</button>
-			<button type="button" class="btn btn-danger" id="resetBtn" data-bs-toggle="modal" data-bs-target="#modalResetClass">
+			<button type="button" class="btn btn-danger" id="resetBtn" data-bs-toggle="modal"
+				data-bs-target="#modalResetClass">
 				<i class="fa-solid fa-arrow-rotate-right"></i> Reset
 			</button>
 			<button class="btn btn-success dropdown-toggle" id="expBtn" type="button" data-bs-toggle="dropdown"
 				aria-expanded="false" disabled>
-				<i class="fas fa-download"></i> Ekspor 
+				<i class="fas fa-download"></i> Ekspor
 				<i class="fa-solid fa-caret-down"></i>
 			</button>
 			<ul class="dropdown-menu">
@@ -194,7 +195,7 @@
 				}
 				$('#reset-select').addClass('is-invalid');
 				$("#reset-error").text(xhr.responseJSON.message);
-				$("#modalResetClass").modal("handleUpdate"); 
+				$("#modalResetClass").modal("handleUpdate");
 				Notiflix.Notify.failure('Gagal reset: ' + errmsg);
 			}
 		});
@@ -227,7 +228,7 @@
 				}
 				$('#calc-select').addClass('is-invalid');
 				$("#calc-error").text(xhr.responseJSON.message);
-				$("#modalCalcClass").modal("handleUpdate"); 
+				$("#modalCalcClass").modal("handleUpdate");
 				Notiflix.Notify.failure(`Gagal hitung: ${errmsg}`);
 			}
 		});
