@@ -71,8 +71,8 @@ class AuthController extends Controller
 			}
 		} catch (TransportException $err) {
 			Log::error($err);
-			return back()->withInput()->withError("Gagal mengirim link reset password:")
-				->withErrors($err);
+			return back()->withInput()
+				->withError("Gagal mengirim link reset password:")->withErrors($err);
 		} catch (QueryException $sql) {
 			Log::error($sql);
 			return back()->withInput()->withErrors($sql->errorInfo)

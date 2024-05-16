@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Atribut;
-use App\Models\NilaiAtribut;
+use App\Models\TrainingData;
+use App\Models\TestingData;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -16,13 +17,14 @@ class AtributController extends Controller
 {
 	public function count()
 	{
-		$attr = Atribut::count();
 		$unused = 0;
-		foreach (Atribut::where('type', 'categorical')->get() as $at) {
-			if (NilaiAtribut::where('atribut_id', $at->id)->count() === 0)
-				$unused++;
+		$atribut = Atribut::get();
+		foreach ($atribut as $attr) {
+			$nulls = TrainingData::whereNotNull($attr->slug)->count() +
+				TestingData::whereNotNull($attr->slug)->count();
+			if ($nulls === 0) $unused++;
 		}
-		return ['total' => $attr, 'unused' => $unused];
+		return ['unused' => $unused];
 	}
 	/**
 	 * Display a listing of the resource.

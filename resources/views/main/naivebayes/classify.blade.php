@@ -77,7 +77,7 @@
 				<i class="fas fa-calculator"></i> Hitung
 			</button>
 			<button type="button" class="btn btn-danger" id="resetBtn" data-bs-toggle="modal"
-				data-bs-target="#modalResetClass">
+				data-bs-target="#modalResetClass" disabled>
 				<i class="fa-solid fa-arrow-rotate-right"></i> Reset
 			</button>
 			<button class="btn btn-success dropdown-toggle" id="expBtn" type="button" data-bs-toggle="dropdown"
@@ -161,7 +161,7 @@
 					}
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
-				errorDT(message, techNote);
+				errorDT(message);
 			});
 		} catch (dterr) {
 			initError(dterr.message);

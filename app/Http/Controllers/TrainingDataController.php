@@ -7,7 +7,6 @@ use App\Imports\TrainingImport;
 use App\Models\Atribut;
 use App\Models\Classification;
 use App\Models\NilaiAtribut;
-use App\Models\Probability;
 use App\Models\TrainingData;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -33,10 +32,10 @@ class TrainingDataController extends Controller
 	{
 		$train = TrainingData::get();
 		$trainUnique = $train->unique(['nama']);
-		return [
-			'total' => count($train),
-			'duplicate' => $train->diff($trainUnique)->count()
-		];
+		$empty = 0;
+		foreach (Atribut::get() as $attr)
+			$empty += TrainingData::whereNull($attr->slug)->count();
+		return ['duplicate' => $train->diff($trainUnique)->count(), 'empty' => $empty];
 	}
 	/**
 	 * Display a listing of the resource.

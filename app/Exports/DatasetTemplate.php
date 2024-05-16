@@ -9,9 +9,11 @@ use Generator;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromGenerator;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class DatasetTemplate implements FromGenerator, WithStrictNullComparison
+class DatasetTemplate
+implements FromGenerator, ShouldAutoSize, WithStrictNullComparison
 {
 	use Exportable;
 	public function generator(): Generator
@@ -29,9 +31,8 @@ class DatasetTemplate implements FromGenerator, WithStrictNullComparison
 			foreach (Atribut::get() as $attr) {
 				if ($attr->type === 'categorical') {
 					$subval = NilaiAtribut::where('atribut_id', $attr->id)->get();
-					$count = count($subval);
-					$val[$attr->slug] = $subval[$a % $count]->name;
-				} else $val[$attr->slug] = rand(0, 1);
+					$val[$attr->slug] = $subval[$a % count($subval)]->name;
+				} else $val[$attr->slug] = rand(0, 2);
 			}
 			$val['status'] = ProbabLabel::$label[$a % 2];
 			yield $val;

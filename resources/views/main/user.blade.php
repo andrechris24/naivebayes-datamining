@@ -158,7 +158,7 @@
 				}],
 				language: {url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"}
 			}).on("dt-error", function (e, settings, techNote, message) {
-				errorDT(message, techNote);
+				errorDT(message);
 			});
 		} catch (dterr) {initError(dterr.message);}
 	}).on("click", ".delete-record", function () {
@@ -279,7 +279,7 @@
 				}
 				$("#password-conf").addClass('is-invalid');
 				$("#del-error").text(errmsg);
-				$("#modalDelAkun").modal("handleUpdate"); 
+				$("#modalDelAkun").modal("handleUpdate");
 				Notiflix.Notify.failure(errmsg);
 			}
 		});

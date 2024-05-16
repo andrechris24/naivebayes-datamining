@@ -33,9 +33,10 @@ class TestingDataController extends Controller
 	{
 		$test = TestingData::get();
 		$testUnique = $test->unique(['nama']);
-		return [
-			'total' => count($test), 'duplicate' => $test->diff($testUnique)->count()
-		];
+		$empty = 0;
+		foreach (Atribut::get() as $attr)
+			$empty += TestingData::whereNull($attr->slug)->count();
+		return ['duplicate' => $test->diff($testUnique)->count(), 'empty' => $empty];
 	}
 	/**
 	 * Display a listing of the resource.

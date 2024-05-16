@@ -106,7 +106,7 @@
 	Mohon untuk tidak menginput atau mengupload data yang sama dengan data training
 </div> --}}
 <div class="row">
-	<div class="col-sm-6 mb-3">
+	<div class="col-md-4 mb-3">
 		<div class="card">
 			<div class="card-body">
 				<div class="d-flex align-items-start justify-content-between">
@@ -123,10 +123,11 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-6 mb-3">
+	<div class="col-md-4 mb-3">
 		<div class="card">
 			<div class="card-body">
-				<div class="d-flex align-items-start justify-content-between">
+				<div class="d-flex align-items-start justify-content-between" data-bs-toggle="tooltip"
+					title="Jumlah Data Testing dengan nama duplikat">
 					<div class="content-left">
 						<span>Duplikat</span>
 						<div class="d-flex align-items-end mt-2">
@@ -135,6 +136,24 @@
 					</div>
 					<span class="badge bg-warning rounded p-2">
 						<i class="fas fa-copy"></i>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 mb-3">
+		<div class="card">
+			<div class="card-body">
+				<div class="d-flex align-items-start justify-content-between" data-bs-toggle="tooltip"
+					title="Jumlah kolom kosong">
+					<div class="content-left">
+						<span>Kosong</span>
+						<div class="d-flex align-items-end mt-2">
+							<h3 class="mb-0 me-2"><span id="total-missing">-</span></h3>
+						</div>
+					</div>
+					<span class="badge bg-danger rounded p-2">
+						<i class="fas fa-exclamation-circle"></i>
 					</span>
 				</div>
 			</div>
@@ -163,11 +182,11 @@
 					</li>
 				</ul>
 			</div>
-			<button type="button" class="btn btn-danger" id="delete-all">
+			<button type="button" class="btn btn-danger" id="delete-all" disabled>
 				<i class="fas fa-trash"></i> Hapus Data
 			</button>
 			<a href="{{route('testing.export')}}" class="btn btn-success disabled" id="dlBtn">
-				<i class="fas fa-download"></i> Ekspor Data
+				<i class="fas fa-download"></i> Ekspor
 			</a>
 		</div>
 		<table class="table table-bordered" id="table-testing" style="width: 100%">
@@ -244,26 +263,29 @@
 				}],
 				language: {
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
-				}
-			}).on("dt-error", function (e, settings, techNote, message) {
-				errorDT(message, techNote);
-			}).on('xhr', function () {
-				$.get("{{ route('testing.count') }}", function (data) {
-					if(data.total===0) {
+				},
+				drawCallback: function(){
+					let total=this.api().page.info().recordsTotal;
+					if(total===0){
 						$('#dlBtn').addClass('disabled');
 						$("#delete-all").prop('disabled',true);
 					}	else {
 						$('#dlBtn').removeClass('disabled');
 						$("#delete-all").prop('disabled',false);
 					}
-					$("#total-counter").text(data.total);
-					$('#total-duplicate').text(data.duplicate);
-				}).fail(function (xhr, st) {
-					console.warn(xhr.responseJSON.message ?? st);
-					Notiflix.Notify.failure(
-						`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+					$("#total-counter").text(total);
+					$.get("{{ route('testing.count') }}", function (data) {
+						$('#total-duplicate').text(data.duplicate);
+						$("#total-missing").text(data.empty);
+					}).fail(function (xhr, st) {
+						console.warn(xhr.responseJSON.message ?? st);
+						Notiflix.Notify.failure(
+							`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
 						);
-				});
+					});
+				}
+			}).on("dt-error", function (e, settings, techNote, message) {
+				errorDT(message);
 			});
 		} catch (dterr) {
 			initError(dterr.message);

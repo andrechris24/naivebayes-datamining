@@ -66,7 +66,7 @@
 		<div class="card">
 			<div class="card-body">
 				<div class="d-flex align-items-start justify-content-between" data-bs-toggle="tooltip"
-					title="Atribut Kategorikal yang tidak digunakan">
+					title="Atribut yang tidak digunakan di dataset">
 					<div class="content-left">
 						<span>Tidak digunakan</span>
 						<div class="d-flex align-items-end mt-2">
@@ -131,8 +131,7 @@
 				}, {
 					targets: 3,
 					render: function(data){
-						if(data === null) return '-';
-						else return data;
+						return data??'-';
 					}
 				}, { //Aksi
 					orderable: false,
@@ -151,19 +150,21 @@
 				}],
 				language: {
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
+				},
+				drawCallback: function(){
+					$("#total-counter").text(this.api().page.info().recordsTotal);
+					$.get("{{ route('atribut.count') }}", function (data) {
+						$('#total-max').text(data.max);
+						$('#total-unused').text(data.unused);
+					}).fail(function (xhr, st) {
+						console.warn(xhr.responseJSON.message ?? st);
+						Notiflix.Notify.failure(
+							`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+						);
+					});
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
-				errorDT(message, techNote);
-			}).on('xhr', function () {
-				$.get("{{ route('atribut.count') }}", function (data) {
-					$("#total-counter").text(data.total);
-					$('#total-unused').text(data.unused);
-				}).fail(function (xhr, st) {
-					console.warn(xhr.responseJSON.message ?? st);
-					Notiflix.Notify.failure(
-						`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
-					);
-				});
+				errorDT(message);
 			});
 		} catch (dterr) {
 			initError(dterr.message);
@@ -259,7 +260,7 @@
 						$("#desc-error").text(xhr.responseJSON.errors.desc);
 					}
 					errmsg = xhr.responseJSON.message;
-					modalForm.modal("handleUpdate"); 
+					modalForm.modal("handleUpdate");
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Gagal: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;

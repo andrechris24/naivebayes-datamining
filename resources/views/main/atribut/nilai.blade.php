@@ -159,20 +159,21 @@
 				}],
 				language: {
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
+				},
+				drawCallback: function(){
+					$("#total-counter").text(this.api().page.info().recordsTotal);
+					$.get("{{ route('atribut.nilai.count') }}", function (data) {
+						$('#total-max').text(data.max);
+						$('#total-duplicate').text(data.duplicate);
+					}).fail(function (xhr, st) {
+						console.warn(xhr.responseJSON.message ?? st);
+						Notiflix.Notify.failure(
+							`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+						);
+					});
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
-				errorDT(message, techNote);
-			}).on('xhr', function () {
-				$.get("{{ route('atribut.nilai.count') }}", function (data) {
-					$('#total-max').text(data.max);
-					$("#total-counter").text(data.total);
-					$('#total-duplicate').text(data.duplicate);
-				}).fail(function (xhr, st) {
-					console.warn(xhr.responseJSON.message ?? st);
-					Notiflix.Notify.failure(
-						`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
-						);
-				});
+				errorDT(message);
 			});
 		} catch (dterr) {
 			initError(dterr.message);
@@ -189,6 +190,12 @@
 					type: "DELETE",
 					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
 					url: '/atribut/nilai/' + attr_id,
+					beforeSend: function(){
+						Notiflix.Loading.standard("Menghapus");
+					},
+					complete: function(){
+						Notiflix.Loading.remove();
+					},
 					success: function () {
 						dt_atribut.draw();
 						Notiflix.Notify.success("Berhasil dihapus");

@@ -77,7 +77,7 @@ class ProbabilityController extends Controller
 			}
 			foreach (Atribut::where('type', 'numeric')->get() as $nilainum) { //Numeric
 				$p = array_filter($this->getNumbers($nilainum->slug));
-				if (empty($p)) continue;
+				// if (empty($p)) continue;
 				if (count($p['true'])) {
 					$avg[$nilainum->name]['true'] = array_sum($p['true']) / count($p['true']);
 					$sd[$nilainum->name]['true'] =
@@ -141,7 +141,7 @@ class ProbabilityController extends Controller
 	private static function getNumbers(string $col)
 	{
 		$data = ['true' => array(), 'false' => array(), 'all' => array()];
-		$trainData = TrainingData::select($col, 'status')->whereNotNull($col)->get();
+		$trainData = TrainingData::whereNotNull($col)->get([$col, 'status']);
 		foreach ($trainData as $train) {
 			if ($train['status'] == true) $data['true'][] = $train[$col];
 			else $data['false'][] = $train[$col];

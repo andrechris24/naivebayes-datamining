@@ -14,7 +14,6 @@ class NilaiAtributController extends Controller
 	public function count()
 	{
 		$attr = Atribut::get();
-		$attribs = NilaiAtribut::get();
 		$totalscr = [];
 		$duplicate = 0;
 		foreach ($attr as $at) {
@@ -24,9 +23,7 @@ class NilaiAtributController extends Controller
 			$duplicate += $subs->diff($subUnique)->count();
 		}
 		return response()->json([
-			'total' => count($attribs),
-			'max' => collect($totalscr)->max() ?? 0,
-			'duplicate' => $duplicate
+			'max' => collect($totalscr)->max() ?? 0, 'duplicate' => $duplicate
 		]);
 	}
 	/**

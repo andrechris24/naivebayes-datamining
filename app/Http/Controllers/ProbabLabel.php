@@ -31,7 +31,7 @@ class ProbabLabel extends Controller
 					else { //Jika Kategorikal, paling sering muncul yang dicari
 						$most = $data->select($attr->slug)->groupBy($attr->slug)
 							->orderByRaw("COUNT(*) desc")->first();
-						if (empty($most[$attr->slug])) continue;
+						// if (empty($most[$attr->slug])) continue;
 					}
 					$data->whereNull($attr->slug)
 						->update([$attr->slug => $most[$attr->slug] ?? $avg]);
@@ -79,6 +79,7 @@ class ProbabLabel extends Controller
 			} else { //Jika Numerik, Normal Distribution yang dicari
 				$probabilitas = Probability::where('atribut_id', $at->id)
 					->whereNull('nilai_atribut_id')->first();
+				// if($probabilitas===null) continue;
 				$trues = json_decode($probabilitas->true);
 				$falses = json_decode($probabilitas->false);
 				$total = json_decode($probabilitas->total);

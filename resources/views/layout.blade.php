@@ -297,7 +297,7 @@
 	<form method="POST" id="logout-form" action="{{ route('logout') }}">@csrf</form>
 	<script type="text/javascript" src="{{ asset('assets/js/datatables.js') }}"></script>
 	<script type="text/javascript">
-		Notiflix.Notify.init({timeout:5000});
+		Notiflix.Notify.init({timeout:5000,clickToClose:true});
 		$(document).on('click', '#logout-btn', function (e) {
 			e.preventDefault();
 			document.getElementById('logout-form').submit();
