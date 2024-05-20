@@ -18,8 +18,7 @@ class AtributController extends Controller
 	public function count()
 	{
 		$unused = 0;
-		$atribut = Atribut::get();
-		foreach ($atribut as $attr) {
+		foreach (Atribut::get() as $attr) {
 			$nulls = TrainingData::whereNotNull($attr->slug)->count() +
 				TestingData::whereNotNull($attr->slug)->count();
 			if ($nulls === 0) $unused++;

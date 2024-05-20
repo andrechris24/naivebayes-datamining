@@ -16,6 +16,9 @@
 	<div class="mb-4">
 		<label for="email">Email</label>
 		<div class="input-group">
+			<span class="input-group-text">
+				<i class="fas fa-envelope text-gray-600"></i>
+			</span>
 			<input type="email" class="form-control @error('email') is-invalid @enderror " name="email"
 				value="{{ old('email') }}" id="email" placeholder="email@example.com" required autofocus>
 		</div>

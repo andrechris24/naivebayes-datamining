@@ -61,7 +61,7 @@ class TestingDataController extends Controller
 	 */
 	public function create()
 	{
-		$dt = DataTables::of(TestingData::query());
+		$dt = DataTables::of(TestingData::with('nilai_atribut')->select('testing_data.*'));
 		foreach (Atribut::get() as $attr) {
 			if ($attr->type === 'categorical') {
 				$dt->editColumn($attr->slug, function (TestingData $test) use ($attr) {

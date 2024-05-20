@@ -190,7 +190,7 @@
 					errmsg = "Terlalu banyak upaya. Cobalah beberapa saat lagi.";
 				else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Gagal hapus: Kesalahan HTTP ${xhr.status}. ${xhr.statusText}`;
+					errmsg = `Gagal hapus: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
 				$("#password-conf").addClass('is-invalid');
 				$("#del-error").text(xhr.responseJSON.message);

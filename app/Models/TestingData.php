@@ -22,8 +22,4 @@ class TestingData extends Model
 			'mimetypes:application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.oasis.opendocument.spreadsheet,text/csv,text/tab-separated-values'
 		]
 	];
-	public function nilaiatribut()
-	{
-		return $this->belongsTo(NilaiAtribut::class);
-	}
 }

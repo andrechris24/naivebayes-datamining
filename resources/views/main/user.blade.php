@@ -173,8 +173,7 @@
 			$("#user_id").val(data.id);
 			$("#add-user-fullname").val(data.name);
 			$("#add-user-email").val(data.email);
-			$('#add-user-password').prop('required', false);
-			$('#confirm-user-password').prop('required', false);
+			$('#add-user-password, #confirm-user-password').prop('required', false);
 		}).fail(function (xhr, st) {
 			if (xhr.status === 302) {
 				modalForm.modal("hide");
@@ -288,14 +287,11 @@
 		resetvalidation();
 		$("#modalAddUserLabel").text("Tambah Pengguna");
 		$("#addNewUserForm")[0].reset();
-		$("#user_id").val("");
-		$('#add-user-password').prop('required', true);
-		$('#confirm-user-password').prop('required', true);
+		$('#add-user-password, #confirm-user-password').prop('required', true);
 	});
 	$("#modalDelAkun").on('hidden.bs.modal',function(){
 		resetvalidation();
 		$("#DelAkunForm")[0].reset();
-		$("#delete-id").val("");
 		$("#nama-user").text("...");
 	});
 </script>

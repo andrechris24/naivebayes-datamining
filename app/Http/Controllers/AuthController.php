@@ -88,16 +88,15 @@ class AuthController extends Controller
 			$enctoken = DB::table('password_reset_tokens')
 				->where('email', $_GET['email'])->first();
 			if ($enctoken === null)
-				return to_route('password.request')->withError("Pengguna tidak ditemukan");
+				return to_route('password.forget')->withError("Pengguna tidak ditemukan");
 			return view(
 				'auth.reset',
 				['token' => $_GET['token'], 'email' => $_GET['email']]
 			);
 		} catch (QueryException $e) {
 			Log::error($e);
-			return to_route('password.request')
-				->withError("Gagal memuat halaman reset password:")
-				->withErrors($e->errorInfo);
+			return to_route('password.forget')->withErrors($e->errorInfo)
+				->withError("Gagal memuat halaman reset password:");
 		}
 	}
 	public function reset(Request $request)

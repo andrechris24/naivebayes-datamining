@@ -297,15 +297,15 @@
 	<form method="POST" id="logout-form" action="{{ route('logout') }}">@csrf</form>
 	<script type="text/javascript" src="{{ asset('assets/js/datatables.js') }}"></script>
 	<script type="text/javascript">
-		Notiflix.Notify.init({timeout:5000,clickToClose:true});
+		Notiflix.Notify.init({timeout: 5000, clickToClose: true});
 		$(document).on('click', '#logout-btn', function (e) {
 			e.preventDefault();
 			document.getElementById('logout-form').submit();
 		});
 		function resetvalidation() {
 			$('.invalid-feedback').text('');
-			$(":input").removeClass('is-invalid');
-			$("select").removeClass("is-invalid");
+			$(":input[name=id]").val('');
+			$(":input, select").removeClass('is-invalid');
 		}
 	</script>
 	@yield('js')

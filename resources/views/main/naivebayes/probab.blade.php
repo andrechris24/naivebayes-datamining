@@ -149,7 +149,7 @@
 						<th>Jumlah</th>
 						<td>{{ $tot["true"] }}</td>
 						<td>{{ $tot['false'] }}</td>
-						<td>{{ $tot['true'] + $tot['false'] }}</td>
+						<td>{{ array_sum($tot) }}</td>
 					</tr>
 					<tr>
 						<th>Rata-rata</th>

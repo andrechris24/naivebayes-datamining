@@ -467,7 +467,6 @@
 		resetvalidation();
 		$("#modalAddTestingLabel").text("Tambah Data Testing");
 		$("#addNewTestingForm")[0].reset();
-		$("#test_id").val("");
 	});
 	$('#modalImportTesting').on('hidden.bs.modal',function(){
 		resetvalidation();

@@ -59,7 +59,7 @@ class ProbabLabel extends Controller
 		 * Likelihood: Jumlah probabilitas dari label Layak dan Tidak Layak
 		 * Evidence: Jumlah probabilitas total
 		 *
-		 * Likelihood dan Evidence diinisialisasi dengan angka 1 untuk perkalian
+		 * Likelihood dan Evidence diberi nilai 1 untuk perkalian
 		 */ $likelihood['true'] = $likelihood['false'] = $evidence = 1;
 		foreach (Atribut::get() as $at) {
 			if ($at->type === 'categorical') {

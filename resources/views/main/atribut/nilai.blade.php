@@ -277,7 +277,6 @@
 		resetvalidation();
 		$("#modalAddNilaiAtributLabel").text("Tambah Nilai Atribut");
 		$("#addNewNilaiAtributForm")[0].reset();
-		$("#attr_id").val("");
 	});
 </script>
 @endsection

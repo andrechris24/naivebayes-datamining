@@ -461,7 +461,6 @@
 		resetvalidation();
 		$("#modalAddTrainingLabel").text("Tambah Data Training");
 		$("#addNewTrainingForm")[0].reset();
-		$("#train_id").val("");
 	});
 	$('#modalImportTraining').on('hidden.bs.modal',function(){
 		resetvalidation();

@@ -57,7 +57,7 @@ class TrainingDataController extends Controller
 	 */
 	public function create()
 	{
-		$dt = DataTables::of(TrainingData::query());
+		$dt = DataTables::of(TrainingData::with('nilai_atribut')->select('training_data.*'));
 		foreach (Atribut::get() as $attr) {
 			if ($attr->type === 'categorical') {
 				$dt->editColumn($attr->slug, function (TrainingData $train) use ($attr) {

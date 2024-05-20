@@ -273,7 +273,6 @@
 		resetvalidation();
 		$("#modalAddAtributLabel").text("Tambah Atribut");
 		$("#addNewAtributForm")[0].reset();
-		$("#attr_id").val("");
 	});
 </script>
 @endsection

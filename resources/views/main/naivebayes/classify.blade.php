@@ -152,13 +152,9 @@
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
 				},
 				drawCallback: function(){
-					if(this.api().page.info().recordsTotal===0){
-						$('#expBtn').prop('disabled',true);
-						$("#resetBtn").prop('disabled',true);
-					}	else {
-						$('#expBtn').prop('disabled',false);
-						$("#resetBtn").prop('disabled',false);
-					}
+					if(this.api().page.info().recordsTotal===0)
+						$('#expBtn, #resetBtn').prop('disabled',true);
+					else $('#expBtn, #resetBtn').prop('disabled',false);
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
 				errorDT(message);

@@ -16,6 +16,9 @@
 	<div class="mb-4">
 		<label for="email">Email</label>
 		<div class="input-group">
+			<span class="input-group-text">
+				<i class="fas fa-envelope text-gray-600"></i>
+			</span>
 			<input name="email" type="email" value="{{ $email }}"
 				class="form-control @error('email') is-invalid @enderror " id="email" required readonly>
 		</div>
@@ -25,17 +28,12 @@
 	<div class="form-group mb-4">
 		<label for="password">Password</label>
 		<div class="input-group">
-			<span class="input-group-text" id="basic-addon4">
-				<svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"
-					xmlns="http://www.w3.org/2000/svg">
-					<path fill-rule="evenodd"
-						d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-						clip-rule="evenodd"></path>
-				</svg>
+			<span class="input-group-text">
+				<i class="fas fa-lock text-gray-600"></i>
 			</span>
 			<input name="password" type="password" placeholder="Password"
 				class="form-control @error('password') is-invalid @enderror " id="password" minlength="8" maxlength="20"
-				oninput="checkpassword()" required>
+				oninput="checkpassword()" autofocus required>
 		</div>
 		@error('password')
 		<div class="invalid-feedback">{{ $message }}</div>
@@ -44,13 +42,8 @@
 	<div class="form-group mb-4">
 		<label for="password_confirmation">Konfirmasi Password</label>
 		<div class="input-group">
-			<span class="input-group-text" id="basic-addon5">
-				<svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"
-					xmlns="http://www.w3.org/2000/svg">
-					<path fill-rule="evenodd"
-						d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-						clip-rule="evenodd"></path>
-				</svg>
+			<span class="input-group-text">
+				<i class="fas fa-lock text-gray-600"></i>
 			</span>
 			<input name="password_confirmation" type="password" placeholder="Konfirmasi Password"
 				class="form-control @error('password_confirmation') is-invalid @enderror " id="password_confirmation"
