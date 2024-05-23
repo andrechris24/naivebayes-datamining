@@ -20,7 +20,7 @@ class TrainingDataController extends Controller
 	{
 		if (TrainingData::count() === 0)
 			return back()->withError('Gagal download: Data Training kosong');
-		return Excel::download(new TrainingExport, 'training.xlsx');
+		return Excel::download(new TrainingExport, 'training_'.time().'.xlsx');
 	}
 	public function import(Request $request)
 	{

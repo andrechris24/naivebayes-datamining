@@ -41,7 +41,7 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th>Atribut</th>
+					<th>Label</th>
 					<th>Nilai Probabilitas</th>
 				</tr>
 			</thead>
@@ -69,7 +69,6 @@
 		@php
 		$true = $false = $semua = 0.00000;
 		$tot = ['true' => 0, 'false' => 0];
-		$list = ['true' => [],'false' => [],'all' => []];
 		$probab = $data->where('atribut_id', $attr->id)->first();
 		if($probab){
 		$probabs = [
@@ -84,7 +83,7 @@
 				<caption>{{ $attr->name }}</caption>
 				<thead>
 					<tr>
-						<th>Sub Atribut</th>
+						<th>#</th>
 						<th>{{$hasil[true]}}</th>
 						<th>{{$hasil[false]}}</th>
 						<th>Total Probabilitas</th>
@@ -129,22 +128,10 @@
 					@foreach($training as $tr)
 					@php
 					if(empty($tr[$attr->slug])) continue;
-					array_push($list['all'],$tr[$attr->slug]);
-					if($tr['status']){
-					array_push($list['true'],$tr[$attr->slug]);
-					$tot['true']+=$tr[$attr->slug];
-					}else{
-					array_push($list['false'],$tr[$attr->slug]);
-					$tot['false']+=$tr[$attr->slug];
-					}
+					else if($tr['status']) $tot['true']+=$tr[$attr->slug];
+					else $tot['false']+=$tr[$attr->slug];
 					@endphp
 					@endforeach
-					<tr>
-						<th>Data</th>
-						<td class="text-wrap">{{implode(', ',$list['true'])}}</td>
-						<td class="text-wrap">{{implode(', ',$list['false'])}}</td>
-						<td class="text-wrap">{{implode(', ',$list['all'])}}</td>
-					</tr>
 					<tr>
 						<th>Jumlah</th>
 						<td>{{ $tot["true"] }}</td>

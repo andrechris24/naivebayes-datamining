@@ -21,7 +21,7 @@ class ClassificationController extends Controller
 			return back()->withError('Gagal download: Tidak ada data hasil klasifikasi');
 		return Excel::download(
 			new ClassificationExport($type),
-			"klasifikasi_{$type}.xlsx"
+			"klasifikasi_{$type}_{${time()}}.xlsx"
 		);
 	}
 	/**

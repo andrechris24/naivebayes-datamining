@@ -94,7 +94,7 @@ Route::middleware(['auth'])->group(function () {
 		});
 	Route::get('result', ResultController::class)->name('result');
 	Route::get('template', function () {
-		return (new DatasetTemplate)->download('template.xlsx');
+		return (new DatasetTemplate)->download('template_'.time().'.xlsx');
 	})->name('template-data');
 	Route::get('laravel', function () {
 		return view('welcome');
