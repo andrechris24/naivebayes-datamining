@@ -21,7 +21,7 @@ class TestingDataController extends Controller
 	{
 		if (TestingData::count() === 0)
 			return back()->withError('Gagal download: Data Testing kosong');
-		return Excel::download(new TestingExport, 'testing_'.time().'.xlsx');
+		return Excel::download(new TestingExport, 'testing_' . time() . '.xlsx');
 	}
 	public function import(Request $request)
 	{
