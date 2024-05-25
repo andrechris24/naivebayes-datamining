@@ -31,7 +31,7 @@ class TestingImport implements ToModel, WithHeadingRow, WithValidation
 						'like',
 						"%{$row[$attr->slug]}%"
 					);
-					$row[$attr->slug] = $foreign->id;
+					$row[$attr->slug] = $foreign->id ?? null;
 				}
 			}
 			$rows[$attr->slug] = $row[$attr->slug];
@@ -46,8 +46,9 @@ class TestingImport implements ToModel, WithHeadingRow, WithValidation
 	{
 		$rules['nama'] = ['bail', 'required', 'string'];
 		foreach (Atribut::get() as $attr) {
-			if ($attr->type === 'categorical') $rules[$attr->slug] = 'string';
-			else $rules[$attr->slug] = 'numeric';
+			if ($attr->type === 'categorical') 
+				$rules[$attr->slug] = ['nullable','string'];
+			else $rules[$attr->slug] = ['nullable','numeric'];
 		}
 		$rules['status'] = ['bail', 'required', Rule::in(ProbabLabel::$label)];
 		return $rules;

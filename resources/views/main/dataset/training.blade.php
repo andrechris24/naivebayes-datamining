@@ -83,7 +83,7 @@
 						title="Format: xls, xlsx, csv, dan tsv" aria-describedby="importFormats"
 						accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.oasis.opendocument.spreadsheet,text/csv,.tsv"
 						required>
-					<div class="invalid-tooltip" id="data-error"></div>
+					<div class="invalid-feedback" id="data-error"></div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -293,7 +293,7 @@
 	}).on("click", "#delete-all", function () {
 		Notiflix.Confirm.show(
 			"Hapus semua Data Training?",
-			'Anda akan menghapus semua Data Training yang akan mereset hasil klasifikasi terkait.',
+			'Anda akan menghapus semua Data Training.',
 			'Ya',
 			'Tidak',
 			function () {
