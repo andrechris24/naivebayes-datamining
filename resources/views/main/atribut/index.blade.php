@@ -10,6 +10,9 @@
 				<button type="button" class="btn-close text-reset" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
+				<div class="alert alert-warning d-none" id="attr-note">
+					Mengganti tipe atribut ke numerik akan menghapus nilai atribut berkaitan.
+				</div>
 				<form id="addNewAtributForm">@csrf
 					<input type="hidden" name="id" id="attr_id">
 					<div class="form-floating mb-3">
@@ -213,6 +216,7 @@
 			$("#attrName").val(data.name);
 			$('#attrDesc').val(data.desc);
 			$("#attrType").val(data.type);
+			if(data.type==='categorical') $("#attr-note").removeClass('d-none');
 		}).fail(function (xhr, st) {
 			if (xhr.status === 404) {
 				dt_atribut.draw();
@@ -272,6 +276,7 @@
 	modalForm.on("hidden.bs.modal", function () {
 		resetvalidation();
 		$("#modalAddAtributLabel").text("Tambah Atribut");
+		$("#attr-note").addClass('d-none');
 		$("#addNewAtributForm")[0].reset();
 	});
 </script>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Atribut;
+use App\Models\NilaiAtribut;
 use App\Models\TrainingData;
 use App\Models\TestingData;
 use Illuminate\Database\Schema\Blueprint;
@@ -63,6 +64,8 @@ class AtributController extends Controller
 					'type' => $req['type'],
 					'desc' => $req['desc']
 				]);
+				if ($req['type'] === 'numeric' && $atribut->type === 'categorical')
+					NilaiAtribut::where('atribut_id', $request->id)->delete();
 				return response()->json(['message' => 'Berhasil diedit']);
 			} else {
 				$this->addColumn('training_data', $req);

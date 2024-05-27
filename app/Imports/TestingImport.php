@@ -46,9 +46,9 @@ class TestingImport implements ToModel, WithHeadingRow, WithValidation
 	{
 		$rules['nama'] = ['bail', 'required', 'string'];
 		foreach (Atribut::get() as $attr) {
-			if ($attr->type === 'categorical') 
-				$rules[$attr->slug] = ['nullable','string'];
-			else $rules[$attr->slug] = ['nullable','numeric'];
+			if ($attr->type === 'categorical')
+				$rules[$attr->slug] = ['nullable', 'string'];
+			else $rules[$attr->slug] = ['nullable', 'numeric'];
 		}
 		$rules['status'] = ['bail', 'required', Rule::in(ProbabLabel::$label)];
 		return $rules;
