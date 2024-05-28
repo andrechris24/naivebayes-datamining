@@ -16,7 +16,7 @@ use Yajra\DataTables\Facades\DataTables;
 class ClassificationController extends Controller
 {
 	public function export($type)
-	{
+	{//Download data hasil klasifikasi
 		if (Classification::count() === 0)
 			return back()->withError('Gagal download: Tidak ada data hasil klasifikasi');
 		return Excel::download(
@@ -25,7 +25,7 @@ class ClassificationController extends Controller
 		);
 	}
 	/**
-	 * Display a listing of the resource.
+	 * Tampilkan halaman Klasifikasi
 	 */
 	public function index()
 	{
@@ -33,7 +33,7 @@ class ClassificationController extends Controller
 	}
 
 	/**
-	 * Show the form for creating a new resource.
+	 * Hitung klasifikasi
 	 */
 	public function create(Request $request)
 	{
@@ -73,7 +73,7 @@ class ClassificationController extends Controller
 	}
 
 	/**
-	 * Display the specified resource.
+	 * DataTables: Tampilkan data hasil klasifikasi
 	 */
 	public function show()
 	{
@@ -88,7 +88,7 @@ class ClassificationController extends Controller
 	}
 
 	/**
-	 * Remove the specified resource from storage.
+	 * Hapus data hasil klasifikasi sesuai tipe data yang dipilih
 	 */
 	public function destroy(Request $request)
 	{
@@ -103,7 +103,7 @@ class ClassificationController extends Controller
 		}
 	}
 	private function getData(string $type)
-	{
+	{//Ambil data dari tabel Dataset
 		if ($type === 'train') {
 			if (TrainingData::count() === 0) return false;
 			$data = TrainingData::get();

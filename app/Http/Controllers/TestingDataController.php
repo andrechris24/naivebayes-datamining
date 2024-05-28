@@ -18,19 +18,19 @@ use Yajra\DataTables\Facades\DataTables;
 class TestingDataController extends Controller
 {
 	public function export()
-	{
+	{//Download Data Testing
 		if (TestingData::count() === 0)
 			return back()->withError('Gagal download: Data Testing kosong');
 		return Excel::download(new TestingExport, 'testing_' . time() . '.xlsx');
 	}
 	public function import(Request $request)
-	{
+	{//Upload Data Testing
 		$request->validate(TestingData::$filerule);
 		Excel::import(new TestingImport, request()->file('data'));
 		return response()->json(['message' => 'Berhasil diimpor']);
 	}
 	public function count()
-	{
+	{//Tampilkan jumlah nilai yang hilang dan data dengan nama duplikat
 		$test = TestingData::get();
 		$testUnique = $test->unique(['nama']);
 		$empty = 0;
@@ -39,7 +39,7 @@ class TestingDataController extends Controller
 		return ['duplicate' => $test->diff($testUnique)->count(), 'empty' => $empty];
 	}
 	/**
-	 * Display a listing of the resource.
+	 * Tampilkan halaman Data Testing
 	 */
 	public function index()
 	{
@@ -57,7 +57,7 @@ class TestingDataController extends Controller
 		);
 	}
 	/**
-	 * Show the form for creating a new resource.
+	 * DataTables: Tampilkan Data Testing
 	 */
 	public function create()
 	{
@@ -76,7 +76,7 @@ class TestingDataController extends Controller
 		return $dt->make();
 	}
 	/**
-	 * Store a newly created resource in storage.
+	 * Simpan Data Testing baru atau Simpan perubahan
 	 */
 	public function store(Request $request)
 	{
@@ -106,14 +106,14 @@ class TestingDataController extends Controller
 		}
 	}
 	/**
-	 * Show the form for editing the specified resource.
+	 * Ambil Data Testing
 	 */
 	public function edit(TestingData $testing)
 	{
 		return response()->json($testing);
 	}
 	/**
-	 * Remove the specified resource from storage.
+	 * Hapus Data Testing
 	 */
 	public function destroy(TestingData $testing)
 	{
@@ -123,7 +123,7 @@ class TestingDataController extends Controller
 		return response()->json(['message' => 'Berhasil dihapus']);
 	}
 	public function clear()
-	{
+	{//Hapus semua Data Testing
 		try {
 			Classification::where('type', 'test')->delete();
 			TestingData::truncate();

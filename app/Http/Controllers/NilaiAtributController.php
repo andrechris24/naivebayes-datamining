@@ -12,7 +12,7 @@ use Yajra\DataTables\Facades\DataTables;
 class NilaiAtributController extends Controller
 {
 	public function count()
-	{
+	{//Tampilkan jumlah duplikat dan terbanyak
 		$attr = Atribut::get();
 		$totalscr = [];
 		$duplicate = 0;
@@ -27,7 +27,7 @@ class NilaiAtributController extends Controller
 		]);
 	}
 	/**
-	 * Display a listing of the resource.
+	 * Tampilkan halaman Nilai Atribut
 	 */
 	public function index()
 	{
@@ -40,7 +40,7 @@ class NilaiAtributController extends Controller
 	}
 
 	/**
-	 * Show the form for creating a new resource.
+	 * DataTables: Tampilkan data Nilai Atribut
 	 */
 	public function create()
 	{
@@ -50,7 +50,7 @@ class NilaiAtributController extends Controller
 	}
 
 	/**
-	 * Store a newly created resource in storage.
+	 * Simpan data Nilai Atribut baru dan simpan perubahan
 	 */
 	public function store(Request $request)
 	{
@@ -74,7 +74,7 @@ class NilaiAtributController extends Controller
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
+	 * Ambil data Nilai Atribut untuk diedit
 	 */
 	public function edit(NilaiAtribut $nilai)
 	{
@@ -82,7 +82,7 @@ class NilaiAtributController extends Controller
 	}
 
 	/**
-	 * Remove the specified resource from storage.
+	 * Hapus data Nilai Atribut
 	 */
 	public function destroy(NilaiAtribut $nilai)
 	{

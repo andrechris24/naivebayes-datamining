@@ -241,8 +241,9 @@
 				@foreach ($atribut as $attr)
 				{
 					targets: 2 + {{$loop->index}},
-					render: function(data){
-						return data ?? "?";
+					render: function(data) {
+						if(data) return data;
+						return "?";
 					}
 				},
 				@endforeach

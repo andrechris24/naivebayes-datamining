@@ -103,3 +103,6 @@ Route::middleware(['auth'])->group(function () {
 		return phpinfo();
 	})->name('phpinfo');
 });
+Route::get('test-area', function () {
+	echo -50 / 80 * log(50 / 80, 2) + (-30 / 80) * log(30 / 80, 2);
+})->name('test-route');

@@ -17,19 +17,19 @@ use Yajra\DataTables\Facades\DataTables;
 class TrainingDataController extends Controller
 {
 	public function export()
-	{
-		if (TrainingData::count() === 0)
+	{//Download Data Training
+		if (TrainingData::count() === 0)//Cek jika kosong
 			return back()->withError('Gagal download: Data Training kosong');
 		return Excel::download(new TrainingExport, 'training_' . time() . '.xlsx');
 	}
 	public function import(Request $request)
-	{
+	{//Upload Data Training
 		$request->validate(TrainingData::$filerule);
 		Excel::import(new TrainingImport, $request->file('data'));
 		return response()->json(['message' => 'Berhasil diimpor']);
 	}
 	public function count()
-	{
+	{//Tampilkan jumlah nilai yang hilang dan data dengan nama duplikat
 		$train = TrainingData::get();
 		$trainUnique = $train->unique(['nama']);
 		$empty = 0;
@@ -38,7 +38,7 @@ class TrainingDataController extends Controller
 		return ['duplicate' => $train->diff($trainUnique)->count(), 'empty' => $empty];
 	}
 	/**
-	 * Display a listing of the resource.
+	 * Tampilkan halaman Data Training
 	 */
 	public function index()
 	{
@@ -53,7 +53,7 @@ class TrainingDataController extends Controller
 	}
 
 	/**
-	 * Show the form for creating a new resource.
+	 * Tampilkan Data Training
 	 */
 	public function create()
 	{
@@ -73,7 +73,7 @@ class TrainingDataController extends Controller
 	}
 
 	/**
-	 * Store a newly created resource in storage.
+	 * Simpan Data Training baru atau Simpan perubahan
 	 */
 	public function store(Request $request)
 	{
@@ -97,7 +97,7 @@ class TrainingDataController extends Controller
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
+	 * Ambil Data Training
 	 */
 	public function edit(TrainingData $training)
 	{
@@ -105,7 +105,7 @@ class TrainingDataController extends Controller
 	}
 
 	/**
-	 * Remove the specified resource from storage.
+	 * Hapus Data Training terpilih
 	 */
 	public function destroy(TrainingData $training)
 	{
@@ -116,7 +116,7 @@ class TrainingDataController extends Controller
 		return response()->json(['message' => 'Berhasil dihapus']);
 	}
 	public function clear()
-	{
+	{//Hapus semua Data Training
 		try {
 			Classification::where('type', 'train')->delete();
 			ProbabLabel::resetProbab();

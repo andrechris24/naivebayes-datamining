@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Log;
 class ProbabLabel extends Controller
 {
 	public static array $label = [
-		0 => 'Tidak Layak',	//false: Tidak berhak mendapatkan bantuan sosial
-		1 => 'Layak'				//true : Berhak mendapatkan bantuan sosial
+		0 => 'Tidak Layak',	//FALSE: Tidak berhak mendapatkan bantuan sosial
+		1 => 'Layak'				//TRUE : Berhak mendapatkan bantuan sosial
 	];
 	public static function preprocess(string $type)
-	{ //Impute missing values
+	{ //Preprocessing: Mengisi nilai yang hilang (Impute missing values)
 		try {
 			$novals = 0;
 			if ($type === 'test') $data = new TestingData();
@@ -29,8 +29,8 @@ class ProbabLabel extends Controller
 					if ($attr->type === 'numeric') //Jika Numerik, rata-rata yang dicari
 						$avg = $data->avg($attr->slug);
 					else { //Jika Kategorikal, paling sering muncul yang dicari
-						$most = $data->select($attr->slug)->groupBy($attr->slug)
-							->orderByRaw("COUNT(*) desc")->first();
+						$most = $data->select($attr->slug)->whereNotNull($attr->slug)
+							->groupBy($attr->slug)->orderByRaw("COUNT(*) desc")->first();
 						// if (empty($most[$attr->slug])) continue;
 					}
 					$data->whereNull($attr->slug)
@@ -44,7 +44,7 @@ class ProbabLabel extends Controller
 		}
 	}
 	public static function hitungProbab($data)
-	{
+	{//Proses perhitungan klasifikasi
 		$semuadata = TrainingData::count();
 
 		/**==================================================
@@ -118,7 +118,7 @@ class ProbabLabel extends Controller
 		];
 	}
 	public static function resetProbab(): void
-	{
+	{//Reset Probabilitas
 		if (Probability::count() > 0) Probability::truncate();
 		if (Classification::count() > 0) Classification::truncate();
 	}
@@ -127,8 +127,7 @@ class ProbabLabel extends Controller
 		return (1 / ($sd * sqrt(2 * pi()))) * exp(-0.5 * pow(($x - $mean) / $sd, 2));
 	}
 	/**
-	 * This user-land implementation follows the implementation quite strictly;
-	 * it does not attempt to improve the code or algorithm in any way.
+	 * Simpangan Baku
 	 *
 	 * @param array $a
 	 * @param bool $sample [optional] Defaults to false

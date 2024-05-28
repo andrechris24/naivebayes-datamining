@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 class ProbabilityController extends Controller
 {
 	/**
-	 * Display a listing of the resource.
+	 * Tampilkan halaman Probabilitas
 	 */
 	public function index()
 	{
@@ -35,7 +35,7 @@ class ProbabilityController extends Controller
 	}
 
 	/**
-	 * Show the form for creating a new resource.
+	 * Hitung Probabilitas pada Data Training
 	 */
 	public function create()
 	{
@@ -126,7 +126,7 @@ class ProbabilityController extends Controller
 	}
 
 	/**
-	 * Remove the specified resource from storage.
+	 * Reset Probabilitas
 	 */
 	public function destroy()
 	{
@@ -139,7 +139,7 @@ class ProbabilityController extends Controller
 		}
 	}
 	private static function getNumbers(string $col)
-	{
+	{//Khusus Atribut numerik
 		$data = ['true' => array(), 'false' => array(), 'all' => array()];
 		$trainData = TrainingData::whereNotNull($col)->get([$col, 'status']);
 		foreach ($trainData as $train) {
