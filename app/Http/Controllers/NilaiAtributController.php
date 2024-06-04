@@ -12,7 +12,7 @@ use Yajra\DataTables\Facades\DataTables;
 class NilaiAtributController extends Controller
 {
 	public function count()
-	{//Tampilkan jumlah duplikat dan terbanyak
+	{ //Tampilkan jumlah duplikat dan terbanyak
 		$attr = Atribut::get();
 		$totalscr = [];
 		$duplicate = 0;

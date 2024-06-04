@@ -151,7 +151,7 @@
 							`<button class="btn btn-primary edit-record" data-id="${data}" data-bs-toggle="modal" data-bs-target="#modalAddNilaiAtribut">` +
 							'<i class="fas fa-pen-to-square"></i>' +
 							'</button>' +
-							`<button class="btn btn-danger delete-record" data-id="${data}" data-name="${full['name']}">` +
+							`<button class="btn btn-danger delete-record" data-id="${data}" data-name="${full['name']}" data-attr="${full['atribut'].name}">` +
 							'<i class="fas fa-trash"></i>' +
 							'</button>' +
 							"</div>");
@@ -179,10 +179,12 @@
 			initError(dterr.message);
 		}
 	}).on("click", ".delete-record", function () {
-		let attr_id = $(this).data("id"), attr_name = $(this).data("name");
+		let attr_id = $(this).data("id"), 
+			attr_name = $(this).data("name"),
+			attr=$(this).data('attr');
 		Notiflix.Confirm.show(
 			"Hapus Nilai Atribut?",
-			`Anda akan menghapus Nilai Atribut ${attr_name}.`,
+			`Anda akan menghapus Nilai Atribut ${attr_name} (${attr}).`,
 			'Ya',
 			'Tidak',
 			function () {
@@ -203,7 +205,7 @@
 					error: function (xhr, st) {
 						if (xhr.status === 404) {
 							dt_atribut.draw();
-							errmsg = `Nilai Atribut ${attr_name} tidak ditemukan`;
+							errmsg = `Nilai Atribut ${attr_name} (${attr}) tidak ditemukan`;
 						} else {
 							console.warn(xhr.responseJSON.message ?? st);
 							errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;

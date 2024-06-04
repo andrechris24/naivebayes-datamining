@@ -139,7 +139,7 @@ class ProbabilityController extends Controller
 		}
 	}
 	private static function getNumbers(string $col)
-	{//Khusus Atribut numerik
+	{ //Khusus Atribut numerik
 		$data = ['true' => array(), 'false' => array(), 'all' => array()];
 		$trainData = TrainingData::whereNotNull($col)->get([$col, 'status']);
 		foreach ($trainData as $train) {

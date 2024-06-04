@@ -18,19 +18,19 @@ use Yajra\DataTables\Facades\DataTables;
 class TestingDataController extends Controller
 {
 	public function export()
-	{//Download Data Testing
+	{ //Download Data Testing
 		if (TestingData::count() === 0)
 			return back()->withError('Gagal download: Data Testing kosong');
 		return Excel::download(new TestingExport, 'testing_' . time() . '.xlsx');
 	}
 	public function import(Request $request)
-	{//Upload Data Testing
+	{ //Upload Data Testing
 		$request->validate(TestingData::$filerule);
 		Excel::import(new TestingImport, request()->file('data'));
 		return response()->json(['message' => 'Berhasil diimpor']);
 	}
 	public function count()
-	{//Tampilkan jumlah nilai yang hilang dan data dengan nama duplikat
+	{ //Tampilkan jumlah nilai yang hilang dan data dengan nama duplikat
 		$test = TestingData::get();
 		$testUnique = $test->unique(['nama']);
 		$empty = 0;
@@ -123,7 +123,7 @@ class TestingDataController extends Controller
 		return response()->json(['message' => 'Berhasil dihapus']);
 	}
 	public function clear()
-	{//Hapus semua Data Testing
+	{ //Hapus semua Data Testing
 		try {
 			Classification::where('type', 'test')->delete();
 			TestingData::truncate();

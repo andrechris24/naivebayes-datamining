@@ -17,7 +17,7 @@ use Illuminate\Validation\Rule;
 class AdminController extends Controller
 {
 	public function index()
-	{//Halaman Dashboard
+	{ //Halaman Dashboard
 		$data = [
 			'test' => TestingData::count(),
 			'train' => TrainingData::count(),
@@ -26,7 +26,7 @@ class AdminController extends Controller
 		return view('main.index', $data);
 	}
 	public function logout()
-	{//Logout
+	{ //Logout
 		User::find(Auth::id())->update(['remember_token' => null]);
 		Auth::logout();
 		Session::invalidate();
@@ -35,11 +35,11 @@ class AdminController extends Controller
 		return to_route('login');
 	}
 	public function edit()
-	{//Halaman Profil
+	{ //Halaman Profil
 		return view('main.profil');
 	}
 	public function update(Request $request)
-	{//Update Profil
+	{ //Update Profil
 		try {
 			$request->validate([
 				'name' => ['bail', 'required', 'string'],
@@ -71,7 +71,7 @@ class AdminController extends Controller
 		}
 	}
 	public function delete(Request $request)
-	{//Hapus Akun
+	{ //Hapus Akun
 		try {
 			$request->validate(User::$delrules);
 			User::findOrFail(Auth::id())->delete();

@@ -16,7 +16,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 class AtributController extends Controller
 {
-	public function count()//Tampilkan jumlah atribut tidak digunakan
+	public function count() //Tampilkan jumlah atribut tidak digunakan
 	{
 		$unused = 0;
 		foreach (Atribut::get() as $attr) {
@@ -105,8 +105,8 @@ class AtributController extends Controller
 		return response()->json(['message' => "Berhasil dihapus"]);
 	}
 	private function addColumn(string $tabel, array $req): void
-	{//Tambahkan kolom sesuai nama atribut ke tabel Dataset
-		if (!Schema::hasColumn($tabel, $req['slug'])) {//Cek jika tidak ada
+	{ //Tambahkan kolom sesuai nama atribut ke tabel Dataset
+		if (!Schema::hasColumn($tabel, $req['slug'])) { //Cek jika tidak ada
 			Schema::table($tabel, function (Blueprint $table) use ($req) {
 				if ($req['type'] === 'numeric')
 					$table->integer($req['slug'])->nullable()->after('nama');
@@ -118,8 +118,8 @@ class AtributController extends Controller
 		}
 	}
 	private function editColumn(string $tabel, $attr, array $req): void
-	{//Edit kolom pada tabel Dataset
-		if ($attr->type !== $req['type']) {//Jika tipe atribut diubah
+	{ //Edit kolom pada tabel Dataset
+		if ($attr->type !== $req['type']) { //Jika tipe atribut diubah
 			Schema::table($tabel, function (Blueprint $table) use ($attr, $req) {
 				if ($req['type'] === 'numeric')
 					$table->dropConstrainedForeignId($attr->slug);
@@ -145,8 +145,8 @@ class AtributController extends Controller
 		}
 	}
 	private function delColumn(string $tabel, $attr): void
-	{//Hapus kolom sesuai nama atribut pada tabel Dataset
-		if (Schema::hasColumn($tabel, $attr->slug)) {//Cek jika ada
+	{ //Hapus kolom sesuai nama atribut pada tabel Dataset
+		if (Schema::hasColumn($tabel, $attr->slug)) { //Cek jika ada
 			Schema::table($tabel, function (Blueprint $table) use ($attr) {
 				if ($attr->type === 'categorical') $table->dropForeign([$attr->slug]);
 				$table->dropColumn($attr->slug);

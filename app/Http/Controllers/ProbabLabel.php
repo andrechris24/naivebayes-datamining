@@ -44,7 +44,7 @@ class ProbabLabel extends Controller
 		}
 	}
 	public static function hitungProbab($data)
-	{//Proses perhitungan klasifikasi
+	{ //Proses perhitungan klasifikasi
 		$semuadata = TrainingData::count();
 
 		/**==================================================
@@ -118,7 +118,7 @@ class ProbabLabel extends Controller
 		];
 	}
 	public static function resetProbab(): void
-	{//Reset Probabilitas
+	{ //Reset Probabilitas
 		if (Probability::count() > 0) Probability::truncate();
 		if (Classification::count() > 0) Classification::truncate();
 	}

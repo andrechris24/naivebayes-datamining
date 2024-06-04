@@ -17,19 +17,19 @@ use Yajra\DataTables\Facades\DataTables;
 class TrainingDataController extends Controller
 {
 	public function export()
-	{//Download Data Training
-		if (TrainingData::count() === 0)//Cek jika kosong
+	{ //Download Data Training
+		if (TrainingData::count() === 0) //Cek jika kosong
 			return back()->withError('Gagal download: Data Training kosong');
 		return Excel::download(new TrainingExport, 'training_' . time() . '.xlsx');
 	}
 	public function import(Request $request)
-	{//Upload Data Training
+	{ //Upload Data Training
 		$request->validate(TrainingData::$filerule);
 		Excel::import(new TrainingImport, $request->file('data'));
 		return response()->json(['message' => 'Berhasil diimpor']);
 	}
 	public function count()
-	{//Tampilkan jumlah nilai yang hilang dan data dengan nama duplikat
+	{ //Tampilkan jumlah nilai yang hilang dan data dengan nama duplikat
 		$train = TrainingData::get();
 		$trainUnique = $train->unique(['nama']);
 		$empty = 0;
@@ -116,7 +116,7 @@ class TrainingDataController extends Controller
 		return response()->json(['message' => 'Berhasil dihapus']);
 	}
 	public function clear()
-	{//Hapus semua Data Training
+	{ //Hapus semua Data Training
 		try {
 			Classification::where('type', 'train')->delete();
 			ProbabLabel::resetProbab();

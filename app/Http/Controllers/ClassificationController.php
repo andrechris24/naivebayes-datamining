@@ -16,7 +16,7 @@ use Yajra\DataTables\Facades\DataTables;
 class ClassificationController extends Controller
 {
 	public function export($type)
-	{//Download data hasil klasifikasi
+	{ //Download data hasil klasifikasi
 		if (Classification::count() === 0)
 			return back()->withError('Gagal download: Tidak ada data hasil klasifikasi');
 		return Excel::download(
@@ -103,7 +103,7 @@ class ClassificationController extends Controller
 		}
 	}
 	private function getData(string $type)
-	{//Ambil data dari tabel Dataset
+	{ //Ambil data dari tabel Dataset
 		if ($type === 'train') {
 			if (TrainingData::count() === 0) return false;
 			$data = TrainingData::get();
