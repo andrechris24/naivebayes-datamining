@@ -121,17 +121,14 @@
 			type: "POST",
 			beforeSend: function () {
 				resetvalidation();
-				Notiflix.Loading.standard('Menyimpan');
-			},
-			complete: function () {
-				Notiflix.Loading.remove();
-			},
-			success: function (data) {
+				blockOnLoad('Menyimpan');
+			}, complete: function () {
+				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+			}, success: function (data) {
 				$("input[type=password]").val("");
 				$("#nama-pengguna").text(data.nama);
-				Notiflix.Notify.success("Tersimpan");
-			},
-			error: function (xhr, st) {
+				iziToast.success({title: "Tersimpan"});
+			}, error: function (xhr, st) {
 				if (xhr.status === 422) {
 					if (typeof xhr.responseJSON.errors.name !== "undefined") {
 						$("#name").addClass("is-invalid");
@@ -162,9 +159,9 @@
 						"Tunggu beberapa saat sebelum menyimpan perubahan.";
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Gagal simpan: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
+					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				Notiflix.Notify.failure(errmsg);
+				iziToast.error({title: "Gagal simpan",message: errmsg});
 			}
 		});
 	});
@@ -176,26 +173,23 @@
 			data: $("#DelAkunForm").serialize(),
 			beforeSend: function(){
 				resetvalidation();
-				Notiflix.Loading.standard("Menghapus");
-			},
-			success: function () {
-				Notiflix.Loading.change('Mengalihkan ke Halaman Login');
-				Notiflix.Loading.remove(5000);
+				blockOnLoad("Menghapus");
+			}, success: function () {
+				blockOnLoad('Mengalihkan ke Halaman Login');
 				location.replace("{{route('login')}}");
-			},
-			error: function (xhr, st) {
-				Notiflix.Loading.remove();
+			}, error: function (xhr, st) {
+				iziToast.hide({}, document.querySelector('.izitoast_loader'));
 				if (xhr.status === 422) errmsg = xhr.responseJSON.message;
 				else if (xhr.status === 429)
 					errmsg = "Terlalu banyak upaya. Cobalah beberapa saat lagi.";
 				else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Gagal hapus: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
+					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
 				$("#password-conf").addClass('is-invalid');
 				$("#del-error").text(xhr.responseJSON.message);
 				$("#DelAkunForm").modal("handleUpdate");
-				Notiflix.Notify.failure(errmsg);
+				iziToast.error({title: "Gagal hapus",message: errmsg});
 			}
 		});
 	});

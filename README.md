@@ -6,13 +6,12 @@
 <p>Aplikasi ini adalah aplikasi Klasifikasi Kelayakan Calon Penerima Bantuan Sosial menggunakan algoritma Naive Bayes. Komponen yang digunakan:</p>
 
 -   [Laravel 10](https://laravel.com/)
--   [Livewire 3](https://livewire.laravel.com/)
 -   [PHP 8.2.18](https://www.php.net/)
 -   [Volt Bootstrap 5 Dashboard](https://github.com/themesberg/volt-bootstrap-5-dashboard)
 -   [FontAwesome](https://fontawesome.com)
 -   [ApexCharts](https://apexcharts.com/)
 -   [DataTables](https://datatables.net/)
--   [Notiflix](https://notiflix.github.io)
+-   [iziToast](https://izitoast.marcelodolza.com/)
 -   [Logo oleh Uniconlabs](https://www.freepik.com/icon/data-mining_8438890)
 
 ## Cara Menggunakan

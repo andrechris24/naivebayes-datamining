@@ -30,6 +30,10 @@
 	<!-- Volt CSS -->
 	<link type="text/css" href="{{asset('css/volt.css')}}" rel="stylesheet">
 
+	<!-- iziToast CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css"
+		integrity="sha256-f6fW47QDm1m01HIep+UjpCpNwLVkBYKd+fhpb4VQ+gE=" crossorigin="anonymous">
+
 	<!-- Core -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
@@ -49,13 +53,11 @@
 	<!-- Apex Charts -->
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-	<!-- Notiflix -->
-	<script src="https://cdn.jsdelivr.net/npm/notiflix@3.2.7/dist/notiflix-aio-3.2.7.min.js"
-		integrity="sha256-G6sj3uSY1Rtnyomq54b5wiwwe2+A5Zym254DHutrXM4=" crossorigin="anonymous"></script>
+	<!-- iziToast JS -->
+	<script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"
+		integrity="sha256-321PxS+POvbvWcIVoRZeRmf32q7fTFQJ21bXwTNWREY=" crossorigin="anonymous"></script>
 
 	<!-- Data Tables -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 	<script
 		src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.0.0/b-3.0.0/b-html5-3.0.0/r-3.0.0/datatables.min.js">
 	</script>
@@ -297,7 +299,6 @@
 	<form method="POST" id="logout-form" action="{{ route('logout') }}">@csrf</form>
 	<script type="text/javascript" src="{{ asset('assets/js/datatables.js') }}"></script>
 	<script type="text/javascript">
-		Notiflix.Notify.init({timeout: 5000, clickToClose: true});
 		$(document).on('click', '#logout-btn', function (e) {
 			e.preventDefault();
 			document.getElementById('logout-form').submit();
@@ -306,6 +307,20 @@
 			$('.invalid-feedback').text('');
 			$(":input[name=id]").val('');
 			$(":input, select").removeClass('is-invalid');
+		}
+		function blockOnLoad(text){
+			iziToast.show({
+				title: text,
+				position: "center", // position the loader in the middle of the page
+				class: "izitoast_loader", // to target the loader when you want to close it
+				overlay: true, // make sure nothing is clickable in the background
+				image: '{{asset("svg-loaders/puff.svg")}}',
+				timeout: 30000,
+				close: false,
+				progressBar: false,
+				drag: false,
+				zindex: 33333
+			});
 		}
 	</script>
 	@yield('js')

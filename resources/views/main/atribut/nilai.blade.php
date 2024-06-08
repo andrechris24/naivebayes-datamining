@@ -135,8 +135,7 @@
 					{ data: "name" },
 					{ data: "atribut.name" },
 					{ data: "id" }
-				],
-				columnDefs: [{
+				], columnDefs: [{
 					targets: 0,
 					searchable: false,
 					render: function (data, type, full, meta) {
@@ -156,20 +155,19 @@
 							'</button>' +
 							"</div>");
 					}
-				}],
-				language: {
+				}], language: {
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
-				},
-				drawCallback: function(){
+				}, drawCallback: function(){
 					$("#total-counter").text(this.api().page.info().recordsTotal);
 					$.get("{{ route('atribut.nilai.count') }}", function (data) {
 						$('#total-max').text(data.max);
 						$('#total-duplicate').text(data.duplicate);
 					}).fail(function (xhr, st) {
 						console.warn(xhr.responseJSON.message ?? st);
-						Notiflix.Notify.failure(
-							`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
-						);
+						iziToast.error({
+							title: "Gagal memuat jumlah",
+							message: `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+						});
 					});
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
@@ -182,43 +180,46 @@
 		let attr_id = $(this).data("id"), 
 			attr_name = $(this).data("name"),
 			attr=$(this).data('attr');
-		Notiflix.Confirm.show(
-			"Hapus Nilai Atribut?",
-			`Anda akan menghapus Nilai Atribut ${attr_name} (${attr}).`,
-			'Ya',
-			'Tidak',
-			function () {
-				$.ajax({
-					type: "DELETE",
-					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
-					url: '/atribut/nilai/' + attr_id,
-					beforeSend: function(){
-						Notiflix.Loading.standard("Menghapus");
-					},
-					complete: function(){
-						Notiflix.Loading.remove();
-					},
-					success: function () {
-						dt_atribut.draw();
-						Notiflix.Notify.success("Berhasil dihapus");
-					},
-					error: function (xhr, st) {
-						if (xhr.status === 404) {
+		iziToast.question({
+			timeout: 20000,
+			overlay: true,
+			title: "Hapus Nilai Atribut?",
+			message: `Anda akan menghapus Nilai Atribut ${attr_name} (${attr}).`,
+			position: 'center',
+			buttons: [
+				['<button><b>Hapus</b></button>', function (instance, toast) {
+					instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+					blockOnLoad("Menghapus");
+					$.ajax({
+						type: "DELETE",
+						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
+						url: '/atribut/nilai/' + attr_id,
+						complete: function(){
+							iziToast.hide({}, document.querySelector('.izitoast_loader'));
+						}, success: function () {
 							dt_atribut.draw();
-							errmsg = `Nilai Atribut ${attr_name} (${attr}) tidak ditemukan`;
-						} else {
-							console.warn(xhr.responseJSON.message ?? st);
-							errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
+							iziToast.success({title: "Berhasil dihapus"});
+						}, error: function (xhr, st) {
+							if (xhr.status === 404) {
+								dt_atribut.draw();
+								errmsg = `Nilai Atribut ${attr_name} (${attr}) tidak ditemukan`;
+							} else {
+								console.warn(xhr.responseJSON.message ?? st);
+								errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
+							}
+							iziToast.error({title: "Gagal hapus",message: errmsg});
 						}
-						Notiflix.Notify.failure('Gagal hapus: ' + errmsg);
-					}
-				});
-			}
-		);
+					});
+				}, true],
+				['<button>Batal</button>', function (instance, toast) {
+					instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+				}]
+			]
+		});
 	}).on("click", ".edit-record", function () {
 		let attr_id = $(this).data("id");
 		$("#modalAddNilaiAtributLabel").text("Edit Nilai Atribut");
-		Notiflix.Block.standard('.modal-content','Memuat');
+		blockOnLoad('Memuat');
 		$.get(`/atribut/nilai/${attr_id}/edit`, function (data) {
 			$("#attr_id").val(data.id);
 			$("#attrName").val(data.name);
@@ -232,9 +233,9 @@
 				console.warn(xhr.responseJSON.message ?? st);
 				errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 			}
-			Notiflix.Notify.failure("Gagal memuat data: "+errmsg);
+			iziToast.error({title: "Gagal memuat data",message: errmsg});
 		}).always(function () {
-			Notiflix.Block.remove('.modal-content');
+			iziToast.hide({}, document.querySelector('.izitoast_loader'));
 		});
 	});
 	$("#addNewNilaiAtributForm").submit(function (ev) {
@@ -245,17 +246,14 @@
 			type: "POST",
 			beforeSend: function () {
 				resetvalidation();
-				Notiflix.Block.standard('.modal-content','Menyimpan');
-			},
-			complete: function () {
-				Notiflix.Block.remove('.modal-content');
-			},
-			success: function (status) {
+				blockOnLoad('Menyimpan');
+			}, complete: function () {
+				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+			}, success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-atribut")) dt_atribut.draw();
 				modalForm.modal("hide");
-				Notiflix.Notify.success(status.message);
-			},
-			error: function (xhr, st) {
+				iziToast.success({title: status.message});
+			}, error: function (xhr, st) {
 				if (xhr.status === 422) {
 					if (typeof xhr.responseJSON.errors.name !== "undefined") {
 						$("#attrName").addClass("is-invalid");
@@ -269,9 +267,9 @@
 					modalForm.modal("handleUpdate");
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Gagal: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
+					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				Notiflix.Notify.failure(errmsg);
+				iziToast.error({title: "Gagal",message: errmsg});
 			}
 		});
 	});

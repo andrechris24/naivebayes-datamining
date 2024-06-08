@@ -141,8 +141,7 @@
 					{ data: "false" },
 					{ data: "predicted" },
 					{ data: "real" }
-				],
-				columnDefs: [{
+				], columnDefs: [{
 					targets: 0,
 					render: function (data, type, full, meta) {
 						return meta.settings._iDisplayStart + meta.row + 1;
@@ -150,8 +149,7 @@
 				}],
 				language: {
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
-				},
-				drawCallback: function(){
+				}, drawCallback: function(){
 					if(this.api().page.info().recordsTotal===0)
 						$('#expBtn, #resetBtn').prop('disabled',true);
 					else $('#expBtn, #resetBtn').prop('disabled',false);
@@ -171,18 +169,15 @@
 			dataType: 'JSON',
 			url: "{{route('class.reset')}}",
 			beforeSend: function(){
-				Notiflix.Block.standard('.modal-content','Mereset');
+				blockOnLoad('Mereset');
 				$('#reset-select').removeClass('is-invalid');
-			},
-			complete: function(){
-				Notiflix.Block.remove('.modal-content');
-			},
-			success: function () {
+			}, complete: function(){
+				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+			}, success: function () {
 				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
 				$("#modalResetClass").modal('hide');
-				Notiflix.Notify.success("Berhasil direset");
-			},
-			error: function (xhr, st) {
+				iziToast.success({title: "Berhasil direset"});
+			}, error: function (xhr, st) {
 				if (xhr.status === 422 || xhr.status === 400)
 					errmsg = xhr.responseJSON.message;
 				else {
@@ -192,7 +187,7 @@
 				$('#reset-select').addClass('is-invalid');
 				$("#reset-error").text(xhr.responseJSON.message);
 				$("#modalResetClass").modal("handleUpdate");
-				Notiflix.Notify.failure('Gagal reset: ' + errmsg);
+				iziToast.error({title: "Gagal reset",message: errmsg});
 			}
 		});
 	});
@@ -205,17 +200,14 @@
 			dataType: 'JSON',
 			beforeSend: function(){
 				resetvalidation();
-				Notiflix.Block.standard('.modal-content','Menghitung');
-			},
-			complete: function(){
-				Notiflix.Block.remove('.modal-content');
-			},
-			success: function (data) {
+				blockOnLoad('Menghitung');
+			}, complete: function(){
+				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+			}, success: function (data) {
 				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
 				$("#modalCalcClass").modal('hide');
-				Notiflix.Notify.success("Berhasil dihitung");
-			},
-			error: function (xhr, st) {
+				iziToast.success({title: "Berhasil dihitung"});
+			}, error: function (xhr, st) {
 				if (xhr.status === 422 || xhr.status === 400)
 					errmsg = xhr.responseJSON.message;
 				else {
@@ -225,7 +217,7 @@
 				$('#calc-select').addClass('is-invalid');
 				$("#calc-error").text(xhr.responseJSON.message);
 				$("#modalCalcClass").modal("handleUpdate");
-				Notiflix.Notify.failure(`Gagal hitung: ${errmsg}`);
+				iziToast.error({title: "Gagal hitung",message: errmsg});
 			}
 		});
 	});

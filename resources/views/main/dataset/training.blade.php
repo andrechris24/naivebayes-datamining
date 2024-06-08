@@ -230,8 +230,7 @@
 					@endforeach
 					{ data: "status" },
 					{ data: "id" }
-				],
-				columnDefs: [{
+				], columnDefs: [{
 					targets: 0,
 					searchable: false,
 					render: function (data, type, full, meta) {
@@ -261,11 +260,9 @@
 							'</button>' +
 							"</div>");
 					}
-				}],
-				language: {
+				}], language: {
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
-				},
-				drawCallback: function(){
+				}, drawCallback: function(){
 					let total=this.api().page.info().recordsTotal;
 					if(total===0){
 						$('#dlBtn').addClass('disabled');
@@ -280,9 +277,10 @@
 						$("#total-missing").text(data.empty);
 					}).fail(function (xhr, st) {
 						console.warn(xhr.responseJSON.message ?? st);
-						Notiflix.Notify.failure(
-							`Gagal memuat jumlah: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
-						);
+						iziToast.error({
+							title: "Gagal memuat jumlah",
+							message: `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+						});
 					});
 				}
 			}).on("dt-error", function (e, settings, techNote, message) {
@@ -292,72 +290,82 @@
 			initError(dterr.message);
 		}
 	}).on("click", "#delete-all", function () {
-		Notiflix.Confirm.show(
-			"Hapus semua Data Training?",
-			'Anda akan menghapus semua Data Training.',
-			'Ya',
-			'Tidak',
-			function () {
-				$.ajax({
-					type: "DELETE",
-					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
-					url: "{{route('training.clear')}}",
-					beforeSend: function(){
-						Notiflix.Loading.standard('Menghapus');
-					},complete:function(){
-						Notiflix.Loading.remove();
-					},
-					success: function () {
-						if ($.fn.DataTable.isDataTable("#table-training"))
-							dt_training.draw();
-						Notiflix.Notify.success("Semua data berhasil dihapus");
-					},
-					error: function (xhr, st) {
-						console.warn(xhr.responseJSON.message ?? st);
-						Notiflix.Notify.failure(
-							`Gagal hapus: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`);
-					}
-				});
-			}
-		);
+		iziToast.question({
+			timeout: 20000,
+			overlay: true,
+			title: "Hapus semua Data Training?",
+			message: 'Anda akan menghapus semua Data Training.',
+			position: 'center',
+			buttons: [
+				['<button><b>Hapus</b></button>', function (instance, toast) {
+					instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+					blockOnLoad("Menghapus");
+					$.ajax({
+						type: "DELETE",
+						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
+						url: "{{route('training.clear')}}",
+						complete:function(){
+							iziToast.hide({}, document.querySelector('.izitoast_loader'));
+						}, success: function () {
+							if ($.fn.DataTable.isDataTable("#table-training"))
+								dt_training.draw();
+							iziToast.success({title: "Semua data berhasil dihapus"});
+						}, error: function (xhr, st) {
+							console.warn(xhr.responseJSON.message ?? st);
+							iziToast.error({
+								title: "Gagal hapus",
+								message: `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+							});
+						}
+					});
+				}, true],
+				['<button>Batal</button>', function (instance, toast) {
+					instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+				}]
+			]
+		});
 	}).on("click", ".delete-record", function () {
 		let train_id = $(this).data("id"), train_name = $(this).data("name");
-		Notiflix.Confirm.show(
-			"Hapus Data Training?",
-			`Anda akan menghapus Data Training ${train_name}.`,
-			'Ya',
-			'Tidak',
-			function () {
-				$.ajax({
-					type: "DELETE",
-					headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
-					url: 'training/' + train_id,
-					beforeSend: function(){
-						Notiflix.Loading.standard('Menghapus');
-					},complete:function(){
-						Notiflix.Loading.remove();
-					},
-					success: function () {
-						dt_training.draw();
-						Notiflix.Notify.success("Berhasil dihapus");
-					},
-					error: function (xhr, st) {
-						if (xhr.status === 404) {
+		iziToast.question({
+			timeout: 20000,
+			overlay: true,
+			title: "Hapus Data Training?",
+			message: `Anda akan menghapus Data Training ${train_name}.`,
+			position: 'center',
+			buttons: [
+				['<button><b>Hapus</b></button>', function (instance, toast) {
+					instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+					blockOnLoad("Menghapus");
+					$.ajax({
+						type: "DELETE",
+						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
+						url: 'training/' + train_id,
+						complete:function(){
+							iziToast.hide({}, document.querySelector('.izitoast_loader'));
+						}, success: function () {
 							dt_training.draw();
-							errmsg = `Data Training ${train_name} tidak ditemukan`;
-						} else {
-							console.warn(xhr.responseJSON.message ?? st);
-							errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
+							iziToast.success({title: "Berhasil dihapus"});
+						}, error: function (xhr, st) {
+							if (xhr.status === 404) {
+								dt_training.draw();
+								errmsg = `Data Training ${train_name} tidak ditemukan`;
+							} else {
+								console.warn(xhr.responseJSON.message ?? st);
+								errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
+							}
+							iziToast.error({title: "Gagal hapus",message: errmsg});
 						}
-						Notiflix.Notify.failure('Gagal hapus: ' + errmsg);
-					}
-				});
-			}
-		);
+					});
+				}, true],
+				['<button>Batal</button>', function (instance, toast) {
+					instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+				}]
+			]
+		});
 	}).on("click", ".edit-record", function () {
 		let train_id = $(this).data("id");
 		$("#modalAddTrainingLabel").text("Edit Data Training");
-		Notiflix.Block.standard('.modal-content','Memuat');
+		blockOnLoad('Memuat');
 		$.get(`training/${train_id}/edit`, function (data) {
 			$("#train_id").val(data.id);
 			$("#trainName").val(data.nama);
@@ -374,9 +382,9 @@
 				console.warn(xhr.responseJSON.message ?? st);
 				errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 			}
-			Notiflix.Notify.failure("Gagal memuat data: "+errmsg);
+			iziToast.error({title: "Gagal memuat data",message: errmsg});
 		}).always(function () {
-			Notiflix.Block.remove('.modal-content');
+			iziToast.hide({}, document.querySelector('.izitoast_loader'));
 		});
 	});
 	$('#importTrainingData').submit(function(e){//form Upload Data
@@ -391,17 +399,14 @@
 			processData: false,
 			beforeSend: function () {
 				resetvalidation();
-				Notiflix.Block.standard('.modal-content','Mengupload');
-			},
-			complete: function () {
-				Notiflix.Block.remove('.modal-content');
-			},
-			success: function (status) {
+				blockOnLoad('Mengupload');
+			}, complete: function () {
+				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+			}, success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-training")) dt_training.draw();
 				$('#modalImportTraining').modal("hide");
-				Notiflix.Notify.success("Berhasil diupload");
-			},
-			error: function (xhr, st) {
+				iziToast.success({title: "Berhasil diupload"});
+			}, error: function (xhr, st) {
 				$("#trainData").addClass("is-invalid");
 				$("#data-error").text(xhr.responseJSON.message);
 				if (xhr.status === 422) errmsg = xhr.responseJSON.message;
@@ -410,7 +415,7 @@
 					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
 				$("#modalImportTraining").modal("handleUpdate");
-				Notiflix.Notify.failure("Gagal upload: "+errmsg);
+				iziToast.error({title: "Gagal upload",message: errmsg});
 			}
 		});
 	});
@@ -422,17 +427,14 @@
 			type: "POST",
 			beforeSend: function () {
 				resetvalidation();
-				Notiflix.Block.standard('.modal-content','Menyimpan');
-			},
-			complete: function () {
-				Notiflix.Block.remove('.modal-content');
-			},
-			success: function (status) {
+				blockOnLoad('Menyimpan');
+			}, complete: function () {
+				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+			}, success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-training")) dt_training.draw();
 				modalForm.modal("hide");
-				Notiflix.Notify.success(status.message);
-			},
-			error: function (xhr, st) {
+				iziToast.success({title: status.message});
+			}, error: function (xhr, st) {
 				if (xhr.status === 422) {
 					if (typeof xhr.responseJSON.errors.nama !== "undefined") {
 						$("#trainName").addClass("is-invalid");
@@ -452,9 +454,9 @@
 					modalForm.modal("handleUpdate");
 				} else {
 					console.warn(xhr.responseJSON.message ?? st);
-					errmsg = `Gagal: Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
+					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				Notiflix.Notify.failure(errmsg);
+				iziToast.error({title: "Gagal",message: errmsg});
 			}
 		});
 	});
