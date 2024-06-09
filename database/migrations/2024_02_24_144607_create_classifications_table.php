@@ -15,8 +15,8 @@ return new class extends Migration
 			$table->id();
 			$table->string('name', 99);
 			$table->enum('type', ['train', 'test']);
-			$table->double('true', 25, 20)->default(0.00);
-			$table->double('false', 25, 20)->default(0.00);
+			$table->double('true')->default(0.00);
+			$table->double('false')->default(0.00);
 			$table->boolean('predicted')->comment('Kelas prediksi');
 			$table->boolean('real')->comment('Kelas asli');
 			$table->timestamps();
