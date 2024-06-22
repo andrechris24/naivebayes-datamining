@@ -232,7 +232,6 @@
 					{ data: "id" }
 				], columnDefs: [{
 					targets: 0,
-					searchable: false,
 					render: function (data, type, full, meta) {
 						return meta.settings._iDisplayStart + meta.row + 1;
 					}
@@ -241,14 +240,13 @@
 				{
 					targets: 2 + {{$loop->index}},
 					render: function(data) {
-						if(data) return data;
-						return "?";
+						return data??"?";
 					}
 				},
 				@endforeach
 				{ //Aksi
 					orderable: false,
-					searchable: false,
+					className: "text-center",
 					targets: -1,
 					render: function (data, type, full) {
 						return ('<div class="btn-group btn-group-sm" role="group">' +
@@ -279,7 +277,8 @@
 						console.warn(xhr.responseJSON.message ?? st);
 						iziToast.error({
 							title: "Gagal memuat jumlah",
-							message: `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+							message: `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`,
+							displayMode: 2
 						});
 					});
 				}
@@ -299,22 +298,25 @@
 			buttons: [
 				['<button><b>Hapus</b></button>', function (instance, toast) {
 					instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-					blockOnLoad("Menghapus");
+					$.LoadingOverlay('show');
 					$.ajax({
 						type: "DELETE",
 						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
 						url: "{{route('training.clear')}}",
 						complete:function(){
-							iziToast.hide({}, document.querySelector('.izitoast_loader'));
+							$.LoadingOverlay('hide');
 						}, success: function () {
 							if ($.fn.DataTable.isDataTable("#table-training"))
 								dt_training.draw();
-							iziToast.success({title: "Semua data berhasil dihapus"});
+							iziToast.success({
+								title: "Semua data berhasil dihapus",displayMode: 2
+							});
 						}, error: function (xhr, st) {
 							console.warn(xhr.responseJSON.message ?? st);
 							iziToast.error({
 								title: "Gagal hapus",
-								message: `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+								message: `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`,
+								displayMode: 2
 							});
 						}
 					});
@@ -335,16 +337,16 @@
 			buttons: [
 				['<button><b>Hapus</b></button>', function (instance, toast) {
 					instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-					blockOnLoad("Menghapus");
+					$.LoadingOverlay('show');
 					$.ajax({
 						type: "DELETE",
 						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
 						url: 'training/' + train_id,
 						complete:function(){
-							iziToast.hide({}, document.querySelector('.izitoast_loader'));
+							$.LoadingOverlay('hide');
 						}, success: function () {
 							dt_training.draw();
-							iziToast.success({title: "Berhasil dihapus"});
+							iziToast.success({title: "Berhasil dihapus",displayMode: 2});
 						}, error: function (xhr, st) {
 							if (xhr.status === 404) {
 								dt_training.draw();
@@ -353,7 +355,7 @@
 								console.warn(xhr.responseJSON.message ?? st);
 								errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 							}
-							iziToast.error({title: "Gagal hapus",message: errmsg});
+							iziToast.error({title: "Gagal hapus",message: errmsg,displayMode: 2});
 						}
 					});
 				}, true],
@@ -365,7 +367,7 @@
 	}).on("click", ".edit-record", function () {
 		let train_id = $(this).data("id");
 		$("#modalAddTrainingLabel").text("Edit Data Training");
-		blockOnLoad('Memuat');
+		$(modalForm).LoadingOverlay('show');
 		$.get(`training/${train_id}/edit`, function (data) {
 			$("#train_id").val(data.id);
 			$("#trainName").val(data.nama);
@@ -382,9 +384,9 @@
 				console.warn(xhr.responseJSON.message ?? st);
 				errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 			}
-			iziToast.error({title: "Gagal memuat data",message: errmsg});
+			iziToast.error({title: "Gagal memuat data",message: errmsg,displayMode: 2});
 		}).always(function () {
-			iziToast.hide({}, document.querySelector('.izitoast_loader'));
+			$(modalForm).LoadingOverlay('hide');
 		});
 	});
 	$('#importTrainingData').submit(function(e){//form Upload Data
@@ -399,13 +401,13 @@
 			processData: false,
 			beforeSend: function () {
 				resetvalidation();
-				blockOnLoad('Mengupload');
+				$("#modalImportTraining").LoadingOverlay('show');
 			}, complete: function () {
-				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+				$("#modalImportTraining").LoadingOverlay('hide');
 			}, success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-training")) dt_training.draw();
 				$('#modalImportTraining').modal("hide");
-				iziToast.success({title: "Berhasil diupload"});
+				iziToast.success({title: "Berhasil diupload",displayMode: 2});
 			}, error: function (xhr, st) {
 				$("#trainData").addClass("is-invalid");
 				$("#data-error").text(xhr.responseJSON.message);
@@ -415,7 +417,7 @@
 					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
 				$("#modalImportTraining").modal("handleUpdate");
-				iziToast.error({title: "Gagal upload",message: errmsg});
+				iziToast.error({title: "Gagal upload",message: errmsg,displayMode: 2});
 			}
 		});
 	});
@@ -427,13 +429,13 @@
 			type: "POST",
 			beforeSend: function () {
 				resetvalidation();
-				blockOnLoad('Menyimpan');
+				$(modalForm).LoadingOverlay('show');
 			}, complete: function () {
-				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+				$(modalForm).LoadingOverlay('hide');
 			}, success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-training")) dt_training.draw();
 				modalForm.modal("hide");
-				iziToast.success({title: status.message});
+				iziToast.success({title: status.message,displayMode: 2});
 			}, error: function (xhr, st) {
 				if (xhr.status === 422) {
 					if (typeof xhr.responseJSON.errors.nama !== "undefined") {
@@ -456,7 +458,7 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				iziToast.error({title: "Gagal",message: errmsg});
+				iziToast.error({title: "Gagal",message: errmsg,displayMode: 2});
 			}
 		});
 	});

@@ -121,13 +121,13 @@
 			type: "POST",
 			beforeSend: function () {
 				resetvalidation();
-				blockOnLoad('Menyimpan');
+				$.LoadingOverlay('show');
 			}, complete: function () {
-				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+				$.LoadingOverlay('hide');
 			}, success: function (data) {
 				$("input[type=password]").val("");
 				$("#nama-pengguna").text(data.nama);
-				iziToast.success({title: "Tersimpan"});
+				iziToast.success({title: "Tersimpan",displayMode: 2});
 			}, error: function (xhr, st) {
 				if (xhr.status === 422) {
 					if (typeof xhr.responseJSON.errors.name !== "undefined") {
@@ -161,7 +161,7 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				iziToast.error({title: "Gagal simpan",message: errmsg});
+				iziToast.error({title: "Gagal simpan",message: errmsg,displayMode: 2});
 			}
 		});
 	});
@@ -173,9 +173,11 @@
 			data: $("#DelAkunForm").serialize(),
 			beforeSend: function(){
 				resetvalidation();
-				blockOnLoad("Menghapus");
+				$.LoadingOverlay('show');
 			}, success: function () {
-				blockOnLoad('Mengalihkan ke Halaman Login');
+				setTimeout(function(){
+					$.LoadingOverlay("hide");
+				}, 5000);
 				location.replace("{{route('login')}}");
 			}, error: function (xhr, st) {
 				iziToast.hide({}, document.querySelector('.izitoast_loader'));
@@ -189,7 +191,7 @@
 				$("#password-conf").addClass('is-invalid');
 				$("#del-error").text(xhr.responseJSON.message);
 				$("#DelAkunForm").modal("handleUpdate");
-				iziToast.error({title: "Gagal hapus",message: errmsg});
+				iziToast.error({title: "Gagal hapus",message: errmsg,displayMode: 2});
 			}
 		});
 	});

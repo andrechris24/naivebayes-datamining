@@ -132,7 +132,7 @@ d.addEventListener("DOMContentLoaded", function () {
 			tooltips: true,
 			range: {
 				min: parseInt(c.getAttribute("data-range-value-min")),
-				max: parseInt(c.getAttribute("data-range-value-max"))
+				max: parseInt(c.getAttribute("data-range-value-max")),
 			}
 		});
 		c.noUiSlider.on("update", function (a, b) {
@@ -160,45 +160,4 @@ d.addEventListener("DOMContentLoaded", function () {
 	});
 	if (d.querySelector(".current-year"))
 		d.querySelector(".current-year").textContent = new Date().getFullYear();
-
-	// Glide JS
-	if (d.querySelector(".glide")) {
-		new Glide(".glide", {
-			type: "carousel",
-			startAt: 0,
-			perView: 3
-		}).mount();
-	}
-	if (d.querySelector(".glide-testimonials")) {
-		new Glide(".glide-testimonials", {
-			type: "carousel",
-			startAt: 0,
-			perView: 1,
-			autoplay: 2000
-		}).mount();
-	}
-	if (d.querySelector(".glide-clients")) {
-		new Glide(".glide-clients", {
-			type: "carousel",
-			startAt: 0,
-			perView: 5,
-			autoplay: 2000
-		}).mount();
-	}
-	if (d.querySelector(".glide-news-widget")) {
-		new Glide(".glide-news-widget", {
-			type: "carousel",
-			startAt: 0,
-			perView: 1,
-			autoplay: 2000
-		}).mount();
-	}
-	if (d.querySelector(".glide-autoplay")) {
-		new Glide(".glide-autoplay", {
-			type: "carousel",
-			startAt: 0,
-			perView: 3,
-			autoplay: 2000
-		}).mount();
-	}
 });

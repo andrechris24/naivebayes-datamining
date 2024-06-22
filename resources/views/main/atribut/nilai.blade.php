@@ -9,7 +9,7 @@
 				<h5 id="modalAddNilaiAtributLabel" class="modal-title">
 					Tambah Nilai Atribut
 				</h5>
-				<button type="button" class="btn-close text-reset" data-bs-dismiss="modal" aria-label="Close"></button>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
 				<form id="addNewNilaiAtributForm">@csrf
@@ -137,13 +137,12 @@
 					{ data: "id" }
 				], columnDefs: [{
 					targets: 0,
-					searchable: false,
 					render: function (data, type, full, meta) {
 						return meta.settings._iDisplayStart + meta.row + 1;
 					}
 				}, { //Aksi
 					orderable: false,
-					searchable: false,
+					className: "text-center",
 					targets: -1,
 					render: function (data, type, full) {
 						return ('<div class="btn-group btn-group-sm" role="group">' +
@@ -166,7 +165,8 @@
 						console.warn(xhr.responseJSON.message ?? st);
 						iziToast.error({
 							title: "Gagal memuat jumlah",
-							message: `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+							message: `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`,
+							displayMode: 2
 						});
 					});
 				}
@@ -198,7 +198,7 @@
 							iziToast.hide({}, document.querySelector('.izitoast_loader'));
 						}, success: function () {
 							dt_atribut.draw();
-							iziToast.success({title: "Berhasil dihapus"});
+							iziToast.success({title: "Berhasil dihapus",displayMode: 2});
 						}, error: function (xhr, st) {
 							if (xhr.status === 404) {
 								dt_atribut.draw();
@@ -207,7 +207,7 @@
 								console.warn(xhr.responseJSON.message ?? st);
 								errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 							}
-							iziToast.error({title: "Gagal hapus",message: errmsg});
+							iziToast.error({title: "Gagal hapus",message: errmsg,displayMode: 2});
 						}
 					});
 				}, true],
@@ -233,7 +233,7 @@
 				console.warn(xhr.responseJSON.message ?? st);
 				errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 			}
-			iziToast.error({title: "Gagal memuat data",message: errmsg});
+			iziToast.error({title: "Gagal memuat data",message: errmsg,displayMode: 2});
 		}).always(function () {
 			iziToast.hide({}, document.querySelector('.izitoast_loader'));
 		});
@@ -252,7 +252,7 @@
 			}, success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-atribut")) dt_atribut.draw();
 				modalForm.modal("hide");
-				iziToast.success({title: status.message});
+				iziToast.success({title: status.message,displayMode: 2});
 			}, error: function (xhr, st) {
 				if (xhr.status === 422) {
 					if (typeof xhr.responseJSON.errors.name !== "undefined") {
@@ -269,7 +269,7 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				iziToast.error({title: "Gagal",message: errmsg});
+				iziToast.error({title: "Gagal",message: errmsg,displayMode: 2});
 			}
 		});
 	});

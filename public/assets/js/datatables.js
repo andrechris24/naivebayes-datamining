@@ -2,12 +2,15 @@ function removeBtn() {
 	$("#spare-button").addClass("d-none");
 }
 function initError(message) {
-	Notiflix.Notify.failure("Terjadi kesalahan fatal pada DataTables", {
-		timeout: 5000
-	});
+	iziToast.error({ title: "Terjadi kesalahan fatal pada DataTables",displayMode:2 });
 	console.error(message);
 }
 function errorDT(message) {
 	console.warn(message);
-	Notiflix.Notify.warning(message, { timeout: 8000 });
+	iziToast.warning({
+		title: "DataTables Warning",
+		message: message,
+		timeout: 8000,
+		displayMode: 2
+	});
 }

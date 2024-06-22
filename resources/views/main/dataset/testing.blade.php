@@ -232,7 +232,6 @@
 					{ data: "id" }
 				], columnDefs: [{
 					targets: 0,
-					searchable: false,
 					render: function (data, type, full, meta) {
 						return meta.settings._iDisplayStart + meta.row + 1;
 					}
@@ -241,14 +240,13 @@
 				{
 					targets: 1 + {{$loop->index}},
 					render: function(data) {
-						if(data) return data;
-						return "?";
+						return data??"?";
 					}
 				},
 				@endforeach
 				{ //Aksi
 					orderable: false,
-					searchable: false,
+					className: "text-center",
 					targets: -1,
 					render: function (data, type, full) {
 						return ('<div class="btn-group btn-group-sm" role="group">' +
@@ -279,7 +277,8 @@
 						console.warn(xhr.responseJSON.message ?? st);
 						iziToast.error({
 							title: "Gagal memuat jumlah",
-							message: `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+							message: `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`,
+							displayMode: 2
 						});
 					});
 				}
@@ -299,21 +298,24 @@
 			buttons: [
 				['<button><b>Hapus</b></button>', function (instance, toast) {
 					instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-					blockOnLoad("Menghapus");
+					$.LoadingOverlay('show');
 					$.ajax({
 						type: "DELETE",
 						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
 						url: "{{route('testing.clear')}}",
 						complete:function(){
-							iziToast.hide({}, document.querySelector('.izitoast_loader'));
+							$.LoadingOverlay('hide');
 						}, success: function () {
 							if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
-							iziToast.success({title: "Semua data berhasil dihapus"});
+							iziToast.success({
+								title: "Semua data berhasil dihapus",displayMode: 2
+							});
 						}, error: function (xhr, st) {
 							console.warn(xhr.responseJSON.message ?? st);
 							iziToast.error({
 								title: "Gagal hapus",
-								message: `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`
+								message: `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`,
+								displayMode: 2
 							});
 						}
 					});
@@ -334,18 +336,16 @@
 			buttons: [
 				['<button><b>Hapus</b></button>', function (instance, toast) {
 					instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-					blockOnLoad("Menghapus");
+					$.LoadingOverlay('show');
 					$.ajax({
 						type: "DELETE",
 						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
 						url: 'testing/' + test_id,
-						beforeSend: function () {
-							blockOnLoad('Menghapus');
-						}, complete: function () {
-							iziToast.hide({}, document.querySelector('.izitoast_loader'));
+						complete: function () {
+							$.LoadingOverlay('hide');
 						}, success: function () {
 							dt_testing.draw();
-							iziToast.success({title: "Berhasil dihapus"});
+							iziToast.success({title: "Berhasil dihapus",displayMode: 2});
 						}, error: function (xhr, st) {
 							if (xhr.status === 404) {
 								dt_testing.draw();
@@ -354,7 +354,7 @@
 								console.warn(xhr.responseJSON.message ?? st);
 								errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 							}
-							iziToast.error({title: "Gagal hapus",message: errmsg});
+							iziToast.error({title: "Gagal hapus",message: errmsg,displayMode: 2});
 						}
 					});
 				}, true],
@@ -366,7 +366,7 @@
 	}).on("click", ".edit-record", function () {
 		let test_id = $(this).data("id");
 		$("#modalAddTestingLabel").text("Edit Data Testing");
-		blockOnLoad('Memuat');
+		$(modalForm).LoadingOverlay('show');
 		$.get(`testing/${test_id}/edit`, function (data) {
 			$("#test_id").val(data.id);
 			$("#testName").val(data.nama);
@@ -383,9 +383,9 @@
 				console.warn(xhr.responseJSON.message ?? st);
 				errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 			}
-			iziToast.error({title: "Gagal memuat data",message: errmsg});
+			iziToast.error({title: "Gagal memuat data",message: errmsg,displayMode: 2});
 		}).always(function () {
-			iziToast.hide({}, document.querySelector('.izitoast_loader'));
+			$(modalForm).LoadingOverlay('hide');
 		});
 	});
 	$('#importTestingData').submit(function(e) {//form Upload Data
@@ -399,14 +399,14 @@
 			cache: false,
 			processData: false,
 			beforeSend: function () {
-				blockOnLoad('Mengupload');
+				$('#modalImportTesting').LoadingOverlay('show');
 				resetvalidation();
 			}, complete: function () {
-				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+				$('#modalImportTesting').LoadingOverlay('hide');
 			}, success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
 				$('#modalImportTesting').modal("hide");
-				iziToast.success({title: "Berhasil diupload"});
+				iziToast.success({title: "Berhasil diupload",displayMode: 2});
 			}, error: function (xhr, st) {
 				$("#testData").addClass("is-invalid");
 				$("#data-error").text(xhr.responseJSON.message);
@@ -416,7 +416,7 @@
 					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
 				$('#modalImportTesting').modal("handleUpdate");
-				iziToast.error({title: "Gagal upload",message: errmsg});
+				iziToast.error({title: "Gagal upload",message: errmsg,displayMode: 2});
 			}
 		});
 	});
@@ -427,14 +427,14 @@
 			url: "{{ route('testing.store') }}",
 			type: "POST",
 			beforeSend: function () {
-				blockOnLoad('Menyimpan');
+				$(modalForm).LoadingOverlay('show');
 				resetvalidation();
 			}, complete: function () {
-				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+				$(modalForm).LoadingOverlay('hide');
 			}, success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
 				modalForm.modal("hide");
-				iziToast.success({title: status.message});
+				iziToast.success({title: status.message,displayMode: 2});
 			}, error: function (xhr, st) {
 				if (xhr.status === 422) {
 					if (typeof xhr.responseJSON.errors.nama !== "undefined") {
@@ -461,7 +461,7 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				iziToast.error({title: "Gagal",message: errmsg});
+				iziToast.error({title: "Gagal",message: errmsg,displayMode: 2});
 			}
 		});
 	});

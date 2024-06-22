@@ -23,9 +23,7 @@
 		rel="stylesheet">
 
 	<!-- Icons -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-		integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-		crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 	<!-- Volt CSS -->
 	<link type="text/css" href="{{asset('css/volt.css')}}" rel="stylesheet">
@@ -297,6 +295,7 @@
 		</footer>
 	</main>
 	<form method="POST" id="logout-form" action="{{ route('logout') }}">@csrf</form>
+	<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js" integrity="sha256-jLFv9iIrIbqKULHpqp/jmePDqi989pKXOcOht3zgRcw=" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/datatables.js') }}"></script>
 	<script type="text/javascript">
 		$(document).on('click', '#logout-btn', function (e) {
@@ -308,20 +307,12 @@
 			$(":input[name=id]").val('');
 			$(":input, select").removeClass('is-invalid');
 		}
-		function blockOnLoad(text){
-			iziToast.show({
-				title: text,
-				position: "center", // position the loader in the middle of the page
-				class: "izitoast_loader", // to target the loader when you want to close it
-				overlay: true, // make sure nothing is clickable in the background
-				image: '{{asset("svg-loaders/puff.svg")}}',
-				timeout: 30000,
-				close: false,
-				progressBar: false,
-				drag: false,
-				zindex: 33333
-			});
-		}
+		$.LoadingOverlaySetup({
+			background: "rgba(0, 0, 0, 0.5)",
+			image: "",
+			fontawesome: "fas fa-circle-notch fa-spin",
+			fontawesomeColor: "#ffffff"
+		});
 	</script>
 	@yield('js')
 </body>

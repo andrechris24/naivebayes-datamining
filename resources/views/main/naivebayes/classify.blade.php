@@ -169,14 +169,14 @@
 			dataType: 'JSON',
 			url: "{{route('class.reset')}}",
 			beforeSend: function(){
-				blockOnLoad('Mereset');
+				$("modalResetClass").LoadingOverlay('show');
 				$('#reset-select').removeClass('is-invalid');
 			}, complete: function(){
-				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+				$("modalResetClass").LoadingOverlay('hide');
 			}, success: function () {
 				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
 				$("#modalResetClass").modal('hide');
-				iziToast.success({title: "Berhasil direset"});
+				iziToast.success({title: "Berhasil direset",displayMode: 2});
 			}, error: function (xhr, st) {
 				if (xhr.status === 422 || xhr.status === 400)
 					errmsg = xhr.responseJSON.message;
@@ -187,7 +187,7 @@
 				$('#reset-select').addClass('is-invalid');
 				$("#reset-error").text(xhr.responseJSON.message);
 				$("#modalResetClass").modal("handleUpdate");
-				iziToast.error({title: "Gagal reset",message: errmsg});
+				iziToast.error({title: "Gagal reset",message: errmsg,displayMode: 2});
 			}
 		});
 	});
@@ -200,13 +200,13 @@
 			dataType: 'JSON',
 			beforeSend: function(){
 				resetvalidation();
-				blockOnLoad('Menghitung');
+				$("#modalCalcClass").LoadingOverlay('show');
 			}, complete: function(){
-				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+				$("#modalCalcClass").LoadingOverlay('hide');
 			}, success: function (data) {
 				if ($.fn.DataTable.isDataTable("#table-classify")) dt_classify.draw();
 				$("#modalCalcClass").modal('hide');
-				iziToast.success({title: "Berhasil dihitung"});
+				iziToast.success({title: "Berhasil dihitung",displayMode: 2});
 			}, error: function (xhr, st) {
 				if (xhr.status === 422 || xhr.status === 400)
 					errmsg = xhr.responseJSON.message;
@@ -217,7 +217,7 @@
 				$('#calc-select').addClass('is-invalid');
 				$("#calc-error").text(xhr.responseJSON.message);
 				$("#modalCalcClass").modal("handleUpdate");
-				iziToast.error({title: "Gagal hitung",message: errmsg});
+				iziToast.error({title: "Gagal hitung",message: errmsg,displayMode: 2});
 			}
 		});
 	});
