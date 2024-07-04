@@ -111,11 +111,10 @@
 @endsection
 @section('js')
 <script type="text/javascript">
-	let dt_atribut = $("#table-atribut"), errmsg;
+	let dt_atribut = $("#table-atribut"), errmsg="";
 	const modalForm = $("#modalAddAtribut");
 	$(document).ready(function () {
 		try {
-			$.fn.dataTable.ext.errMode = "none";
 			dt_atribut = dt_atribut.DataTable({
 				stateSave: true,
 				lengthChange: false,
@@ -242,7 +241,7 @@
 			$(modalForm).LoadingOverlay('hide');
 		});
 	});
-	$("#addNewAtributForm").submit(function (ev) {
+	$("#addNewAtributForm").on("submit",function (ev) {
 		ev.preventDefault();
 		$.ajax({
 			data: $("#addNewAtributForm").serialize(),

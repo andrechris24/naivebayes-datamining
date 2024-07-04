@@ -209,11 +209,10 @@
 @endsection
 @section('js')
 <script type="text/javascript">
-	let dt_training = $("#table-training"), errmsg;
-	const modalForm = $("#modalAddTraining");
+	let dt_training = $("#table-training"), errmsg="";
+	const modalForm = $("#modalAddTraining"),modalImport=$('#modalImportTraining');
 	$(document).ready(function () {
 		try {
-			$.fn.dataTable.ext.errMode = "none";
 			dt_training = dt_training.DataTable({
 				stateSave: true,
 				lengthChange: false,
@@ -389,7 +388,7 @@
 			$(modalForm).LoadingOverlay('hide');
 		});
 	});
-	$('#importTrainingData').submit(function(e){//form Upload Data
+	$('#importTrainingData').on("submit",function(e){//form Upload Data
 		e.preventDefault();
 		$.ajax({
 			type: "POST",
@@ -401,12 +400,12 @@
 			processData: false,
 			beforeSend: function () {
 				resetvalidation();
-				$("#modalImportTraining").LoadingOverlay('show');
+				modalImport.LoadingOverlay('show');
 			}, complete: function () {
-				$("#modalImportTraining").LoadingOverlay('hide');
+				modalImport.LoadingOverlay('hide');
 			}, success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-training")) dt_training.draw();
-				$('#modalImportTraining').modal("hide");
+				modalImport.modal("hide");
 				iziToast.success({title: "Berhasil diupload",displayMode: 2});
 			}, error: function (xhr, st) {
 				$("#trainData").addClass("is-invalid");
@@ -416,12 +415,12 @@
 					console.warn(xhr.responseJSON.message ?? st);
 					errmsg = `Kesalahan HTTP ${xhr.status} ${xhr.statusText}`;
 				}
-				$("#modalImportTraining").modal("handleUpdate");
+				modalImport.modal("handleUpdate");
 				iziToast.error({title: "Gagal upload",message: errmsg,displayMode: 2});
 			}
 		});
 	});
-	$("#addNewTrainingForm").submit(function (ev) {//form Input Manual
+	$("#addNewTrainingForm").on("submit",function (ev) {//form Input Manual
 		ev.preventDefault();
 		$.ajax({
 			data: $("#addNewTrainingForm").serialize(),
@@ -467,7 +466,7 @@
 		$("#modalAddTrainingLabel").text("Tambah Data Training");
 		$("#addNewTrainingForm")[0].reset();
 	});
-	$('#modalImportTraining').on('hidden.bs.modal',function(){
+	modalImport.on('hidden.bs.modal',function(){
 		resetvalidation();
 		$("#importTrainingData")[0].reset();
 	});

@@ -117,11 +117,10 @@
 @endsection
 @section('js')
 <script type="text/javascript">
-	let dt_atribut = $("#table-atribut"), errmsg;
+	let dt_atribut = $("#table-atribut"), errmsg="";
 	const modalForm = $("#modalAddNilaiAtribut");
 	$(document).ready(function () {
 		try {
-			$.fn.dataTable.ext.errMode = "none";
 			dt_atribut = dt_atribut.DataTable({
 				stateSave: true,
 				lengthChange: false,
@@ -189,13 +188,13 @@
 			buttons: [
 				['<button><b>Hapus</b></button>', function (instance, toast) {
 					instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-					blockOnLoad("Menghapus");
+					$.LoadingOverlay('show');
 					$.ajax({
 						type: "DELETE",
 						headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
 						url: '/atribut/nilai/' + attr_id,
 						complete: function(){
-							iziToast.hide({}, document.querySelector('.izitoast_loader'));
+							$.LoadingOverlay('show');
 						}, success: function () {
 							dt_atribut.draw();
 							iziToast.success({title: "Berhasil dihapus",displayMode: 2});
@@ -219,7 +218,7 @@
 	}).on("click", ".edit-record", function () {
 		let attr_id = $(this).data("id");
 		$("#modalAddNilaiAtributLabel").text("Edit Nilai Atribut");
-		blockOnLoad('Memuat');
+		$(modalForm).LoadingOverlay('show');
 		$.get(`/atribut/nilai/${attr_id}/edit`, function (data) {
 			$("#attr_id").val(data.id);
 			$("#attrName").val(data.name);
@@ -235,10 +234,10 @@
 			}
 			iziToast.error({title: "Gagal memuat data",message: errmsg,displayMode: 2});
 		}).always(function () {
-			iziToast.hide({}, document.querySelector('.izitoast_loader'));
+			$(modalForm).LoadingOverlay('hide');
 		});
 	});
-	$("#addNewNilaiAtributForm").submit(function (ev) {
+	$("#addNewNilaiAtributForm").on("submit",function (ev) {
 		ev.preventDefault();
 		$.ajax({
 			data: $("#addNewNilaiAtributForm").serialize(),
@@ -246,9 +245,9 @@
 			type: "POST",
 			beforeSend: function () {
 				resetvalidation();
-				blockOnLoad('Menyimpan');
+				$(modalForm).LoadingOverlay('show');
 			}, complete: function () {
-				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+				$(modalForm).LoadingOverlay('hide');
 			}, success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-atribut")) dt_atribut.draw();
 				modalForm.modal("hide");

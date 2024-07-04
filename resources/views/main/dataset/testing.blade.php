@@ -209,11 +209,10 @@
 @endsection
 @section('js')
 <script type="text/javascript">
-	let dt_testing = $("#table-testing"), errmsg;
-	const modalForm = $("#modalAddTesting");
+	let dt_testing = $("#table-testing"), errmsg="";
+	const modalForm = $("#modalAddTesting"),modalImport=$('#modalImportTesting');
 	$(document).ready(function () {
 		try {
-			$.fn.dataTable.ext.errMode = "none";
 			dt_testing = dt_testing.DataTable({
 				stateSave: true,
 				lengthChange: false,
@@ -388,7 +387,7 @@
 			$(modalForm).LoadingOverlay('hide');
 		});
 	});
-	$('#importTestingData').submit(function(e) {//form Upload Data
+	$('#importTestingData').on("submit",function(e) {//form Upload Data
 		e.preventDefault();
 		$.ajax({
 			type: "POST",
@@ -399,13 +398,13 @@
 			cache: false,
 			processData: false,
 			beforeSend: function () {
-				$('#modalImportTesting').LoadingOverlay('show');
+				modalImport.LoadingOverlay('show');
 				resetvalidation();
 			}, complete: function () {
-				$('#modalImportTesting').LoadingOverlay('hide');
+				modalImport.LoadingOverlay('hide');
 			}, success: function (status) {
 				if ($.fn.DataTable.isDataTable("#table-testing")) dt_testing.draw();
-				$('#modalImportTesting').modal("hide");
+				modalImport.modal("hide");
 				iziToast.success({title: "Berhasil diupload",displayMode: 2});
 			}, error: function (xhr, st) {
 				$("#testData").addClass("is-invalid");
@@ -420,7 +419,7 @@
 			}
 		});
 	});
-	$("#addNewTestingForm").submit(function (ev) {//form Input Manual
+	$("#addNewTestingForm").on("submit",function (ev) {//form Input Manual
 		ev.preventDefault();
 		$.ajax({
 			data: $("#addNewTestingForm").serialize(),
@@ -470,7 +469,7 @@
 		$("#modalAddTestingLabel").text("Tambah Data Testing");
 		$("#addNewTestingForm")[0].reset();
 	});
-	$('#modalImportTesting').on('hidden.bs.modal',function(){
+	modalImport.on('hidden.bs.modal',function(){
 		resetvalidation();
 		$("#importTestingData")[0].reset();
 	});

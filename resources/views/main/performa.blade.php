@@ -265,20 +265,15 @@
 		}, {
 			name: "Tidak Layak (Prediksi)",
 			data: [{{$data['test']['fn']}}, {{$data['test']['tn']}}]
-		}],
-		chart: {
+		}], chart: {
 			type: "bar"
-		},
-		dataLabels: {
+		}, dataLabels: {
 			enabled: false
-		},
-		tooltip: {
+		}, tooltip: {
 			theme: 'dark'
-		},
-		xaxis: {
+		}, xaxis: {
 			categories: ["Layak (Aktual)", "Tidak Layak (Aktual)"]
-		},
-		title: {
+		}, title: {
 			text: 'Hasil Prediksi'
 		}
 	};
@@ -289,20 +284,15 @@
 		}, {
 			name: "Tidak Layak (Prediksi)",
 			data: [{{$data['train']['fn']}}, {{$data['train']['tn']}}]
-		}],
-		chart: {
+		}], chart: {
 			type: "bar"
-		},
-		dataLabels: {
+		}, dataLabels: {
 			enabled: false
-		},
-		tooltip: {
+		}, tooltip: {
 			theme: 'dark'
-		},
-		xaxis: {
+		}, xaxis: {
 			categories: ["Layak (Aktual)", "Tidak Layak (Aktual)"]
-		},
-		title: {
+		}, title: {
 			text: 'Hasil Prediksi'
 		}
 	};

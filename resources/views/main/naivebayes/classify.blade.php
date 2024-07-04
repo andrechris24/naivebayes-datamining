@@ -121,10 +121,9 @@
 @endsection
 @section('js')
 <script type="text/javascript">
-	let dt_classify = $("#table-classify"), errmsg;
+	let dt_classify = $("#table-classify"), errmsg="";
 	$(document).ready(function () {
 		try {
-			$.fn.dataTable.ext.errMode = "none";
 			dt_classify = dt_classify.DataTable({
 				stateSave: true,
 				lengthChange: false,
@@ -146,8 +145,7 @@
 					render: function (data, type, full, meta) {
 						return meta.settings._iDisplayStart + meta.row + 1;
 					}
-				}],
-				language: {
+				}], language: {
 					url: "https://cdn.datatables.net/plug-ins/2.0.0/i18n/id.json"
 				}, drawCallback: function(){
 					if(this.api().page.info().recordsTotal===0)
@@ -161,7 +159,7 @@
 			initError(dterr.message);
 		}
 	});
-	$("#formResetClass").submit(function(e){
+	$("#formResetClass").on("submit",function(e){
 		e.preventDefault();
 		$.ajax({
 			type: "DELETE",
@@ -191,7 +189,7 @@
 			}
 		});
 	});
-	$("#formCalcClass").submit(function(e){
+	$("#formCalcClass").on("submit",function(e){
 		e.preventDefault();
 		$.ajax({
 			url: "{{ route('class.create') }}",

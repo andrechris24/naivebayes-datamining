@@ -1,8 +1,8 @@
-function removeBtn() {
-	$("#spare-button").addClass("d-none");
-}
 function initError(message) {
-	iziToast.error({ title: "Terjadi kesalahan fatal pada DataTables",displayMode:2 });
+	iziToast.error({
+		title: "Terjadi kesalahan fatal pada DataTables",
+		displayMode: 2,
+	});
 	console.error(message);
 }
 function errorDT(message) {
@@ -11,6 +11,6 @@ function errorDT(message) {
 		title: "DataTables Warning",
 		message: message,
 		timeout: 8000,
-		displayMode: 2
+		displayMode: 2,
 	});
 }

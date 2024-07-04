@@ -112,8 +112,8 @@
 <script type="text/javascript" src="{{ asset('assets/js/capslock.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/js/password.js') }}"></script>
 <script type="text/javascript">
-	let errmsg;
-	$("#form-edit-account").submit(function(e) {
+	let errmsg="";
+	$("#form-edit-account").on("submit",function(e) {
 		e.preventDefault();
 		$.ajax({
 			data: $("#form-edit-account").serialize(),
@@ -165,7 +165,7 @@
 			}
 		});
 	});
-	$("#DelAkunForm").submit(function (e) {
+	$("#DelAkunForm").on("submit",function (e) {
 		e.preventDefault();
 		$.ajax({
 			url: "{{ route('profil.delete') }}",
