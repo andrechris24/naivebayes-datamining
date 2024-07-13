@@ -180,7 +180,7 @@
 				}, 5000);
 				location.replace("{{route('login')}}");
 			}, error: function (xhr, st) {
-				iziToast.hide({}, document.querySelector('.izitoast_loader'));
+				$.LoadingOverlay("hide");
 				if (xhr.status === 422) errmsg = xhr.responseJSON.message;
 				else if (xhr.status === 429)
 					errmsg = "Terlalu banyak upaya. Cobalah beberapa saat lagi.";

@@ -91,7 +91,6 @@
 					<div class="accordion-body">
 						<div class="table-responsive">
 							<table class="table table-bordered caption-top">
-								{{-- <caption>{{ $attr->name }}</caption> --}}
 								<thead>
 									<tr>
 										<th>#</th>

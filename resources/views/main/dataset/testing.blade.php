@@ -465,13 +465,11 @@
 		});
 	});
 	modalForm.on("hidden.bs.modal", function () {
-		resetvalidation();
+		resetForm("#addNewTestingForm");
 		$("#modalAddTestingLabel").text("Tambah Data Testing");
-		$("#addNewTestingForm")[0].reset();
 	});
 	modalImport.on('hidden.bs.modal',function(){
-		resetvalidation();
-		$("#importTestingData")[0].reset();
+		resetForm("#importTestingData");
 	});
 </script>
 @endsection

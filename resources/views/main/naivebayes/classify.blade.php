@@ -168,7 +168,7 @@
 			url: "{{route('class.reset')}}",
 			beforeSend: function(){
 				$("modalResetClass").LoadingOverlay('show');
-				$('#reset-select').removeClass('is-invalid');
+				resetvalidation();
 			}, complete: function(){
 				$("modalResetClass").LoadingOverlay('hide');
 			}, success: function () {

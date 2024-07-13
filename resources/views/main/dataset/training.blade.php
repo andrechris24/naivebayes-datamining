@@ -462,13 +462,11 @@
 		});
 	});
 	modalForm.on("hidden.bs.modal", function () {
-		resetvalidation();
+		resetForm("#addNewTrainingForm");
 		$("#modalAddTrainingLabel").text("Tambah Data Training");
-		$("#addNewTrainingForm")[0].reset();
 	});
 	modalImport.on('hidden.bs.modal',function(){
-		resetvalidation();
-		$("#importTrainingData")[0].reset();
+		resetForm("#importTrainingData");
 	});
 </script>
 @endsection

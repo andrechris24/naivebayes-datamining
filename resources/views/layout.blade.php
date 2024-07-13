@@ -309,9 +309,12 @@
 			$.fn.dataTable.ext.errMode = "none";
 		});
 		function resetvalidation() {
-			$('.invalid-feedback').text('');
-			$(":input[name=id]").val('');
-			$(":input, select").removeClass('is-invalid');
+			$(":input").removeClass('is-invalid');
+		}
+		function resetForm(form){
+			resetvalidation();
+			$(form)[0].reset();
+			$(form+" :input[name=id]").val('');
 		}
 		$.LoadingOverlaySetup({
 			background: "rgba(0, 0, 0, 0.5)",

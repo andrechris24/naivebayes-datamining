@@ -273,9 +273,8 @@
 		});
 	});
 	modalForm.on("hidden.bs.modal", function () {
-		resetvalidation();
+		resetForm("#addNewNilaiAtributForm");
 		$("#modalAddNilaiAtributLabel").text("Tambah Nilai Atribut");
-		$("#addNewNilaiAtributForm")[0].reset();
 	});
 </script>
 @endsection

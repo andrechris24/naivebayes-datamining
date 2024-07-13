@@ -281,10 +281,9 @@
 		});
 	});
 	modalForm.on("hidden.bs.modal", function () {
-		resetvalidation();
+		resetForm("#addNewAtributForm");
 		$("#modalAddAtributLabel").text("Tambah Atribut");
 		$("#attr-note").addClass('d-none');
-		$("#addNewAtributForm")[0].reset();
 	});
 </script>
 @endsection
