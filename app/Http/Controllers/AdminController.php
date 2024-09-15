@@ -44,8 +44,12 @@ class AdminController extends Controller
 			$request->validate([
 				'name' => ['bail', 'required', 'string'],
 				'email' => [
-					'bail', 'required', 'email', Rule::unique('users')->ignore(Auth::id())
-				], 'current_password' => ['bail', 'required', 'current_password'],
+					'bail',
+					'required',
+					'email',
+					Rule::unique('users')->ignore(Auth::id())
+				],
+				'current_password' => ['bail', 'required', 'current_password'],
 				'password' => ['nullable', 'bail', 'confirmed', 'between:8,20'],
 				'password_confirmation' => 'required_with:password'
 			]);

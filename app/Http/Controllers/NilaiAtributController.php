@@ -23,7 +23,8 @@ class NilaiAtributController extends Controller
 			$duplicate += $subs->diff($subUnique)->count();
 		}
 		return response()->json([
-			'max' => collect($totalscr)->max() ?? 0, 'duplicate' => $duplicate
+			'max' => collect($totalscr)->max() ?? 0,
+			'duplicate' => $duplicate
 		]);
 	}
 	/**
@@ -58,12 +59,14 @@ class NilaiAtributController extends Controller
 			$request->validate(NilaiAtribut::$rules);
 			if (!empty($request->id)) {
 				NilaiAtribut::updateOrCreate(['id' => $request->id], [
-					'name' => $request->name, 'atribut_id' => $request->atribut_id
+					'name' => $request->name,
+					'atribut_id' => $request->atribut_id
 				]);
 				return response()->json(['message' => 'Berhasil diedit']);
 			} else {
 				NilaiAtribut::create([
-					'name' => $request->name, 'atribut_id' => $request->atribut_id
+					'name' => $request->name,
+					'atribut_id' => $request->atribut_id
 				]);
 				return response()->json(['message' => 'Berhasil disimpan']);
 			}

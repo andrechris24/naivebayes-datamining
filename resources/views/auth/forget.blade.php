@@ -11,7 +11,6 @@
 @endsection
 @section('form')
 <form action="{{ route('password.send') }}" method="POST" enctype="multipart/form-data">
-	<!-- Form -->
 	@csrf
 	<div class="mb-4">
 		<label for="email">Email</label>
@@ -24,7 +23,6 @@
 		</div>
 		@error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
 	</div>
-	<!-- End of Form -->
 	<div class="d-grid">
 		<button type="submit" class="btn btn-gray-800">
 			<i class="fas fa-paper-plane"></i> Kirim link

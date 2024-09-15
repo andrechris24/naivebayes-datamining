@@ -55,7 +55,8 @@ class ClassificationController extends Controller
 			foreach ($semuadata as $dataset) {
 				$klasifikasi = ProbabLabel::hitungProbab($dataset);
 				Classification::updateOrCreate([
-					'name' => $dataset->nama, 'type' => $request->tipe
+					'name' => $dataset->nama,
+					'type' => $request->tipe
 				], [
 					'true' => $klasifikasi['true'],
 					'false' => $klasifikasi['false'],
@@ -64,7 +65,8 @@ class ClassificationController extends Controller
 				]);
 			}
 			return response()->json([
-				'message' => 'Berhasil dihitung', 'preprocess' => $pre ?? 0
+				'message' => 'Berhasil dihitung',
+				'preprocess' => $pre ?? 0
 			]);
 		} catch (QueryException $e) {
 			Log::error($e);

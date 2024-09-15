@@ -5,7 +5,6 @@
 @section('form')
 <form action="{{ route('login.submit') }}" class="mt-4" method="POST" enctype="multipart/form-data">
 	@csrf
-	<!-- Form -->
 	<div class="form-group mb-4">
 		<label for="email">Email</label>
 		<div class="input-group">
@@ -17,9 +16,7 @@
 		</div>
 		@error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
 	</div>
-	<!-- End of Form -->
 	<div class="form-group">
-		<!-- Form -->
 		<div class="form-group mb-4">
 			<label for="password">Password</label>
 			<div class="input-group">
@@ -33,7 +30,6 @@
 			<div class="invalid-feedback">{{ $message }}</div>
 			@enderror
 		</div>
-		<!-- End of Form -->
 		<div class="d-flex justify-content-between align-items-top mb-4">
 			<div class="form-check">
 				<input class="form-check-input" type="checkbox" value="1" id="remember" name="remember">

@@ -24,7 +24,6 @@
 		</div>
 		@error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
 	</div>
-	<!-- Form -->
 	<div class="form-group mb-4">
 		<label for="password">Password</label>
 		<div class="input-group">
@@ -53,7 +52,6 @@
 		<div class="invalid-feedback">{{ $message }}</div>
 		@enderror
 	</div>
-	<!-- End of Form -->
 	<div class="d-grid">
 		<button type="submit" class="btn btn-gray-800">Reset password</button>
 	</div>

@@ -33,7 +33,11 @@ class ResultController extends Controller
 			->where('real', false)->count(); //True Negative
 		$total = $tp + $fp + $fn + $tn;
 		return [
-			'tp' => $tp, 'fp' => $fp, 'fn' => $fn, 'tn' => $tn, 'total' => $total
+			'tp' => $tp,
+			'fp' => $fp,
+			'fn' => $fn,
+			'tn' => $tn,
+			'total' => $total
 		];
 	}
 	private static function performa(array $data)
@@ -46,7 +50,10 @@ class ResultController extends Controller
 			$f1 = 2 * ($prec * $rec) / ($prec + $rec);
 		}
 		return [
-			'accuracy' => $accu, 'precision' => $prec, 'recall' => $rec, 'f1' => $f1
+			'accuracy' => $accu,
+			'precision' => $prec,
+			'recall' => $rec,
+			'f1' => $f1
 		];
 	}
 }

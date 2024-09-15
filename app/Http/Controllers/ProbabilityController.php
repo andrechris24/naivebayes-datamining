@@ -68,7 +68,8 @@ class ProbabilityController extends Controller
 						$total['all']
 				];
 				Probability::updateOrCreate([
-					'atribut_id' => $nilai->atribut_id, 'nilai_atribut_id' => $nilai->id
+					'atribut_id' => $nilai->atribut_id,
+					'nilai_atribut_id' => $nilai->id
 				], [
 					'true' => json_encode($ll[$nilai->name]['true']),
 					'false' => json_encode($ll[$nilai->name]['false']),
@@ -93,7 +94,8 @@ class ProbabilityController extends Controller
 				$sd[$nilainum->name]['all'] =
 					ProbabLabel::stats_standard_deviation($p['all'], true);
 				Probability::updateOrCreate([
-					'atribut_id' => $nilainum->id, 'nilai_atribut_id' => null
+					'atribut_id' => $nilainum->id,
+					'nilai_atribut_id' => null
 				], [
 					'true' =>  json_encode([
 						'mean' => $avg[$nilainum->name]['true'],

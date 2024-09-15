@@ -9,7 +9,11 @@ class Probability extends Model
 {
 	use HasFactory;
 	protected $fillable = [
-		'atribut_id', 'nilai_atribut_id', 'true', 'false', 'total'
+		'atribut_id',
+		'nilai_atribut_id',
+		'true',
+		'false',
+		'total'
 	];
 	public function atribut()
 	{
