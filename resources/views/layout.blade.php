@@ -19,7 +19,7 @@
 
 	<!-- DataTables -->
 	<link
-		href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.6/b-3.1.2/b-html5-3.1.2/r-3.0.3/datatables.min.css"
+		href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/b-3.1.2/b-html5-3.1.2/r-3.0.3/datatables.min.css"
 		rel="stylesheet">
 
 	<!-- Icons -->
@@ -59,7 +59,7 @@
 
 	<!-- Data Tables -->
 	<script
-		src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.6/b-3.1.2/b-html5-3.1.2/r-3.0.3/datatables.min.js">
+		src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/b-3.1.2/b-html5-3.1.2/r-3.0.3/datatables.min.js">
 	</script>
 
 	<!-- Simplebar -->
