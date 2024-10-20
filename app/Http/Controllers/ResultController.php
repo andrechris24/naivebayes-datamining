@@ -32,13 +32,7 @@ class ResultController extends Controller
 		$tn = Classification::where('type', $type)->where('predicted', false)
 			->where('real', false)->count(); //True Negative
 		$total = $tp + $fp + $fn + $tn;
-		return [
-			'tp' => $tp,
-			'fp' => $fp,
-			'fn' => $fn,
-			'tn' => $tn,
-			'total' => $total
-		];
+		return ['tp' => $tp, 'fp' => $fp, 'fn' => $fn, 'tn' => $tn, 'total' => $total];
 	}
 	private static function performa(array $data)
 	{ //Hitung Akurasi, Presisi, Recall, dan F1-score

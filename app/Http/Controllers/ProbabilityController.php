@@ -93,23 +93,23 @@ class ProbabilityController extends Controller
 				$avg[$nilainum->name]['all'] = array_sum($p['all']) / count($p['all']);
 				$sd[$nilainum->name]['all'] =
 					ProbabLabel::stats_standard_deviation($p['all'], true);
-				Probability::updateOrCreate([
-					'atribut_id' => $nilainum->id,
-					'nilai_atribut_id' => null
-				], [
-					'true' =>  json_encode([
-						'mean' => $avg[$nilainum->name]['true'],
-						'sd' => $sd[$nilainum->name]['true']
-					]),
-					'false' => json_encode([
-						'mean' => $avg[$nilainum->name]['false'],
-						'sd' => $sd[$nilainum->name]['false']
-					]),
-					'total' => json_encode([
-						'mean' => $avg[$nilainum->name]['all'],
-						'sd' => $sd[$nilainum->name]['all']
-					])
-				]);
+				Probability::updateOrCreate(
+					['atribut_id' => $nilainum->id, 'nilai_atribut_id' => null],
+					[
+						'true' =>  json_encode([
+							'mean' => $avg[$nilainum->name]['true'],
+							'sd' => $sd[$nilainum->name]['true']
+						]),
+						'false' => json_encode([
+							'mean' => $avg[$nilainum->name]['false'],
+							'sd' => $sd[$nilainum->name]['false']
+						]),
+						'total' => json_encode([
+							'mean' => $avg[$nilainum->name]['all'],
+							'sd' => $sd[$nilainum->name]['all']
+						])
+					]
+				);
 			}
 			//Likelihood End
 

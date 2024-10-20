@@ -8,13 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Probability extends Model
 {
 	use HasFactory;
-	protected $fillable = [
-		'atribut_id',
-		'nilai_atribut_id',
-		'true',
-		'false',
-		'total'
-	];
+	protected $fillable = ['atribut_id', 'nilai_atribut_id', 'true', 'false', 'total'];
 	public function atribut()
 	{
 		return $this->belongsTo(Atribut::class, 'atribut_id');

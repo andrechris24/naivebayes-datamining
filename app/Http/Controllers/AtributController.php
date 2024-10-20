@@ -74,7 +74,10 @@ class AtributController extends Controller
 				return response()->json(['message' => 'Berhasil disimpan']);
 			}
 		} catch (QueryException $e) {
-			if (in_array($e->errorInfo[1], [1060, 1062])) {
+			if (
+				in_array($e->errorInfo[1], [1060, 1062]) ||
+				in_array($e->errorInfo[0], [23505, 42701])
+			) {
 				return response()->json([
 					'message' => "Nama Atribut \"$request->name\" sudah digunakan",
 					'errors' => ['name' => "Nama Atribut sudah digunakan"]
@@ -100,7 +103,6 @@ class AtributController extends Controller
 	{
 		$this->delColumn('training_data', $atribut);
 		$this->delColumn('testing_data', $atribut);
-		// NilaiAtribut::where('atribut_id',$atribut->id)->delete();
 		$atribut->delete();
 		return response()->json(['message' => "Berhasil dihapus"]);
 	}

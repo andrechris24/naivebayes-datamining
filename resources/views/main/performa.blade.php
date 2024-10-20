@@ -20,8 +20,8 @@
 	</li>
 </ul>
 <div class="tab-content" id="pills-tabContent">
-	<div class="tab-pane fade @if($data['test']['total']>0) show active @endif " id="pills-testing"
-		role="tabpanel" aria-labelledby="pills-testing-tab" tabindex="0">
+	<div @class([ 'tab-pane' ,'fade','show'=>$data['test']['total']>0,'active'=>$data['test']['total']>0
+		]) id="pills-testing" role="tabpanel" aria-labelledby="pills-testing-tab" tabindex="0">
 		<div class="card mb-3">
 			<div class="card-header"><b>Performa Klasifikasi Data Testing</b></div>
 			<div class="card-body">
@@ -137,8 +137,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="tab-pane fade @if($data['test']['total']===0) show active @endif " id="pills-training"
-		role="tabpanel" aria-labelledby="pills-training-tab" tabindex="0">
+	<div @class([ 'tab-pane' ,'fade','show'=>$data['test']['total']===0,'active'=>$data['test']['total']===0
+		]) id="pills-training" role="tabpanel" aria-labelledby="pills-training-tab" tabindex="0">
 		<div class="card mb-3">
 			<div class="card-header"><b>Performa Klasifikasi Data Training</b></div>
 			<div class="card-body">

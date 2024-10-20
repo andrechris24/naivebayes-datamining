@@ -64,7 +64,7 @@ class AdminController extends Controller
 		} catch (ModelNotFoundException) {
 			return response()->json(['message' => 'Akun tidak ditemukan'], 404);
 		} catch (QueryException $e) {
-			if ($e->errorInfo[1] === 1062) {
+			if ($e->errorInfo[1] === 1062 || $e->errorInfo[0] === 23505) {
 				return response()->json([
 					'message' => "Email \"$request->email\" sudah digunakan",
 					'errors' => ['email' => "Email sudah digunakan"]
