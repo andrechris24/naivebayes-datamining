@@ -93,9 +93,7 @@
 						<img src="{{asset('assets/img/data-mining_8438890.png')}}" height="20" width="20"
 							alt="Logo Data Mining">
 					</div>
-					<div class="d-block">
-						<h2 class="h5 mb-3">Data Mining</h2>
-					</div>
+					<div class="d-block"><h2 class="h5 mb-3">Data Mining</h2></div>
 				</div>
 				<div class="collapse-close d-md-none">
 					<a href="#sidebarMenu" data-bs-toggle="collapse" data-bs-target="#sidebarMenu"
@@ -118,7 +116,8 @@
 						</span>
 					</a>
 				</li>
-				<li @class(["nav-item", 'active'=>Request::segment(1)=='atribut'&&empty(Request::segment(2))
+				<li @class([
+					"nav-item", 'active'=>Request::segment(1)=='atribut'&&empty(Request::segment(2))
 					])>
 					<a href="{{route('atribut.index')}}" class="nav-link d-flex justify-content-between">
 						<span>
@@ -319,7 +318,7 @@
 		function resetForm(form){
 			resetvalidation();
 			$(form)[0].reset();
-			$(form+" :input[name=id]").val('');
+			$(form + " :input[name=id]").val('');
 		}
 		$.LoadingOverlaySetup({
 			background: "rgba(0, 0, 0, 0.5)",

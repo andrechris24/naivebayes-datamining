@@ -104,12 +104,7 @@
 		</button>
 		<table class="table table-bordered" id="table-atribut" width="100%">
 			<thead>
-				<tr>
-					<th>#</th>
-					<th>Nama</th>
-					<th>Atribut</th>
-					<th>Aksi</th>
-				</tr>
+				<tr><th>#</th><th>Nama</th><th>Atribut</th><th>Aksi</th></tr>
 			</thead>
 		</table>
 	</div>
@@ -130,10 +125,7 @@
 				searching: false,
 				ajax: "{{ route('atribut.nilai.create') }}",
 				columns: [
-					{ data: "id" },
-					{ data: "name" },
-					{ data: "atribut.name" },
-					{ data: "id" }
+					{ data: "id" },{ data: "name" },{ data: "atribut.name" },{ data: "id" }
 				], columnDefs: [{
 					targets: 0,
 					render: function (data, type, full, meta) {
@@ -178,7 +170,7 @@
 	}).on("click", ".delete-record", function () {
 		let attr_id = $(this).data("id"), 
 			attr_name = $(this).data("name"),
-			attr=$(this).data('attr');
+			attr = $(this).data('attr');
 		iziToast.question({
 			timeout: 20000,
 			overlay: true,

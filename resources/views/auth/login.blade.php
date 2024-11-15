@@ -4,8 +4,7 @@
 @section('desc', 'Silahkan login dengan data yang sudah Anda daftarkan.')
 @section('form')
 <form action="{{ route('login.submit') }}" class="mt-4" method="POST" enctype="multipart/form-data">
-	@csrf
-	<div class="form-group mb-4">
+	<div class="form-group mb-4">@csrf
 		<label for="email">Email</label>
 		<div class="input-group">
 			<span class="input-group-text">

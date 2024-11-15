@@ -12,11 +12,8 @@ use Illuminate\Support\Facades\Log;
 
 class ProbabilityController extends Controller
 {
-	/**
-	 * Tampilkan halaman Probabilitas
-	 */
 	public function index()
-	{
+	{//Tampilkan halaman Probabilitas
 		$atribut = Atribut::get();
 		if (count($atribut) === 0) {
 			return to_route('atribut.index')
@@ -33,12 +30,8 @@ class ProbabilityController extends Controller
 			compact('attribs', 'data', 'kelas', 'training', 'hasil')
 		);
 	}
-
-	/**
-	 * Hitung Probabilitas pada Data Training
-	 */
 	public function create()
-	{
+	{//Hitung Probabilitas pada Data Training
 		try {
 			if (TrainingData::count() === 0) {
 				return to_route("training.index")->withWarning(
@@ -68,8 +61,7 @@ class ProbabilityController extends Controller
 						$total['all']
 				];
 				Probability::updateOrCreate([
-					'atribut_id' => $nilai->atribut_id,
-					'nilai_atribut_id' => $nilai->id
+					'atribut_id' => $nilai->atribut_id,	'nilai_atribut_id' => $nilai->id
 				], [
 					'true' => json_encode($ll[$nilai->name]['true']),
 					'false' => json_encode($ll[$nilai->name]['false']),
@@ -126,12 +118,8 @@ class ProbabilityController extends Controller
 			return back()->withError('Gagal hitung:')->withErrors($e->errorInfo);
 		}
 	}
-
-	/**
-	 * Reset Probabilitas
-	 */
 	public function destroy()
-	{
+	{//Reset Probabilitas
 		try {
 			Probability::truncate();
 			Classification::truncate();

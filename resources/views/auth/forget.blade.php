@@ -11,8 +11,7 @@
 @endsection
 @section('form')
 <form action="{{ route('password.send') }}" method="POST" enctype="multipart/form-data">
-	@csrf
-	<div class="mb-4">
+	<div class="mb-4">@csrf
 		<label for="email">Email</label>
 		<div class="input-group">
 			<span class="input-group-text">

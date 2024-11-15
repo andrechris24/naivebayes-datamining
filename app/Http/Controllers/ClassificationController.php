@@ -24,19 +24,12 @@ class ClassificationController extends Controller
 			"klasifikasi_{$type}_" . time() . ".xlsx"
 		);
 	}
-	/**
-	 * Tampilkan halaman Klasifikasi
-	 */
 	public function index()
-	{
+	{//Tampilkan halaman Klasifikasi
 		return view('main.naivebayes.classify', ['hasil' => ProbabLabel::$label]);
 	}
-
-	/**
-	 * Hitung klasifikasi
-	 */
 	public function create(Request $request)
-	{
+	{//Hitung klasifikasi
 		$request->validate(Classification::$rule);
 		try {
 			if (Probability::count() === 0)
@@ -65,20 +58,15 @@ class ClassificationController extends Controller
 				);
 			}
 			return response()->json([
-				'message' => 'Berhasil dihitung',
-				'preprocess' => $pre ?? 0
+				'message' => 'Berhasil dihitung',	'preprocess' => $pre ?? 0
 			]);
 		} catch (QueryException $e) {
 			Log::error($e);
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
 	}
-
-	/**
-	 * DataTables: Tampilkan data hasil klasifikasi
-	 */
 	public function show()
-	{
+	{//Tampilkan data hasil klasifikasi
 		return DataTables::of(Classification::query())
 			->editColumn('type', function (Classification $class) {
 				return Classification::$tipedata[$class->type];
@@ -88,12 +76,8 @@ class ClassificationController extends Controller
 				return ProbabLabel::$label[$class->real];
 			})->make();
 	}
-
-	/**
-	 * Hapus data hasil klasifikasi sesuai tipe data yang dipilih
-	 */
 	public function destroy(Request $request)
-	{
+	{//Hapus data hasil klasifikasi sesuai tipe data yang dipilih
 		$request->validate(Classification::$rule);
 		try {
 			if ($request->tipe === 'all') Classification::truncate();

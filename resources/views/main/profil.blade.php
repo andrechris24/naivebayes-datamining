@@ -127,7 +127,7 @@
 			}, success: function (data) {
 				$("input[type=password]").val("");
 				$("#nama-pengguna").text(data.nama);
-				iziToast.success({title: "Tersimpan",displayMode: 2});
+				iziToast.success({title: "Tersimpan", displayMode: 2});
 			}, error: function (xhr, st) {
 				if (xhr.status === 422) {
 					if (typeof xhr.responseJSON.errors.name !== "undefined") {
@@ -175,9 +175,7 @@
 				resetvalidation();
 				$.LoadingOverlay('show');
 			}, success: function () {
-				setTimeout(function(){
-					$.LoadingOverlay("hide");
-				}, 5000);
+				setTimeout(function(){$.LoadingOverlay("hide");}, 5000);
 				location.replace("{{route('login')}}");
 			}, error: function (xhr, st) {
 				$.LoadingOverlay("hide");

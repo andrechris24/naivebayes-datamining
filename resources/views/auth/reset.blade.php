@@ -11,9 +11,8 @@
 @endsection
 @section('form')
 <form action="{{ route('password.reset') }}" method="POST" enctype="multipart/form-data">
-	@csrf @method("PATCH")
 	<input type="hidden" name="token" value="{{ $token }}">
-	<div class="mb-4">
+	<div class="mb-4">@csrf @method("PATCH")
 		<label for="email">Email</label>
 		<div class="input-group">
 			<span class="input-group-text">

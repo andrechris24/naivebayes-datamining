@@ -37,11 +37,8 @@ class TrainingDataController extends Controller
 			$empty += TrainingData::whereNull($attr->slug)->count();
 		return ['duplicate' => $train->diff($trainUnique)->count(), 'empty' => $empty];
 	}
-	/**
-	 * Tampilkan halaman Data Training
-	 */
 	public function index()
-	{
+	{//Tampilkan halaman Data Training
 		$atribut = Atribut::get();
 		if (count($atribut) === 0) {
 			return to_route('atribut.index')
@@ -51,12 +48,8 @@ class TrainingDataController extends Controller
 		$hasil = ProbabLabel::$label;
 		return view('main.dataset.training', compact('atribut', 'nilai', 'hasil'));
 	}
-
-	/**
-	 * Tampilkan Data Training
-	 */
 	public function create()
-	{
+	{//DataTables: Tampilkan Data Training
 		$dt = DataTables::of(TrainingData::with('nilai_atribut')->select('training_data.*'));
 		foreach (Atribut::get() as $attr) {
 			if ($attr->type === 'categorical') {
@@ -71,12 +64,8 @@ class TrainingDataController extends Controller
 		});
 		return $dt->make();
 	}
-
-	/**
-	 * Simpan Data Training baru atau Simpan perubahan
-	 */
 	public function store(Request $request)
-	{
+	{//Simpan Data Training baru atau Simpan perubahan
 		try {
 			$request->validate(TrainingData::$rules);
 			foreach ($request->q as $id => $q) $req[$id] = $q;
@@ -95,20 +84,12 @@ class TrainingDataController extends Controller
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
 	}
-
-	/**
-	 * Ambil Data Training
-	 */
 	public function edit(TrainingData $training)
-	{
+	{//Ambil Data Training
 		return response()->json($training);
 	}
-
-	/**
-	 * Hapus Data Training terpilih
-	 */
 	public function destroy(TrainingData $training)
-	{
+	{//Hapus Data Training terpilih
 		Classification::where('name', $training->nama)->where('type', 'train')
 			->delete();
 		$training->delete();

@@ -4,8 +4,7 @@
 @section('desc', 'Selamat datang! Silahkan isi data Anda untuk membuat akun.')
 @section('form')
 <form action="{{ route('register.submit') }}" method="POST" enctype="multipart/form-data" class="mt-4">
-	@csrf
-	<div class="form-group mb-4">
+	<div class="form-group mb-4">@csrf
 		<label for="nama">Nama</label>
 		<div class="input-group">
 			<span class="input-group-text">

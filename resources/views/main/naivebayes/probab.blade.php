@@ -39,24 +39,12 @@
 	<div class="card-header">Probabilitas Label Kelas</div>
 	<div class="card-body">
 		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>Label</th>
-					<th>Nilai Probabilitas</th>
-				</tr>
-			</thead>
+			<thead><tr><th>Label</th><th>Nilai Probabilitas</th></tr></thead>
 			<tbody>
-				<tr>
-					<td>{{$hasil[true]}}</td>
-					<td>{{$kelas['true']}}</td>
-				</tr>
-				<tr>
-					<td>{{$hasil[false]}}</td>
-					<td>{{$kelas['false']}}</td>
-				</tr>
+				<tr><td>{{$hasil[true]}}</td><td>{{$kelas['true']}}</td></tr>
+				<tr><td>{{$hasil[false]}}</td><td>{{$kelas['false']}}</td></tr>
 				<tr class="table-secondary">
-					<td>Total</td>
-					<td>{{array_sum($kelas)}}</td>
+					<td>Total</td><td>{{array_sum($kelas)}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -137,9 +125,9 @@
 									@else
 									@foreach($training as $tr)
 									@php
-									if(empty($tr[$attr->slug])) continue;
-									else if($tr['status']) $tot['true']+=$tr[$attr->slug];
-									else $tot['false']+=$tr[$attr->slug];
+										if(empty($tr[$attr->slug])) continue;
+										else if($tr['status']) $tot['true']+=$tr[$attr->slug];
+										else $tot['false']+=$tr[$attr->slug];
 									@endphp
 									@endforeach
 									<tr>

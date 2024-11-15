@@ -20,8 +20,9 @@
 	</li>
 </ul>
 <div class="tab-content" id="pills-tabContent">
-	<div @class([ 'tab-pane' ,'fade','show'=>$data['test']['total']>0,'active'=>$data['test']['total']>0
-		]) id="pills-testing" role="tabpanel" aria-labelledby="pills-testing-tab" tabindex="0">
+	<div id="pills-testing" @class([
+		'tab-pane' ,'fade','show'=>$data['test']['total']>0,'active'=>$data['test']['total']>0
+		]) role="tabpanel" aria-labelledby="pills-testing-tab" tabindex="0">
 		<div class="card mb-3">
 			<div class="card-header"><b>Performa Klasifikasi Data Testing</b></div>
 			<div class="card-body">
@@ -29,10 +30,7 @@
 					<table class="table table-bordered caption-top">
 						<caption>Hasil Prediksi</caption>
 						<thead class="thead-light">
-							<tr>
-								<th>#</th>
-								<th colspan="3">Aktual</th>
-							</tr>
+							<tr><th>#</th><th colspan="3">Aktual</th></tr>
 							<tr>
 								<th>Prediksi</th>
 								<th>{{$stat[1]}}</th>
@@ -63,9 +61,7 @@
 					</table>
 				</div>
 				<div class="row">
-					<div class="col-md-6">
-						<div id="predict-actual-test"></div>
-					</div>
+					<div class="col-md-6"><div id="predict-actual-test"></div></div>
 					<div class="col-md-6">
 						<p>Hasil Akhir</p>
 						<div class="progress-wrapper">
@@ -137,8 +133,9 @@
 			</div>
 		</div>
 	</div>
-	<div @class([ 'tab-pane' ,'fade','show'=>$data['test']['total']===0,'active'=>$data['test']['total']===0
-		]) id="pills-training" role="tabpanel" aria-labelledby="pills-training-tab" tabindex="0">
+	<div id="pills-training" @class([
+		'tab-pane' ,'fade','show'=>$data['test']['total']===0,'active'=>$data['test']['total']===0
+		]) role="tabpanel" aria-labelledby="pills-training-tab" tabindex="0">
 		<div class="card mb-3">
 			<div class="card-header"><b>Performa Klasifikasi Data Training</b></div>
 			<div class="card-body">
@@ -146,10 +143,7 @@
 					<table class="table table-bordered caption-top">
 						<caption>Hasil Prediksi</caption>
 						<thead class="thead-light">
-							<tr>
-								<th>#</th>
-								<th colspan="3">Aktual</th>
-							</tr>
+							<tr><th>#</th><th colspan="3">Aktual</th></tr>
 							<tr>
 								<th>Prediksi</th>
 								<th>{{$stat[1]}}</th>
@@ -180,9 +174,7 @@
 					</table>
 				</div>
 				<div class="row">
-					<div class="col-md-6">
-						<div id="predict-actual-train"></div>
-					</div>
+					<div class="col-md-6"><div id="predict-actual-train"></div></div>
 					<div class="col-md-6">
 						<p>Hasil Akhir</p>
 						<div class="progress-wrapper">
@@ -239,13 +231,13 @@
 									<span class="text-success">Skor F1</span>
 								</div>
 								<div class="progress-percentage">
-									<span>{{round($performa['train']['f1'],2)}}%</span>
+									<span>{{round($performa['train']['f1'], 2)}}%</span>
 								</div>
 							</div>
 							<div class="progress progress-xl">
 								<div class="progress-bar bg-success" role="progressbar"
-									style="width: {{round($performa['train']['f1'],2)}}%;"
-									aria-valuenow="{{round($performa['train']['f1'],2)}}" aria-valuemin="0" aria-valuemax="100">
+									style="width: {{round($performa['train']['f1'], 2)}}%;"
+									aria-valuenow="{{round($performa['train']['f1'], 2)}}" aria-valuemin="0" aria-valuemax="100">
 								</div>
 							</div>
 						</div>

@@ -44,10 +44,7 @@ class ResultController extends Controller
 			$f1 = 2 * ($prec * $rec) / ($prec + $rec);
 		}
 		return [
-			'accuracy' => $accu,
-			'precision' => $prec,
-			'recall' => $rec,
-			'f1' => $f1
+			'accuracy' => $accu,'precision' => $prec,'recall' => $rec,'f1' => $f1
 		];
 	}
 }
