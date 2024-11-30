@@ -38,7 +38,7 @@ class TrainingDataController extends Controller
 		return ['duplicate' => $train->diff($trainUnique)->count(), 'empty' => $empty];
 	}
 	public function index()
-	{//Tampilkan halaman Data Training
+	{ //Tampilkan halaman Data Training
 		$atribut = Atribut::get();
 		if (count($atribut) === 0) {
 			return to_route('atribut.index')
@@ -49,7 +49,7 @@ class TrainingDataController extends Controller
 		return view('main.dataset.training', compact('atribut', 'nilai', 'hasil'));
 	}
 	public function create()
-	{//DataTables: Tampilkan Data Training
+	{ //DataTables: Tampilkan Data Training
 		$dt = DataTables::of(TrainingData::with('nilai_atribut')->select('training_data.*'));
 		foreach (Atribut::get() as $attr) {
 			if ($attr->type === 'categorical') {
@@ -65,7 +65,7 @@ class TrainingDataController extends Controller
 		return $dt->make();
 	}
 	public function store(Request $request)
-	{//Simpan Data Training baru atau Simpan perubahan
+	{ //Simpan Data Training baru atau Simpan perubahan
 		try {
 			$request->validate(TrainingData::$rules);
 			foreach ($request->q as $id => $q) $req[$id] = $q;
@@ -85,11 +85,11 @@ class TrainingDataController extends Controller
 		}
 	}
 	public function edit(TrainingData $training)
-	{//Ambil Data Training
+	{ //Ambil Data Training
 		return response()->json($training);
 	}
 	public function destroy(TrainingData $training)
-	{//Hapus Data Training terpilih
+	{ //Hapus Data Training terpilih
 		Classification::where('name', $training->nama)->where('type', 'train')
 			->delete();
 		$training->delete();

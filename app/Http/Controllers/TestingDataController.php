@@ -39,7 +39,7 @@ class TestingDataController extends Controller
 		return ['duplicate' => $test->diff($testUnique)->count(), 'empty' => $empty];
 	}
 	public function index()
-	{//Tampilkan halaman Data Testing
+	{ //Tampilkan halaman Data Testing
 		$atribut = Atribut::get();
 		if (count($atribut) === 0) {
 			return to_route('atribut.index')
@@ -54,7 +54,7 @@ class TestingDataController extends Controller
 		);
 	}
 	public function create()
-	{//DataTables: Tampilkan Data Testing
+	{ //DataTables: Tampilkan Data Testing
 		$dt = DataTables::of(TestingData::with('nilai_atribut')->select('testing_data.*'));
 		foreach (Atribut::get() as $attr) {
 			if ($attr->type === 'categorical') {
@@ -70,7 +70,7 @@ class TestingDataController extends Controller
 		return $dt->make();
 	}
 	public function store(Request $request)
-	{//Simpan Data Testing baru atau Simpan perubahan
+	{ //Simpan Data Testing baru atau Simpan perubahan
 		try {
 			$request->validate(TestingData::$rules);
 			foreach ($request->q as $id => $q) $req[$id] = $q;
@@ -97,11 +97,11 @@ class TestingDataController extends Controller
 		}
 	}
 	public function edit(TestingData $testing)
-	{//Ambil Data Testing
+	{ //Ambil Data Testing
 		return response()->json($testing);
 	}
 	public function destroy(TestingData $testing)
-	{//Hapus Data Testing
+	{ //Hapus Data Testing
 		Classification::where('name', $testing->nama)->where('type', 'test')
 			->delete();
 		$testing->delete();

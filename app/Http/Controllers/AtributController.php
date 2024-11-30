@@ -27,18 +27,18 @@ class AtributController extends Controller
 		return ['unused' => $unused];
 	}
 	public function index()
-	{//Tampilkan halaman Atribut
+	{ //Tampilkan halaman Atribut
 		return view('main.atribut.index');
 	}
 	public function create()
-	{//Tampilkan data Atribut
+	{ //Tampilkan data Atribut
 		return DataTables::of(Atribut::query())
 			->editColumn('type', function (Atribut $attr) {
 				return Atribut::$tipe[$attr->type];
 			})->make();
 	}
 	public function store(Request $request)
-	{//Simpan Atribut baru atau simpan perubahan ke database
+	{ //Simpan Atribut baru atau simpan perubahan ke database
 		try {
 			$request->validate(Atribut::$rules);
 			$req = $request->all();
@@ -77,11 +77,11 @@ class AtributController extends Controller
 		}
 	}
 	public function edit(Atribut $atribut)
-	{//Tampilkan atribut yang akan diedit
+	{ //Tampilkan atribut yang akan diedit
 		return response()->json($atribut);
 	}
 	public function destroy(Atribut $atribut)
-	{//Hapus atribut dari database
+	{ //Hapus atribut dari database
 		$this->delColumn('training_data', $atribut);
 		$this->delColumn('testing_data', $atribut);
 		$atribut->delete();

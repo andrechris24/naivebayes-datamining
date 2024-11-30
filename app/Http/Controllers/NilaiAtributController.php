@@ -23,11 +23,12 @@ class NilaiAtributController extends Controller
 			$duplicate += $subs->diff($subUnique)->count();
 		}
 		return response()->json([
-			'max' => collect($totalscr)->max() ?? 0,'duplicate' => $duplicate
+			'max' => collect($totalscr)->max() ?? 0,
+			'duplicate' => $duplicate
 		]);
 	}
 	public function index()
-	{//Tampilkan halaman Nilai Atribut
+	{ //Tampilkan halaman Nilai Atribut
 		$atribut = Atribut::where('type', 'categorical')->get();
 		if (Atribut::count() === 0) {
 			return to_route('atribut.index')
@@ -36,13 +37,13 @@ class NilaiAtributController extends Controller
 		return view('main.atribut.nilai', compact('atribut'));
 	}
 	public function create()
-	{//Tampilkan data Nilai Atribut
+	{ //Tampilkan data Nilai Atribut
 		return DataTables::of(
 			NilaiAtribut::with('atribut')->select('nilai_atributs.*')
 		)->make();
 	}
 	public function store(Request $request)
-	{//Simpan data Nilai Atribut baru dan simpan perubahan
+	{ //Simpan data Nilai Atribut baru dan simpan perubahan
 		try {
 			$request->validate(NilaiAtribut::$rules);
 			if (!empty($request->id)) {
@@ -53,7 +54,8 @@ class NilaiAtributController extends Controller
 				return response()->json(['message' => 'Berhasil diedit']);
 			} else {
 				NilaiAtribut::create([
-					'name' => $request->name,	'atribut_id' => $request->atribut_id
+					'name' => $request->name,
+					'atribut_id' => $request->atribut_id
 				]);
 				return response()->json(['message' => 'Berhasil disimpan']);
 			}
@@ -63,11 +65,11 @@ class NilaiAtributController extends Controller
 		}
 	}
 	public function edit(NilaiAtribut $nilai)
-	{//Ambil data Nilai Atribut untuk diedit
+	{ //Ambil data Nilai Atribut untuk diedit
 		return response()->json($nilai);
 	}
 	public function destroy(NilaiAtribut $nilai)
-	{//Hapus data Nilai Atribut
+	{ //Hapus data Nilai Atribut
 		$nilai->delete();
 		return response()->json(['message' => 'Berhasil dihapus']);
 	}
