@@ -104,7 +104,12 @@
 		</button>
 		<table class="table table-bordered" id="table-atribut" width="100%">
 			<thead>
-				<tr><th>#</th><th>Nama</th><th>Atribut</th><th>Aksi</th></tr>
+				<tr>
+					<th>#</th>
+					<th>Nama</th>
+					<th>Atribut</th>
+					<th>Aksi</th>
+				</tr>
 			</thead>
 		</table>
 	</div>
@@ -168,7 +173,7 @@
 			initError(dterr.message);
 		}
 	}).on("click", ".delete-record", function () {
-		let attr_id = $(this).data("id"), 
+		let attr_id = $(this).data("id"),
 			attr_name = $(this).data("name"),
 			attr = $(this).data('attr');
 		iziToast.question({

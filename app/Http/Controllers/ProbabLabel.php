@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Atribut;
-use App\Models\Classification;
-use App\Models\Probability;
-use App\Models\TrainingData;
-use App\Models\TestingData;
+use App\Models\{Atribut, Classification, Probability, TrainingData, TestingData};
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 
@@ -44,7 +40,7 @@ class ProbabLabel extends Controller
 		}
 	}
 	public static function hitungProbab($data)
-	{ //Proses perhitungan klasifikasi
+	{
 		$semuadata = TrainingData::count();
 
 		/**==================================================
@@ -65,7 +61,8 @@ class ProbabLabel extends Controller
 			if ($at->type === 'categorical') {
 				//Jika Kategorikal, nilai probabilitas yang dicari
 				$probabilitas = Probability::firstWhere(
-					'nilai_atribut_id',	$data[$at->slug]
+					'nilai_atribut_id',
+					$data[$at->slug]
 				);
 				$probabs = [
 					'true' => json_decode($probabilitas->true),
@@ -83,13 +80,19 @@ class ProbabLabel extends Controller
 				$falses = json_decode($probabilitas->false);
 				$total = json_decode($probabilitas->total);
 				$likelihood['true'] *= self::normalDistribution(
-					$data[$at->slug],	$trues->sd,$trues->mean
+					$data[$at->slug],
+					$trues->sd,
+					$trues->mean
 				);
 				$likelihood['false'] *= self::normalDistribution(
-					$data[$at->slug],	$falses->sd,$falses->mean
+					$data[$at->slug],
+					$falses->sd,
+					$falses->mean
 				);
 				$evidence *= self::normalDistribution(
-					$data[$at->slug],$total->sd,$total->mean
+					$data[$at->slug],
+					$total->sd,
+					$total->mean
 				);
 			}
 		}
@@ -111,7 +114,7 @@ class ProbabLabel extends Controller
 		];
 	}
 	public static function resetProbab(): void
-	{ //Reset Probabilitas
+	{
 		if (Probability::count() > 0) Probability::truncate();
 		if (Classification::count() > 0) Classification::truncate();
 	}
@@ -119,6 +122,7 @@ class ProbabLabel extends Controller
 	{
 		return (1 / ($sd * sqrt(2 * pi()))) * exp(-0.5 * pow(($x - $mean) / $sd, 2));
 	}
+
 	/**
 	 * Simpangan Baku
 	 *

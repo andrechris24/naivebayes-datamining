@@ -2,22 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TestingData;
-use App\Models\TrainingData;
-use App\Models\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
+use App\Models\{TestingData, TrainingData, User};
+use Illuminate\Database\{Eloquent\ModelNotFoundException, QueryException};
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\{Auth, Hash, Log, Session};
 use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
 	public function index()
-	{ //Halaman Dashboard
+	{
 		$data = [
 			'test' => TestingData::count(),
 			'train' => TrainingData::count(),
@@ -26,7 +20,7 @@ class AdminController extends Controller
 		return view('main.index', $data);
 	}
 	public function logout()
-	{ //Logout
+	{
 		User::find(Auth::id())->update(['remember_token' => null]);
 		Auth::logout();
 		Session::invalidate();
@@ -35,20 +29,16 @@ class AdminController extends Controller
 		return to_route('login');
 	}
 	public function edit()
-	{ //Halaman Profil
+	{
 		return view('main.profil');
 	}
 	public function update(Request $request)
-	{ //Update Profil
+	{
 		try {
 			$request->validate([
 				'name' => ['bail', 'required', 'string'],
-				'email' => [
-					'bail',
-					'required',
-					'email',
-					Rule::unique('users')->ignore(Auth::id())
-				],
+				'email' => 
+					['bail', 'required', 'email', Rule::unique('users')->ignore(Auth::id())],
 				'current_password' => ['bail', 'required', 'current_password'],
 				'password' => ['nullable', 'bail', 'confirmed', 'between:8,20'],
 				'password_confirmation' => 'required_with:password'
@@ -75,7 +65,7 @@ class AdminController extends Controller
 		}
 	}
 	public function delete(Request $request)
-	{ //Hapus Akun
+	{
 		try {
 			$request->validate(User::$delrules);
 			User::findOrFail(Auth::id())->delete();

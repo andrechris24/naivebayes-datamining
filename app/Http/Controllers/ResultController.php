@@ -7,7 +7,7 @@ use App\Models\Classification;
 class ResultController extends Controller
 {
 	public function __invoke()
-	{ //Tampilkan halaman Performa
+	{
 		if (Classification::count() === 0) {
 			return to_route('class.index')->withWarning(
 				'Lakukan klasifikasi dulu sebelum melihat performa klasifikasi'
@@ -22,7 +22,7 @@ class ResultController extends Controller
 		return view('main.performa', compact('data', 'performa', 'stat'));
 	}
 	private static function cm(string $type)
-	{ //Hitung data Confusion Matrix
+	{
 		$tp = Classification::where('type', $type)->where('predicted', true)
 			->where('real', true)->count(); //True Positive
 		$fp = Classification::where('type', $type)->where('predicted', true)
@@ -35,7 +35,7 @@ class ResultController extends Controller
 		return ['tp' => $tp, 'fp' => $fp, 'fn' => $fn, 'tn' => $tn, 'total' => $total];
 	}
 	private static function performa(array $data)
-	{ //Hitung Akurasi, Presisi, Recall, dan F1-score
+	{
 		if ($data['total'] === 0) $accu = $prec = $rec = $f1 = 0;
 		else {
 			$accu = (($data['tp'] + $data['tn']) / $data['total']) * 100;
@@ -43,8 +43,6 @@ class ResultController extends Controller
 			$rec = ($data['tp'] / ($data['tp'] + $data['fn'])) * 100;
 			$f1 = 2 * ($prec * $rec) / ($prec + $rec);
 		}
-		return [
-			'accuracy' => $accu,'precision' => $prec,'recall' => $rec,'f1' => $f1
-		];
+		return ['accuracy' => $accu, 'precision' => $prec, 'recall' => $rec, 'f1' => $f1];
 	}
 }

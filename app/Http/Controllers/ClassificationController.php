@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ClassificationExport;
-use App\Models\Classification;
-use App\Models\Probability;
-use App\Models\TestingData;
-use App\Models\TrainingData;
+use App\Models\{Classification, Probability, TestingData, TrainingData};
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -16,7 +13,7 @@ use Yajra\DataTables\Facades\DataTables;
 class ClassificationController extends Controller
 {
 	public function export($type)
-	{ //Download data hasil klasifikasi
+	{
 		if (Classification::count() === 0)
 			return back()->withError('Gagal download: Tidak ada data hasil klasifikasi');
 		return Excel::download(
@@ -25,11 +22,11 @@ class ClassificationController extends Controller
 		);
 	}
 	public function index()
-	{ //Tampilkan halaman Klasifikasi
+	{
 		return view('main.naivebayes.classify', ['hasil' => ProbabLabel::$label]);
 	}
 	public function create(Request $request)
-	{ //Hitung klasifikasi
+	{
 		$request->validate(Classification::$rule);
 		try {
 			if (Probability::count() === 0)
@@ -57,17 +54,16 @@ class ClassificationController extends Controller
 					]
 				);
 			}
-			return response()->json([
-				'message' => 'Berhasil dihitung',
-				'preprocess' => $pre ?? 0
-			]);
+			return response()->json(
+				['message' => 'Berhasil dihitung', 'preprocess' => $pre ?? 0]
+			);
 		} catch (QueryException $e) {
 			Log::error($e);
 			return response()->json(['message' => $e->errorInfo[2]], 500);
 		}
 	}
 	public function show()
-	{ //Tampilkan data hasil klasifikasi
+	{
 		return DataTables::of(Classification::query())
 			->editColumn('type', function (Classification $class) {
 				return Classification::$tipedata[$class->type];
@@ -78,7 +74,7 @@ class ClassificationController extends Controller
 			})->make();
 	}
 	public function destroy(Request $request)
-	{ //Hapus data hasil klasifikasi sesuai tipe data yang dipilih
+	{
 		$request->validate(Classification::$rule);
 		try {
 			if ($request->tipe === 'all') Classification::truncate();
@@ -90,7 +86,7 @@ class ClassificationController extends Controller
 		}
 	}
 	private function getData(string $type)
-	{ //Ambil data dari tabel Dataset
+	{
 		if ($type === 'train') {
 			if (TrainingData::count() === 0) return false;
 			$data = TrainingData::get();

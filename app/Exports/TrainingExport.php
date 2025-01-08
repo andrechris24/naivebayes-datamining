@@ -3,9 +3,7 @@
 namespace App\Exports;
 
 use App\Http\Controllers\ProbabLabel;
-use App\Models\Atribut;
-use App\Models\NilaiAtribut;
-use App\Models\TrainingData;
+use App\Models\{Atribut, NilaiAtribut, TrainingData};
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;

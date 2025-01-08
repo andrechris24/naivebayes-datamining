@@ -2,13 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\TestingExport;
-use App\Imports\TestingImport;
-use App\Models\Atribut;
-use App\Models\Classification;
-use App\Models\NilaiAtribut;
-use App\Models\Probability;
-use App\Models\TestingData;
+use App\{Exports\TestingExport, Imports\TestingImport};
+use App\Models\{Atribut, Classification, NilaiAtribut, Probability, TestingData};
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -18,19 +13,19 @@ use Yajra\DataTables\Facades\DataTables;
 class TestingDataController extends Controller
 {
 	public function export()
-	{ //Download Data Testing
+	{
 		if (TestingData::count() === 0)
 			return back()->withError('Gagal download: Data Testing kosong');
 		return Excel::download(new TestingExport, 'testing_' . time() . '.xlsx');
 	}
 	public function import(Request $request)
-	{ //Upload Data Testing
+	{
 		$request->validate(TestingData::$filerule);
 		Excel::import(new TestingImport, request()->file('data'));
 		return response()->json(['message' => 'Berhasil diimpor']);
 	}
 	public function count()
-	{ //Tampilkan jumlah nilai yang hilang dan data dengan nama duplikat
+	{
 		$test = TestingData::get();
 		$testUnique = $test->unique(['nama']);
 		$empty = 0;
@@ -39,7 +34,7 @@ class TestingDataController extends Controller
 		return ['duplicate' => $test->diff($testUnique)->count(), 'empty' => $empty];
 	}
 	public function index()
-	{ //Tampilkan halaman Data Testing
+	{
 		$atribut = Atribut::get();
 		if (count($atribut) === 0) {
 			return to_route('atribut.index')
@@ -54,7 +49,7 @@ class TestingDataController extends Controller
 		);
 	}
 	public function create()
-	{ //DataTables: Tampilkan Data Testing
+	{
 		$dt = DataTables::of(TestingData::with('nilai_atribut')->select('testing_data.*'));
 		foreach (Atribut::get() as $attr) {
 			if ($attr->type === 'categorical') {
@@ -70,7 +65,7 @@ class TestingDataController extends Controller
 		return $dt->make();
 	}
 	public function store(Request $request)
-	{ //Simpan Data Testing baru atau Simpan perubahan
+	{
 		try {
 			$request->validate(TestingData::$rules);
 			foreach ($request->q as $id => $q) $req[$id] = $q;
@@ -97,18 +92,18 @@ class TestingDataController extends Controller
 		}
 	}
 	public function edit(TestingData $testing)
-	{ //Ambil Data Testing
+	{
 		return response()->json($testing);
 	}
 	public function destroy(TestingData $testing)
-	{ //Hapus Data Testing
+	{
 		Classification::where('name', $testing->nama)->where('type', 'test')
 			->delete();
 		$testing->delete();
 		return response()->json(['message' => 'Berhasil dihapus']);
 	}
 	public function clear()
-	{ //Hapus semua Data Testing
+	{
 		try {
 			Classification::where('type', 'test')->delete();
 			TestingData::truncate();

@@ -3,13 +3,9 @@
 namespace App\Imports;
 
 use App\Http\Controllers\ProbabLabel;
-use App\Models\Atribut;
-use App\Models\NilaiAtribut;
-use App\Models\TestingData;
+use App\Models\{Atribut, NilaiAtribut, TestingData};
 use Illuminate\Validation\Rule;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\{ToModel, WithHeadingRow, WithValidation};
 
 class TestingImport implements ToModel, WithHeadingRow, WithValidation
 {

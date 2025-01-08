@@ -6,23 +6,18 @@ use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\{Auth, DB, Hash, Log, Password, Session};
 use Symfony\Component\Mailer\Exception\TransportException;
 
 class AuthController extends Controller
 {
 	public function register()
-	{ //Tampilkan halaman Buat Akun
+	{
 		if (Auth::viaRemember() || Auth::check()) return to_route('home');
 		return view('auth.register');
 	}
 	public function postRegister(Request $request)
-	{ //Operasi Buat Akun
+	{
 		try {
 			$request->validate(User::$rules);
 			$req = $request->all();
@@ -38,12 +33,12 @@ class AuthController extends Controller
 		}
 	}
 	public function login()
-	{ //Tampilkan halaman Login
+	{
 		if (Auth::viaRemember() || Auth::check()) return to_route('home');
 		return view('auth.login');
 	}
 	public function postLogin(Request $request)
-	{ //Operasi Login
+	{
 		$credentials = $request->validate(User::$loginrules);
 		if (Auth::attempt($credentials, $request->get('remember'))) {
 			$user = User::firstWhere('email', $request->email);
@@ -54,12 +49,12 @@ class AuthController extends Controller
 		return back()->onlyInput('email')->withError('E-mail atau Password salah');
 	}
 	public function forget()
-	{ //Tampilkan halaman Lupa Password
+	{
 		if (Auth::viaRemember() || Auth::check()) return to_route('home');
 		return view('auth.forget');
 	}
 	public function forgetLink(Request $request)
-	{ //Kirim link Reset Password
+	{
 		try {
 			$request->validate(User::$forgetrules);
 			$status = Password::sendResetLink($request->only('email'));
@@ -67,7 +62,7 @@ class AuthController extends Controller
 				return back()->withSuccess("Link reset password sudah dikirim");
 			elseif ($status === Password::RESET_THROTTLED) {
 				return back()->withInput()
-					->withError("Tunggu beberapa saat sebeelum mencoba lagi.");
+					->withError("Tunggu beberapa saat sebelum mencoba lagi.");
 			}
 		} catch (TransportException $err) {
 			Log::error($err);
@@ -82,7 +77,7 @@ class AuthController extends Controller
 			->withError('Gagal membuat token reset password: Kesalahan tidak diketahui');
 	}
 	public function showReset()
-	{ //Tampilkan halaman Reset Password
+	{
 		if (Auth::viaRemember() || Auth::check()) return to_route('home');
 		try {
 			$enctoken = DB::table('password_reset_tokens')
@@ -100,7 +95,7 @@ class AuthController extends Controller
 		}
 	}
 	public function reset(Request $request)
-	{ //Operasi Reset Password
+	{
 		$request->validate(User::$resetrules);
 		try {
 			$status = Password::reset(

@@ -19,11 +19,13 @@
 
 	<!-- DataTables -->
 	<link
-		href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/b-3.1.2/b-html5-3.1.2/r-3.0.3/datatables.min.css"
+		href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.2.0/b-3.2.0/b-html5-3.2.0/r-3.0.3/datatables.min.css"
 		rel="stylesheet">
 
 	<!-- Icons -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+		integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 	<!-- Volt CSS -->
 	<link type="text/css" href="{{asset('css/volt.css')}}" rel="stylesheet">
@@ -34,8 +36,7 @@
 
 	<!-- Core -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-	</script>
+		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 	<!-- Vendor JS -->
 	<script src="{{asset('assets/js/on-screen.umd.min.js')}}"></script>
@@ -57,8 +58,7 @@
 
 	<!-- Data Tables -->
 	<script
-		src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/b-3.1.2/b-html5-3.1.2/r-3.0.3/datatables.min.js">
-	</script>
+		src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.2.0/b-3.2.0/b-html5-3.2.0/r-3.0.3/datatables.min.js"></script>
 
 	<!-- Simplebar -->
 	<script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
@@ -91,7 +91,9 @@
 						<img src="{{asset('assets/img/data-mining_8438890.png')}}" height="20" width="20"
 							alt="Logo Data Mining">
 					</div>
-					<div class="d-block"><h2 class="h5 mb-3">Data Mining</h2></div>
+					<div class="d-block">
+						<h2 class="h5 mb-3">Data Mining</h2>
+					</div>
 				</div>
 				<div class="collapse-close d-md-none">
 					<a href="#sidebarMenu" data-bs-toggle="collapse" data-bs-target="#sidebarMenu"
@@ -114,8 +116,7 @@
 						</span>
 					</a>
 				</li>
-				<li @class([
-					"nav-item", 'active'=>Request::segment(1)=='atribut'&&empty(Request::segment(2))
+				<li @class([ "nav-item" , 'active'=>Request::segment(1)=='atribut'&&empty(Request::segment(2))
 					])>
 					<a href="{{route('atribut.index')}}" class="nav-link d-flex justify-content-between">
 						<span>
@@ -133,12 +134,9 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<span @class(['nav-link',
-						'collapsed'=> in_array(request()->segment(1),['training','testing']),
-						'd-flex',
-						'justify-content-between',
-						'align-items-center'
-						]) data-bs-toggle="collapse" data-bs-target="#submenu-dataset">
+					<span @class(['nav-link', 'collapsed'=> in_array(request()->segment(1),['training','testing']),
+						'd-flex','justify-content-between','align-items-center'])
+						data-bs-toggle="collapse" data-bs-target="#submenu-dataset">
 						<span>
 							<span class="sidebar-icon"><i class="fas fa-database"></i></span>
 							<span class="sidebar-text">Dataset</span>
@@ -152,8 +150,8 @@
 							</svg>
 						</span>
 					</span>
-					<div @class(["multi-level", "collapse", 
-					'show'=>in_array(request()->segment(1),['training','testing'])])
+					<div @class(["multi-level", "collapse" , 'show'=>
+						in_array(request()->segment(1),['training','testing'])])
 						role="list" id="submenu-dataset" aria-expanded="false">
 						<ul class="flex-column nav">
 							<li @class(["nav-item", 'active'=> Request::segment(1) == 'training'])>
@@ -170,12 +168,9 @@
 					</div>
 				</li>
 				<li class="nav-item">
-					<span @class(['nav-link', 
-						'collapsed'=> in_array(request()->segment(1),['probab','class']),
-						'd-flex',
-						'justify-content-between',
-						'align-items-center'
-						]) data-bs-toggle="collapse" data-bs-target="#submenu-naivebayes">
+					<span @class(['nav-link', 'collapsed'=> in_array(request()->segment(1),['probab','class']),
+						'd-flex','justify-content-between','align-items-center'])
+						data-bs-toggle="collapse" data-bs-target="#submenu-naivebayes">
 						<span>
 							<span class="sidebar-icon"><i class="fas fa-calculator"></i></span>
 							<span class="sidebar-text">Naive Bayes</span>
@@ -189,8 +184,7 @@
 							</svg>
 						</span>
 					</span>
-					<div @class(["multi-level", "collapse", 
-					'show'=>in_array(request()->segment(1),['probab','class'])])
+					<div @class(["multi-level", "collapse" , 'show'=>in_array(request()->segment(1),['probab','class'])])
 						role="list" id="submenu-naivebayes" aria-expanded="false">
 						<ul class="flex-column nav">
 							<li @class(["nav-item", 'active'=> Request::segment(1) == 'probab'])>

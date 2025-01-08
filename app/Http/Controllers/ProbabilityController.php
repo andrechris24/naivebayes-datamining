@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Atribut;
-use App\Models\Classification;
-use App\Models\NilaiAtribut;
-use App\Models\Probability;
-use App\Models\TrainingData;
+use App\Models\{Atribut, Classification, NilaiAtribut, Probability, TrainingData};
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 
 class ProbabilityController extends Controller
 {
 	public function index()
-	{ //Tampilkan halaman Probabilitas
+	{
 		$atribut = Atribut::get();
 		if (count($atribut) === 0) {
 			return to_route('atribut.index')
@@ -31,7 +27,7 @@ class ProbabilityController extends Controller
 		);
 	}
 	public function create()
-	{ //Hitung Probabilitas pada Data Training
+	{
 		try {
 			if (TrainingData::count() === 0) {
 				return to_route("training.index")->withWarning(
@@ -120,7 +116,7 @@ class ProbabilityController extends Controller
 		}
 	}
 	public function destroy()
-	{ //Reset Probabilitas
+	{
 		try {
 			Probability::truncate();
 			Classification::truncate();
@@ -130,7 +126,7 @@ class ProbabilityController extends Controller
 		}
 	}
 	private static function getNumbers(string $col)
-	{ //Khusus Atribut numerik
+	{
 		$data = ['true' => array(), 'false' => array(), 'all' => array()];
 		$trainData = TrainingData::whereNotNull($col)->get([$col, 'status']);
 		foreach ($trainData as $train) {

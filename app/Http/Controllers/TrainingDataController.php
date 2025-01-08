@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\TrainingExport;
-use App\Imports\TrainingImport;
-use App\Models\Atribut;
-use App\Models\Classification;
-use App\Models\NilaiAtribut;
-use App\Models\TrainingData;
+use App\{Exports\TrainingExport, Imports\TrainingImport};
+use App\Models\{Atribut, Classification, NilaiAtribut, TrainingData};
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -17,19 +13,19 @@ use Yajra\DataTables\Facades\DataTables;
 class TrainingDataController extends Controller
 {
 	public function export()
-	{ //Download Data Training
+	{
 		if (TrainingData::count() === 0) //Cek jika kosong
 			return back()->withError('Gagal download: Data Training kosong');
 		return Excel::download(new TrainingExport, 'training_' . time() . '.xlsx');
 	}
 	public function import(Request $request)
-	{ //Upload Data Training
+	{
 		$request->validate(TrainingData::$filerule);
 		Excel::import(new TrainingImport, $request->file('data'));
 		return response()->json(['message' => 'Berhasil diimpor']);
 	}
 	public function count()
-	{ //Tampilkan jumlah nilai yang hilang dan data dengan nama duplikat
+	{
 		$train = TrainingData::get();
 		$trainUnique = $train->unique(['nama']);
 		$empty = 0;
@@ -38,7 +34,7 @@ class TrainingDataController extends Controller
 		return ['duplicate' => $train->diff($trainUnique)->count(), 'empty' => $empty];
 	}
 	public function index()
-	{ //Tampilkan halaman Data Training
+	{
 		$atribut = Atribut::get();
 		if (count($atribut) === 0) {
 			return to_route('atribut.index')
@@ -49,7 +45,7 @@ class TrainingDataController extends Controller
 		return view('main.dataset.training', compact('atribut', 'nilai', 'hasil'));
 	}
 	public function create()
-	{ //DataTables: Tampilkan Data Training
+	{
 		$dt = DataTables::of(TrainingData::with('nilai_atribut')->select('training_data.*'));
 		foreach (Atribut::get() as $attr) {
 			if ($attr->type === 'categorical') {
@@ -65,7 +61,7 @@ class TrainingDataController extends Controller
 		return $dt->make();
 	}
 	public function store(Request $request)
-	{ //Simpan Data Training baru atau Simpan perubahan
+	{
 		try {
 			$request->validate(TrainingData::$rules);
 			foreach ($request->q as $id => $q) $req[$id] = $q;
@@ -85,11 +81,11 @@ class TrainingDataController extends Controller
 		}
 	}
 	public function edit(TrainingData $training)
-	{ //Ambil Data Training
+	{
 		return response()->json($training);
 	}
 	public function destroy(TrainingData $training)
-	{ //Hapus Data Training terpilih
+	{
 		Classification::where('name', $training->nama)->where('type', 'train')
 			->delete();
 		$training->delete();
@@ -97,7 +93,7 @@ class TrainingDataController extends Controller
 		return response()->json(['message' => 'Berhasil dihapus']);
 	}
 	public function clear()
-	{ //Hapus semua Data Training
+	{
 		try {
 			Classification::where('type', 'train')->delete();
 			ProbabLabel::resetProbab();

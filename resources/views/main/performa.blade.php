@@ -20,8 +20,8 @@
 	</li>
 </ul>
 <div class="tab-content" id="pills-tabContent">
-	<div id="pills-testing" @class([
-		'tab-pane' ,'fade','show'=>$data['test']['total']>0,'active'=>$data['test']['total']>0
+	<div id="pills-testing" @class([ 'tab-pane' ,'fade','show'=>
+		$data['test']['total']>0,'active'=>$data['test']['total']>0
 		]) role="tabpanel" aria-labelledby="pills-testing-tab" tabindex="0">
 		<div class="card mb-3">
 			<div class="card-header"><b>Performa Klasifikasi Data Testing</b></div>
@@ -30,7 +30,10 @@
 					<table class="table table-bordered caption-top">
 						<caption>Hasil Prediksi</caption>
 						<thead class="thead-light">
-							<tr><th>#</th><th colspan="3">Aktual</th></tr>
+							<tr>
+								<th>#</th>
+								<th colspan="3">Aktual</th>
+							</tr>
 							<tr>
 								<th>Prediksi</th>
 								<th>{{$stat[1]}}</th>
@@ -61,7 +64,9 @@
 					</table>
 				</div>
 				<div class="row">
-					<div class="col-md-6"><div id="predict-actual-test"></div></div>
+					<div class="col-md-6">
+						<div id="predict-actual-test"></div>
+					</div>
 					<div class="col-md-6">
 						<p>Hasil Akhir</p>
 						<div class="progress-wrapper">
@@ -133,8 +138,8 @@
 			</div>
 		</div>
 	</div>
-	<div id="pills-training" @class([
-		'tab-pane' ,'fade','show'=>$data['test']['total']===0,'active'=>$data['test']['total']===0
+	<div id="pills-training" @class([ 'tab-pane' ,'fade','show'=>
+		$data['test']['total']===0,'active'=>$data['test']['total']===0
 		]) role="tabpanel" aria-labelledby="pills-training-tab" tabindex="0">
 		<div class="card mb-3">
 			<div class="card-header"><b>Performa Klasifikasi Data Training</b></div>
@@ -143,7 +148,10 @@
 					<table class="table table-bordered caption-top">
 						<caption>Hasil Prediksi</caption>
 						<thead class="thead-light">
-							<tr><th>#</th><th colspan="3">Aktual</th></tr>
+							<tr>
+								<th>#</th>
+								<th colspan="3">Aktual</th>
+							</tr>
 							<tr>
 								<th>Prediksi</th>
 								<th>{{$stat[1]}}</th>
@@ -174,7 +182,9 @@
 					</table>
 				</div>
 				<div class="row">
-					<div class="col-md-6"><div id="predict-actual-train"></div></div>
+					<div class="col-md-6">
+						<div id="predict-actual-train"></div>
+					</div>
 					<div class="col-md-6">
 						<p>Hasil Akhir</p>
 						<div class="progress-wrapper">

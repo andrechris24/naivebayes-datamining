@@ -3,8 +3,7 @@
 namespace App\Exports;
 
 use App\Http\Controllers\ProbabLabel;
-use App\Models\Atribut;
-use App\Models\NilaiAtribut;
+use App\Models\{Atribut, NilaiAtribut};
 use Generator;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\Exportable;

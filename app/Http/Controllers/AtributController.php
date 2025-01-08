@@ -2,21 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Atribut;
-use App\Models\NilaiAtribut;
-use App\Models\TrainingData;
-use App\Models\TestingData;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\QueryException;
+use App\Models\{Atribut, NilaiAtribut, TrainingData, TestingData};
+use Illuminate\Database\{Schema\Blueprint, QueryException};
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
+use Illuminate\Support\{Facades\Log, Facades\Schema, Str};
 use Yajra\DataTables\Facades\DataTables;
 
 class AtributController extends Controller
 {
-	public function count() //Tampilkan jumlah atribut tidak digunakan
+	public function count()
 	{
 		$unused = 0;
 		foreach (Atribut::get() as $attr) {
@@ -27,18 +21,18 @@ class AtributController extends Controller
 		return ['unused' => $unused];
 	}
 	public function index()
-	{ //Tampilkan halaman Atribut
+	{
 		return view('main.atribut.index');
 	}
 	public function create()
-	{ //Tampilkan data Atribut
+	{
 		return DataTables::of(Atribut::query())
 			->editColumn('type', function (Atribut $attr) {
 				return Atribut::$tipe[$attr->type];
 			})->make();
 	}
 	public function store(Request $request)
-	{ //Simpan Atribut baru atau simpan perubahan ke database
+	{
 		try {
 			$request->validate(Atribut::$rules);
 			$req = $request->all();
@@ -77,18 +71,18 @@ class AtributController extends Controller
 		}
 	}
 	public function edit(Atribut $atribut)
-	{ //Tampilkan atribut yang akan diedit
+	{
 		return response()->json($atribut);
 	}
 	public function destroy(Atribut $atribut)
-	{ //Hapus atribut dari database
+	{
 		$this->delColumn('training_data', $atribut);
 		$this->delColumn('testing_data', $atribut);
 		$atribut->delete();
 		return response()->json(['message' => "Berhasil dihapus"]);
 	}
 	private function addColumn(string $tabel, array $req): void
-	{ //Tambahkan kolom sesuai nama atribut ke tabel Dataset
+	{
 		if (!Schema::hasColumn($tabel, $req['slug'])) { //Cek jika tidak ada
 			Schema::table($tabel, function (Blueprint $table) use ($req) {
 				if ($req['type'] === 'numeric')
@@ -101,7 +95,7 @@ class AtributController extends Controller
 		}
 	}
 	private function editColumn(string $tabel, $attr, array $req): void
-	{ //Edit kolom pada tabel Dataset
+	{
 		if ($attr->type !== $req['type']) { //Jika tipe atribut diubah
 			Schema::table($tabel, function (Blueprint $table) use ($attr, $req) {
 				if ($req['type'] === 'numeric')
@@ -128,7 +122,7 @@ class AtributController extends Controller
 		}
 	}
 	private function delColumn(string $tabel, $attr): void
-	{ //Hapus kolom sesuai nama atribut pada tabel Dataset
+	{
 		if (Schema::hasColumn($tabel, $attr->slug)) { //Cek jika ada
 			Schema::table($tabel, function (Blueprint $table) use ($attr) {
 				if ($attr->type === 'categorical') $table->dropForeign([$attr->slug]);
