@@ -17,10 +17,8 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-	<!-- DataTables -->
-	<link
-		href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.2.0/b-3.2.0/b-html5-3.2.0/r-3.0.3/datatables.min.css"
-		rel="stylesheet">
+	<!-- DataTables CSS -->
+	<link href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.2.2/b-3.2.2/b-html5-3.2.2/r-3.0.4/datatables.min.css" rel="stylesheet" integrity="sha384-zcgtcHBI+MIc3mUyBmWIMv/2Nmrwven/HbnaeRcihay7uZnlVdIfVjrzRfGCxpBr" crossorigin="anonymous">
 
 	<!-- Icons -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -56,9 +54,8 @@
 	<script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"
 		integrity="sha256-321PxS+POvbvWcIVoRZeRmf32q7fTFQJ21bXwTNWREY=" crossorigin="anonymous"></script>
 
-	<!-- Data Tables -->
-	<script
-		src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.2.0/b-3.2.0/b-html5-3.2.0/r-3.0.3/datatables.min.js"></script>
+	<!-- DataTables JS -->
+	<script src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.2.2/b-3.2.2/b-html5-3.2.2/r-3.0.4/datatables.min.js" integrity="sha384-QD+rS5GSDzGaGQTrC8nz+nEEUAd5kVzEqPRVQ1eufD9udZaX+Hg6/eq6xCpQU1SQ" crossorigin="anonymous"></script>
 
 	<!-- Simplebar -->
 	<script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
